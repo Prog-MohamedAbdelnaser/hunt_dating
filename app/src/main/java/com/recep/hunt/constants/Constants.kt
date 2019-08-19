@@ -9,6 +9,9 @@ package com.recep.hunt.constants
 
 class Constants {
     companion object{
+
+        //BASEURl =
+        const val BASEURL = ""
         const val prefsName = "app_prefs_file"
     }
 }
