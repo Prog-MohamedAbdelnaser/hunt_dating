@@ -13,5 +13,8 @@ class Constants {
         //BASEURl =
         const val BASEURL = ""
         const val prefsName = "app_prefs_file"
+
+        const val messageSentType = "messageSentType"
+        const val messageReceivedType = "messageReceivedType"
     }
 }
