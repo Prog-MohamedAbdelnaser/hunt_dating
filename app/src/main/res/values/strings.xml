@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">HUNT</string>
+    <string name="next">Next</string>
+    <string name="wanna_go_hunting">Wanna go Hunting?</string>
+    <string name="be_part_of_hunt">Be a part of the Hunt and find the minded people to Hunt with</string>
+    <string name="enter_your_phone_number"/>
+    <string name="enter_number_recevie_otp">Enter your cellphone number to receive the one time verification</string>
+    <string name="verification">Verification</string>
+    <string name="didnt_recive_otp">Didn\'t receive the code?
+        <font fgcolor='#E3004C'>Resend</font>
+    </string>
+    <string name="resent_otp">Resend OTP</string>
+    <string name="we_will_send_other_otp">We will send you another four digit\nOTP on
+        <font fgcolor='#E3004C'>%1$s!</font>
+    </string>
+    <string name="send_again">Send Again</string>
+    <string name="connect_with_fb">Connect with Facebook</string>
+    <string name="connect_with_insta">Connect with Instagram</string>
+    <string name="connect_with_google">Connect with Google</string>
+    <string name="we_will_never_post">We will never post on your account. Pinky swear!</string>
+    <string name="type_your_msg">Type your message here...</string>
+
+</resources>
+
