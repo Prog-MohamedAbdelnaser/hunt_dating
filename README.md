@@ -29,4 +29,6 @@ example :
      apiController.get(path,params) // GET request :  params =  String , path = String
      
      
+ 3. Rendring out the recyclerView adapters with Groupie: https://github.com/lisawray/groupie
+     
 
