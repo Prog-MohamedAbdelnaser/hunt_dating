@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E3004C</color>
-    <color name="colorPrimaryDark">#F7531B</color>
+    <color name="colorPrimary">#F7531B</color>
+    <color name="colorPrimaryDark">#E3004C</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#fff</color>
     <color name="black">#000</color>
@@ -13,5 +13,7 @@
     <color name="material_orange">#ff9800</color>
     <color name="materiallightred">#92f44336</color>
     <color name="transparent_black">#99000000</color>
+    <color name="seprator_color">#efefef</color>
+    <color name="table_view_bg">#EFEFF4</color>
 
 </resources>
