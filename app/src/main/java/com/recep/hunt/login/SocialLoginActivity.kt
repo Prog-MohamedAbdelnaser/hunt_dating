@@ -15,6 +15,7 @@ import com.recep.hunt.adapters.SocialLoginChatSentAdapter
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.models.LoginChatMessageModel
 import com.recep.hunt.setupProfile.SetupProfileActivity
+import com.recep.hunt.setupProfile.SetupProfileGalleryActivity
 import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
@@ -51,7 +52,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                     }
                 }
                 R.id.connect_with_fb_btn -> launchActivity<SetupProfileActivity>()
-                R.id.connect_with_google_btn -> toast("google")
+                R.id.connect_with_google_btn -> launchActivity<SetupProfileGalleryActivity>()
                 R.id.connect_with_insta_btn -> toast("Insta")
             }
         }
