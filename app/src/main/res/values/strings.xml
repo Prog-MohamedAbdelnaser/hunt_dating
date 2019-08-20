@@ -35,6 +35,7 @@
     <string name="female">Female</string>
     <string name="other">Other</string>
     <string name="continuee">Continue</string>
+    <string name="resend_code">Resend code</string>
 
 </resources>
 

@@ -101,7 +101,7 @@
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:lines="2"
-                  android:textColor="@color/app_text_black"
+                  android:textColor="@color/light_grey"
                   android:text="@string/we_will_send_other_otp"
                   android:textSize="13sp"
                   android:fontFamily="@font/montserrat_medium"
@@ -112,7 +112,7 @@
                   android:layout_marginRight="32dp" android:layout_marginStart="32dp"
                   app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="32dp"/>
         <Button
-                android:text="@string/send_again"
+                android:text="@string/resend_code"
                 android:fontFamily="@font/montserrat_medium"
                 android:textAllCaps="false"
                 android:layout_width="0dp"

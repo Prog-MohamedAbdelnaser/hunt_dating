@@ -20,11 +20,13 @@ import com.recep.hunt.R
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_otp_verification.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 
 
 class OtpVerificationActivity : AppCompatActivity() {
 
     private var pStatus = 0
+    private var pStatusVisible = 60
     private lateinit var cl_progressbar : ConstraintLayout
     private lateinit var cl_resend_otp : ConstraintLayout
     private lateinit var sendButton : Button
@@ -63,16 +65,17 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
     //Set Resend color Red
     private fun setSpannable(){
-        val text1= "Didn't receive the code? "
-        val text2= "Resend"
-        val text3 = text1+text2
-        val spannable = SpannableString(text3)
+        val text1= "We will send you another four digit  OTP on \""
+        val text2= "+91 740 539 9887"
+        val text3 = "\""
+        val text4= text1+text2+text3
+        val spannable = SpannableString(text4)
         spannable.setSpan(
             ForegroundColorSpan(resources.getColor(R.color.colorPrimary)),
             text1.length,
-            text3.length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            (text2+text3).length,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        resend_otp_btn.setText(spannable, TextView.BufferType.SPANNABLE)
+        we_will_send_you_otp_tv.setText(spannable, TextView.BufferType.SPANNABLE)
     }
 
     //Resend OTP Alert Dialog
@@ -90,6 +93,9 @@ class OtpVerificationActivity : AppCompatActivity() {
 
     //Setup ProgressTimer
     private fun setupProgressTimer(){
+        resend_otp_btn.text="Didn't receive the code? Please wait . . ."
+        resend_otp_btn.textSize=15f
+        resend_otp_btn.setTextColor(resources.getColor(R.color.light_grey))
         cl_progressbar.visibility = View.VISIBLE
         cl_resend_otp.visibility=View.GONE
         val res = resources
@@ -102,11 +108,12 @@ class OtpVerificationActivity : AppCompatActivity() {
         Thread(Runnable {
             while (pStatus < 60) {
                 pStatus += 1
+                pStatusVisible -=1
 
                 handler.post {
                     progressBar.progress = pStatus
 
-                    otp_progrss_txt.text =  pStatus.toString()
+                    otp_progrss_txt.text =  pStatusVisible.toString()
                 }
                 try {
                     // Sleep for 200 milliseconds.
@@ -128,6 +135,9 @@ class OtpVerificationActivity : AppCompatActivity() {
 
     private fun showResendOption() {
 
+        resend_otp_btn.text=" Didn't receive the code yet ?"
+        resend_otp_btn.textSize=16f
+        resend_otp_btn.setTextColor(resources.getColor(R.color.dusk))
         cl_progressbar.visibility = View.GONE
         cl_resend_otp.visibility=View.VISIBLE
     }
