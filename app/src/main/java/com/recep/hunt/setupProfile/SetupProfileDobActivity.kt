@@ -35,7 +35,7 @@ class SetupProfileDobActivity : AppCompatActivity() {
         }
 
         setup_profile_dob_next_btn.setOnClickListener {
-            launchActivity<SetupProfileUploadPhotoActivity>()
+            launchActivity<SetupProfileGenderActivity>()
         }
     }
 

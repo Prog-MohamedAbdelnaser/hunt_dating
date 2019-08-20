@@ -34,8 +34,21 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
+    <string name="both">Both</string>
     <string name="continuee">Continue</string>
     <string name="resend_code">Resend code</string>
+    <string name="skip">Skip</string>
+    <string name="i_am_looking_for">I am looking for</string>
+    <string name="select_your_choice">Select Your Choice</string>
+    <string name="dates">Dates</string>
+    <string name="buisness">Business</string>
+    <string name="friendship">Friendship</string>
+    <string name="i_am_interested_im">I\'m Interested in</string>
+    <string name="done">Done</string>
+    <string name="do_you_want_to_add_extra_choice">Do you want to add\nextra choice?</string>
+    <string name="select_dates_buis_friends">You can select Dates, Business \n and friendship</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>
 

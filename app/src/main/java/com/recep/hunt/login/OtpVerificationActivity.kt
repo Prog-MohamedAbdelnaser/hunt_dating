@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.goodiebag.pinview.Pinview
 import com.recep.hunt.R
+import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_otp_verification.*
 import org.jetbrains.anko.find
@@ -58,6 +59,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         }
 
         otpPinView.setPinViewEventListener{ pinview, fromUser ->
+            this.hideKeyboard()
             launchActivity<SocialLoginActivity>()
         }
 

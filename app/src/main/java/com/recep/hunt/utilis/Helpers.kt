@@ -3,6 +3,10 @@ package com.recep.hunt.utilis
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
+import androidx.recyclerview.widget.RecyclerView
+import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 
 
@@ -40,6 +44,15 @@ class Helpers {
 
             }
             return statusInternet
+        }
+
+        fun runAnimation(recyclerView: RecyclerView) {
+            val context = recyclerView.context
+            val controller: LayoutAnimationController
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_slide_from_bottom)
+            recyclerView.layoutAnimation = controller
+            recyclerView.adapter!!.notifyDataSetChanged()
+            recyclerView.scheduleLayoutAnimation()
         }
     }
 

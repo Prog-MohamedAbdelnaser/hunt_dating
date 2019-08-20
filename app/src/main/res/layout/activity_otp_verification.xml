@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         android:id="@+id/otp_verification_view_id"
         tools:context=".login.OtpVerificationActivity"
+        android:focusableInTouchMode="false"
         android:background="@color/white">
     <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
