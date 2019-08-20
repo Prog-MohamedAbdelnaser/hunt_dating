@@ -15,5 +15,8 @@
     <color name="transparent_black">#99000000</color>
     <color name="seprator_color">#efefef</color>
     <color name="table_view_bg">#EFEFF4</color>
+    <color name="light_grey">#ff9a9da4</color>
+    <color name="light_grey_title">#ff3c4a6d</color>
+
 
 </resources>

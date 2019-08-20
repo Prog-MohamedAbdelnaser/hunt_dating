@@ -6,8 +6,7 @@
     <string name="enter_your_phone_number"/>
     <string name="enter_number_recevie_otp">Enter your cellphone number to receive the one time verification</string>
     <string name="verification">Verification</string>
-    <string name="didnt_recive_otp">Didn\'t receive the code?
-        <font fgcolor='#E3004C'>Resend</font>
+    <string name="didnt_recive_otp">Didn\'t receive the code? Please wait....
     </string>
     <string name="resent_otp">Resend OTP</string>
     <string name="we_will_send_other_otp">We will send you another four digit\nOTP on
