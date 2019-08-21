@@ -34,7 +34,7 @@ class SetupProfileUploadPhotoActivity : AppCompatActivity() {
         setSupportActionBar(setupProfileupload_pic__toolbar)
         add_photo_layout.setOnClickListener {
             toast("AddPhoto")
-            ImagePicker.with(this).setShowCamera(false)
+            ImagePicker.with(this).setShowCamera(true)
                 .start()
 
         }
