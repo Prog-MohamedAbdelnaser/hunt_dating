@@ -15,6 +15,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/photo_recyclerView"
             android:layout_marginBottom="8dp"
+            android:padding="5dp"
           />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
