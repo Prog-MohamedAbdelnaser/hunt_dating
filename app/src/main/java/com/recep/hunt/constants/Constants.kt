@@ -16,5 +16,8 @@ class Constants {
 
         const val messageSentType = "messageSentType"
         const val messageReceivedType = "messageReceivedType"
+
+        const val IMGURI = "image_uri"
+
     }
 }

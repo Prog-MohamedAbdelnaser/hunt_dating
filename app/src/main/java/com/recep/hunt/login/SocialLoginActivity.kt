@@ -87,8 +87,6 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         adapter.notifyDataSetChanged()
         messageEditText.setText("")
         this@SocialLoginActivity.hideKeyboard()
-
-
     }
 
     //Dummy Chat Data

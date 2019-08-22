@@ -53,8 +53,6 @@ class SetupProfileGalleryActivity : BaseActivity() {
 
             adapter.add(SetupProfileGalleryAdapter(this@SetupProfileGalleryActivity,data))
         }
-
-
     }
 
     //Dummy Chat Data

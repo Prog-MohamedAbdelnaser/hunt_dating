@@ -53,6 +53,12 @@
     <string name="thank_you">Thank You!</string>
     <string name="you_have_completed">You\'ve completed your profile.\nYou are all set!</string>
     <string name="lets_start">Let\'s start!</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="cancel">Cancel</string>
+    <string name="added_photo">Added a profile photo</string>
+    <string name="change_pic">change picture</string>
+
 
 </resources>
 
