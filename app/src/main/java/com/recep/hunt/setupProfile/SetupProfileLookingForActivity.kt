@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.recep.hunt.R
+import com.recep.hunt.adapters.SetupProfileLookingForAdapter
+import com.recep.hunt.models.LookingForModel
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_looking_for.*
 import org.jetbrains.anko.find
@@ -30,9 +33,10 @@ class SetupProfileLookingForActivity : AppCompatActivity() {
         init()
     }
     private fun init(){
-        datesImageView = find(R.id.dates_imageView)
-        buisnessImageView = find(R.id.buisness_ImageView)
-        friendShipImageView = find(R.id.friendship_imageView)
+        val data= dummyImagedata()
+        rc_view.layoutManager = LinearLayoutManager(this)
+       // rc_view.adapter = SetupProfileLookingForAdapter(this,data)
+
         setSupportActionBar(setupProfile_lookingFor_toolbar)
         setupLookingForSelection()
         setup_looking_for_continue_btn.setOnClickListener {
@@ -44,7 +48,7 @@ class SetupProfileLookingForActivity : AppCompatActivity() {
     }
 
     private fun setupLookingForSelection(){
-        datesImageView.image = resources.getDrawable(R.drawable.ic_heart)
+      /*  datesImageView.image = resources.getDrawable(R.drawable.ic_heart)
         buisnessImageView.image = resources.getDrawable(R.drawable.ic_buisness_icon)
         friendShipImageView.image = resources.getDrawable(R.drawable.ic_friendship_icon)
 
@@ -123,9 +127,20 @@ class SetupProfileLookingForActivity : AppCompatActivity() {
             }
 
         }
+*/    }
+
+    // Data
+    private fun dummyImagedata():ArrayList<LookingForModel>{
+        val data = ArrayList<LookingForModel>()
+        if(data.size == 0){
+            data.add(LookingForModel(R.drawable.ic_heart,"Date",false))
+            data.add(LookingForModel(R.drawable.ic_buisness_icon,"Business",false))
+            data.add(LookingForModel(R.drawable.ic_friendship_icon,"Friendship",false))
+
+
+        }
+        return data
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         finish()
