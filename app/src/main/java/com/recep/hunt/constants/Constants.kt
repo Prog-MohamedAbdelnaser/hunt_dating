@@ -18,6 +18,14 @@ class Constants {
         const val messageReceivedType = "messageReceivedType"
 
         const val IMGURI = "image_uri"
+        const val socialFBType = "socialFBType"
+        const val socialInstaType = "socialInstaType "
+        const val socialGoogleType  = "socialGoogleType"
+
+
+
+
+
 
     }
 }

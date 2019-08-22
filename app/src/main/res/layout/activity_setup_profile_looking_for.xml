@@ -54,8 +54,8 @@
             android:id="@+id/setup_looking_for_continue_btn"
     />
 
-    <androidx.recyclerview.widget.RecyclerView android:layout_width="405dp"
-                                               android:layout_height="514dp"
+    <androidx.recyclerview.widget.RecyclerView android:layout_width="0dp"
+                                               android:layout_height="0dp"
                                                app:layout_constraintBottom_toTopOf="@+id/setup_looking_for_continue_btn"
                                                app:layout_constraintTop_toBottomOf="@id/textView4"
                                                app:layout_constraintEnd_toEndOf="parent"

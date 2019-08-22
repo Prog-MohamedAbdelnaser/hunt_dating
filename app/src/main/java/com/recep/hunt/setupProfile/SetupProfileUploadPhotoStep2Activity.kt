@@ -31,17 +31,17 @@ class SetupProfileUploadPhotoStep2Activity : AppCompatActivity() {
     private fun init() {
         setSupportActionBar(setupProfileupload_pic1__toolbar)
 
-        camera_layout.setOnClickListener(View.OnClickListener {
-          ImagePicker.with(this).setCameraOnly(true)
+        camera_layout.setOnClickListener {
+            ImagePicker.with(this).setCameraOnly(true)
                 .start()
 
-        })
+        }
 
-        gallery_layout.setOnClickListener(View.OnClickListener {
+        gallery_layout.setOnClickListener {
             ImagePicker.with(this).setShowCamera(false)
                 .start()
 
-        })
+        }
 
     }
 

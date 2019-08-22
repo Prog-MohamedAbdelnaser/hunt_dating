@@ -41,7 +41,7 @@
                 android:textAllCaps="false"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/button"
+                android:id="@+id/send_otp_again_btn"
                 android:textColor="@color/white"
                 android:background="@drawable/app_btn_round"
                 app:layout_constraintTop_toBottomOf="@+id/we_will_send_you_otp_tv"

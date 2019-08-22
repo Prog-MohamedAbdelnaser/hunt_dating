@@ -6,10 +6,12 @@
     <string name="enter_your_phone_number"/>
     <string name="enter_number_recevie_otp">Enter your cellphone number to receive the one time verification</string>
     <string name="verification">Verification</string>
-    <string name="didnt_recive_otp">Didn\'t receive the code? Please wait....
-    </string>
+    <string name="didnt_recive_otp">Didn\'t receive the code? Please wait…</string>
     <string name="resent_otp">Resend OTP</string>
     <string name="we_will_send_other_otp">We will send you another four digit\nOTP on
+        <font fgcolor='#E3004C'>%1$s!</font>
+    </string>
+    <string name="we_will_send_otp">We will send you four digit\nOTP on
         <font fgcolor='#E3004C'>%1$s!</font>
     </string>
     <string name="send_again">Send Again</string>
@@ -17,7 +19,7 @@
     <string name="connect_with_insta">Connect with Instagram</string>
     <string name="connect_with_google">Connect with Google</string>
     <string name="we_will_never_post">We will never post on your account. Pinky swear!</string>
-    <string name="type_your_msg">Type your message here...</string>
+    <string name="type_your_msg">Type your message here…</string>
     <string name="setup_profile">Setup Profile</string>
     <string name="full_name">Full name</string>
     <string name="first_name">First Name</string>
@@ -57,7 +59,37 @@
     <string name="camera">Camera</string>
     <string name="cancel">Cancel</string>
     <string name="added_photo">Added a profile photo</string>
-    <string name="change_pic">change picture</string>
+    <string name="change_pic">Change picture</string>
+    <string name="info_you_provide">Info You Provide</string>
+    <string name="name_and_profile_pic">Name and profile picture</string>
+    <string name="required">Required</string>
+    <string name="friend_list">Friend List</string>
+    <string name="friend_list_description">The names of your friends who also use and have shared their friends lists with HUNT</string>
+    <string name="birthday">Birthday</string>
+    <string name="birthday_description">Your Birthday</string>
+    <string name="home_town">Hometown</string>
+    <string name="home_town_description">Koln,DE</string>
+    <string name="photos">Photos</string>
+    <string name="photos_description">Your Photos</string>
+    <string name="page_likes">Page Likes</string>
+    <string name="page_likes_description">Your Likes</string>
+    <string name="gender">Gender</string>
+    <string name="gender_description">Your Gender</string>
+    <string name="email_address">Email address</string>
+    <string name="email_address_description">sara@gmail.com</string>
+    <string name="continue_as">Continue as %1$s</string>
+    <string name="hunt_will_user">Hunt will use:</string>
+    <string name="profile_details_used">Your Public Profile, Friends List, Relationship Status, Interests, Birthday, Work History, Education History, Photos, Likes and Email Address.</string>
+    <string name="edit_this">Edit This</string>
+
+    <array name="country_codes">
+        <item>+91</item>
+        <item>+92</item>
+        <item>+93</item>
+        <item>+94</item>
+        <item>+95</item>
+        <item>+96</item>
+    </array>
 
 
 </resources>

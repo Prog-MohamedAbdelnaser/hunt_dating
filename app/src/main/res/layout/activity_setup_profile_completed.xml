@@ -24,7 +24,6 @@
                app:layout_constraintStart_toStartOf="parent"
                android:layout_marginLeft="8dp"
                android:layout_marginStart="8dp"
-
                android:tint="@color/app_text_black"
                android:padding="18dp"
                app:layout_constraintEnd_toEndOf="parent"

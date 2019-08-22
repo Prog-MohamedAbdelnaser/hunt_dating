@@ -45,25 +45,7 @@ class SetupProfileAddedPhotoActivity : AppCompatActivity() {
                 .start()
         }
 
-        profile_image.setOnTouchListener(object : OnTouchListener {
-
-
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        change_pic_tv.visibility = View.VISIBLE
-
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        change_pic_tv.visibility = View.VISIBLE
-
-                    }
-                }
-                return true
-            }
-        })
-
-
+        change_pic_tv.visibility = View.VISIBLE
 
         setup_profile_upload_pic_next_btn.setOnClickListener {
             launchActivity<SetupProfileGenderActivity>()

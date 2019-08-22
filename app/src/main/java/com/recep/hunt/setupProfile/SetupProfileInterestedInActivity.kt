@@ -99,7 +99,7 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
             finish()
         }
         noButton.setOnClickListener {
-            toast("ok lets move from no button")
+
         }
         dialog.show()
 

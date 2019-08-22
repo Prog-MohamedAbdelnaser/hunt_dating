@@ -31,6 +31,9 @@ import org.jetbrains.anko.toast
 class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
 
 
+    companion object{
+        const val socialTypeKey = "social_type_key"
+    }
     private lateinit var recyclerView: RecyclerView
     private lateinit var messageEditText :EditText
     private val adapter = GroupAdapter<ViewHolder>() // using groupie to render recyclerView
@@ -54,9 +57,15 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                         addMessage()
                     }
                 }
-                R.id.connect_with_fb_btn -> toast("fb")
-                R.id.connect_with_google_btn -> launchActivity<SetupProfileUploadPhotoActivity>()
-                R.id.connect_with_insta_btn -> launchActivity<SetupProfileCompletedActivity>()
+                R.id.connect_with_fb_btn -> launchActivity<ContinueAsSocialActivity>{
+                    putExtra(socialTypeKey,Constants.socialFBType)
+                }
+                R.id.connect_with_google_btn -> launchActivity<ContinueAsSocialActivity>{
+                    putExtra(socialTypeKey,Constants.socialGoogleType)
+                }
+                R.id.connect_with_insta_btn -> launchActivity<ContinueAsSocialActivity>{
+                    putExtra(socialTypeKey,Constants.socialInstaType)
+                }
                 R.id.social_login_skip_btn -> launchActivity<SetupProfileActivity>()
             }
         }

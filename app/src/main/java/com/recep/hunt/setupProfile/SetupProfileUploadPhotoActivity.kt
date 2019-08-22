@@ -33,15 +33,4 @@ class SetupProfileUploadPhotoActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
-
-
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == Config.RC_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
-            val images = data.getParcelableArrayListExtra<Parcelable>(Config.EXTRA_IMAGES)
-            // do your logic here...
-        }
-        super.onActivityResult(requestCode, resultCode, data)  // You MUST have this line to be here
-        // so ImagePicker can work with fragment mode
-    }*/
 }

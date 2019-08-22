@@ -32,6 +32,7 @@
                         android:layout_width="90dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/send_msg_icon"
+                        android:onClick="onClick"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:background="@android:color/transparent"
                         app:layout_constraintEnd_toEndOf="parent"

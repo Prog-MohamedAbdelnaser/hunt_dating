@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#F7531B</color>
     <color name="colorPrimaryDark">#E3004C</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#ffff2a4e</color>
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="mytransparentblack">#d31f292e</color>
@@ -20,6 +20,9 @@
     <color name="dusk">#3c4a6d</color>
     <color name="silver">#bac0cb</color>
     <color name="pink">#ffff2a4e</color>
+    <color name="fb_color">#3c5a99</color>
+    <color name="app_light_text_color">#9AA7A4</color>
+    <color name="app_seperator_color">#9A9DA4</color>
 
 
 </resources>
