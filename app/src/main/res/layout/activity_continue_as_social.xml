@@ -26,9 +26,7 @@
                 android:id="@+id/continue_as_user_imageView"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:src="@drawable/boy_casual_eyes"
                 android:layout_centerInParent="true"
-                android:background="@drawable/fb_bg_color"
                 app:civ_border_width="4dp"
                 app:civ_border_color="@color/white"
 

@@ -1,19 +1,34 @@
 package com.recep.hunt.login
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.gson.GsonBuilder
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.adapters.SocialLoginChatReceivedAdapter
 import com.recep.hunt.adapters.SocialLoginChatSentAdapter
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.firebaseHelper.FirebaseHelpers
 import com.recep.hunt.models.LoginChatMessageModel
+import com.recep.hunt.models.UserSocialModel
 import com.recep.hunt.setupProfile.SetupProfileActivity
 import com.recep.hunt.setupProfile.SetupProfileCompletedActivity
 import com.recep.hunt.setupProfile.SetupProfileGalleryActivity
@@ -27,26 +42,47 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_social_login.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
+import org.json.JSONObject
 
 class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
 
 
     companion object{
         const val socialTypeKey = "social_type_key"
+        const val userSocialModel = "user_social_key"
     }
+
+    //Google Login Request Code
+    private val RC_SIGN_IN = 7
+    //Google Sign In Client
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    //Firebase Auth
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var userDetailsModel : UserSocialModel
+    private lateinit var dialog : KProgressHUD
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var messageEditText :EditText
     private val adapter = GroupAdapter<ViewHolder>() // using groupie to render recyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_social_login)
-
+        mAuth = FirebaseAuth.getInstance()
+        setupGoogleAuth()
         init()
     }
     private fun init(){
         recyclerView = find(R.id.social_login_recyclerView)
         messageEditText = find(R.id.type_msg_et)
         setupRecyclerView()
+    }
+    private fun setupGoogleAuth(){
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
     }
 
     override fun onClick(v: View?) {
@@ -59,9 +95,12 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 }
                 R.id.connect_with_fb_btn -> launchActivity<ContinueAsSocialActivity>{
                     putExtra(socialTypeKey,Constants.socialFBType)
+
                 }
-                R.id.connect_with_google_btn -> launchActivity<ContinueAsSocialActivity>{
-                    putExtra(socialTypeKey,Constants.socialGoogleType)
+                R.id.connect_with_google_btn -> {
+
+                    val signInIntent = mGoogleSignInClient.signInIntent
+                    startActivityForResult(signInIntent, RC_SIGN_IN)
                 }
                 R.id.connect_with_insta_btn -> launchActivity<ContinueAsSocialActivity>{
                     putExtra(socialTypeKey,Constants.socialInstaType)
@@ -70,6 +109,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             }
         }
     }
+
 
     private fun setupRecyclerView(){
         val linearLayout = LinearLayoutManager(this@SocialLoginActivity)
@@ -108,6 +148,64 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             data.add(LoginChatMessageModel("Sure i will call you asap!",Constants.messageSentType))
         }
         return data
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(Exception::class.java)
+                if(account != null)
+                firebaseAuthWithGoogle(account)
+            } catch (e: Exception) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("Login", "Google sign in failed", e)
+
+            }
+
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+        Log.d("Login", "firebaseAuthWithGoogle:" + acct.id!!)
+
+        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("Login", "signInWithCredential:success")
+                    val user = mAuth.currentUser
+                    updateGoogleUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("Login", "signInWithCredential:failure", task.exception)
+                    Toast.makeText(this,"Failed",Toast.LENGTH_LONG).show()
+                }
+
+
+            }
+    }
+
+    private fun updateGoogleUI(user: FirebaseUser?){
+        if(user != null){
+
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            userDetailsModel = UserSocialModel(user.uid,user.photoUrl.toString(), user.displayName!!,user.email!!)
+            val json: String = gson.toJson(userDetailsModel)
+
+            launchActivity<ContinueAsSocialActivity> {
+                putExtra(socialTypeKey,Constants.socialGoogleType)
+                putExtra(userSocialModel,json)
+            }
+
+        }
+        else{
+            toast("userNotFound")
+        }
     }
 
 

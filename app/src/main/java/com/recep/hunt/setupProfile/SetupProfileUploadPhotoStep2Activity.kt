@@ -32,13 +32,13 @@ class SetupProfileUploadPhotoStep2Activity : AppCompatActivity() {
         setSupportActionBar(setupProfileupload_pic1__toolbar)
 
         camera_layout.setOnClickListener {
-            ImagePicker.with(this).setCameraOnly(true)
+            ImagePicker.with(this).setCameraOnly(true).setMultipleMode(false)
                 .start()
 
         }
 
         gallery_layout.setOnClickListener {
-            ImagePicker.with(this).setShowCamera(false)
+            ImagePicker.with(this).setShowCamera(false).setMultipleMode(false)
                 .start()
 
         }
@@ -59,8 +59,8 @@ class SetupProfileUploadPhotoStep2Activity : AppCompatActivity() {
                 MediaScannerConnection.scanFile(
                     this, arrayOf(imageFile.getAbsolutePath()), null
                 ) { path, uri ->
-                    CropImage.activity(uri)
-                        .start(this);
+                    CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL)
+                        .start(this)
 
                 }
 

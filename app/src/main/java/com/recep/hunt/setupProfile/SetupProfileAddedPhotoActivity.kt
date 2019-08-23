@@ -17,6 +17,7 @@ import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_setup_profile_added_photo.*
 import kotlinx.android.synthetic.main.activity_setup_profile_upload_photo.setup_profile_upload_pic_next_btn
 import org.jetbrains.anko.toast
@@ -41,7 +42,7 @@ class SetupProfileAddedPhotoActivity : AppCompatActivity() {
 
 
         change_pic_tv.setOnClickListener {
-            ImagePicker.with(this).setShowCamera(true)
+            ImagePicker.with(this).setShowCamera(true).setMultipleMode(false)
                 .start()
         }
 
@@ -66,15 +67,12 @@ class SetupProfileAddedPhotoActivity : AppCompatActivity() {
                 MediaScannerConnection.scanFile(
                     this, arrayOf(imageFile.getAbsolutePath()), null
                 ) { path, uri ->
-                    CropImage.activity(uri)
-                        .start(this);
+                    CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL)
+                        .start(this)
 
                 }
 
             }
-
-            toast("selected")
-            // do your logic here...
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)

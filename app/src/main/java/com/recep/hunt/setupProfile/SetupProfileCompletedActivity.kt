@@ -21,14 +21,8 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         setSupportActionBar(setupProfile_complete_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
-
-
-
-        setupProfile_complete_toolbar.title=""
-        setupProfile_complete_toolbar.subtitle=""
-
         lets_start_btn.setOnClickListener {
-            launchActivity<TurnOnGPSActivity> {  }
+            launchActivity<TurnOnGPSActivity>()
         }
     }
 

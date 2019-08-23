@@ -1,11 +1,13 @@
 package com.recep.hunt.utilis
 
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import androidx.recyclerview.widget.RecyclerView
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 
@@ -19,17 +21,16 @@ import com.recep.hunt.constants.Constants
 class Helpers {
 
     companion object{
-        fun setSharedPrefs(context: Context, key:String, value:String){
-            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
-            val editor = sharedPreferences.edit()
-            editor.putString(key, value)
-            editor.apply()
-        }
-        fun getSharePrefs(context: Context, key:String) : String {
-            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
-            return sharedPreferences.getString(key,"null") ?: ""
-        }
 
+        fun showDialog(activity: Activity, context: Context, title:String): KProgressHUD {
+            return KProgressHUD.create(activity)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(title)
+                .setCancellable(false)
+                .setBackgroundColor(context.resources.getColor(R.color.transparent_black))
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+        }
         fun isInternetConnection(context: Context): Boolean {
             val cn =  context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val nf = cn.activeNetworkInfo

@@ -20,8 +20,7 @@ class TurnOnGPSActivity : AppCompatActivity() {
     private fun init() {
         setSupportActionBar(turn_on_gps_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        turn_on_gps_toolbar.title=""
-        turn_on_gps_toolbar.subtitle=""
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -36,9 +35,7 @@ class TurnOnGPSActivity : AppCompatActivity() {
                 R.id.notify_item -> toast("notify")
                 R.id.ghost_item -> toast("hunt")
                 R.id.settings_item -> toast("settings")
-
                 else -> finish()
-
             }
         }
         return super.onOptionsItemSelected(item)

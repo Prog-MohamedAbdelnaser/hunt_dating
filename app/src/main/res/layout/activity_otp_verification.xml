@@ -32,26 +32,26 @@
     </androidx.appcompat.widget.Toolbar>
 
     <com.goodiebag.pinview.Pinview
-
             android:id="@+id/otp_pin_view"
             app:pinBackground="@drawable/otp_pin_bg"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="60dp"
-            app:pinWidth="60dp"
-            app:pinHeight="60dp"
-            app:pinLength="4"
+            app:pinHeight="42dp"
+            app:pinWidth="42dp"
+            app:pinLength="6"
             app:hint="0"
             app:cursorVisible="true"
             app:forceKeyboard="false"
             app:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="24dp"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:password="false"/>
+            app:password="false"
+            android:layout_marginStart="24dp"/>
 
     <TextView
             android:id="@+id/resend_otp_btn"

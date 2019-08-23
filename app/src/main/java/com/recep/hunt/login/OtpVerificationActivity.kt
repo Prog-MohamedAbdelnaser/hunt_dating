@@ -8,20 +8,34 @@ import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.get
 import com.goodiebag.pinview.Pinview
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_otp_verification.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import org.jetbrains.anko.toast
 
 
 class OtpVerificationActivity : AppCompatActivity() {
@@ -30,38 +44,48 @@ class OtpVerificationActivity : AppCompatActivity() {
     private var pStatusVisible = 60
     private lateinit var cl_progressbar : ConstraintLayout
     private var phoneNumber = ""
-//    private lateinit var cl_resend_otp : ConstraintLayout
-//    private lateinit var sendButton : Button
+    private var otp = ""
+    private var verificationId = ""
     private val handler = Handler()
     private lateinit var otpPinView : Pinview
     private lateinit var progressBar : ProgressBar
+    private lateinit var mAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verification)
+        mAuth = FirebaseAuth.getInstance()
         init()
     }
+
+//    putExtra(numberKey,number)
+//    putExtra(verificationIdKey,p0)
+//    putExtra(otpKey,p0)
     private fun init(){
+        verificationId = intent.getStringExtra(LoginActivity.verificationIdKey)
+        otp = intent.getStringExtra(LoginActivity.otpKey)
         phoneNumber = intent.getStringExtra(LoginActivity.numberKey)
         progressBar = find(R.id.otp_progressBar)
         cl_progressbar=find(R.id.cl_progress_bar)
-//        cl_resend_otp=find(R.id.cl_we_will_send_otp)
         otpPinView = find(R.id.otp_pin_view)
-//        sendButton=find(R.id.sendButton)
         setupProgressTimer()
-//        showResendOption()
 
         resend_otp_btn.setOnClickListener {
             showResendOtpAlert()
         }
 
-//        sendButton.setOnClickListener{
-//            setupProgressTimer()
-//
-//        }
-
         otpPinView.setPinViewEventListener{ pinview, fromUser ->
-            this.hideKeyboard()
-            launchActivity<SocialLoginActivity>()
+
+            Log.e("OTP","${pinview.value}")
+            Log.e("OTP FROM FIRE","${otp}")
+            authenticate(pinview.value)
+//            if(pinview.value == otp){
+//                this.hideKeyboard()
+//
+//
+//            }else{
+//                toast("wrong otp")
+//            }
+
         }
 
 
@@ -115,9 +139,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                     }
                 }
                 try {
-                    // Sleep for 200 milliseconds.
-                    // Just to display the progress slowly
-                    Thread.sleep(  60) //thread will take approx 1.5 seconds to finish
+                    Thread.sleep(  600)
 
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
@@ -137,6 +159,32 @@ class OtpVerificationActivity : AppCompatActivity() {
         pStatusVisible = 60
         setupProgressTimer()
 
+    }
+
+
+    private fun authenticate (number:String) {
+        val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(verificationId, number)
+        signIn(credential)
+
+    }
+
+    private fun signIn(credential: PhoneAuthCredential){
+        val dialog : KProgressHUD = Helpers.showDialog(this@OtpVerificationActivity,this@OtpVerificationActivity,"Verifying OTP")
+        dialog.show()
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener {
+                    task: Task<AuthResult> ->
+                if(task.isSuccessful){
+                    dialog.run { dismiss() }
+                    SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity,Constants.isOTPVerified)
+                    launchActivity<SocialLoginActivity>()
+                }else{
+                    dialog.dismiss()
+                    Log.e("Error : ",task.result.toString())
+                    SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity,!Constants.isOTPVerified)
+                    toast("Failed")
+                }
+            }
     }
 
 }

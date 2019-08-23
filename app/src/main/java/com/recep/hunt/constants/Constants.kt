@@ -22,6 +22,8 @@ class Constants {
         const val socialInstaType = "socialInstaType "
         const val socialGoogleType  = "socialGoogleType"
 
+        const val isOTPVerified = true
+
 
 
 

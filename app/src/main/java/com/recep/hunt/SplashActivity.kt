@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.recep.hunt.login.LoginActivity
+import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 
 class SplashActivity : AppCompatActivity() {
 
@@ -15,9 +17,18 @@ class SplashActivity : AppCompatActivity() {
     private val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
             //Check if user is logged in or not here
-            val intent = Intent(applicationContext,LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            val isOtpVerified = SharedPrefrenceManager.getIsOtpVerified(this@SplashActivity)
+
+            if(isOtpVerified){
+                val intent = Intent(applicationContext,SocialLoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                val intent = Intent(applicationContext,LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -24,25 +24,11 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         init()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.skip_menu,menu)
-        return true
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item != null){
-            when(item.itemId){
-                R.id.skip_item -> launchActivity<SetupProfileCompletedActivity> {  }
-                else -> finish()
-
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun init() {
         setSupportActionBar(setupProfile_code__toolbar)
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         check_code_btn.setOnClickListener {
             showTryAgainAlert()
 
@@ -71,5 +57,21 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         }
         dialog.show()
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.skip_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item != null){
+            when(item.itemId){
+                R.id.skip_item -> launchActivity<SetupProfileCompletedActivity> {  }
+                else -> finish()
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
