@@ -17,20 +17,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
     </androidx.appcompat.widget.Toolbar>
+    <de.hdodenhof.circleimageview.CircleImageView android:layout_width="140dp"
+                                                  android:layout_height="140dp"
+                                                  app:layout_constraintTop_toTopOf="parent"
+                                                  app:layout_constraintStart_toStartOf="parent"
+                                                  android:layout_marginLeft="8dp"
+                                                  android:layout_marginStart="8dp"
+                                                  android:tint="@color/app_text_black"
 
-    <ImageView android:layout_width="140dp"
-               android:layout_height="140dp"
-               app:layout_constraintTop_toTopOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               android:layout_marginLeft="8dp"
-               android:layout_marginStart="8dp"
-               android:tint="@color/app_text_black"
-               android:padding="18dp"
-               app:layout_constraintEnd_toEndOf="parent"
-               android:background="@drawable/pexels"
-               android:layout_marginEnd="8dp"
-               android:layout_marginRight="8dp" android:id="@+id/imageView5" android:layout_marginTop="56dp"
-               app:layout_constraintHorizontal_bias="0.498"/>
+                                                  app:layout_constraintEnd_toEndOf="parent"
+                                                  android:src="@drawable/on_board_bg_1"
+                                                  android:layout_marginEnd="8dp"
+                                                  android:layout_marginRight="8dp" android:id="@+id/imageView5"
+                                                  android:layout_marginTop="56dp"
+                                                  app:layout_constraintHorizontal_bias="0.498"/>
+
 
     <TextView
             android:text="@string/John_don"
@@ -96,11 +97,12 @@
             android:layout_height="wrap_content"
             android:text="@string/lets_start"
             android:textColor="@color/white"
+
             android:fontFamily="@font/montserrat_bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/setup_profile_upload_pic_next_btn"
+            android:id="@+id/lets_start_btn"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

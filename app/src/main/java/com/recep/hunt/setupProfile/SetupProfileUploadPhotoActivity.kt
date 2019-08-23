@@ -16,7 +16,7 @@ class SetupProfileUploadPhotoActivity : AppCompatActivity() {
         init()
     }
     private fun init(){
-        setSupportActionBar(setupProfileupload_pic__toolbar)
+        setSupportActionBar(setupProfile_code__toolbar)
         add_photo_layout.setOnClickListener {
             launchActivity<SetupProfileUploadPhotoStep2Activity>()
 

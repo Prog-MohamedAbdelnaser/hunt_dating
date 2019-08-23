@@ -64,7 +64,9 @@
     <string name="name_and_profile_pic">Name and profile picture</string>
     <string name="required">Required</string>
     <string name="friend_list">Friend List</string>
-    <string name="friend_list_description">The names of your friends who also use and have shared their friends lists with HUNT</string>
+    <string name="friend_list_description">The names of your friends who also use and have shared their friends lists
+        with HUNT
+    </string>
     <string name="birthday">Birthday</string>
     <string name="birthday_description">Your Birthday</string>
     <string name="home_town">Hometown</string>
@@ -79,8 +81,18 @@
     <string name="email_address_description">sara@gmail.com</string>
     <string name="continue_as">Continue as %1$s</string>
     <string name="hunt_will_user">Hunt will use:</string>
-    <string name="profile_details_used">Your Public Profile, Friends List, Relationship Status, Interests, Birthday, Work History, Education History, Photos, Likes and Email Address.</string>
+    <string name="profile_details_used">Your Public Profile, Friends List, Relationship Status, Interests, Birthday,
+        Work History, Education History, Photos, Likes and Email Address.
+    </string>
     <string name="edit_this">Edit This</string>
+    <string name="referral_code">Referral Code</string>
+    <string name="check_code">Check Code</string>
+    <string name="enter_referral">Enter Referral code and enjoy a full free subscription for one month</string>
+    <string name="your_referral_code">Your referral code is\n not correct.</string>
+    <string name="try_again">Try again</string>
+    <string name="turn_on_gps">Turn on GPS</string>
+    <string name="open_the_location">Open the location service to get \ngeographic information, to get\n your match.
+    </string>
 
     <array name="country_codes">
         <item>+91</item>

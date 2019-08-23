@@ -2,8 +2,11 @@ package com.recep.hunt.setupProfile
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.recep.hunt.R
+import com.recep.hunt.location.TurnOnGPSActivity
+import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_completed.*
 
 class SetupProfileCompletedActivity : AppCompatActivity() {
@@ -16,6 +19,13 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
     private fun init() {
         setSupportActionBar(setupProfile_complete_toolbar)
+
+        setupProfile_complete_toolbar.title=""
+        setupProfile_complete_toolbar.subtitle=""
+
+        lets_start_btn.setOnClickListener {
+            launchActivity<TurnOnGPSActivity> {  }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

@@ -99,7 +99,7 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
             finish()
         }
         noButton.setOnClickListener {
-
+        launchActivity<SetupProfileReferralCodeActivity> {  }
         }
         dialog.show()
 
