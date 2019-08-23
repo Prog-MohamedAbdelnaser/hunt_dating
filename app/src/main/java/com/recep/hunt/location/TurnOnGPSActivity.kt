@@ -19,7 +19,7 @@ class TurnOnGPSActivity : AppCompatActivity() {
 
     private fun init() {
         setSupportActionBar(turn_on_gps_toolbar)
-
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         turn_on_gps_toolbar.title=""
         turn_on_gps_toolbar.subtitle=""
     }

@@ -19,6 +19,10 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
     private fun init() {
         setSupportActionBar(setupProfile_complete_toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+
+
+
 
         setupProfile_complete_toolbar.title=""
         setupProfile_complete_toolbar.subtitle=""

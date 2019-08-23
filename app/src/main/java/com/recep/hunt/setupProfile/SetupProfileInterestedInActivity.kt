@@ -10,9 +10,17 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.adapters.SetupProfileInterestedInAdapter
+import com.recep.hunt.adapters.SetupProfileLookingForAdapter
+import com.recep.hunt.models.LookingForModel
 import com.recep.hunt.utilis.launchActivity
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_setup_profile_interested_in.*
+import kotlinx.android.synthetic.main.activity_setup_profile_looking_for.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.toast
@@ -24,6 +32,7 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
     private lateinit var feMaleImageView : ImageView
     private lateinit var otherImageView : ImageView
     private var selectedInterests = ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_interested_in)
@@ -31,11 +40,9 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
     }
     private fun init(){
         selectedInterests = intent.getStringArrayListExtra(SetupProfileLookingForActivity.selectedInterestKey)
-        maleImageView = find(R.id.male_imageview)
-        feMaleImageView = find(R.id.female_imageview)
-        otherImageView = find(R.id.others_imageview)
+
         setSupportActionBar(setupProfile_interested_in_toolbar)
-        setupGenderSelection()
+        setupRecyclerView()
 
         setup_interested_in_continue_btn.setOnClickListener {
             val count = selectedInterests.size
@@ -48,42 +55,13 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
         }
 
     }
-    private fun setupGenderSelection(){
+    private fun setupRecyclerView(){
+        val lookingForData= dummyImageData()
+        rc_view1.layoutManager = LinearLayoutManager(this)
+        rc_view1.adapter = SetupProfileInterestedInAdapter(lookingForData,this@SetupProfileInterestedInActivity)
 
-        maleImageView.image = resources.getDrawable(R.drawable.ic_man)
-        feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
-        otherImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
 
-        maleImageView.setOnClickListener {
-            maleImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-            feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-            otherImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
 
-            maleImageView.image = resources.getDrawable(R.drawable.ic_man_white)
-            feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
-            otherImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
-
-        }
-
-        female_imageview.setOnClickListener {
-            maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-            feMaleImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-            otherImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-
-            maleImageView.image = resources.getDrawable(R.drawable.ic_man)
-            feMaleImageView.image = resources.getDrawable(R.drawable.ic_female_white)
-            otherImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
-        }
-
-        otherImageView.setOnClickListener {
-            maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-            feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-            otherImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-
-            maleImageView.image = resources.getDrawable(R.drawable.ic_man)
-            feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
-            otherImageView.image = resources.getDrawable(R.drawable.ic_other_white)
-        }
     }
 
     private fun showAddExtraChoiceDialog(){
@@ -108,5 +86,16 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         finish()
         return super.onOptionsItemSelected(item)
+    }
+    private fun dummyImageData():ArrayList<LookingForModel>{
+        val data = ArrayList<LookingForModel>()
+        if(data.size == 0){
+            data.add(LookingForModel(R.drawable.ic_man,R.drawable.ic_man_white,"Male",false))
+            data.add(LookingForModel(R.drawable.ic_female,R.drawable.ic_female_white,"Female",false))
+            data.add(LookingForModel(R.drawable.ic_others_gender,R.drawable.ic_other_white,"Both",false))
+
+
+        }
+        return data
     }
 }
