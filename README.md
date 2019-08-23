@@ -29,7 +29,12 @@ example :
      
  3. Rendring out the recyclerView adapters with **Groupie**: https://github.com/lisawray/groupie
  
-**FIREBASE LOGIN**
+**FIREBASE LOGIN:**
+   username : hunt.recep.123@gmail.com
+   password : Contact owner of this repo for password
+   
+   
+**FACEBOOK LOGIN:**
    username : hunt.recep.123@gmail.com
    password : Contact owner of this repo for password
 
