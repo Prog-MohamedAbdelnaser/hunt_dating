@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
     <stroke android:width="0.5dp" android:color="@color/mytransparentblack"/>
-    <solid android:color="@color/colorPrimaryDark"/>
+    <!--<solid android:color="@color/colorPrimaryDark"/>-->
+    <gradient android:startColor="#F7531B"
+              android:endColor="#E3004C"
+    />
 </shape>

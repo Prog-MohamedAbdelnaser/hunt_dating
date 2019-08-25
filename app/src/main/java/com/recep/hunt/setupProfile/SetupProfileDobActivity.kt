@@ -7,6 +7,10 @@ import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.EditText
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_dob.*
 import org.jetbrains.anko.*
@@ -17,6 +21,8 @@ import java.text.ParseException
 
 class SetupProfileDobActivity : AppCompatActivity() {
 
+    private var apiDate = ""
+    private val TAG = SetupProfileDobActivity::class.java.simpleName
     private lateinit var dobEditText : EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +36,24 @@ class SetupProfileDobActivity : AppCompatActivity() {
 
         dobEditText.setOnFocusChangeListener { _, hasFocus ->
             if(hasFocus){
+                this.hideKeyboard()
                 showDatePicker()
             }
         }
 
         setup_profile_dob_next_btn.setOnClickListener {
-            launchActivity<SetupProfileUploadPhotoActivity>()
+            moveToUploadPicture()
         }
+    }
+    private fun moveToUploadPicture(){
+        val dob = dobEditText.text.toString()
+        if(dob.isNotEmpty()){
+            Log.e(TAG,"apiDate : $apiDate")
+        }else{
+            Helpers.showErrorSnackBar(this,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
+            return
+        }
+        launchActivity<SetupProfileUploadPhotoActivity>()
     }
 
     private fun showDatePicker(){
@@ -49,6 +66,8 @@ class SetupProfileDobActivity : AppCompatActivity() {
             customView {
                 verticalLayout {
                     datePicker = datePicker {
+                        maxDate = System.currentTimeMillis()
+
                     }
                 }
             }
@@ -58,23 +77,29 @@ class SetupProfileDobActivity : AppCompatActivity() {
 
                 val parsedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
                 val formatedDate = getFormattedDate(parsedDate)
+                apiDate = getFormattedDate(input = parsedDate,outputDateFormat = Constants.apiDateFormat)
                 val age = getAge(parsedDate)
                 dobEditText.setText(formatedDate)
+                dobEditText.clearFocus()
                 years_old_textView.text = resources.getString(R.string.years_old,age.toString())
+                hideKeyboard()
             }
 
             noButton { }
 
         }.show()
     }
-    private fun getFormattedDate(input:String,inoutDateFormat:String = "dd/M/yyyy"):String{
-        val inputFormat = SimpleDateFormat(inoutDateFormat, Locale.ENGLISH)
-        val outputFormat = SimpleDateFormat("MM/dd/YYYY", Locale.ENGLISH)
+    private fun getFormattedDate(input:String,inputDateFormat:String = "dd/M/yyyy",outputDateFormat:String = "MM/dd/YYYY"):String{
+        val inputFormat = SimpleDateFormat(inputDateFormat, Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat(outputDateFormat,Locale.ENGLISH)
         val date = inputFormat.parse(input)
         val formattedDate = outputFormat.format(date)
-        Log.e("else Format  ",": $formattedDate")
+        Log.e(TAG,": Input date Format : $inputDateFormat")
+        Log.e(TAG,": Output date Format : $outputDateFormat")
+        Log.e(TAG,": Formatted date : $formattedDate")
         return formattedDate
     }
+
     private fun getAge(dobString: String): Int {
 
         var date: Date? = null

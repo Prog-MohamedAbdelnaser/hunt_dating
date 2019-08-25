@@ -9,7 +9,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile.*
 import org.jetbrains.anko.backgroundColor
@@ -28,10 +31,20 @@ class SetupProfileActivity : AppCompatActivity() {
 
     private fun init(){
         full_name_next_btn.setOnClickListener {
-            launchActivity<SetupProfileDobActivity>()
+            val firstName = first_name_editText.text.toString()
+            val lastName = last_name_editText.text.toString()
+            if(firstName.isNotEmpty() && lastName.isNotEmpty()){
+                SharedPrefrenceManager.setUserFirstName(this@SetupProfileActivity,firstName)
+                SharedPrefrenceManager.setUserLastName(this@SetupProfileActivity,lastName)
+                launchActivity<SetupProfileDobActivity>()
+            }else{
+                Helpers.showErrorSnackBar(this@SetupProfileActivity,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
+            }
+
         }
         setSupportActionBar(setupProfile_toolbar)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         finish()

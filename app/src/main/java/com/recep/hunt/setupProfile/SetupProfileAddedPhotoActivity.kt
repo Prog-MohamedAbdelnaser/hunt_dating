@@ -15,6 +15,7 @@ import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -36,18 +37,15 @@ class SetupProfileAddedPhotoActivity : AppCompatActivity() {
     private fun init() {
         setSupportActionBar(setupProfileupload_pic3__toolbar)
         val uriString: String = intent.getStringExtra(IMGURI)
+        SharedPrefrenceManager.setUserImage(this@SetupProfileAddedPhotoActivity,uriString)
         uri = Uri.parse(uriString)
-
-        profile_image.setImageURI(uri);
+        profile_image.setImageURI(uri)
 
 
         change_pic_tv.setOnClickListener {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false)
                 .start()
         }
-
-        change_pic_tv.visibility = View.VISIBLE
-
         setup_profile_upload_pic_next_btn.setOnClickListener {
             launchActivity<SetupProfileGenderActivity>()
         }

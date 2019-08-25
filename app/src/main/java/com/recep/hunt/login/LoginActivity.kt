@@ -1,6 +1,8 @@
 package com.recep.hunt.login
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,24 +35,23 @@ import com.recep.hunt.adapters.OnBoardAdapter
 import com.recep.hunt.utilis.Helpers
 import java.util.concurrent.TimeUnit
 
-
-//9560246054
 class LoginActivity : AppCompatActivity() {
 
     companion object{
         const val numberKey = "userPhoneNumberKey"
         const val otpKey = "otpKey"
         const val verificationIdKey = "verificationId"
+        const val searchRequestCode = 1
     }
     private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var mAuth: FirebaseAuth
     private lateinit var dialog : KProgressHUD
+    private lateinit var countryCodeTextView: TextView
 
     private var verificationId = ""
     private lateinit var viewPager : ViewPager
     private lateinit var springDotsIndicator: SpringDotsIndicator
-    private lateinit var countryCodeSpinner:Spinner
-    private var countryCodes = listOf("+91","+92","+93")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -61,21 +62,25 @@ class LoginActivity : AppCompatActivity() {
         dialog = Helpers.showDialog(this@LoginActivity,this@LoginActivity,"Verifying")
         viewPager = find(R.id.login_viewPager)
         springDotsIndicator = find(R.id.login_spring_dots_indicator)
-        countryCodeSpinner = find(R.id.country_code_spinner)
+        countryCodeTextView = find(R.id.country_code_txtView)
 
         login_nxt_btn.setOnClickListener {
             val number = user_number_edittext.text.toString()
             if(number.isNotEmpty()){
                 dialog.show()
-               verify(number)
+               verify(number,countryCodeTextView.text.toString())
             }else{
-                toast("Enter Number")
+                Helpers.showErrorSnackBar(this@LoginActivity,"Enter number","")
             }
 
         }
 
         setupViewPager()
-        setupCountryCodeSpinner()
+
+        countryCodeTextView.setOnClickListener {
+            val intent = Intent(this@LoginActivity,SelectCountryCodeActivity::class.java)
+            startActivityForResult(intent,searchRequestCode)
+        }
 
     }
     //Setting up view pager
@@ -84,25 +89,6 @@ class LoginActivity : AppCompatActivity() {
         val adapter = OnBoardAdapter(this@LoginActivity,imagesArray)
         viewPager.adapter = adapter
         springDotsIndicator.setViewPager(viewPager)
-    }
-
-    private fun setupCountryCodeSpinner(){
-        val aa = ArrayAdapter(this@LoginActivity, android.R.layout.simple_spinner_item, countryCodes)
-        // Set layout to use when the list of choices appear
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Set Adapter to Spinner
-        countryCodeSpinner.adapter = aa
-        countryCodeSpinner.background.setColorFilter(resources.getColor(R.color.white), PorterDuff.Mode.SRC_ATOP)
-        val listener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.white))
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
-        countryCodeSpinner.onItemSelectedListener = listener
     }
      fun verificationCallbacks(number: String){
         mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
@@ -127,9 +113,9 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-    private fun verify(number:String){
+    private fun verify(number:String,countryCode:String){
         verificationCallbacks(number)
-        val phoneNumber = "+91$number"
+        val phoneNumber = "$countryCode$number"
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber,
             60,
@@ -137,6 +123,20 @@ class LoginActivity : AppCompatActivity() {
             this,
             mCallbacks
         )
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(resultCode == Activity.RESULT_OK){
+            if(data != null) {
+                val name = data.getStringExtra(SelectCountryCodeActivity.countryNameKey)
+                val code = data.getStringExtra(SelectCountryCodeActivity.countryCodeKey)
+                countryCodeTextView.text = code
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+
+
     }
 
 

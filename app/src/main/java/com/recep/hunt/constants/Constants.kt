@@ -10,8 +10,10 @@ package com.recep.hunt.constants
 class Constants {
     companion object{
 
+
         //BASEURl =
-        const val BASEURL = ""
+        const val baseURL = "http://165.22.18.129/dev/api"
+        const val instaGramUrl = "https://www.instagram.com/oauth/authorize/?"
         const val prefsName = "app_prefs_file"
 
         const val messageSentType = "messageSentType"
@@ -22,7 +24,24 @@ class Constants {
         const val socialInstaType = "socialInstaType "
         const val socialGoogleType  = "socialGoogleType"
 
+        const val apiDateFormat = "yyyy-MM-dd"
         const val isOTPVerified = true
+
+        //Info you provide keys
+        const val friends = "friends"
+        const val birthday = "birthday"
+        const val hometown = "homeTown"
+        const val photos = "photos"
+        const val pageLikes = "pageLikes"
+        const val gender = "gender"
+        const val emailAddress = "emailAddress"
+
+        //Male,Female,Others,Both
+        const val male = "Male"
+        const val female = "Female"
+        const val others = "Others"
+        const val both = "Male,Female"
+
 
 
 

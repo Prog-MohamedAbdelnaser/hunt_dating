@@ -3,7 +3,7 @@
     <string name="next">Next</string>
     <string name="wanna_go_hunting">Wanna go Hunting?</string>
     <string name="be_part_of_hunt">Be a part of the Hunt and find the minded people to Hunt with</string>
-    <string name="enter_your_phone_number"/>
+    <string name="enter_your_phone_number">Enter your number ..</string>
     <string name="enter_number_recevie_otp">Enter your cellphone number to receive the one time verification</string>
     <string name="verification">Verification</string>
     <string name="didnt_recive_otp">Didn\'t receive the code? Please wait…</string>
@@ -93,7 +93,14 @@
     <string name="turn_on_gps">Turn on GPS</string>
     <string name="open_the_location">Open the location service to get \ngeographic information, to get\n your match.
     </string>
+    <string name="complete_form">Complete Form!</string>
+    <string name="you_have_complete_form">You must complete the form before moving</string>
 
+    <string name="facebook_app_id">428189314461041</string>
+    <string name="insta_client_id">50861e5c85324044a5c2b888735d7ca8</string>
+    <string name="insta_client_secret">ad97c323aaa94ffdb5bdf5a6a25435e</string>
+    <string name="insta_callback_url">https://www.gethunt.app/</string>
+    <string name="insta_base_url">https://api.instagram.com/</string>
     <array name="country_codes">
         <item>+91</item>
         <item>+92</item>

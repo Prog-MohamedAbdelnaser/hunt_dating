@@ -19,10 +19,7 @@ class SetupProfileUploadPhotoActivity : AppCompatActivity() {
         setSupportActionBar(setupProfile_code__toolbar)
         add_photo_layout.setOnClickListener {
             launchActivity<SetupProfileUploadPhotoStep2Activity>()
-
-
         }
-
         setup_profile_upload_pic_next_btn.setOnClickListener {
             launchActivity<SetupProfileGenderActivity>()
         }

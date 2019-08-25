@@ -57,7 +57,7 @@ class SetupProfileUploadPhotoStep2Activity : AppCompatActivity() {
             if (images.size == 1) {
                 imageFile = File(images[0].path)
                 MediaScannerConnection.scanFile(
-                    this, arrayOf(imageFile.getAbsolutePath()), null
+                    this, arrayOf(imageFile.absolutePath), null
                 ) { path, uri ->
                     CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL)
                         .start(this)

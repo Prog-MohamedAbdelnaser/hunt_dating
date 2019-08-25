@@ -22,4 +22,8 @@
     <style name="menu_item_color">
         <item name="android:textColor">@color/app_light_text_color</item>
     </style>
+
+    <style name="SearchViewTheme" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
 </resources>

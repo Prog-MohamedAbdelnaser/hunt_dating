@@ -11,7 +11,8 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.looking_for_adapter_item.view.*
 import org.jetbrains.anko.image
 
-class SetupProfileInterestedInAdapter( private var model: ArrayList<LookingForModel>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+
+class SetupProfileInterestedInAdapter( private var model: ArrayList<LookingForModel>, val context: Context,private val lookingForListeners: LookingForListeners) : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return  ViewHolder(LayoutInflater.from(context).inflate(R.layout.looking_for_adapter_item, parent, false))
 
@@ -22,52 +23,53 @@ class SetupProfileInterestedInAdapter( private var model: ArrayList<LookingForMo
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.title_tv.text = model.get(position).label
-//        viewHolder.itemView.dates_imageView.background= Resources.getSystem().getDrawable(model.unSelectedImage)
-        if(  model.get(position).isSelected == false) {
+        viewHolder.itemView.title_tv.text = model[position].label
+        viewHolder.itemView.dates_imageView.image = context.resources.getDrawable(model[position].unSelectedImage)
+
+        if(!model[position].isSelected) {
             viewHolder.itemView.dates_imageView.background =
                 context.resources.getDrawable(R.drawable.unselected_circular_btn)
+            viewHolder.itemView.dates_imageView.image =
+                context.resources.getDrawable(model[position].unSelectedImage)
         }
-        else
-        {
+        else {
             viewHolder.itemView.dates_imageView.background =
                 context.resources.getDrawable(R.drawable.selected_cirular_btn)
+            viewHolder.itemView.dates_imageView.image = context.resources.getDrawable(model[position].selectedImage)
         }
-        viewHolder.itemView.dates_imageView.image = context.resources.getDrawable(model.get(position).unSelectedImage)
+
+
         viewHolder.itemView.dates_imageView.setOnClickListener {
 
-            if (model.get(position).isSelected) {
+            if (model[position].isSelected) {
                 reset()
                 //unselect
-                model.get(position).isSelected = false
+                model[position].isSelected = false
 
                 viewHolder.itemView.dates_imageView.background =
                     context.resources.getDrawable(R.drawable.unselected_circular_btn)
                 viewHolder.itemView.dates_imageView.image =
-                    context.resources.getDrawable(model.get(position).unSelectedImage)
+                    context.resources.getDrawable(model[position].unSelectedImage)
 
             } else {
                 reset()
-                model.get(position).isSelected = true
+                model[position].isSelected = true
 
-                viewHolder.itemView.dates_imageView.background =
-                    context.resources.getDrawable(R.drawable.selected_cirular_btn)
-                viewHolder.itemView.dates_imageView.image =
-                    context.resources.getDrawable(model.get(position).selectedImage)
+                viewHolder.itemView.dates_imageView.background = context.resources.getDrawable(R.drawable.selected_cirular_btn)
+                viewHolder.itemView.dates_imageView.image = context.resources.getDrawable(model[position].selectedImage)
+
+                lookingForListeners.getSelectedLookingFor(model[position].value.toString(),null)
             }
-notifyDataSetChanged()
+            notifyDataSetChanged()
 
         }
 
     }
-
-
-
-fun reset() {
-    for (data in model) {
-       data.isSelected=false
+    private fun reset() {
+        for (data in model) {
+           data.isSelected=false
+        }
     }
-}
 
 
 }

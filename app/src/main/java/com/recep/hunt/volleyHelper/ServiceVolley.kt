@@ -6,7 +6,7 @@ import com.android.volley.Response
 import com.android.volley.VolleyLog
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
-import com.recep.hunt.constants.Constants
+import com.recep.hunt.application.MyApplication
 import org.json.JSONObject
 
 /**
@@ -14,9 +14,9 @@ import org.json.JSONObject
  */
 class ServiceVolley : ServiceInterface {
     val TAG = ServiceVolley::class.java.simpleName
-    val basePath = Constants.BASEURL
+//    val basePath = Constants.BASEURL
     override fun post(path: String, params: JSONObject, completionHandler: (response: JSONObject?) -> Unit) {
-        val jsonObjReq = object : JsonObjectRequest(Method.POST, basePath + path, params,
+        val jsonObjReq = object : JsonObjectRequest(Method.POST, path, params,
                 Response.Listener<JSONObject> { response ->
                     Log.e(TAG, "/post request OK! Response: $response")
                     completionHandler(response)
@@ -32,11 +32,11 @@ class ServiceVolley : ServiceInterface {
                 return headers
             }
         }
-        BackendVolley.instance?.addToRequestQueue(jsonObjReq, TAG)
+        MyApplication.instance?.addToRequestQueue(jsonObjReq, TAG)
     }
 
     override fun get(path: String, params: String, completionHandler:(response: String?) -> Unit) {
-        val url = "$basePath$path?$params"
+        val url = "$path?$params"
         val stringRequest = object : StringRequest(Method.GET,url,
                 Response.Listener<String> { response ->
                     Log.e(TAG,"/get request URL : $url")
@@ -49,7 +49,7 @@ class ServiceVolley : ServiceInterface {
         }){
 
         }
-        BackendVolley.instance?.addToRequestQueue(stringRequest, TAG)
+        MyApplication.instance?.addToRequestQueue(stringRequest, TAG)
     }
 
 }

@@ -1,8 +1,9 @@
-package com.recep.hunt.volleyHelper
+package com.recep.hunt.application
 
 
 import android.app.Application
 import android.text.TextUtils
+import androidx.multidex.MultiDexApplication
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
@@ -10,11 +11,11 @@ import com.android.volley.toolbox.Volley
 /**
  * Created by RishabhShukla on 11/02/19.
  */
-class BackendVolley : Application() {
+class MyApplication : MultiDexApplication() {
 
     companion object {
-        private val TAG = BackendVolley::class.java.simpleName
-        @get:Synchronized var instance: BackendVolley? = null
+        private val TAG = MyApplication::class.java.simpleName
+        @get:Synchronized var instance: MyApplication? = null
             private set
     }
 

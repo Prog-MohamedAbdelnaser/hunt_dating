@@ -10,21 +10,26 @@ import com.recep.hunt.constants.Constants
  * Email : rishabh1450@gmail.com
  */
 enum class PersistenceKeys {
-    UserName,UserId,UserImage,UserEmail,IsOtpVerified
+    UserModel,
+    IsOtpVerified,
+    IsFromSocial,
+    UserMobileNumber,
+    DeviceToken,
+    UserFirstName,
+    UserLastName,
+    UserGender,
+    UserEmail,
+    IsUserLoggedIn,
+    UserDob,
+    UserImage,
+    UserLookingFor,
+    UserInterestedIn,
+    UserLatitude,
+    UserLongitude
+
 }
 class SharedPrefrenceManager {
     companion object{
-        private fun setSharedPrefs(context: Context, key:String, value:String){
-            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
-            val editor = sharedPreferences.edit()
-            editor.putString(key, value)
-            editor.apply()
-        }
-        private fun getSharePrefs(context: Context, key:String) : String {
-            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
-            return sharedPreferences.getString(key,"null") ?: ""
-        }
-
         //ISOTpVerified
         fun setIsOtpVerified(context: Context,value: Boolean){
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
@@ -37,39 +42,125 @@ class SharedPrefrenceManager {
             return sharedPreferences.getBoolean(PersistenceKeys.IsOtpVerified.toString(),false)
         }
 
-        //USERID
-        fun setUserId(context: Context,value: String){
-            setSharedPrefs(context,PersistenceKeys.UserId.toString(),value)
+        //IsUserLoggedIn
+        fun setIsUserLoggedIn(context: Context,value: Boolean){
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(PersistenceKeys.IsUserLoggedIn.toString(),value)
+            editor.apply()
         }
-        fun getUserId(context: Context):String{
-            return getSharePrefs(context,PersistenceKeys.UserId.toString())
+        fun geIsUserLoggedIn(context: Context):Boolean{
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            return sharedPreferences.getBoolean(PersistenceKeys.IsUserLoggedIn.toString(),false)
+        }
+
+
+        //User model
+        fun setUserDetailModel(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserModel.toString(),value)
+        }
+        fun getUserDetailModel(context: Context)= getSharePrefs(context,PersistenceKeys.UserModel.toString())
+
+
+        //IsFromSocial
+        fun setIsFromSocial(context: Context,value: Boolean){
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(PersistenceKeys.IsFromSocial.toString(),value)
+            editor.apply()
+        }
+        fun getIsFromSocial(context: Context):Boolean{
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            return sharedPreferences.getBoolean(PersistenceKeys.IsFromSocial.toString(),false)
         }
 
 
-        //USERNAME
-        fun setUserName(context: Context,value: String){
-            setSharedPrefs(context,PersistenceKeys.UserName.toString(),value)
+        //DeviceToken
+        fun setDeviceToken(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.DeviceToken.toString(),value)
         }
-        fun getUserName(context: Context):String{
-            return getSharePrefs(context,PersistenceKeys.UserName.toString())
-        }
+        fun getDeviceToken(context: Context) = getSharePrefs(context,PersistenceKeys.DeviceToken.toString())
 
-        //USEREMAIL
-        fun setUserEmail(context: Context,value: String){
+        //UserFirstName
+        fun setUserFirstName(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserFirstName.toString(),value)
+        }
+        fun getUserFirstName(context: Context) = getSharePrefs(context,PersistenceKeys.UserLastName.toString())
+
+        //UserLastName
+        fun setUserLastName(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserLastName.toString(),value)
+        }
+        fun getUserLastName(context: Context) = getSharePrefs(context,PersistenceKeys.UserLastName.toString())
+
+        //UserGender
+        fun setUserGender(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserGender.toString(),value)
+        }
+        fun getUserGender(context: Context) = getSharePrefs(context,PersistenceKeys.UserGender.toString())
+
+        //UserEmail
+        fun setUserEmail(context: Context,value:String){
             setSharedPrefs(context,PersistenceKeys.UserEmail.toString(),value)
         }
-        fun getUserEmail(context: Context):String{
-            return getSharePrefs(context,PersistenceKeys.UserEmail.toString())
-        }
+        fun getUserEmail(context: Context) = getSharePrefs(context,PersistenceKeys.UserEmail.toString())
 
-        //USERIMAGE
-        fun setUserImage(context: Context,value: String){
+
+        //UserDob
+        fun setUserDob(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserDob.toString(),value)
+        }
+        fun getUserDob(context: Context) = getSharePrefs(context,PersistenceKeys.UserDob.toString())
+
+        //UserImage
+        fun setUserImage(context: Context,value:String){
             setSharedPrefs(context,PersistenceKeys.UserImage.toString(),value)
         }
-        fun getUserImage(context: Context):String{
-            return getSharePrefs(context,PersistenceKeys.UserImage.toString())
-        }
+        fun getUserImage(context: Context) = getSharePrefs(context,PersistenceKeys.UserImage.toString())
 
+
+        //UserLookingFor
+        fun setUserLookingFor(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserLookingFor.toString(),value)
+        }
+        fun getUserLookingFor(context: Context) = getSharePrefs(context,PersistenceKeys.UserLookingFor.toString())
+
+        //UserInterestedIn - value for userLooking for
+        fun setUserInterestedIn(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserInterestedIn.toString(),value)
+        }
+        fun getUserInterestedIn(context: Context) = getSharePrefs(context,PersistenceKeys.UserInterestedIn.toString())
+
+        //UserLatitude - value for userLooking for
+        fun setUserLatitude(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserLatitude.toString(),value)
+        }
+        fun getUserLatitude(context: Context) = getSharePrefs(context,PersistenceKeys.UserLatitude.toString())
+
+        //UserLongitude - value for userLooking for
+        fun setUserLongitude(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserLongitude.toString(),value)
+        }
+        fun getUserLongitude(context: Context) = getSharePrefs(context,PersistenceKeys.UserLongitude.toString())
+
+
+        //UserMobileNumber
+        fun setUserMobileNumber(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserMobileNumber.toString(),value)
+        }
+        fun getUserMobileNumber(context: Context) = getSharePrefs(context,PersistenceKeys.UserMobileNumber.toString())
+
+
+        private fun setSharedPrefs(context: Context, key:String, value:String){
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            val editor = sharedPreferences.edit()
+            editor.putString(key,value)
+            editor.apply()
+        }
+        private fun getSharePrefs(context: Context, key:String) : String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            return sharedPreferences.getString(key,"null") ?: ""
+        }
 
 
     }

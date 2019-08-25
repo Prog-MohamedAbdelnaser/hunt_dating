@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.Button
@@ -13,9 +14,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.adapters.AddRemoveMode
+import com.recep.hunt.adapters.LookingForListeners
 import com.recep.hunt.adapters.SetupProfileInterestedInAdapter
 import com.recep.hunt.adapters.SetupProfileLookingForAdapter
+import com.recep.hunt.constants.Constants
+import com.recep.hunt.location.TurnOnGPSActivity
 import com.recep.hunt.models.LookingForModel
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -25,14 +32,15 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.toast
 
-class SetupProfileInterestedInActivity : AppCompatActivity() {
+class SetupProfileInterestedInActivity : AppCompatActivity(),LookingForListeners {
 
+    override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
+        selectedInterstedIn = lookingFor
+        SharedPrefrenceManager.setUserInterestedIn(this@SetupProfileInterestedInActivity,lookingFor)
+    }
 
-    private lateinit var maleImageView : ImageView
-    private lateinit var feMaleImageView : ImageView
-    private lateinit var otherImageView : ImageView
+    private var selectedInterstedIn = ""
     private var selectedInterests = ArrayList<String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_interested_in)
@@ -45,12 +53,18 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
         setupRecyclerView()
 
         setup_interested_in_continue_btn.setOnClickListener {
-            val count = selectedInterests.size
-            if(count < 3){
-                showAddExtraChoiceDialog()
+            if(selectedInterstedIn.isNotEmpty()){
+                val count = selectedInterests.size
+                if(count < 3){
+                    showAddExtraChoiceDialog()
+                }else{
+                    toast(selectedInterstedIn)
+                    launchActivity<TurnOnGPSActivity>()
+                }
             }else{
-                toast("lets move to next screen")
+                Helpers.showErrorSnackBar(this@SetupProfileInterestedInActivity,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
             }
+
 
         }
 
@@ -58,7 +72,7 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
     private fun setupRecyclerView(){
         val lookingForData= dummyImageData()
         rc_view1.layoutManager = LinearLayoutManager(this)
-        rc_view1.adapter = SetupProfileInterestedInAdapter(lookingForData,this@SetupProfileInterestedInActivity)
+        rc_view1.adapter = SetupProfileInterestedInAdapter(lookingForData,this@SetupProfileInterestedInActivity,this)
 
 
 
@@ -74,10 +88,13 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
         yesButton = dialog.find(R.id.add_extra_choice_yesButton)
         noButton = dialog.find(R.id.add_extra_choice_noButton)
         yesButton.setOnClickListener {
+            dialog.dismiss()
             finish()
+
         }
         noButton.setOnClickListener {
-        launchActivity<SetupProfileReferralCodeActivity> {  }
+            dialog.dismiss()
+            launchActivity<TurnOnGPSActivity>()
         }
         dialog.show()
 
@@ -90,9 +107,9 @@ class SetupProfileInterestedInActivity : AppCompatActivity() {
     private fun dummyImageData():ArrayList<LookingForModel>{
         val data = ArrayList<LookingForModel>()
         if(data.size == 0){
-            data.add(LookingForModel(R.drawable.ic_man,R.drawable.ic_man_white,"Male",false))
-            data.add(LookingForModel(R.drawable.ic_female,R.drawable.ic_female_white,"Female",false))
-            data.add(LookingForModel(R.drawable.ic_others_gender,R.drawable.ic_other_white,"Both",false))
+            data.add(LookingForModel(R.drawable.ic_man,R.drawable.ic_man_white,"Male",false,Constants.male))
+            data.add(LookingForModel(R.drawable.ic_female,R.drawable.ic_female_white,"Female",false,Constants.female))
+            data.add(LookingForModel(R.drawable.ic_others_gender,R.drawable.ic_other_white,"Both",false,Constants.both))
 
 
         }

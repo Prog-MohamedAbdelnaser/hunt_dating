@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_gender.*
 import org.jetbrains.anko.find
@@ -15,6 +18,7 @@ class SetupProfileGenderActivity : AppCompatActivity() {
     private lateinit var maleImageView : ImageView
     private lateinit var feMaleImageView : ImageView
     private lateinit var otherImageView : ImageView
+    private var selectedGender = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_gender)
@@ -28,7 +32,13 @@ class SetupProfileGenderActivity : AppCompatActivity() {
         setupGenderSelection()
 
         setup_gender_continue_btn.setOnClickListener {
-            launchActivity<SetupProfileLookingForActivity>()
+            if(selectedGender.isNotEmpty()){
+                SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
+                launchActivity<SetupProfileLookingForActivity>()
+            }else{
+                Helpers.showErrorSnackBar(this,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
+            }
+
         }
 
     }
@@ -46,7 +56,7 @@ class SetupProfileGenderActivity : AppCompatActivity() {
             maleImageView.image = resources.getDrawable(R.drawable.ic_man_white)
             feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
             otherImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
-
+            selectedGender = Constants.male
         }
 
         female_imageview.setOnClickListener {
@@ -57,6 +67,8 @@ class SetupProfileGenderActivity : AppCompatActivity() {
             maleImageView.image = resources.getDrawable(R.drawable.ic_man)
             feMaleImageView.image = resources.getDrawable(R.drawable.ic_female_white)
             otherImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
+
+            selectedGender = Constants.female
         }
 
         otherImageView.setOnClickListener {
@@ -67,6 +79,8 @@ class SetupProfileGenderActivity : AppCompatActivity() {
             maleImageView.image = resources.getDrawable(R.drawable.ic_man)
             feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
             otherImageView.image = resources.getDrawable(R.drawable.ic_other_white)
+
+            selectedGender = Constants.others
         }
     }
 

@@ -47,6 +47,7 @@
                 android:textAlignment="center"
                 android:fontFamily="@font/montserrat"
                 android:layout_marginTop="26dp"
+                android:id="@+id/first_name_editText"
         />
         <EditText
                 android:layout_width="match_parent"
@@ -57,6 +58,7 @@
                 android:fontFamily="@font/montserrat"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
+                android:id="@+id/last_name_editText"
         />
     </LinearLayout>
     <Button android:layout_width="match_parent"

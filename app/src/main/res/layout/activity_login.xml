@@ -81,24 +81,45 @@
                 android:layout_marginEnd="16dp"
                 android:layout_height="60dp">
 
-            <Spinner
-                    android:id="@+id/country_code_spinner"
+            <!--<Spinner-->
+                    <!--android:id="@+id/country_code_spinner"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_alignParentStart="true"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:entries="@array/country_codes"-->
+                    <!--android:layout_marginStart="16dp"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:textAlignment="center">-->
+            <!--</Spinner>-->
+            <TextView
+                    android:id="@+id/country_code_txtView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
-                    android:entries="@array/country_codes"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:textAlignment="center">
-            </Spinner>
+                    android:textAlignment="center"
+                    android:text="+ 91"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/white"
+                    android:background="@android:color/transparent"
+                    android:drawableEnd="@drawable/ic_arrow_drop_down_white"
+                    android:drawableRight="@drawable/ic_arrow_drop_down_white"
+
+            />
 
             <View
                     android:id="@+id/sepratorView"
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_alignRight="@id/country_code_spinner"
-                    android:layout_alignEnd="@id/country_code_spinner"
+                    android:layout_alignStart="@id/country_code_txtView"
+                    android:layout_alignLeft="@id/country_code_txtView"
+                    android:layout_marginLeft="65dp"
+                    android:layout_marginStart="65dp"
                     android:background="@color/app_seperator_color"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
@@ -109,8 +130,8 @@
                     android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:background="@android:color/transparent"
-                      android:hint="Enter your phone number here"
-                    android:textColorHint="@color/white"
+                      android:hint="@string/enter_your_phone_number"
+                        android:textColorHint="@color/white"
                       android:layout_alignStart="@+id/sepratorView"
                       android:layout_alignLeft="@+id/sepratorView"
                       android:layout_marginLeft="16dp"

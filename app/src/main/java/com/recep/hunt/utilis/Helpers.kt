@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
+import org.aviran.cookiebar2.CookieBar
 
 
 /**
@@ -47,6 +48,53 @@ class Helpers {
             return statusInternet
         }
 
+        fun showInternetSnackBar(activity: Activity){
+            CookieBar.build(activity)
+                .setTitle("\t\tNo Internet")
+                .setMessage("check your Internet Connection")
+                .setIcon(R.drawable.ic_signal_wifi_off_black_24dp)
+                .setCookiePosition(CookieBar.TOP)
+                .setBackgroundColor(R.color.colorAccent)
+                .setTitleColor(R.color.white)
+                .setMessageColor(R.color.white)
+                .setSwipeToDismiss(true)
+                .show()
+        }
+        fun showImageSnackBar(activity: Activity,color:Int,image:Int,title:String,detail:String,titleColor: Int,detailColor:Int,cokkiePosition:Int){
+            CookieBar.build(activity)
+                .setTitle("\t\t$title")
+                .setMessage(detail)
+                .setIcon(image)
+                .setCookiePosition(cokkiePosition)
+                .setBackgroundColor(color)
+                .setTitleColor(titleColor)
+                .setMessageColor(detailColor)
+                .setSwipeToDismiss(true)
+                .show()
+        }
+        fun showSuccesSnackBar(activity: Activity,title: String,msg:String){
+            CookieBar.build(activity)
+                .setTitle("\t$title")
+                .setMessage(msg)
+                .setCookiePosition(CookieBar.TOP)
+                .setBackgroundColor(R.color.materialgreen)
+                .setTitleColor(R.color.white)
+                .setMessageColor(R.color.white)
+                .setSwipeToDismiss(true)
+                .show()
+        }
+        fun showErrorSnackBar(activity: Activity,title: String,msg:String){
+            CookieBar.build(activity)
+                .setTitle("\t$title")
+                .setMessage(msg)
+                .setCookiePosition(CookieBar.TOP)
+                .setBackgroundColor(R.color.materialred)
+                .setTitleColor(R.color.white)
+                .setMessageColor(R.color.white)
+                .setIcon(R.drawable.ic_error_white)
+                .setSwipeToDismiss(true)
+                .show()
+        }
         fun runAnimation(recyclerView: RecyclerView) {
             val context = recyclerView.context
             val controller: LayoutAnimationController

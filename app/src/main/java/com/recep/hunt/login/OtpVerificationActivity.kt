@@ -57,9 +57,6 @@ class OtpVerificationActivity : AppCompatActivity() {
         init()
     }
 
-//    putExtra(numberKey,number)
-//    putExtra(verificationIdKey,p0)
-//    putExtra(otpKey,p0)
     private fun init(){
         verificationId = intent.getStringExtra(LoginActivity.verificationIdKey)
         otp = intent.getStringExtra(LoginActivity.otpKey)
@@ -78,13 +75,6 @@ class OtpVerificationActivity : AppCompatActivity() {
             Log.e("OTP","${pinview.value}")
             Log.e("OTP FROM FIRE","${otp}")
             authenticate(pinview.value)
-//            if(pinview.value == otp){
-//                this.hideKeyboard()
-//
-//
-//            }else{
-//                toast("wrong otp")
-//            }
 
         }
 
@@ -177,6 +167,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                 if(task.isSuccessful){
                     dialog.run { dismiss() }
                     SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity,Constants.isOTPVerified)
+                    SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity,phoneNumber)
                     launchActivity<SocialLoginActivity>()
                 }else{
                     dialog.dismiss()
