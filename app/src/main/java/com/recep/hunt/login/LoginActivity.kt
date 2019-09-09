@@ -1,38 +1,23 @@
 package com.recep.hunt.login
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
-import androidx.annotation.NonNull
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.recep.hunt.R
 import com.recep.hunt.utilis.launchActivity
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.find
-import org.jetbrains.anko.toast
-import android.widget.AdapterView
-import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.hbb20.CountryCodePicker
 import com.kaopiz.kprogresshud.KProgressHUD
-import com.recep.hunt.adapters.OnBoardAdapter
+import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
@@ -46,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var mAuth: FirebaseAuth
     private lateinit var dialog : KProgressHUD
-    private lateinit var countryCodeTextView: TextView
+    private lateinit var countryCodePicker:CountryCodePicker
 
     private var verificationId = ""
     private lateinit var viewPager : ViewPager
@@ -60,33 +45,34 @@ class LoginActivity : AppCompatActivity() {
     }
     private fun init(){
         dialog = Helpers.showDialog(this@LoginActivity,this@LoginActivity,"Verifying")
+        countryCodePicker = find(R.id.ccp)
         viewPager = find(R.id.login_viewPager)
         springDotsIndicator = find(R.id.login_spring_dots_indicator)
-        countryCodeTextView = find(R.id.country_code_txtView)
 
         login_nxt_btn.setOnClickListener {
             val number = user_number_edittext.text.toString()
+            val numberCode = countryCodePicker.selectedCountryCodeWithPlus
+            val selectedCountry = countryCodePicker.selectedCountryName
             if(number.isNotEmpty()){
                 dialog.show()
-               verify(number,countryCodeTextView.text.toString())
+                SharedPrefrenceManager.setUserCountryCode(this@LoginActivity,numberCode)
+                SharedPrefrenceManager.setUserCountry(this@LoginActivity,selectedCountry)
+                verify(number,numberCode)
+
             }else{
                 Helpers.showErrorSnackBar(this@LoginActivity,"Enter number","")
             }
 
-        }
 
+
+        }
         setupViewPager()
-
-        countryCodeTextView.setOnClickListener {
-            val intent = Intent(this@LoginActivity,SelectCountryCodeActivity::class.java)
-            startActivityForResult(intent,searchRequestCode)
-        }
 
     }
     //Setting up view pager
     private fun setupViewPager(){
         val imagesArray = arrayListOf(R.drawable.on_board_bg_1,R.drawable.on_board_bg_1,R.drawable.on_board_bg_1)
-        val adapter = OnBoardAdapter(this@LoginActivity,imagesArray)
+        val adapter = OnBoardAdapter(this@LoginActivity, imagesArray)
         viewPager.adapter = adapter
         springDotsIndicator.setViewPager(viewPager)
     }
@@ -100,7 +86,6 @@ class LoginActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
-//                super.onCodeSent(p0, p1)
                 dialog.dismiss()
                 Log.e("OnCodeSent","OTP : $p0")
                 verificationId = p0
@@ -125,19 +110,6 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(resultCode == Activity.RESULT_OK){
-            if(data != null) {
-                val name = data.getStringExtra(SelectCountryCodeActivity.countryNameKey)
-                val code = data.getStringExtra(SelectCountryCodeActivity.countryCodeKey)
-                countryCodeTextView.text = code
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-
-
-    }
 
 
 

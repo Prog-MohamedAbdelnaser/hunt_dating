@@ -7,13 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionMenuTextColor">@color/pink</item>
-    </style>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
 
-    <style name="spinner_style" parent="Widget.AppCompat.Spinner">
-        <item name="backgroundTint">@color/white</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">@font/montserrat</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="AppToolbar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -25,5 +20,15 @@
 
     <style name="SearchViewTheme" parent="AppTheme">
         <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+           parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+           parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/round_dialog</item>
     </style>
 </resources>

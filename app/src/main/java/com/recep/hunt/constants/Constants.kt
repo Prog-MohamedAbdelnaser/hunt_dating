@@ -27,6 +27,10 @@ class Constants {
         const val apiDateFormat = "yyyy-MM-dd"
         const val isOTPVerified = true
 
+        const val oneMonthValue = "1"
+        const val sixMonthValue = "6"
+        const val twelveMonthValue = "12"
+
         //Info you provide keys
         const val friends = "friends"
         const val birthday = "birthday"
@@ -37,15 +41,15 @@ class Constants {
         const val emailAddress = "emailAddress"
 
         //Male,Female,Others,Both
-        const val male = "Male"
-        const val female = "Female"
-        const val others = "Others"
-        const val both = "Male,Female"
+        const val male = "male"
+        const val female = "female"
+        const val others = "others"
+        const val both = "male,female"
 
 
-
-
-
+        const val MALE = "Male"
+        const val FEMALE = "Female"
+        const val BOTH = "Both"
 
 
     }

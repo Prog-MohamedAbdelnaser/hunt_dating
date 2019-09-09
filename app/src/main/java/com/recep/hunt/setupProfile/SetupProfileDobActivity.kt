@@ -6,12 +6,12 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.EditText
+import androidx.lifecycle.ViewModelProviders
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.hideKeyboard
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.profile.model.User
+import com.recep.hunt.profile.viewmodel.UserViewModel
+import com.recep.hunt.utilis.*
 import kotlinx.android.synthetic.main.activity_setup_profile_dob.*
 import org.jetbrains.anko.*
 import java.text.SimpleDateFormat
@@ -19,7 +19,7 @@ import java.util.*
 import java.text.ParseException
 
 
-class SetupProfileDobActivity : AppCompatActivity() {
+class SetupProfileDobActivity : BaseActivity() {
 
     private var apiDate = ""
     private val TAG = SetupProfileDobActivity::class.java.simpleName
@@ -27,16 +27,18 @@ class SetupProfileDobActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_dob)
+        setScreenTitle(R.string.setup_profile)
+        getBackButton().setOnClickListener {
+            finish()
+        }
         init()
     }
     private fun init(){
 
         dobEditText = find(R.id.dob_et)
-        setSupportActionBar(setupProfiledob__toolbar)
-
+        this.hideKeyboard()
         dobEditText.setOnFocusChangeListener { _, hasFocus ->
             if(hasFocus){
-                this.hideKeyboard()
                 showDatePicker()
             }
         }
@@ -49,11 +51,12 @@ class SetupProfileDobActivity : AppCompatActivity() {
         val dob = dobEditText.text.toString()
         if(dob.isNotEmpty()){
             Log.e(TAG,"apiDate : $apiDate")
+            launchActivity<SetupProfileUploadPhotoActivity>()
         }else{
             Helpers.showErrorSnackBar(this,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
             return
         }
-        launchActivity<SetupProfileUploadPhotoActivity>()
+
     }
 
     private fun showDatePicker(){
@@ -82,7 +85,7 @@ class SetupProfileDobActivity : AppCompatActivity() {
                 dobEditText.setText(formatedDate)
                 dobEditText.clearFocus()
                 years_old_textView.text = resources.getString(R.string.years_old,age.toString())
-                hideKeyboard()
+                dobEditText.clearFocus()
             }
 
             noButton { }

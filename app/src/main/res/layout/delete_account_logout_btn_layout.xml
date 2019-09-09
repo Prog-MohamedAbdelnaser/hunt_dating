@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/delete_account"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/pink"
+            android:foreground="?android:attr/selectableItemBackground"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:background="@drawable/delete_account_bg"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/logout"
+            android:textAllCaps="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:background="@drawable/app_btn_round"/>
+</LinearLayout>

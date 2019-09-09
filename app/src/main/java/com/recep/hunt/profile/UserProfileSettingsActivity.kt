@@ -1,0 +1,219 @@
+package com.recep.hunt.profile
+
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.recep.hunt.R
+import com.recep.hunt.contactUs.ContactUsActivity
+import com.recep.hunt.premium.HuntPremiumActivity
+import com.recep.hunt.premium.MyCardsActivity
+import com.recep.hunt.profile.listeners.UserProfileSettingListeners
+import com.recep.hunt.profile.viewmodel.IcebreakerViewModel
+import com.recep.hunt.profile.viewmodel.UserViewModel
+import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.launchActivity
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.minimal_header_title_item.view.*
+import kotlinx.android.synthetic.main.notification_title_item_layout.view.*
+import kotlinx.android.synthetic.main.select_plan_header_item_layout.view.*
+import kotlinx.android.synthetic.main.social_switch_item_layout.view.*
+import org.jetbrains.anko.find
+import org.jetbrains.anko.image
+
+class UserProfileSettingsActivity : BaseActivity() ,UserProfileSettingListeners{
+
+    override fun itemSelected(title: String) {
+        when(title){
+            resources.getString(R.string.phone_number)-> launchActivity<PhoneNumberSettingActivity>()
+            resources.getString(R.string.email)-> launchActivity<EmailSettingsActivity>()
+            resources.getString(R.string.push_notifications)->launchActivity<PushNotificationsSettingsActivity>()
+            resources.getString(R.string.questions) -> launchActivity<IcebreakerQuestionActivity>()
+            resources.getString(R.string.tickets)->launchActivity<ContactUsActivity>()
+            resources.getString(R.string.add_payment_details)->launchActivity<MyCardsActivity>()
+
+        }
+    }
+
+    private lateinit var recyclerView:RecyclerView
+    private var adapter = GroupAdapter<ViewHolder>()
+    private lateinit var icebreakerViewModel : IcebreakerViewModel
+    private var totalQuestionsCount = 0
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_profile_settings)
+        setScreenTitle(R.string.settings)
+        getBackButton().setOnClickListener { finish() }
+        getBaseCancelBtn().visibility = View.GONE
+        init()
+    }
+
+    private fun init(){
+        icebreakerViewModel = ViewModelProviders.of(this).get(IcebreakerViewModel::class.java)
+
+
+        recyclerView = find(R.id.settings_recyclerView)
+        icebreakerViewModel.getAllQuestions().observe(this, Observer {
+            totalQuestionsCount = it.size
+            adapter.notifyDataSetChanged()
+        })
+        setupRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        icebreakerViewModel.getAllQuestions().observe(this, Observer {
+            totalQuestionsCount = it.size
+            adapter.notifyDataSetChanged()
+        })
+
+
+
+    }
+    private fun setupRecyclerView(){
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        adapter.add(SelectPlanHeaderItem(this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.account_settings)))
+        val phoneNumber = SharedPrefrenceManager.getUserMobileNumber(this)
+        adapter.add(DetailItemAdapter(resources.getString(R.string.phone_number),phoneNumber,resources.getString(R.string.verify_phone_to_secure),this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.notifications_setting)))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.email),0,listener = this))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.push_notifications),0,listener = this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.connected_accounts)))
+        adapter.add(SocialSwitchItemAdapter(this,R.drawable.facebook_setting,resources.getString(R.string.fb),true))
+        adapter.add(SocialSwitchItemAdapter(this,R.drawable.linked_setting,resources.getString(R.string.linked_in),true))
+        adapter.add(SocialSwitchItemAdapter(this,R.drawable.spotify_setting,resources.getString(R.string.spotify),false))
+        adapter.add(SocialSwitchItemAdapter(this,R.drawable.inst_setting,resources.getString(R.string.insta),false))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.payment)))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.add_payment_details),0,listener = this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.ice_breaker_questions)))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.questions),0,listener = this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.help_support)))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.tickets),2,listener = this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.other)))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.invite_a_friend),0,listener = this))
+        adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.legal)))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.license),0,false,listener = this))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.privacy_policy),0,listener = this))
+        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.terms_conditions),0,listener = this))
+        adapter.add(DeleteAccountAndLogoutItem())
+
+    }
+
+}
+
+
+
+
+
+
+//Select Plan Header item
+class SelectPlanHeaderItem(private val context: Context):Item<ViewHolder>(){
+    override fun getLayout() = R.layout.select_plan_header_item_layout
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.get_hunt_premium_btn.setOnClickListener {
+            context.launchActivity<HuntPremiumActivity>()
+        }
+    }
+}
+//Minimal Header Item
+class MinimalHeaderItemAdapter(private val text:String):Item<ViewHolder>(){
+    override fun getLayout() = R.layout.minimal_header_title_item
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.minimal_header_item_text.text = text
+    }
+}
+
+//Detail Item
+class DetailItemAdapter(private val title:String,private val rightDetail:String,private val belowDetail:String,val listener:UserProfileSettingListeners):Item<ViewHolder>(){
+
+    private lateinit var titleTextView : TextView
+    private lateinit var rightDetailTextView : TextView
+    private lateinit var belowDetailTextView : TextView
+    override fun getLayout() = R.layout.detail_item_layout
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        titleTextView = viewHolder.itemView.find(R.id.detail_item_title_text)
+        rightDetailTextView = viewHolder.itemView.find(R.id.detail_item_right_detail_text)
+        belowDetailTextView = viewHolder.itemView.find(R.id.detail_item_below_detail_text)
+
+        titleTextView.text = title
+        rightDetailTextView.text = rightDetail
+        belowDetailTextView.text = belowDetail
+
+        viewHolder.itemView.setOnClickListener {
+            listener.itemSelected(title)
+        }
+
+    }
+}
+
+//Notification Title ITem
+class NotificationTitleItemAdapter(private val title: String,private val count:Int,private val showArrow:Boolean = true,private val listener:UserProfileSettingListeners):Item<ViewHolder>(){
+    private lateinit var notificationCountBtn:Button
+    private lateinit var notificationTitleText:TextView
+    override fun getLayout() = R.layout.notification_title_item_layout
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        notificationCountBtn = viewHolder.itemView.find(R.id.notification_item_count_btn)
+        notificationTitleText = viewHolder.itemView.find(R.id.notification_item_title_text)
+
+        notificationTitleText.text = title
+
+        if(count != 0){
+            notificationCountBtn.visibility = View.VISIBLE
+            notificationCountBtn.text = count.toString()
+        }else{
+            notificationCountBtn.visibility = View.GONE
+        }
+
+        if(showArrow){
+            viewHolder.itemView.arrow_icon.visibility = View.VISIBLE
+        }else{
+            viewHolder.itemView.arrow_icon.visibility = View.INVISIBLE
+        }
+
+        viewHolder.itemView.setOnClickListener {
+            listener.itemSelected(title)
+        }
+    }
+}
+
+//Social switch item
+class SocialSwitchItemAdapter(private val ctx: Context,private val socialIcon:Int,private val title:String,private val switchValue:Boolean):Item<ViewHolder>(){
+    override fun getLayout() = R.layout.social_switch_item_layout
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        viewHolder.itemView.social_switch_title.text = title
+        viewHolder.itemView.social_switch_image.image = ctx.resources.getDrawable(socialIcon)
+
+        viewHolder.itemView.social_switch_control.isChecked = switchValue
+
+}
+
+}
+
+//Delete Account And Logout Item
+class DeleteAccountAndLogoutItem():Item<ViewHolder>(){
+
+    override fun getLayout() = R.layout.delete_account_logout_btn_layout
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+    }
+
+
+}

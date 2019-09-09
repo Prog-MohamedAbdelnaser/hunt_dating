@@ -12,6 +12,10 @@ import org.json.JSONObject
 /**
  * Created by RishabhShukla on 11/02/19.
  */
+enum class APIState{
+    Success,
+    Error
+}
 class ServiceVolley : ServiceInterface {
     val TAG = ServiceVolley::class.java.simpleName
 //    val basePath = Constants.BASEURL

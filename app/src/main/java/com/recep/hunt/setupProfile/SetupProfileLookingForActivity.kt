@@ -1,30 +1,27 @@
 package com.recep.hunt.setupProfile
 
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.recep.hunt.R
-import com.recep.hunt.adapters.AddRemoveMode
-import com.recep.hunt.adapters.LookingForListeners
-import com.recep.hunt.adapters.SetupProfileLookingForAdapter
-import com.recep.hunt.models.LookingForModel
-import com.recep.hunt.models.LookingForSelectionModel
+import com.recep.hunt.setupProfile.adapters.AddRemoveMode
+import com.recep.hunt.setupProfile.adapters.LookingForListeners
+import com.recep.hunt.setupProfile.adapters.SetupProfileLookingForAdapter
+import com.recep.hunt.setupProfile.model.LookingForModel
+import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_setup_profile_looking_for.*
-import org.jetbrains.anko.find
-import org.jetbrains.anko.image
 
-class SetupProfileLookingForActivity : AppCompatActivity(),LookingForListeners {
+class SetupProfileLookingForActivity : BaseActivity(),
+    LookingForListeners {
 
-    override fun getSelectedLookingFor(lookingFor: String,state:AddRemoveMode?) {
+    override fun getSelectedLookingFor(lookingFor: String,state: AddRemoveMode?) {
         when(state){
             AddRemoveMode.Added ->  {
                 selectedLookingForArray.add(lookingFor)
@@ -49,10 +46,14 @@ class SetupProfileLookingForActivity : AppCompatActivity(),LookingForListeners {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_looking_for)
+        setScreenTitle(R.string.setup_profile)
+        getBackButton().setOnClickListener {
+            finish()
+        }
         init()
     }
     private fun init(){
-        setSupportActionBar(setupProfile_lookingFor_toolbar)
+
         setup_looking_for_continue_btn.setOnClickListener {
             if(selectedLookingForArray.size != 0){
                 SharedPrefrenceManager.setUserLookingFor(this@SetupProfileLookingForActivity,selectedLookingFor)
@@ -73,7 +74,13 @@ class SetupProfileLookingForActivity : AppCompatActivity(),LookingForListeners {
         rc_view.adapter = adapter
 
         for(data in lookingForData){
-            adapter.add(SetupProfileLookingForAdapter(this@SetupProfileLookingForActivity,data,this))
+            adapter.add(
+                SetupProfileLookingForAdapter(
+                    this@SetupProfileLookingForActivity,
+                    data,
+                    this
+                )
+            )
         }
 
 
@@ -81,11 +88,33 @@ class SetupProfileLookingForActivity : AppCompatActivity(),LookingForListeners {
     private fun dummyImageData():ArrayList<LookingForModel>{
         val data = ArrayList<LookingForModel>()
         if(data.size == 0){
-            data.add(LookingForModel(R.drawable.ic_heart,R.drawable.ic_date_white,"Date",false,null))
-            data.add(LookingForModel(R.drawable.ic_buisness_icon,R.drawable.ic_buisness_white,"Business",false,null))
-            data.add(LookingForModel(R.drawable.ic_friendship_icon,R.drawable.ic_friendship_white,"Friendship",false,null))
-
-
+            data.add(
+                LookingForModel(
+                    R.drawable.ic_heart,
+                    R.drawable.ic_date_white,
+                    "Date",
+                    false,
+                    null
+                )
+            )
+            data.add(
+                LookingForModel(
+                    R.drawable.ic_buisness_icon,
+                    R.drawable.ic_buisness_white,
+                    "Business",
+                    false,
+                    null
+                )
+            )
+            data.add(
+                LookingForModel(
+                    R.drawable.friendship_icon,
+                    R.drawable.friendship_white,
+                    "Friendship",
+                    false,
+                    null
+                )
+            )
         }
         return data
     }

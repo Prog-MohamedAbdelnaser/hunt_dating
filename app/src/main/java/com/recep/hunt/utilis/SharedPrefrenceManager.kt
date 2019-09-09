@@ -25,7 +25,10 @@ enum class PersistenceKeys {
     UserLookingFor,
     UserInterestedIn,
     UserLatitude,
-    UserLongitude
+    UserLongitude,
+    UserCountryCode,
+    UserCountry,
+    IsLoggedIn
 
 }
 class SharedPrefrenceManager {
@@ -40,6 +43,18 @@ class SharedPrefrenceManager {
         fun getIsOtpVerified(context: Context):Boolean{
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
             return sharedPreferences.getBoolean(PersistenceKeys.IsOtpVerified.toString(),false)
+        }
+
+        //IsLoggedIn
+        fun setIsLoggedIn(context: Context,value: Boolean){
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(PersistenceKeys.IsLoggedIn.toString(),value)
+            editor.apply()
+        }
+        fun getIsLoggedIn(context: Context):Boolean{
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)
+            return sharedPreferences.getBoolean(PersistenceKeys.IsLoggedIn.toString(),false)
         }
 
         //IsUserLoggedIn
@@ -150,6 +165,17 @@ class SharedPrefrenceManager {
         }
         fun getUserMobileNumber(context: Context) = getSharePrefs(context,PersistenceKeys.UserMobileNumber.toString())
 
+        //UserCountryCode
+        fun setUserCountryCode(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserCountryCode.toString(),value)
+        }
+        fun getUserCountryCode(context: Context) = getSharePrefs(context,PersistenceKeys.UserCountryCode.toString())
+
+        //UserCountry
+        fun setUserCountry(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.UserCountry.toString(),value)
+        }
+        fun getUserCountry(context: Context) = getSharePrefs(context,PersistenceKeys.UserCountry.toString())
 
         private fun setSharedPrefs(context: Context, key:String, value:String){
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)

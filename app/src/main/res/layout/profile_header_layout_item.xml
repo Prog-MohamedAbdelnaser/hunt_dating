@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="146dp"
+            android:layout_height="146dp"
+            android:id="@+id/profile_header_user_image"
+            android:src="@drawable/boy_casual_eyes"
+            android:layout_gravity="center_horizontal"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="4dp"
+            />
+    <Button
+            android:id="@+id/view_my_profile_as_others_btn"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="@color/pink"
+            android:text="@string/view_my_profile_as_others"
+            android:fontFamily="@font/montserrat"
+            android:textAllCaps="false"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            />
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+        >
+
+        <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Rishabh"
+                android:textAlignment="center"
+                android:textColor="@color/app_text_black"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/light_blue_circle"
+                android:padding="8dp"
+                android:src="@drawable/ic_like_filled"
+                app:layout_constraintBottom_toBottomOf="@+id/textView13"
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/app_text_black"
+            android:text="Android &amp; iOS Developer" />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Why Did the chicker cross the road? Lets meet up and i'll tell you! I'm Rishabh,23 and i love cheesy humor."
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/app_light_text_color"
+            android:textSize="12sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            />
+
+</LinearLayout>

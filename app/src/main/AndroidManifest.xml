@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:dist="http://schemas.android.com/apk/distribution"
-          package="com.recep.hunt">
+        xmlns:dist="http://schemas.android.com/apk/distribution"
+        package="com.recep.hunt">
 
-    <dist:module dist:instant="true"/>
+    <dist:module dist:instant="true" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
             android:name=".application.MyApplication"
@@ -22,70 +23,56 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-        <activity android:name=".login.SelectCountryCodeActivity"
-                  android:label="Search Country"
-                  android:launchMode="singleTop"
-                  android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-            <meta-data
-                    android:name="android.app.searchable"
-                    android:resource="@xml/searchable" />
-
-        </activity>
-        <activity android:name=".location.TurnOnGPSActivity">
-        </activity>
+            android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true">
+        <activity android:name=".premium.MyCardsActivity"></activity>
+        <activity android:name=".contactUs.ChatWithUsChatActivity" />
+        <activity android:name=".contactUs.ContactUsEmailActivity" />
+        <activity android:name=".contactUs.ChatWithUsActivity" />
+        <activity android:name=".contactUs.FAQsActivty" />
+        <activity android:name=".contactUs.ContactUsActivity" />
+        <activity android:name=".notifications.NotificationsActivity" />
+        <activity android:name=".premium.AddNewPaymentActivity" />
+        <activity android:name=".premium.HuntPremiumActivity" />
+        <activity android:name=".profile.ChangeMyPhoneNumberActivity" />
+        <activity android:name=".profile.PhoneNumberSettingActivity" />
+        <activity android:name=".profile.IcebreakerQuestionActivity" />
+        <activity android:name=".profile.PushNotificationsSettingsActivity" />
+        <activity android:name=".profile.EmailSettingsActivity" />
+        <activity android:name=".profile.UserProfileEditQuestionActivity" />
+        <activity android:name=".profile.UserProfileSettingsActivity" />
+        <activity android:name=".profile.UserProfileEditActivity" />
+        <activity android:name=".profile.UserProfileActivity" />
+        <activity android:name=".home.HomeActivity" />
+        <activity android:name=".setupProfile.TurnOnGPSActivity" />
         <activity
                 android:name=".setupProfile.SetupProfileReferralCodeActivity"
-                android:windowSoftInputMode="adjustResize">
-
-        </activity>
-        <activity android:name=".login.ContinueAsSocialActivity">
-        </activity>
-        <activity android:name=".login.InfoYouProvideActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileAddedPhotoActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileUploadPhotoStep2Activity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileCompletedActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileInterestedInActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileLookingForActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileGalleryActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileGenderActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileDobActivity">
-        </activity>
-        <activity android:name=".setupProfile.SetupProfileActivity">
-        </activity>
-        <activity android:name=".login.SocialLoginActivity">
-        </activity>
-        <activity android:name=".login.OtpVerificationActivity">
-        </activity>
-        <activity android:name=".login.LoginActivity">
-        </activity>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-                  android:theme="@style/Base.Theme.AppCompat"/>
-
+                android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".login.ContinueAsSocialActivity" />
+        <activity android:name=".login.InfoYouProvideActivity" />
+        <activity android:name=".setupProfile.SetupProfileAddedPhotoActivity" />
+        <activity android:name=".setupProfile.SetupProfileUploadPhotoStep2Activity" />
+        <activity android:name=".setupProfile.SetupProfileCompletedActivity" />
+        <activity android:name=".setupProfile.SetupProfileInterestedInActivity" />
+        <activity android:name=".setupProfile.SetupProfileLookingForActivity" />
+        <activity android:name=".setupProfile.SetupProfileGalleryActivity" />
+        <activity android:name=".setupProfile.SetupProfileGenderActivity" />
+        <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity" />
+        <activity android:name=".setupProfile.SetupProfileDobActivity" />
+        <activity android:name=".setupProfile.SetupProfileActivity" />
+        <activity android:name=".login.SocialLoginActivity" />
+        <activity android:name=".login.OtpVerificationActivity" />
+        <activity android:name=".login.LoginActivity" />
+        <activity
+                android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+                android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <service
                 android:name=".firebaseHelper.FirebaseInstanceClass"
@@ -95,13 +82,15 @@
             </intent-filter>
         </service>
 
-
         <meta-data
                 android:name="preloaded_fonts"
-                android:resource="@array/preloaded_fonts"/>
+                android:resource="@array/preloaded_fonts" />
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
-                android:value="@string/facebook_app_id"/>
+                android:value="@string/facebook_app_id" />
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_maps_key" />
     </application>
 
 </manifest>

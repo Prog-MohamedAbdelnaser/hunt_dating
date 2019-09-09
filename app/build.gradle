@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
 androidExtensions {
     experimental = true
 }
@@ -26,6 +27,7 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation files('libs/httpclient-4.2.1.jar')
     implementation files('libs/httpmime-4.2.1.jar')
@@ -68,8 +70,26 @@ dependencies {
     implementation 'com.kaopiz:kprogresshud:1.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.aviran.cookiebar2:cookiebar2:1.1.0'
+    implementation 'com.hbb20:ccp:2.3.1'
+    implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
+    implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
+    implementation 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
+
+    // Room components
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+// Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$rootProject.androidxArchVersion"
+
+// ViewModel Kotlin support
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.archLifecycleVersion"
 
 
     testImplementation 'junit:junit:4.12'

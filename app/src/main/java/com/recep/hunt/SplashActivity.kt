@@ -1,22 +1,11 @@
 package com.recep.hunt
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationServices
-import com.recep.hunt.constants.Constants
-import com.recep.hunt.location.TurnOnGPSActivity
-import com.recep.hunt.login.LoginActivity
+import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.SocialLoginActivity
-import com.recep.hunt.setupProfile.SetupProfileDobActivity
-import com.recep.hunt.setupProfile.SetupProfileGenderActivity
-import com.recep.hunt.setupProfile.SetupProfileUploadPhotoActivity
-import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 
 class SplashActivity : AppCompatActivity() {
@@ -26,13 +15,21 @@ class SplashActivity : AppCompatActivity() {
     private val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
             val isOtpVerified = SharedPrefrenceManager.getIsOtpVerified(this@SplashActivity)
+            val isLoggedIn = SharedPrefrenceManager.getIsLoggedIn(this)
             if(isOtpVerified){
-                    val intent = Intent(applicationContext,SocialLoginActivity::class.java)
+                if(isLoggedIn){
+                    val intent = Intent(applicationContext,HomeActivity::class.java)
                     startActivity(intent)
                     finish()
-
+                }else{
+                    val intent = Intent(applicationContext,SocialLoginActivity::class.java)
+//                    val intent = Intent(applicationContext,UserProfileSettingsActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }else{
-                val intent = Intent(applicationContext,LoginActivity::class.java)
+                val intent = Intent(applicationContext,SocialLoginActivity::class.java)
+//                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
                 startActivity(intent)
                 finish()
             }

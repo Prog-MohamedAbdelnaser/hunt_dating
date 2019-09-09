@@ -103,6 +103,15 @@ class Helpers {
             recyclerView.adapter!!.notifyDataSetChanged()
             recyclerView.scheduleLayoutAnimation()
         }
+
+        fun runReverseAnimation(recyclerView: RecyclerView){
+            val context = recyclerView.context
+            val controller: LayoutAnimationController
+            controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_slide_from_up)
+            recyclerView.layoutAnimation = controller
+            recyclerView.adapter!!.notifyDataSetChanged()
+            recyclerView.scheduleLayoutAnimation()
+        }
     }
 
 }

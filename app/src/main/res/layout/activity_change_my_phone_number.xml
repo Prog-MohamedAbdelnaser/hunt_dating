@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".profile.ChangeMyPhoneNumberActivity">
+
+    <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/round_app_stroke_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccpDialog_keyboardAutoPopup="false"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_countryPreference="in,us,nz,gb"
+                app:ccp_defaultLanguage="ENGLISH"
+                app:ccp_textSize="13sp"
+                app:ccp_hintExampleNumber="true" />
+
+        <View
+                android:id="@+id/sepratorView"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/app_seperator_color" />
+
+        <EditText
+                android:id="@+id/user_number_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/montserrat"
+                android:hint="@string/enter_your_phone_number"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textColor="@color/app_text_black"
+                android:textColorHint="@color/app_light_text_color"
+                android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/change_number_btn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/change"
+            android:textSize="17sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/app_btn_round"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

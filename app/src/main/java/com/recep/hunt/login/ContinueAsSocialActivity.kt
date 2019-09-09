@@ -1,24 +1,21 @@
 package com.recep.hunt.login
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.models.UserSocialModel
-import com.recep.hunt.utilis.Response
+import com.recep.hunt.login.model.UserSocialModel
+import com.recep.hunt.setupProfile.SetupProfileGenderActivity
 import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_continue_as_social.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
-import org.json.JSONObject
 
 class ContinueAsSocialActivity : AppCompatActivity() {
 
@@ -44,7 +41,7 @@ class ContinueAsSocialActivity : AppCompatActivity() {
         val userJson = intent.getStringExtra(SocialLoginActivity.userSocialModel)
 
 
-        userDetailModel = Gson().fromJson(userJson,UserSocialModel::class.java)
+        userDetailModel = Gson().fromJson(userJson, UserSocialModel::class.java)
 
         backButton = find(R.id.continue_social_back_btn)
         socialImage = find(R.id.continue_as_social_image)
@@ -61,6 +58,10 @@ class ContinueAsSocialActivity : AppCompatActivity() {
         }
         continueUserNameTv.text = userName
         setupSocialLoginImage()
+
+        continue_as_social_nextBtn.setOnClickListener {
+            launchActivity<SetupProfileGenderActivity>()
+        }
 
     }
     private fun setupSocialLoginImage(){

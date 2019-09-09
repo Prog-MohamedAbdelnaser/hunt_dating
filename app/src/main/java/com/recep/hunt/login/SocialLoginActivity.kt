@@ -6,23 +6,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.location.Location
-import android.nfc.Tag
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.*
@@ -32,13 +26,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -46,28 +33,22 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.GsonBuilder
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
-import com.recep.hunt.adapters.SocialLoginChatReceivedAdapter
-import com.recep.hunt.adapters.SocialLoginChatSentAdapter
+import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
+import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.firebaseHelper.FirebaseHelpers
-import com.recep.hunt.models.LoginChatMessageModel
-import com.recep.hunt.models.UserSocialModel
+import com.recep.hunt.login.model.LoginChatMessageModel
+import com.recep.hunt.login.model.UserSocialModel
+import com.recep.hunt.profile.viewmodel.UserViewModel
 import com.recep.hunt.setupProfile.SetupProfileActivity
-import com.recep.hunt.setupProfile.SetupProfileCompletedActivity
-import com.recep.hunt.setupProfile.SetupProfileGalleryActivity
-import com.recep.hunt.setupProfile.SetupProfileUploadPhotoActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.activity_social_login.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
 import org.json.JSONException
-import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.security.MessageDigest
@@ -98,6 +79,8 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var messageEditText :EditText
 
+    private lateinit var userViewModel : UserViewModel
+
 
 
     private val adapter = GroupAdapter<ViewHolder>()
@@ -105,11 +88,15 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_social_login)
 
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         getDeviceToken()
         mAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
         setupGoogleAuth()
         init()
+
+//        userViewModel.logUsers()
+
 //        printHashKey(this)
     }
 
@@ -117,7 +104,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         recyclerView = find(R.id.social_login_recyclerView)
         messageEditText = find(R.id.type_msg_et)
         setupRecyclerView()
-//        checkPermission()
+
     }
     override fun onClick(v: View?) {
         if(v != null){
@@ -129,6 +116,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 }
                 R.id.connect_with_fb_btn -> {
                     setupFbLoginAuth()
+//                    launchActivity<HomeActivity>()
                 }
                 R.id.connect_with_google_btn -> {
                     val signInIntent = mGoogleSignInClient.signInIntent
@@ -194,9 +182,19 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         for(data in chatData){
             //msg type case
             if(data.type == Constants.messageSentType){
-                adapter.add(SocialLoginChatSentAdapter(this@SocialLoginActivity,data))
+                adapter.add(
+                    SocialLoginChatSentAdapter(
+                        this@SocialLoginActivity,
+                        data
+                    )
+                )
             }else{
-                adapter.add(SocialLoginChatReceivedAdapter(this@SocialLoginActivity,data))
+                adapter.add(
+                    SocialLoginChatReceivedAdapter(
+                        this@SocialLoginActivity,
+                        data
+                    )
+                )
             }
         }
 
@@ -205,8 +203,14 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun addMessage(){
         val message = messageEditText.text.toString()
-        val model = LoginChatMessageModel(message,Constants.messageSentType)
-        adapter.add(SocialLoginChatSentAdapter(this@SocialLoginActivity,model))
+        val model =
+            LoginChatMessageModel(message, Constants.messageSentType)
+        adapter.add(
+            SocialLoginChatSentAdapter(
+                this@SocialLoginActivity,
+                model
+            )
+        )
         adapter.notifyDataSetChanged()
         messageEditText.setText("")
         this@SocialLoginActivity.hideKeyboard()
@@ -216,10 +220,30 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
     private fun dummyChatdata():ArrayList<LoginChatMessageModel>{
         val data = ArrayList<LoginChatMessageModel>()
         if(data.size == 0){
-            data.add(LoginChatMessageModel("You might like to become a member of our loyalty program and accumulate points.",Constants.messageSentType))
-            data.add(LoginChatMessageModel("Interesting",Constants.messageReceivedType))
-            data.add(LoginChatMessageModel("i am looking forward to it ",Constants.messageReceivedType))
-            data.add(LoginChatMessageModel("Sure i will call you asap!",Constants.messageSentType))
+            data.add(
+                LoginChatMessageModel(
+                    "You might like to become a member of our loyalty program and accumulate points.",
+                    Constants.messageSentType
+                )
+            )
+            data.add(
+                LoginChatMessageModel(
+                    "Interesting",
+                    Constants.messageReceivedType
+                )
+            )
+            data.add(
+                LoginChatMessageModel(
+                    "i am looking forward to it ",
+                    Constants.messageReceivedType
+                )
+            )
+            data.add(
+                LoginChatMessageModel(
+                    "Sure i will call you asap!",
+                    Constants.messageSentType
+                )
+            )
         }
         return data
     }
@@ -268,7 +292,12 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         if(user != null){
 
             val gson = GsonBuilder().setPrettyPrinting().create()
-            userDetailsModel = UserSocialModel(user.uid,user.photoUrl.toString(), user.displayName!!,user.email!!)
+            userDetailsModel = UserSocialModel(
+                user.uid,
+                user.photoUrl.toString(),
+                user.displayName!!,
+                user.email!!
+            )
             val json: String = gson.toJson(userDetailsModel)
 
             val fullname = user.displayName!!.split(",").toTypedArray()

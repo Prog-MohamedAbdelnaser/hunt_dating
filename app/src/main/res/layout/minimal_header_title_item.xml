@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@color/table_view_bg"
+        android:layout_height="50dp">
+
+    <TextView
+            android:id="@+id/minimal_header_item_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/account_settings"
+            android:layout_margin="16dp"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/app_text_black"
+            />
+
+
+</LinearLayout>

@@ -69,7 +69,6 @@
     </string>
     <string name="birthday">Birthday</string>
     <string name="birthday_description">Your Birthday</string>
-    <string name="home_town">Hometown</string>
     <string name="home_town_description">Koln,DE</string>
     <string name="photos">Photos</string>
     <string name="photos_description">Your Photos</string>
@@ -95,20 +94,244 @@
     </string>
     <string name="complete_form">Complete Form!</string>
     <string name="you_have_complete_form">You must complete the form before moving</string>
+    <string name="search_locations">search locations</string>
+    <string name="filter">Filter</string>
+    <string name="interested_in">Interested in</string>
+    <string name="age_range">Age Range</string>
+    <string name="fromYears_toYears">%1$s Years - %2$s Years</string>
+    <string name="apply">Apply</string>
+    <string name="near_by_locations">Nearby locations</string>
+    <string name="far_away">Far away</string>
+    <string name="view_my_profile_as_others">View my profile as others see it.</string>
+
+    <string name="hometown">Hometown</string>
+    <string name="schooloruniversity">School or University</string>
+    <string name="iam">I am</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save">Save</string>
+    <string name="write_about_you">Write about you</string>
+    <string name="job_title">Job title</string>
+    <string name="add_job_title">Add job title</string>
+    <string name="company">Company</string>
+    <string name="add_company_name">Add company name</string>
+    <string name="add_home_town">Add hometown</string>
+    <string name="add_school_or_university">Add School or University</string>
+
+
+    <!--    //Edit Questions values-->
+    <string name="relation_question">What\'s your relationship status?</string>
+    <string name="relation_option_1">Single</string>
+    <string name="relation_option_2">In a relationship</string>
+    <string name="relation_option_3">Married</string>
+    <string name="relation_option_4">divorced</string>
+    <string name="relation_option_5">its complicated</string>
+
+    <string name="height_question">Whats\'s your height?</string>
+    <string name="height_placeholder">Enter your height in cm</string>
+
+
+    <string name="gym_question">Do you work out?</string>
+    <string name="gym_option_1">Active</string>
+    <string name="gym_option_2">Sometimes</string>
+    <string name="gym_option_3">Almost never</string>
+
+    <string name="edutcation_question">What\'s your education?</string>
+    <string name="education_option_1">High school</string>
+    <string name="education_option_2">Vocational school</string>
+    <string name="education_option_3">College</string>
+    <string name="education_option_4">Undergraduate degree</string>
+    <string name="education_option_5">Grad school</string>
+    <string name="education_option_6">Graduate degree</string>
+
+    <string name="drink_question">Do your drink?</string>
+    <string name="drink_option_1">Socially</string>
+    <string name="drink_option_2">Never</string>
+    <string name="drink_option_3">Frequently</string>
+
+    <string name="smoke_question">Do you smoke?</string>
+    <string name="smoke_option_1">Socially</string>
+    <string name="smoke_option_2">Never</string>
+    <string name="smoke_option_3">Frequently</string>
+
+    <string name="pets_question">Do you have pets?</string>
+    <string name="pet_option_1">Dog</string>
+    <string name="pet_option_2">Cat</string>
+    <string name="pet_option_3">None</string>
+    <string name="pet_option_4">Don\'t want any</string>
+    <string name="pet_option_5">Lots</string>
+    <string name="pet_option_6">Other</string>
+
+    <string name="looking_for_question">What do you want from your matches?</string>
+    <string name="looking_for_option_1">Dating</string>
+    <string name="looking_for_option_2">Business</string>
+    <string name="looking_for_option_3">Friendship</string>
+    <string name="looking_for_option_4">All</string>
+
+    <string name="kids_question">Do you have plans on having children?</string>
+    <string name="kids_option_1">Want someday</string>
+    <string name="kids_option_2">Don\'t want</string>
+    <string name="kids_option_3">Have &amp; want more</string>
+    <string name="kids_option_4">have &amp; don\'t want more</string>
+
+    <string name="zodiac_question">Choose your zodiac?</string>
+    <string name="zodiac_option_1">Aquaris</string>
+    <string name="zodiac_option_2">Pisces</string>
+    <string name="zodiac_option_3">Aries</string>
+    <string name="zodiac_option_4">Taurus</string>
+    <string name="zodiac_option_5">Gemini</string>
+    <string name="zodiac_option_6">Cancer</string>
+    <string name="zodiac_option_7">Leo</string>
+    <string name="zodiac_option_8">Virgo</string>
+    <string name="zodiac_option_9">Libra</string>
+    <string name="zodiac_option_10">Scorpio</string>
+    <string name="zodiac_option_11">Sagittarius</string>
+    <string name="zodiac_option_12">Capricon</string>
+
+    <string name="religion_question">Do you identify with a religion?</string>
+    <string name="religin_option_1">Christian</string>
+    <string name="religin_option_2">Atheist</string>
+    <string name="religin_option_3">Christian</string>
+    <string name="religin_option_4">Jewish</string>
+    <string name="religin_option_5">Muslim</string>
+    <string name="religin_option_6">Other</string>
+
+
+    <!-- Setting's Page -->
+    <string name="settings">Settings</string>
+    <string name="select_a_plan">Select a plan!</string>
+    <string name="exclusive">Exclusive</string>
+    <string name="one_month">1</string>
+    <string name="six_months">6</string>
+    <string name="twelve_months">12</string>
+    <string name="month">Month</string>
+    <string name="months">Months</string>
+    <string name="one_month_price">14.99 $/month</string>
+    <string name="six_months_price">9.99 $/month</string>
+    <string name="tweleve_months_price">6.99 $/month</string>
+    <string name="get_hunt_premium">Get Hunt Premium</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="phone_number">Phone number</string>
+    <string name="verify_phone_to_secure">Verify a phone number to help secure your account</string>
+    <string name="notifications_setting">Notifications Settings</string>
+    <string name="email">Email</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="connected_accounts">Connected Accounts</string>
+    <string name="fb">Facebook</string>
+    <string name="linked_in">Linked in</string>
+    <string name="spotify">Spotify</string>
+    <string name="insta">Instagram</string>
+    <string name="payment">Payment</string>
+    <string name="add_payment_details">Add payment details</string>
+    <string name="ice_breaker_questions">Icebreaker-Questions</string>
+    <string name="questions">Questions</string>
+    <string name="help_support">Help &amp; Support</string>
+    <string name="tickets">Tickets</string>
+    <string name="invite_a_friend">Invite a Friend</string>
+    <string name="legal">Legal</string>
+    <string name="license">License</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="logout">Logout</string>
+
+    <string name="Email_Address">Email Address</string>
+    <string name="verified">Verified</string>
+    <string name="not_verified">Not Verified</string>
+    <string name="notifications">Notifications</string>
+    <string name="new_matches">New Matches</string>
+    <string name="new_locations">New Locations</string>
+    <string name="promotions">Promotions</string>
+    <string name="turn_of_all_notifications">Turn Off All Notifications</string>
+
+    <string name="push_notificaions">Push Notifications</string>
+    <string name="you_just_got_new_match">You just got new match</string>
+    <string name="new_like">New Like</string>
+    <string name="someone_like_ur_profile">Someone liked your profile</string>
+
+    <string name="add_new_question">Add New Question</string>
+    <string name="add_a_question">Add a question</string>
+    <string name="add_your_question_here">Add your question here…</string>
+    <string name="option1">Option 1</string>
+    <string name="option2">Option 2</string>
+    <string name="option3">Option 3</string>
+    <string name="option4">Option 4</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="phone_no_setting">Phone Number Settings</string>
+    <string name="discovery_settings">Discovery Settings</string>
+    <string name="change_my_number">Change My Phone Number</string>
+
+    <string name="change_my_phone_no">Change My Phone Number</string>
+    <string name="change">Change</string>
+    <string name="success">Success!</string>
+    <string name="you_have_change_phone_nummber">You have successfully changed your phone number</string>
+    <string name="ok">OK</string>
+
+    <string name="hunt_premium">HUNT PREMIUM</string>
+    <string name="select_payment_method">Select payment method</string>
+    <string name="new_payment_method">New payment method</string>
+    <string name="card_number">Card Number</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="cvv">CVV</string>
+    <string name="card_holders_name">Card Holder\'s Name</string>
+    <string name="add_card">Add card</string>
+    <string name="payment_methods">Payment methods</string>
+    <string name="example_card_numner">1234 5678 9101 1121</string>
+    <string name="expiry_date_hint">mm/yy</string>
+
+    <string name="sorry">Sorry</string>
+    <string name="not_find_any_notifications">We couldn\'t find any notifications.</string>
+
+    <string name="exp_date">Exp. Date</string>
+
+    <string name="contact_us">Contact us</string>
+    <string name="faqs">FAQs</string>
+    <string name="faq_detail">Help on common issues</string>
+    <string name="chat_with_us">Chat with us</string>
+    <string name="chat_detail">Message us in-app</string>
+    <string name="email_us">Email us</string>
+    <string name="email_detail">Our Team will reply shortly</string>
+    <string name="ask_us">Ask Us</string>
+
+
+    <string name="hunt_detail">Hunt ID, sign up and more</string>
+    <string name="account">Account</string>
+    <string name="account_detail">Limits, statements and more</string>
+    <string name="pricing">Pricing</string>
+    <string name="pricing_detail">Our Team will replay shortly</string>
+    <string name="card">Card</string>
+    <string name="card_detail">Pin code, activation and more</string>
+    <string name="payments">Payments</string>
+    <string name="payments_detail">Our Team will replay shortly</string>
+    <string name="paypal">Paypal</string>
+    <string name="paypal_detail">All question related paypal</string>
+    <string name="mastercard">Mastercard</string>
+    <string name="mastercard_details">All question related mastercard</string>
+    <string name="google_pay">Google pay</string>
+    <string name="googlepay_details">All question related google pay</string>
+    <string name="security">Security</string>
+    <string name="security_details">All question related security</string>
+
+
+    <string name="dont_want_to_join_hunt">Don\'t wanna join Hunt Premium today?\nTell us why and we\'ll see what we can do!</string>
+    <string name="reason1">Unsure which package I should use</string>
+    <string name="reason2">I want to test the app some more</string>
+    <string name="reason3">Price</string>
+    <string name="reason4">I don\'t want to subscribe to Premium</string>
+    <string name="reason5">Not enough value for the cost</string>
+    <string name="reason6">Other</string>
+
 
     <string name="facebook_app_id">428189314461041</string>
     <string name="insta_client_id">50861e5c85324044a5c2b888735d7ca8</string>
     <string name="insta_client_secret">ad97c323aaa94ffdb5bdf5a6a25435e</string>
     <string name="insta_callback_url">https://www.gethunt.app/</string>
     <string name="insta_base_url">https://api.instagram.com/</string>
-    <array name="country_codes">
-        <item>+91</item>
-        <item>+92</item>
-        <item>+93</item>
-        <item>+94</item>
-        <item>+95</item>
-        <item>+96</item>
-    </array>
+    <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
+    <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
 
 
 </resources>

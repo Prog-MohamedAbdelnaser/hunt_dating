@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#F7531B</color>
-    <color name="colorPrimaryDark">#F7531B</color>
-    <color name="colorAccent">#ffff2a4e</color>
+    <color name="colorPrimaryDark">#F64C1F</color>
+    <color name="colorAccent">#F64C1F</color>
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="mytransparentblack">#d31f292e</color>
@@ -23,6 +23,10 @@
     <color name="fb_color">#3c5a99</color>
     <color name="app_light_text_color">#9AA7A4</color>
     <color name="app_seperator_color">#9A9DA4</color>
+    <color name="app_gray_color">#CDD1D9</color>
+    <color name="edit_questions_bg_color">#FF9057</color>
+
+    <color name="map_ripple_color">#973EFD</color>
 
 
 </resources>

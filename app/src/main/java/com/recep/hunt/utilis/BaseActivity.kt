@@ -3,10 +3,7 @@ package com.recep.hunt.utilis
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.recep.hunt.R
 import org.jetbrains.anko.find
@@ -17,14 +14,17 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var mImageButtonBack: ImageButton
     lateinit var progressDialog: Dialog
     lateinit var fakeToolbar : RelativeLayout
+    lateinit var cancelBtn : Button
     override fun setContentView(layoutResID: Int) {
         val coordinatorLayout: CoordinatorLayout = layoutInflater.inflate(R.layout.activity_base, null) as CoordinatorLayout
         val activityContainer: FrameLayout = coordinatorLayout.findViewById(R.id.layout_container)
         mTextViewScreenTitle = coordinatorLayout.findViewById(R.id.text_screen_title) as TextView
         mImageButtonBack = coordinatorLayout.findViewById(R.id.image_back_button)
+        cancelBtn = coordinatorLayout.findViewById(R.id.base_cancel_btn)
         progressDialog = Dialog(this@BaseActivity)
         layoutInflater.inflate(layoutResID, activityContainer, true)
         fakeToolbar = coordinatorLayout.findViewById(R.id.dumy_base_toolbar) as RelativeLayout
+
         super.setContentView(coordinatorLayout)
     }
 
@@ -45,6 +45,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun getToolbar():RelativeLayout{
         return fakeToolbar
+    }
+
+    fun getBaseCancelBtn():Button{
+        return cancelBtn
     }
 
     fun showProgressDialog() {

@@ -8,25 +8,27 @@ import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProviders
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.utilis.BaseActivity
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.profile.model.User
+import com.recep.hunt.profile.viewmodel.UserViewModel
+import com.recep.hunt.utilis.*
 import kotlinx.android.synthetic.main.activity_setup_profile.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.image
 import org.jetbrains.anko.textColor
 import java.util.*
 
-class SetupProfileActivity : AppCompatActivity() {
-
+class SetupProfileActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile)
+        setScreenTitle(R.string.setup_profile)
+        getBackButton().setOnClickListener { finish() }
         init()
+        this.hideKeyboard()
     }
 
     private fun init(){
@@ -42,13 +44,13 @@ class SetupProfileActivity : AppCompatActivity() {
             }
 
         }
-        setSupportActionBar(setupProfile_toolbar)
+//        setSupportActionBar(setupProfile_toolbar)
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        finish()
-        return super.onOptionsItemSelected(item)
-    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        finish()
+//        return super.onOptionsItemSelected(item)
+//    }
 
 }

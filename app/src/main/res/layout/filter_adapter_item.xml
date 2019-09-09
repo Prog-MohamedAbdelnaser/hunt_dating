@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:orientation="vertical"
+                                                   android:layout_width="wrap_content"
+                                                   android:layout_height="145dp">
+    <ImageView android:layout_width="100dp"
+               android:id="@+id/filter_adapter_item_image"
+               android:layout_height="100dp"
+               android:background="@drawable/selected_cirular_btn"
+               android:padding="30dp"
+               android:src="@drawable/ic_date_white"
+               android:clickable="true"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               android:layout_marginTop="8dp"/>
+    <TextView
+            android:id="@+id/filter_adapter_item_title"
+            android:text="@string/dates"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/app_text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/filter_adapter_item_image"
+            android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="@+id/filter_adapter_item_image"
+            android:layout_marginLeft="8dp" app:layout_constraintHorizontal_bias="0.375"
+            app:layout_constraintTop_toBottomOf="@+id/filter_adapter_item_image" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp" android:layout_marginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

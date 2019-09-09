@@ -5,37 +5,31 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".setupProfile.SetupProfileGenderActivity">
 
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/setupProfile_lookingFor_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="@string/setup_profile"
-            app:titleTextColor="@color/app_text_black"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-    </androidx.appcompat.widget.Toolbar>
-
     <TextView
-            android:text="@string/i_am_looking_for"
-            android:textColor="@color/app_text_black"
-            android:fontFamily="@font/montserrat_medium"
-            android:textSize="22sp"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView2"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="@string/i_am_looking_for"
             android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/setupProfile_lookingFor_toolbar"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" android:layout_marginTop="24dp"/>
+            android:textColor="@color/app_text_black"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     <TextView
             android:text="@string/select_your_choice"
             android:fontFamily="@font/montserrat"
             android:textSize="13sp"
+            android:textColor="@color/app_light_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView4" android:layout_marginTop="8dp"
@@ -44,10 +38,12 @@
 
     <Button android:layout_width="match_parent"
             android:background="@drawable/rectangle_app_btn"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="@string/next"
             android:textColor="@color/white"
-            android:fontFamily="@font/montserrat_bold"
+            android:textSize="17sp"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

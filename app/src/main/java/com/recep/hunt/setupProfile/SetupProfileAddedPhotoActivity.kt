@@ -15,6 +15,7 @@ import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
+import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImage
@@ -25,17 +26,19 @@ import org.jetbrains.anko.toast
 import java.io.File
 
 
-class SetupProfileAddedPhotoActivity : AppCompatActivity() {
+class SetupProfileAddedPhotoActivity : BaseActivity() {
 
     lateinit var uri: Uri
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_added_photo)
+        setScreenTitle(R.string.setup_profile)
+        getBackButton().setOnClickListener { finish() }
+        getBaseCancelBtn().visibility = View.GONE
         init()
     }
 
     private fun init() {
-        setSupportActionBar(setupProfileupload_pic3__toolbar)
         val uriString: String = intent.getStringExtra(IMGURI)
         SharedPrefrenceManager.setUserImage(this@SetupProfileAddedPhotoActivity,uriString)
         uri = Uri.parse(uriString)

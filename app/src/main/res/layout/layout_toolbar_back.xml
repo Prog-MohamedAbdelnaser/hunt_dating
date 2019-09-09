@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/dumy_base_toolbar"
-                android:background="@drawable/rectangle_app_btn">
+                android:background="@color/white">
 
     <ImageButton
             android:id="@+id/image_back_button"
@@ -14,20 +14,32 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:background="@android:color/transparent"
-            android:tint="@color/white"
             android:src="@drawable/ic_arrow_back_black" />
 
     <TextView
             android:id="@+id/text_screen_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_toEndOf="@id/image_back_button"
-            android:layout_toRightOf="@id/image_back_button"
-            android:textColor="@color/white"
-            android:fontFamily="@font/montserrat_medium"
-            android:textSize="20sp"
+            android:fontFamily="@font/montserrat"
+            android:textAlignment="center"
+            android:textColor="@color/app_text_black"
+            android:textSize="17sp"
             tools:text="Screen Title" />
+
+    <Button
+            android:id="@+id/base_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/app_light_text_color"
+            />
 </RelativeLayout>
