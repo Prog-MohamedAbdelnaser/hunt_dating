@@ -87,7 +87,6 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_social_login)
-
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         getDeviceToken()
         mAuth = FirebaseAuth.getInstance()
@@ -299,8 +298,9 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 user.email!!
             )
             val json: String = gson.toJson(userDetailsModel)
+            Log.e("Full name : ${user.displayName}","")
+            val fullname = user.displayName!!.split(" ").toTypedArray()
 
-            val fullname = user.displayName!!.split(",").toTypedArray()
             val firstName : String = fullname[0]
             val lastName:String = fullname[1]
 
@@ -308,7 +308,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             SharedPrefrenceManager.setUserLastName(this,lastName)
             SharedPrefrenceManager.setUserEmail(this,user.email!!)
             SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity,json)
-
+            SharedPrefrenceManager.setUserImage(this,user.photoUrl.toString())
             launchActivity<ContinueAsSocialActivity> {
                 putExtra(socialTypeKey,Constants.socialGoogleType)
                 putExtra(userSocialModel,json)
@@ -336,10 +336,17 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                     Log.e("peofile_name", social_name)
                     Log.e("peofile_email", social_email)
 
+                userDetailsModel = UserSocialModel(
+                    id,
+                    social_pic,
+                    social_name,
+                    social_email
+                )
+
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val json: String = gson.toJson(userDetailsModel)
 
-                val fullname = social_name.split(",").toTypedArray()
+                val fullname = social_name.split(" ").toTypedArray()
                 val firstName : String = fullname[0]
                 val lastName:String = fullname[1]
 
@@ -347,6 +354,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 SharedPrefrenceManager.setUserLastName(this,lastName)
                 SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity,json)
                 SharedPrefrenceManager.setUserEmail(this,social_email)
+                SharedPrefrenceManager.setUserImage(this,social_pic)
 
                 launchActivity<ContinueAsSocialActivity> {
                     putExtra(socialTypeKey,Constants.socialFBType)

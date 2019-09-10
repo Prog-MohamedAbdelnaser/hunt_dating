@@ -33,7 +33,7 @@
         >
 
         <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/profile_header_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_medium"
@@ -54,25 +54,24 @@
                 android:background="@drawable/light_blue_circle"
                 android:padding="8dp"
                 android:src="@drawable/ic_like_filled"
-                app:layout_constraintBottom_toBottomOf="@+id/textView13"
-                app:layout_constraintStart_toEndOf="@+id/textView13"
-                app:layout_constraintTop_toTopOf="@+id/textView13" />
+                app:layout_constraintBottom_toBottomOf="@+id/profile_header_user_name"
+                app:layout_constraintStart_toEndOf="@+id/profile_header_user_name"
+                app:layout_constraintTop_toTopOf="@+id/profile_header_user_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/user_job_title_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:fontFamily="@font/montserrat"
-            android:textColor="@color/app_text_black"
-            android:text="Android &amp; iOS Developer" />
+            android:textColor="@color/app_text_black" />
     <TextView
+            android:id="@+id/user_aboutus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="Why Did the chicker cross the road? Lets meet up and i'll tell you! I'm Rishabh,23 and i love cheesy humor."
             android:fontFamily="@font/montserrat"
             android:textColor="@color/app_light_text_color"
             android:textSize="12sp"

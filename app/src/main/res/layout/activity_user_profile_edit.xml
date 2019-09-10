@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content">
 
                 <EditText
-                        android:id="@+id/profile_simple_item_title"
+                        android:id="@+id/write_about_us_et"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"

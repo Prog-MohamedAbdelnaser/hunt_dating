@@ -28,7 +28,12 @@ enum class PersistenceKeys {
     UserLongitude,
     UserCountryCode,
     UserCountry,
-    IsLoggedIn
+    IsLoggedIn,
+    AboutYou,
+    JobTitle,
+    CompanyName,
+    HomeTown,
+    SchoolUniversity
 
 }
 class SharedPrefrenceManager {
@@ -176,6 +181,37 @@ class SharedPrefrenceManager {
             setSharedPrefs(context,PersistenceKeys.UserCountry.toString(),value)
         }
         fun getUserCountry(context: Context) = getSharePrefs(context,PersistenceKeys.UserCountry.toString())
+
+        //AboutYou
+        fun setAboutYou(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.AboutYou.toString(),value)
+        }
+        fun getAboutYou(context: Context) = getSharePrefs(context,PersistenceKeys.AboutYou.toString())
+
+        //JobTitle
+        fun setJobTitle(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.JobTitle.toString(),value)
+        }
+        fun getJobTitle(context: Context) = getSharePrefs(context,PersistenceKeys.JobTitle.toString())
+
+        //CompanyName
+        fun setCompanyName(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.CompanyName.toString(),value)
+        }
+        fun getCompanyName(context: Context) = getSharePrefs(context,PersistenceKeys.CompanyName.toString())
+
+        //HomeTown
+        fun setHomeTown(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.HomeTown.toString(),value)
+        }
+        fun getHomeTown(context: Context) = getSharePrefs(context,PersistenceKeys.HomeTown.toString())
+
+        //SchoolUniversity
+        fun setSchoolUniversity(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.SchoolUniversity.toString(),value)
+        }
+        fun getSchoolUniversity(context: Context) = getSharePrefs(context,PersistenceKeys.SchoolUniversity.toString())
+
 
         private fun setSharedPrefs(context: Context, key:String, value:String){
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName,0)

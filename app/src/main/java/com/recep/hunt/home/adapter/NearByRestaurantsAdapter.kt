@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
+import com.recep.hunt.utilis.Helpers
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 
@@ -46,7 +47,7 @@ class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRes
                 if(model.photos != null){
                     val photoRefrence = model.photos[0].photoReference
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
-                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
+                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
 
                 restaurantName.text = model.name

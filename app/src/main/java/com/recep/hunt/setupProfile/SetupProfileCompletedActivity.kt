@@ -44,9 +44,10 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private var mHttpClient: DefaultHttpClient? = null
     private lateinit var userImage : CircleImageView
     private lateinit var userName : TextView
-    private lateinit var userViewModel: UserViewModel
+//    private lateinit var userViewModel: UserViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SharedPrefrenceManager.setIsLoggedIn(this,true)
         setContentView(R.layout.activity_setup_profile_completed)
         init()
     }
@@ -56,10 +57,10 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         userName = find(R.id.user_completed_profile_name)
         setSupportActionBar(setupProfile_complete_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+//        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         setupViews()
 
-        SharedPrefrenceManager.setIsLoggedIn(this,true)
+
 
         lottieAnimationView.playAnimation()
 //        MakeAPICall(this,this).execute(APIUtils.REGISTER)
@@ -79,7 +80,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
     private fun setupViews(){
         val userImageString = SharedPrefrenceManager.getUserImage(this)
-        Picasso.get().load(Uri.parse(userImageString)).into(userImage)
+        Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
 

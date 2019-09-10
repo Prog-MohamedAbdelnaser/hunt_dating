@@ -7,19 +7,25 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import androidx.constraintlayout.solver.widgets.Helper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.share.Share
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.android.synthetic.main.profile_basic_item_view.view.*
+import kotlinx.android.synthetic.main.profile_header_layout_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_header_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_title_item.view.*
 import org.jetbrains.anko.*
@@ -290,8 +296,20 @@ class UserProfileActivity : AppCompatActivity() {
 
 //ProfileHeader
 class ProfileHeaderView(private val context: Context):Item<ViewHolder>(){
+    var userName : String? = ""
+    var userJobtitle : String? = ""
+    var aboutYou : String? = ""
     override fun getLayout() = R.layout.profile_header_layout_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        userName = SharedPrefrenceManager.getUserFirstName(context)
+        userJobtitle = SharedPrefrenceManager.getJobTitle(context)
+        aboutYou = SharedPrefrenceManager.getAboutYou(context)
+
+        val userImage = SharedPrefrenceManager.getUserImage(context)
+        Picasso.get().load(userImage).transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image)).into(viewHolder.itemView.profile_header_user_image)
+        viewHolder.itemView.profile_header_user_name.text = userName
+        viewHolder.itemView.user_aboutus.text = aboutYou
+        viewHolder.itemView.user_job_title_tv.text = userJobtitle
 
     }
 }

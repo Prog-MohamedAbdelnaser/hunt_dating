@@ -1,15 +1,19 @@
+
 package com.recep.hunt.utilis
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import androidx.recyclerview.widget.RecyclerView
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
+import com.squareup.picasso.Transformation
 import org.aviran.cookiebar2.CookieBar
 
 
@@ -112,6 +116,34 @@ class Helpers {
             recyclerView.adapter!!.notifyDataSetChanged()
             recyclerView.scheduleLayoutAnimation()
         }
+
+        fun getPicassoTransformation(imageView: View): Transformation {
+            val transformation = object : com.squareup.picasso.Transformation {
+                override fun transform(source: Bitmap): Bitmap {
+                    var targetWidth =imageView.getWidth()
+
+                    if (targetWidth <= 0) {
+                        targetWidth = Constants.defaultWidth
+                    } else {
+                        Constants.defaultWidth = targetWidth
+                    }
+
+                    val aspectRatio = source.height.toDouble() / source.width.toDouble()
+                    val targetHeight = (targetWidth * aspectRatio).toInt()
+                    val result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false)
+                    if (result != source) {
+                        source.recycle()
+                    }
+                    return result
+                }
+
+                override fun key(): String {
+                    return "transformation" + " desiredWidth"
+                }
+            }
+            return transformation
+        }
+
     }
 
 }

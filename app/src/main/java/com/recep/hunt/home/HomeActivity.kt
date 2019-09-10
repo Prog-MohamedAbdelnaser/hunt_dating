@@ -1,5 +1,6 @@
 package com.recep.hunt.home
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -45,6 +46,7 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.toast
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
@@ -59,6 +61,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        private const val animateZoomTo = 12f
     }
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
@@ -123,6 +126,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             ScaleTransformer.Builder()
             .setMinScale(0.8f)
             .build())
+        horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
     private fun nearByRestaurants(lat:Double,long:Double,radius:String,completion:(APIState,ArrayList<NearByRestaurantsModelResults>?)->Unit){
@@ -142,31 +146,69 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
             setupSortedListRecyclerView(results)
 
+        }
 
-//            if(forNearBy){
-////                nearByRestaurantsAdapter.setItems(results)
-////                setupNearByRestaurantsRecyclerView(results)
-//            }
-////            completion(APIState.Success,results)
-//            val markerOptions=MarkerOptions()
-//            for(i in 0 until results.size - 1){
-//                val googlePlace = results[i]
-//                val mLat = googlePlace.geometry.location.lat
-//                val mLong = googlePlace.geometry.location.lng
-//                val placeName = googlePlace.name
-//                val latLong = LatLng(mLat,mLong)
-//
-//                markerOptions.position(latLong)
-//                markerOptions.title(placeName)
-////                markerOptions.icon(BitmapDescriptorFactory.fromRxesource(R.drawable.ic_launcher_foreground))
-//                markerOptions.snippet(i.toString())
-//
-//                mMap.addMarker(markerOptions)
-//
-//            }
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat,long)))
-//            mMap.animateCamera(CameraUpdateFactory.zoomTo(11f))
-//
+    }
+
+    private fun setupAllNearByRestMarkers(lat:Double,long:Double){
+        nearByRestaurants(lat,long,"1000"){response,results->
+            if(response == APIState.Success){
+                val markerOptions=MarkerOptions()
+                if(results != null){
+                    for(i in 0 until results.size - 1){
+                        val googlePlace = results[i]
+                        val mLat = googlePlace.geometry.location.lat
+                        val mLong = googlePlace.geometry.location.lng
+                        val placeName = googlePlace.name
+                        val latLong = LatLng(mLat,mLong)
+
+                        markerOptions.position(latLong)
+                        markerOptions.title(placeName).icon(null)
+
+                        markerOptions.snippet(i.toString())
+
+                        val marker = mMap.addMarker(markerOptions)
+                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
+                    }
+                    Run.after(1000){
+                        setupNearByResUnder600M(lat,long)
+                    }
+                    setupNearByRestaurantsRecyclerView(results)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat,long)))
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+                }
+            }
+
+        }
+
+    }
+    private fun setupNearByResUnder600M(lat:Double,long:Double){
+        nearByRestaurants(lat,long,"600"){response,results->
+            if(response == APIState.Success){
+                val markerOptions=MarkerOptions()
+                if(results != null){
+                    for(i in 0 until results.size - 1){
+                        val googlePlace = results[i]
+                        val mLat = googlePlace.geometry.location.lat
+                        val mLong = googlePlace.geometry.location.lng
+                        val placeName = googlePlace.name
+                        val latLong = LatLng(mLat,mLong)
+
+                        markerOptions.position(latLong)
+                        markerOptions.title(placeName).icon(null)
+
+                        markerOptions.snippet(i.toString())
+
+                        val marker = mMap.addMarker(markerOptions)
+                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.close_rest_marker))
+
+
+
+                    }
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat,long)))
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+                }
+            }
 
         }
 
@@ -175,7 +217,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private fun setupCardClicks(){
         showMyLocationCardView.setOnClickListener {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude,longitude)))
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(11f))
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
         }
 
         showSortedListCardView.setOnClickListener {
@@ -213,7 +255,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-        for(i in 3 until items.size-1){
+        for(i in 3 until items.size){
             adapter.add(
                 NearByRestaurantsVerticalAdapter(
                     this@HomeActivity,
@@ -252,6 +294,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
 
                 mMarker = mMap.addMarker(markerOptions)
+//                mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(11f))
@@ -260,9 +303,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
                     mapRipple.withNumberOfRipples(4)
                     mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
-                    mapRipple.withDistance(5500.toDouble())      // 2000 metres radius
+                    mapRipple.withDistance(600.toDouble())      // 2000 metres radius
                     mapRipple.withRippleDuration(12000)    //12000ms
-                    mapRipple.withTransparency(0.5f)
+                    mapRipple.withTransparency(0.4f)
                 mapRipple.startRippleMapAnimation()
 
 
@@ -270,13 +313,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity,mLastLocation.longitude.toString())
 
                 if(Helpers.isInternetConnection(this@HomeActivity)){
-                    nearByRestaurants(mLastLocation.latitude,mLastLocation.longitude,"1000"){res,data->
-                        if(data != null)
-                            setupNearByRestaurantsRecyclerView(data)
-                        else
-                            toast("No Restaurants Found")
+                    val lat = mLastLocation.latitude
+                    val long = mLastLocation.longitude
 
-                    }
+                    setupAllNearByRestMarkers(lat,long)
+
+
                 }
 
 
@@ -349,6 +391,15 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             }
         }
     }
+}
+
+class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter{
+    override fun getInfoContents(p0: Marker?): View {
+        val view = context.layoutInflater.inflate(R.layout.custom_infowindow,null)
+        return view
+    }
+
+    override fun getInfoWindow(p0: Marker?) = null
 }
 
 

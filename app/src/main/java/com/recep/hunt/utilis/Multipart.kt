@@ -39,7 +39,7 @@ constructor(url: URL) {
         httpConnection.setRequestProperty("Accept-Charset", "UTF-8")
         httpConnection.setRequestProperty("Connection", "Keep-Alive")
         httpConnection.setRequestProperty("Cache-Control", "no-cache")
-        httpConnection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary)
+        httpConnection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
         httpConnection.setChunkedStreamingMode(maxBufferSize)
         httpConnection.doInput = true
         httpConnection.doOutput = true    // indicates POST method
@@ -96,7 +96,7 @@ constructor(url: URL) {
      * @param value - value of the header field
      */
     fun addHeaderField(name: String, value: String) {
-        writer.append(name + ": " + value).append(LINE_FEED)
+        writer.append("$name: $value").append(LINE_FEED)
         writer.flush()
     }
 

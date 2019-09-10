@@ -2,6 +2,7 @@ package com.recep.hunt.profile
 
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
@@ -12,6 +13,7 @@ import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_user_profile_edit.*
 import org.jetbrains.anko.find
 
 class UserProfileEditActivity : BaseActivity(),ProfileBasicInfoTappedListner {
@@ -23,6 +25,7 @@ class UserProfileEditActivity : BaseActivity(),ProfileBasicInfoTappedListner {
         }
     }
 
+    private lateinit var writeAboutYouEditText: EditText
     companion object{
         const val questionModelKey = "questionModelKey"
         const val questionImageKey = "questionImageKey"
@@ -39,8 +42,13 @@ class UserProfileEditActivity : BaseActivity(),ProfileBasicInfoTappedListner {
     }
 
     private fun init(){
+        writeAboutYouEditText = find(R.id.write_about_us_et)
         userBasicInfoRecyclerView = find(R.id.edit_profile_user_basic_details_recyclerView)
         setupRecyclerView()
+
+        save_edit_profile_btn.setOnClickListener {
+
+        }
     }
     private fun setupRecyclerView(){
         userBasicInfoRecyclerView.adapter = adapter

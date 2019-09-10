@@ -10,6 +10,7 @@ import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.login.model.UserSocialModel
 import com.recep.hunt.setupProfile.SetupProfileGenderActivity
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -33,7 +34,6 @@ class ContinueAsSocialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_continue_as_social)
-
         init()
     }
     private fun init(){

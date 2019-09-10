@@ -51,6 +51,8 @@ class Constants {
         const val FEMALE = "Female"
         const val BOTH = "Both"
 
+        var defaultWidth = 600
+
 
     }
 }
