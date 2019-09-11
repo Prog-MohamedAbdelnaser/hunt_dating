@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.contactUs.ContactUsActivity
+import com.recep.hunt.payment.PaymentMethodActivity
+import com.recep.hunt.payment.SelectPaymentMethodsActivity
 import com.recep.hunt.premium.HuntPremiumActivity
 import com.recep.hunt.premium.MyCardsActivity
 import com.recep.hunt.profile.listeners.UserProfileSettingListeners
@@ -40,7 +42,7 @@ class UserProfileSettingsActivity : BaseActivity() ,UserProfileSettingListeners{
             resources.getString(R.string.push_notifications)->launchActivity<PushNotificationsSettingsActivity>()
             resources.getString(R.string.questions) -> launchActivity<IcebreakerQuestionActivity>()
             resources.getString(R.string.tickets)->launchActivity<ContactUsActivity>()
-            resources.getString(R.string.add_payment_details)->launchActivity<MyCardsActivity>()
+            resources.getString(R.string.add_payment_details)->launchActivity<PaymentMethodActivity>()
 
         }
     }
@@ -125,7 +127,7 @@ class SelectPlanHeaderItem(private val context: Context):Item<ViewHolder>(){
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.get_hunt_premium_btn.setOnClickListener {
-            context.launchActivity<HuntPremiumActivity>()
+            context.launchActivity<SelectPaymentMethodsActivity>()
         }
     }
 }

@@ -53,6 +53,8 @@ class Constants {
 
         var defaultWidth = 600
 
+//        val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
+
 
     }
 }

@@ -32,10 +32,7 @@ import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModel
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.Run
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import com.recep.hunt.volleyHelper.APIController
 import com.recep.hunt.volleyHelper.APIState
 import com.recep.hunt.volleyHelper.ServiceVolley
@@ -45,6 +42,7 @@ import com.yarolegovich.discretescrollview.DSVOrientation
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
+import kotlinx.android.synthetic.main.custom_infowindow.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.toast
@@ -124,7 +122,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(
             ScaleTransformer.Builder()
-            .setMinScale(0.8f)
+            .setMinScale(0.8f).setMaxScale(1.0f)
             .build())
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
@@ -169,6 +167,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
                         val marker = mMap.addMarker(markerOptions)
                         marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
+                        marker.showInfoWindow()
                     }
                     Run.after(1000){
                         setupNearByResUnder600M(lat,long)
@@ -347,6 +346,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             mMap.uiSettings.isZoomControlsEnabled = false
             mMap.uiSettings.isMapToolbarEnabled = false
             mMap.uiSettings.isMyLocationButtonEnabled = false
+            mMap.setInfoWindowAdapter(CustomInfoWindowView(this))
+//            mMap.setOnInfoWindowClickListener {
+//                it.
+//
+//            }
 
 
         }
@@ -394,12 +398,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 }
 
 class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter{
-    override fun getInfoContents(p0: Marker?): View {
+    override fun getInfoContents(marker: Marker?): View {
         val view = context.layoutInflater.inflate(R.layout.custom_infowindow,null)
+        if(marker != null){
+         view.info_window_rest_name.text = marker.title
+        }
         return view
     }
 
     override fun getInfoWindow(p0: Marker?) = null
+
 }
 
 

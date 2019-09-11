@@ -25,7 +25,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".premium.MyCardsActivity"></activity>
+        <activity android:name=".payment.SelectPaymentMethodsActivity"></activity>
+        <activity android:name=".payment.AddPaymentMethod" />
+        <activity android:name=".payment.PaymentMethodActivity" />
+        <activity android:name=".premium.MyCardsActivity" />
         <activity android:name=".contactUs.ChatWithUsChatActivity" />
         <activity android:name=".contactUs.ContactUsEmailActivity" />
         <activity android:name=".contactUs.ChatWithUsActivity" />

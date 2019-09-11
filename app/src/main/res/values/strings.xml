@@ -52,6 +52,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="John_don">John Don</string>
+    <string name="email_email">abc@xyz.com</string>
     <string name="thank_you">Thank You!</string>
     <string name="you_have_completed">You\'ve completed your profile.\nYou are all set!</string>
     <string name="lets_start">Let\'s start!</string>
@@ -77,6 +78,7 @@
     <string name="gender">Gender</string>
     <string name="gender_description">Your Gender</string>
     <string name="email_address">Email address</string>
+    <string name="passwords">Password</string>
     <string name="email_address_description">sara@gmail.com</string>
     <string name="continue_as">Continue as %1$s</string>
     <string name="hunt_will_user">Hunt will use:</string>
@@ -270,11 +272,12 @@
     <string name="you_have_change_phone_nummber">You have successfully changed your phone number</string>
     <string name="ok">OK</string>
 
+
     <string name="hunt_premium">HUNT PREMIUM</string>
     <string name="select_payment_method">Select payment method</string>
     <string name="new_payment_method">New payment method</string>
     <string name="card_number">Card Number</string>
-    <string name="expiration_date">Expiration Date</string>
+    <string name="expiration_date">Expires Date</string>
     <string name="cvv">CVV</string>
     <string name="card_holders_name">Card Holder\'s Name</string>
     <string name="add_card">Add card</string>
@@ -323,6 +326,19 @@
     <string name="reason4">I don\'t want to subscribe to Premium</string>
     <string name="reason5">Not enough value for the cost</string>
     <string name="reason6">Other</string>
+    <string name="save_card">Save card</string>
+    <string name="login_paypal">Login paypal</string>
+
+    <string name="here_u_can_add_delete_cards">Here you can add or delete your card\ninformation</string>
+    <string name="add_payment_method">Add payment method</string>
+    <string name="debit_card_are_acccepted">Debit cards are accepted for some countries and\nsome categories</string>
+    <string name="debit_card_or_credit_card">debit or credit card</string>
+
+    <string name="by_clicking_here">By clicking here login you agree with</string>
+
+    <string name="select_methods">Select methods</string>
+    <string name="just_select_a_payment_method">just select a payment method or simply add \nanother card to buy subscriptions</string>
+    <string name="or_buy_your_subscription_with">Or buy your subscription with</string>
 
 
     <string name="facebook_app_id">428189314461041</string>

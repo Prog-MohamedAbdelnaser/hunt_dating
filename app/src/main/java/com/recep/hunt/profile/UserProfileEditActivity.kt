@@ -10,6 +10,7 @@ import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -47,7 +48,13 @@ class UserProfileEditActivity : BaseActivity(),ProfileBasicInfoTappedListner {
         setupRecyclerView()
 
         save_edit_profile_btn.setOnClickListener {
-
+            updateAboutYou()
+        }
+    }
+    private fun updateAboutYou(){
+        val txt = writeAboutYouEditText.text.toString()
+        if(txt.isNotEmpty()){
+            SharedPrefrenceManager.setAboutYou(this,txt)
         }
     }
     private fun setupRecyclerView(){

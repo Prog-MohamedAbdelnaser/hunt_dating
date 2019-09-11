@@ -1,6 +1,7 @@
 package com.recep.hunt.home.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,9 +46,10 @@ class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRes
             if(model != null){
 
                 if(model.photos != null){
-                    val photoRefrence = model.photos[0].photoReference
-                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
-                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
+//                    val photoRefrence = model.photos[0].photoReference
+//                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
+//                    Log.e("Url","Image : $url")
+//                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
 
                 restaurantName.text = model.name

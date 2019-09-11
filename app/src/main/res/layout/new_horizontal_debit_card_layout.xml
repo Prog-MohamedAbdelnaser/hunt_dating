@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:background="@drawable/new_app_btn_bg"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_height="154dp">
+    <ImageView
+            android:layout_width="52dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_new_master_card_icon"/>
+    <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/payment_method_card_et_bg"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingStart="16dp"
+            android:paddingLeft="16dp"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="**** **** **** 1123"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            />
+
+    <EditText
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textAlignment="center"
+            android:text="14/21"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/payment_method_card_et_bg"
+            />
+
+
+</LinearLayout>

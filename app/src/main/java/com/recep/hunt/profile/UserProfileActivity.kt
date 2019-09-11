@@ -46,6 +46,11 @@ class UserProfileActivity : AppCompatActivity() {
 
         setupRecyclerView()
     }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
+    }
     private fun setupRecyclerView(){
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this@UserProfileActivity)

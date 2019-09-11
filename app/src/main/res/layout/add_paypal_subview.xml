@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:id="@+id/login_with_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#263B80"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Login with "/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="paypal"
+                    android:textColor="#263B80"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/montserrat_bold"
+                    />
+
+        </LinearLayout>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email_address"
+                android:fontFamily="@font/montserrat_medium"
+                android:textSize="12sp"
+                android:layout_marginTop="24dp"
+                android:textColor="#BAC0CB"
+                />
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/email_email"
+                android:paddingStart="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/app_light_text_color"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="14sp"
+                android:background="@drawable/gray_edit_text_bg"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/passwords"
+                android:fontFamily="@font/montserrat_medium"
+                android:textSize="12sp"
+                android:layout_marginTop="16dp"
+                android:textColor="#BAC0CB"
+                />
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="8dp"
+                android:paddingStart="16dp"
+                android:inputType="textPassword"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="@color/app_light_text_color"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="14sp"
+                android:background="@drawable/gray_edit_text_bg"
+                />
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/by_clicking_here"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="#CDD1D9"
+                />
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/terms_conditions"
+                android:textAlignment="center"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="#3C4A6D"
+                android:textSize="13sp"
+            />
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/login_paypal"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="16sp"
+                android:background="@drawable/paypal_login_btn"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</ScrollView>
