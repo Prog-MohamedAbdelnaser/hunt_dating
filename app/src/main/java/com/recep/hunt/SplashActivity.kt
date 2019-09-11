@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.login.LoginActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.payment.PaymentMethodActivity
 import com.recep.hunt.payment.SelectPaymentMethodsActivity
@@ -24,13 +25,13 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }else{
-                    val intent = Intent(applicationContext,HomeActivity::class.java)
+                    val intent = Intent(applicationContext,SocialLoginActivity::class.java)
 //                    val intent = Intent(applicationContext,UserProfileSettingsActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
             }else{
-                val intent = Intent(applicationContext,HomeActivity::class.java)
+                val intent = Intent(applicationContext,LoginActivity::class.java)
 //                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
                 startActivity(intent)
                 finish()
