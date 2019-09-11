@@ -51,7 +51,7 @@ class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRes
 //                    Log.e("Url","Image : $url")
 //                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
-
+                Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
                 restaurantName.text = model.name
                 restaurantDetail.text = model.vicinity
             }

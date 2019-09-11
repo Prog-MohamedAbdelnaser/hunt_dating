@@ -11,7 +11,7 @@ class APIUtils{
     companion object{
         //API =
         const val REGISTER = Constants.baseURL +"/register"
-        
+
 
 
     }

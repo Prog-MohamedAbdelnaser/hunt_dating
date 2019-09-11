@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
@@ -23,7 +24,8 @@ class SetupProfileDobActivity : BaseActivity() {
 
     private var apiDate = ""
     private val TAG = SetupProfileDobActivity::class.java.simpleName
-    private lateinit var dobEditText : EditText
+    private var dob = ""
+    private lateinit var dobTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_dob)
@@ -34,13 +36,10 @@ class SetupProfileDobActivity : BaseActivity() {
         init()
     }
     private fun init(){
-
-        dobEditText = find(R.id.dob_et)
+        dobTextView = find(R.id.user_dob)
         this.hideKeyboard()
-        dobEditText.setOnFocusChangeListener { _, hasFocus ->
-            if(hasFocus){
-                showDatePicker()
-            }
+        show_dob_dialog_btn.setOnClickListener {
+            showDatePicker()
         }
 
         setup_profile_dob_next_btn.setOnClickListener {
@@ -48,10 +47,9 @@ class SetupProfileDobActivity : BaseActivity() {
         }
     }
     private fun moveToUploadPicture(){
-        val dob = dobEditText.text.toString()
-        if(dob.isNotEmpty()){
-            Log.e(TAG,"apiDate : $apiDate")
-            launchActivity<SetupProfileUploadPhotoActivity>()
+        if(dob != ""){
+            SharedPrefrenceManager.setUserDob(this,dob)
+            launchActivity<SetupProfileUploadPhotoStep2Activity>()
         }else{
             Helpers.showErrorSnackBar(this,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
             return
@@ -82,10 +80,14 @@ class SetupProfileDobActivity : BaseActivity() {
                 val formatedDate = getFormattedDate(parsedDate)
                 apiDate = getFormattedDate(input = parsedDate,outputDateFormat = Constants.apiDateFormat)
                 val age = getAge(parsedDate)
-                dobEditText.setText(formatedDate)
-                dobEditText.clearFocus()
+                dobTextView.text = formatedDate
+                dobTextView.textColor = resources.getColor(R.color.app_text_black)
                 years_old_textView.text = resources.getString(R.string.years_old,age.toString())
-                dobEditText.clearFocus()
+                dob = formatedDate
+                dob_layout.clearFocus()
+                it.dismiss()
+                it.cancel()
+                hideKeyboard()
             }
 
             noButton { }

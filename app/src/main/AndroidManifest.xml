@@ -16,16 +16,22 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-feature
+            android:name="android.hardware.camera"
+            android:required="true" />
+
     <application
             android:name=".application.MyApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:largeHeap="true"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".payment.SelectPaymentMethodsActivity"></activity>
+        <activity android:name=".login.WelcomeScreenActivity"></activity>
+        <activity android:name=".payment.SelectPaymentMethodsActivity" />
         <activity android:name=".payment.AddPaymentMethod" />
         <activity android:name=".payment.PaymentMethodActivity" />
         <activity android:name=".premium.MyCardsActivity" />
@@ -94,6 +100,9 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key" />
+        <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
     </application>
 
 </manifest>

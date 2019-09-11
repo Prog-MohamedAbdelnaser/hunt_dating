@@ -31,22 +31,41 @@
                 android:textColor="@color/app_text_black"
                 android:textSize="22sp" />
 
-        <EditText
-                android:id="@+id/dob_et"
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
                 android:background="@drawable/round_app_stroke_bg"
-                android:drawableEnd="@drawable/calendar"
-                android:drawableRight="@drawable/calendar"
-                android:fontFamily="@font/montserrat"
-                android:hint="@string/dobFormat"
-                android:imeOptions="actionDone"
-                android:paddingStart="26dp"
-                android:paddingLeft="26dp"
-                android:paddingEnd="26dp"
-                android:paddingRight="16dp"
-                android:singleLine="true" />
+                android:id="@+id/dob_layout"
+                android:layout_marginTop="24dp"
+                android:layout_height="60dp">
+
+            <TextView
+                    android:id="@+id/user_dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/dobFormat"
+                    android:textColor="@color/app_light_text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                    android:id="@+id/show_dob_dialog_btn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/calendar" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
                 android:id="@+id/years_old_textView"

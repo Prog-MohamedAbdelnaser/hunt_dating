@@ -3,6 +3,13 @@
     <string name="next">Next</string>
     <string name="wanna_go_hunting">Wanna go Hunting?</string>
     <string name="be_part_of_hunt">Be a part of the Hunt and find the minded people to Hunt with</string>
+
+    <string name="wanna_go_hunting1">Wanna go Hunting New Text?</string>
+    <string name="be_part_of_hunt1">Be a part of the Hunt and find the minded people to Hunt with New Text</string>
+
+    <string name="wanna_go_hunting2">Wanna go Hunting? Second Text</string>
+    <string name="be_part_of_hunt2">Be a part of the Hunt and find the minded people to Hunt with NEw Text 1</string>
+
     <string name="enter_your_phone_number">Enter your number ..</string>
     <string name="enter_number_recevie_otp">Enter your cellphone number to receive the one time verification</string>
     <string name="verification">Verification</string>
@@ -339,6 +346,11 @@
     <string name="select_methods">Select methods</string>
     <string name="just_select_a_payment_method">just select a payment method or simply add \nanother card to buy subscriptions</string>
     <string name="or_buy_your_subscription_with">Or buy your subscription with</string>
+
+
+    <string name="storage_permission_rationale_title">Storage permission required</string>
+    <string name="storage_permition_rationale_message">In order to take a picture, you must grant this permission!</string>
+    <string name="storage_permission_denied_message">Storage permission is required in order to take a photo with the camera</string>
 
 
     <string name="facebook_app_id">428189314461041</string>

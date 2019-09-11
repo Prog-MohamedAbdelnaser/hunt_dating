@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.recep.hunt.R
+import kotlinx.android.synthetic.main.on_board_adapter.view.*
 
 
 /**
@@ -14,18 +15,17 @@ import com.recep.hunt.R
  * Email : rishabh1450@gmail.com
  */
 
-class OnBoardAdapter(private val context: Context, private val images:ArrayList<Int>) : PagerAdapter(){
+class OnBoardAdapter(private val context: Context, private val titleArray:ArrayList<Int>) : PagerAdapter(){
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(context).inflate(R.layout.on_board_adapter, container, false)
-        //adapter imageView - change it with positions
-//        val adapterImage : ImageView = item.find(R.id.on_board_image_View)
-        container.addView(item)
+//        item.on_board_adapter_title_view.text = context.resources.getString(titleArray[position])
+//        item.on_board_adapter_subtitle_view.text = context.resources.getString(subtitle[position])
         return item
     }
 
 
     override fun getCount(): Int {
-        return 3
+        return 5
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {

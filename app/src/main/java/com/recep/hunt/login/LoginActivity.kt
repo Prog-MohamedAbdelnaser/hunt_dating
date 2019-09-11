@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
         dialog = Helpers.showDialog(this@LoginActivity,this@LoginActivity,"Verifying")
         countryCodePicker = find(R.id.ccp)
         viewPager = find(R.id.login_viewPager)
-        springDotsIndicator = find(R.id.login_spring_dots_indicator)
+//        springDotsIndicator = find(R.id.login_spring_dots_indicator)
 
         login_nxt_btn.setOnClickListener {
             val number = user_number_edittext.text.toString()
@@ -66,16 +66,16 @@ class LoginActivity : AppCompatActivity() {
 
 
         }
-        setupViewPager()
+//        setupViewPager()
 
     }
     //Setting up view pager
-    private fun setupViewPager(){
-        val imagesArray = arrayListOf(R.drawable.on_board_bg_1,R.drawable.on_board_bg_1,R.drawable.on_board_bg_1)
-        val adapter = OnBoardAdapter(this@LoginActivity, imagesArray)
-        viewPager.adapter = adapter
-        springDotsIndicator.setViewPager(viewPager)
-    }
+//    private fun setupViewPager(){
+//        val imagesArray = arrayListOf(R.drawable.on_board_bg_1,R.drawable.on_board_bg_1,R.drawable.on_board_bg_1)
+//        val adapter = OnBoardAdapter(this@LoginActivity, imagesArray)
+//        viewPager.adapter = adapter
+//        springDotsIndicator.setViewPager(viewPager)
+//    }
      fun verificationCallbacks(number: String){
         mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
