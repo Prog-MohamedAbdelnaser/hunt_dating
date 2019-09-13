@@ -1,8 +1,11 @@
 package com.recep.hunt.profile
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,22 +31,23 @@ import kotlinx.android.synthetic.main.profile_basic_item_view.view.*
 import kotlinx.android.synthetic.main.profile_header_layout_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_header_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_title_item.view.*
+import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
 import org.jetbrains.anko.*
 
 class UserProfileActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var recyclerView: RecyclerView
     private var adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
         init()
     }
-    private fun init(){
+
+    private fun init() {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-
         setupRecyclerView()
     }
 
@@ -51,7 +55,8 @@ class UserProfileActivity : AppCompatActivity() {
         super.onResume()
         adapter.notifyDataSetChanged()
     }
-    private fun setupRecyclerView(){
+
+    private fun setupRecyclerView() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this@UserProfileActivity)
 
@@ -64,45 +69,63 @@ class UserProfileActivity : AppCompatActivity() {
 
 
     }
-    private fun addProfileHeader(){
+
+    private fun addProfileHeader() {
         adapter.add(ProfileHeaderView(this))
     }
 
-    private fun addSixPhotosItemView(){
+    private fun addSixPhotosItemView() {
         adapter.add(ProfileSixPhotosView(this))
     }
-    private fun addHomeTownAndSchoolItemView(){
+
+    private fun addHomeTownAndSchoolItemView() {
         adapter.add(ProfileHeaderTitle(resources.getString(R.string.hometown)))
         adapter.add(ProfileSimpleItem("India"))
         adapter.add(ProfileHeaderTitle(resources.getString(R.string.schooloruniversity)))
         adapter.add(ProfileSimpleItem("J.D Tytler school , New Delhi"))
         adapter.add(ProfileHeaderTitle(resources.getString(R.string.iam)))
     }
-    private fun addUserGenderItemView(){
-        adapter.add(ProfileGenderItemView(this,Constants.male,false))
-    }
-    private fun addBasicInfoItemViews(){
-        val basicModel= ArrayList<UserBasicInfoModel>()
-        val questionModel = getBasicInfoQuestions()
-        basicModel.add(UserBasicInfoModel("Relationship status","Single",R.drawable.relationship_icon,questionModel[0]))
-        basicModel.add(UserBasicInfoModel("Height",null,R.drawable.height_icon,questionModel[1]))
-        basicModel.add(UserBasicInfoModel("Gym",null,R.drawable.gym_icon,questionModel[2]))
-        basicModel.add(UserBasicInfoModel("Education level","Engineering",R.drawable.education_icon,questionModel[3]))
-        basicModel.add(UserBasicInfoModel("Drink","Socially",R.drawable.drink_icon,questionModel[4]))
-        basicModel.add(UserBasicInfoModel("Smoke",null,R.drawable.smoke_icon,questionModel[5]))
-        basicModel.add(UserBasicInfoModel("Pets",null,R.drawable.pets_icon,questionModel[6]))
-        basicModel.add(UserBasicInfoModel("Looking for","Dating",R.drawable.looking_for_icon,questionModel[7]))
-        basicModel.add(UserBasicInfoModel("Kids","Want someday",R.drawable.kids_icon,questionModel[8]))
-        basicModel.add(UserBasicInfoModel("Zodiac","Libra",R.drawable.zodiac_icon,questionModel[9]))
-        basicModel.add(UserBasicInfoModel("Religion","Punjabi",R.drawable.religion_icon,questionModel[10]))
 
-        for(model in basicModel){
-            adapter.add(ProfileBasicInfoItemView(this,model,null))
+    private fun addUserGenderItemView() {
+        adapter.add(ProfileGenderItemView(this, Constants.male, false))
+    }
+
+    private fun addBasicInfoItemViews() {
+        val basicModel = ArrayList<UserBasicInfoModel>()
+        val questionModel = getBasicInfoQuestions()
+        basicModel.add(
+            UserBasicInfoModel(
+                "Relationship status",
+                "Single",
+                R.drawable.relationship_icon,
+                questionModel[0]
+            )
+        )
+        basicModel.add(UserBasicInfoModel("Height", null, R.drawable.height_icon, questionModel[1]))
+        basicModel.add(UserBasicInfoModel("Gym", null, R.drawable.gym_icon, questionModel[2]))
+        basicModel.add(
+            UserBasicInfoModel(
+                "Education level",
+                "Engineering",
+                R.drawable.education_icon,
+                questionModel[3]
+            )
+        )
+        basicModel.add(UserBasicInfoModel("Drink", "Socially", R.drawable.drink_icon, questionModel[4]))
+        basicModel.add(UserBasicInfoModel("Smoke", null, R.drawable.smoke_icon, questionModel[5]))
+        basicModel.add(UserBasicInfoModel("Pets", null, R.drawable.pets_icon, questionModel[6]))
+        basicModel.add(UserBasicInfoModel("Looking for", "Dating", R.drawable.looking_for_icon, questionModel[7]))
+        basicModel.add(UserBasicInfoModel("Kids", "Want someday", R.drawable.kids_icon, questionModel[8]))
+        basicModel.add(UserBasicInfoModel("Zodiac", "Libra", R.drawable.zodiac_icon, questionModel[9]))
+        basicModel.add(UserBasicInfoModel("Religion", "Punjabi", R.drawable.religion_icon, questionModel[10]))
+
+        for (model in basicModel) {
+            adapter.add(ProfileBasicInfoItemView(this, model, null))
         }
 
     }
 
-    private fun getBasicInfoQuestions():ArrayList<UserBasicInfoQuestionModel>{
+    private fun getBasicInfoQuestions(): ArrayList<UserBasicInfoQuestionModel> {
         val questionModel = ArrayList<UserBasicInfoQuestionModel>()
         questionModel.add(
             UserBasicInfoQuestionModel(
@@ -282,15 +305,15 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.profile_menu,menu)
+        menuInflater.inflate(R.menu.profile_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item != null){
-            when(item.itemId){
-                R.id.edit_profile->launchActivity<UserProfileEditActivity>()
-                R.id.settings_profile->launchActivity<UserProfileSettingsActivity>()
+        if (item != null) {
+            when (item.itemId) {
+                R.id.edit_profile -> launchActivity<UserProfileEditActivity>()
+                R.id.settings_profile -> launchActivity<UserProfileSettingsActivity>()
                 else -> finish()
 
             }
@@ -300,61 +323,88 @@ class UserProfileActivity : AppCompatActivity() {
 }
 
 //ProfileHeader
-class ProfileHeaderView(private val context: Context):Item<ViewHolder>(){
-    var userName : String? = ""
-    var userJobtitle : String? = ""
-    var aboutYou : String? = ""
+class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
+    var userName: String? = ""
+    var userJobtitle: String? = ""
+    var aboutYou: String? = ""
+
     override fun getLayout() = R.layout.profile_header_layout_item
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
+
         userName = SharedPrefrenceManager.getUserFirstName(context)
         userJobtitle = SharedPrefrenceManager.getJobTitle(context)
         aboutYou = SharedPrefrenceManager.getAboutYou(context)
-
         val userImage = SharedPrefrenceManager.getUserImage(context)
-        Picasso.get().load(userImage).transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image)).into(viewHolder.itemView.profile_header_user_image)
+
+        Picasso.get().load(userImage)
+            .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
+            .into(viewHolder.itemView.profile_header_user_image)
+
         viewHolder.itemView.profile_header_user_name.text = userName
         viewHolder.itemView.user_aboutus.text = aboutYou
         viewHolder.itemView.user_job_title_tv.text = userJobtitle
 
     }
 }
+
 //Profile User Images - 6
-class ProfileSixPhotosView(private val context: Context):Item<ViewHolder>(){
+class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
+    var bitmap: Bitmap? = null
     override fun getLayout() = R.layout.six_photos_item_layout
     override fun bind(viewHolder: ViewHolder, position: Int) {
-
+        viewHolder.itemView.user_image_1.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getFirstImg(context)))
+        viewHolder.itemView.user_image_2.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getSecImg(context)))
+        viewHolder.itemView.user_image_3.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getThirdImg(context)))
+        viewHolder.itemView.user_image_4.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getFourthImg(context)))
+        viewHolder.itemView.user_image_5.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getFiveImg(context)))
+        viewHolder.itemView.user_image_6.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getSixImg(context)))
     }
+
+    fun StringToBitmap(img: String): Bitmap? {
+        if (img != null) {
+            var b = Base64.decode(img, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
+
+        }
+        return bitmap
+    }
+
 }
+
 //Profile Simple title Header
-class ProfileHeaderTitle(private val txt:String):Item<ViewHolder>(){
+class ProfileHeaderTitle(private val txt: String) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.profile_simple_header_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.profile_simple_header_title.text = txt
     }
 }
+
 //Profile Simple detail item view
-class ProfileSimpleItem(private val detail:String):Item<ViewHolder>(){
+class ProfileSimpleItem(private val detail: String) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.profile_simple_title_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.profile_simple_item_title.text = detail
     }
 }
+
 //PRofile Gender View
-class ProfileGenderItemView(private val context: Context,private val gender:String,private val isEditMode:Boolean):Item<ViewHolder>(){
-    private lateinit var maleBtn : Button
-    private lateinit var femaleBtn : Button
-    private lateinit var otherBtn : Button
+class ProfileGenderItemView(private val context: Context, private val gender: String, private val isEditMode: Boolean) :
+    Item<ViewHolder>() {
+    private lateinit var maleBtn: Button
+    private lateinit var femaleBtn: Button
+    private lateinit var otherBtn: Button
     override fun getLayout() = R.layout.profile_gender_item_view
     override fun bind(viewHolder: ViewHolder, position: Int) {
         maleBtn = viewHolder.itemView.find(R.id.profile_male_gender_btn)
         femaleBtn = viewHolder.itemView.find(R.id.profile_female_gender_btn)
         otherBtn = viewHolder.itemView.find(R.id.profile_other_gender_btn)
 
-        if(isEditMode){
+        if (isEditMode) {
             maleBtn.isEnabled = true
             femaleBtn.isEnabled = true
             otherBtn.isEnabled = true
-        }else{
+        } else {
             maleBtn.isEnabled = false
             femaleBtn.isEnabled = false
             otherBtn.isEnabled = false
@@ -375,10 +425,10 @@ class ProfileGenderItemView(private val context: Context,private val gender:Stri
         setupSelectedGender(gender)
 
 
-
     }
-    private fun setupSelectedGender(selectedgender:String){
-        when(selectedgender){
+
+    private fun setupSelectedGender(selectedgender: String) {
+        when (selectedgender) {
             Constants.male -> {
                 maleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 maleBtn.textColor = context.resources.getColor(R.color.white)
@@ -389,7 +439,7 @@ class ProfileGenderItemView(private val context: Context,private val gender:Stri
                 otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
-            Constants.female ->{
+            Constants.female -> {
                 femaleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 femaleBtn.textColor = context.resources.getColor(R.color.white)
 
@@ -399,7 +449,7 @@ class ProfileGenderItemView(private val context: Context,private val gender:Stri
                 otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
-            else->{
+            else -> {
                 otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.white)
 
@@ -414,25 +464,27 @@ class ProfileGenderItemView(private val context: Context,private val gender:Stri
 }
 
 //Basic Info
-class ProfileBasicInfoItemView(private val context: Context,private val model:UserBasicInfoModel,val listener:ProfileBasicInfoTappedListner?):Item<ViewHolder>(){
+class ProfileBasicInfoItemView(
+    private val context: Context,
+    private val model: UserBasicInfoModel,
+    val listener: ProfileBasicInfoTappedListner?
+) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.profile_basic_item_view
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-
         viewHolder.itemView.basic_info_icon.image = context.resources.getDrawable(model.icon)
         viewHolder.itemView.basic_info_title.text = model.title
         val questionModel = model.questions
 
-        if(questionModel.selectedValue != null){
+        if (questionModel.selectedValue != null) {
             viewHolder.itemView.basic_info_add_image.visibility = View.GONE
             viewHolder.itemView.basic_info_detail.text = context.resources.getString(questionModel.selectedValue)
-        }else{
+        } else {
             viewHolder.itemView.basic_info_add_image.visibility = View.VISIBLE
             viewHolder.itemView.basic_info_detail.text = ""
         }
-
         viewHolder.itemView.setOnClickListener {
-            listener?.onItemClicked(position,questionModel,model.icon)
+            listener?.onItemClicked(position, questionModel, model.icon)
         }
 
 

@@ -39,6 +39,7 @@ import com.recep.hunt.volleyHelper.ServiceVolley
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
+import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
@@ -54,25 +55,26 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
     private lateinit var toolbar: Toolbar
-    private lateinit var mMap : GoogleMap
-    private lateinit var mapRipple:MapRipple
+    private lateinit var mMap: GoogleMap
+    private lateinit var mapRipple: MapRipple
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val animateZoomTo = 12f
     }
+
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
-    lateinit var mLastLocation : Location
-    private var mMarker : Marker? = null
+    lateinit var mLastLocation: Location
+    private var mMarker: Marker? = null
     //Location
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    lateinit var locationRequest : LocationRequest
+    lateinit var locationRequest: LocationRequest
     lateinit var locationCallback: LocationCallback
-    private lateinit var allNearByRestaurantsModel : NearByRestaurantsModel
-    private lateinit var showSortedListCardView : CardView
-    private lateinit var showMyLocationCardView : CardView
-    private lateinit var sortedListRecyclerView : RecyclerView
+    private lateinit var allNearByRestaurantsModel: NearByRestaurantsModel
+    private lateinit var showSortedListCardView: CardView
+    private lateinit var showMyLocationCardView: CardView
+    private lateinit var sortedListRecyclerView: RecyclerView
     private var isListshowing = true
     private var adapter = GroupAdapter<ViewHolder>()
 
@@ -81,6 +83,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         setContentView(R.layout.activity_home)
         init()
     }
+
     override fun onStop() {
         super.onStop()
         if (mapRipple.isAnimationRunning) {
@@ -88,7 +91,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-    private fun init(){
+    private fun init() {
         MapsInitializer.initialize(this)
         val mapFrag = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFrag.getMapAsync(this)
@@ -103,62 +106,69 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         setupCardClicks()
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             checkPermission()
         buildLocationRequest()
         buildLocationCallBack()
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
 
     }
 
 
-
-    private fun setupNearByRestaurantsRecyclerView(items:ArrayList<NearByRestaurantsModelResults>){
-        horizontal_list_near_by_user.adapter =
-            NearByRestaurantsAdapter(this, items)
+    private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
+        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(
             ScaleTransformer.Builder()
-            .setMinScale(0.8f).setMaxScale(1.0f)
-            .build())
+                .setMinScale(0.7f)
+                .setMaxScale(1.1f)
+                .setPivotX(Pivot.X.CENTER) // CENTER is a default one
+                .setPivotY(Pivot.Y.BOTTOM)
+                .build()
+        )
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
-    private fun nearByRestaurants(lat:Double,long:Double,radius:String,completion:(APIState,ArrayList<NearByRestaurantsModelResults>?)->Unit){
+    private fun nearByRestaurants(
+        lat: Double,
+        long: Double,
+        radius: String,
+        completion: (APIState, ArrayList<NearByRestaurantsModelResults>?) -> Unit
+    ) {
         val path = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-        Log.e("Lat long","$lat,$long")
-        val params ="location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
+        Log.e("Lat long", "$lat,$long")
+        val params =
+            "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
         val serviceVolley = ServiceVolley()
         val apiController = APIController(serviceVolley)
         val url = "$path?$params"
-        Log.e("URL","$url")
-        val dialog = Helpers.showDialog(this,this,"Getting near by restaurants").show()
-        apiController.get(path,params){response ->
+        Log.e("URL", "$url")
+        val dialog = Helpers.showDialog(this, this, "Getting near by restaurants").show()
+        apiController.get(path, params) { response ->
             dialog.dismiss()
             allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
             val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
-                completion(APIState.Success,results)
-
+            completion(APIState.Success, results)
             setupSortedListRecyclerView(results)
 
         }
 
     }
 
-    private fun setupAllNearByRestMarkers(lat:Double,long:Double){
-        nearByRestaurants(lat,long,"1000"){response,results->
-            if(response == APIState.Success){
-                val markerOptions=MarkerOptions()
-                if(results != null){
-                    for(i in 0 until results.size - 1){
+    private fun setupAllNearByRestMarkers(lat: Double, long: Double) {
+        nearByRestaurants(lat, long, "1000") { response, results ->
+            if (response == APIState.Success) {
+                val markerOptions = MarkerOptions()
+                if (results != null) {
+                    for (i in 0 until results.size - 1) {
                         val googlePlace = results[i]
                         val mLat = googlePlace.geometry.location.lat
                         val mLong = googlePlace.geometry.location.lng
                         val placeName = googlePlace.name
-                        val latLong = LatLng(mLat,mLong)
+                        val latLong = LatLng(mLat, mLong)
 
                         markerOptions.position(latLong)
                         markerOptions.title(placeName).icon(null)
@@ -169,11 +179,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
                         marker.showInfoWindow()
                     }
-                    Run.after(1000){
-                        setupNearByResUnder600M(lat,long)
+                    Run.after(1000) {
+                        setupNearByResUnder600M(lat, long)
                     }
                     setupNearByRestaurantsRecyclerView(results)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat,long)))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
                 }
             }
@@ -181,17 +191,18 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
 
     }
-    private fun setupNearByResUnder600M(lat:Double,long:Double){
-        nearByRestaurants(lat,long,"600"){response,results->
-            if(response == APIState.Success){
-                val markerOptions=MarkerOptions()
-                if(results != null){
-                    for(i in 0 until results.size - 1){
+
+    private fun setupNearByResUnder600M(lat: Double, long: Double) {
+        nearByRestaurants(lat, long, "600") { response, results ->
+            if (response == APIState.Success) {
+                val markerOptions = MarkerOptions()
+                if (results != null) {
+                    for (i in 0 until results.size - 1) {
                         val googlePlace = results[i]
                         val mLat = googlePlace.geometry.location.lat
                         val mLong = googlePlace.geometry.location.lng
                         val placeName = googlePlace.name
-                        val latLong = LatLng(mLat,mLong)
+                        val latLong = LatLng(mLat, mLong)
 
                         markerOptions.position(latLong)
                         markerOptions.title(placeName).icon(null)
@@ -202,9 +213,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.close_rest_marker))
 
 
-
                     }
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat,long)))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
                 }
             }
@@ -213,19 +223,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     }
 
-    private fun setupCardClicks(){
+    private fun setupCardClicks() {
         showMyLocationCardView.setOnClickListener {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude,longitude)))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
             mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
         }
 
         showSortedListCardView.setOnClickListener {
-            if(isListshowing){
+            if (isListshowing) {
                 isListshowing = false
                 sortedListRecyclerView.visibility = View.VISIBLE
                 horizontal_list_near_by_user.visibility = View.INVISIBLE
                 Helpers.runAnimation(sortedListRecyclerView)
-            }else{
+            } else {
                 isListshowing = true
                 Helpers.runReverseAnimation(sortedListRecyclerView)
 
@@ -240,11 +250,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-    private fun setupSortedListRecyclerView(items:ArrayList<NearByRestaurantsModelResults>){
+    private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-        for(i in 0 until 2){
+        for (i in 0 until 2) {
             adapter.add(
                 NearByRestaurantsVerticalAdapter(
                     this@HomeActivity,
@@ -253,7 +263,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-        for(i in 3 until items.size){
+        for (i in 3 until items.size) {
             adapter.add(
                 NearByRestaurantsVerticalAdapter(
                     this@HomeActivity,
@@ -265,7 +275,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     }
 
-    private fun buildLocationRequest(){
+    private fun buildLocationRequest() {
 
         locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -273,19 +283,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         locationRequest.smallestDisplacement = 10f
 
     }
-    private fun buildLocationCallBack(){
-        locationCallback = object : LocationCallback(){
+
+    private fun buildLocationCallBack() {
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
                 super.onLocationResult(p0)
                 mLastLocation = p0!!.locations[p0.locations.size - 1]
-                if(mMarker != null){
+                if (mMarker != null) {
                     mMarker!!.remove()
                 }
                 latitude = mLastLocation.latitude
                 longitude = mLastLocation.longitude
 
 
-                val latLng = LatLng(latitude,longitude)
+                val latLng = LatLng(latitude, longitude)
                 val markerOptions = MarkerOptions()
                     .position(latLng)
                     .icon(null)
@@ -297,24 +308,24 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(11f))
 
-                mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude,mLastLocation.longitude),this@HomeActivity)
+                mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude, mLastLocation.longitude), this@HomeActivity)
 
-                    mapRipple.withNumberOfRipples(4)
-                    mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
-                    mapRipple.withDistance(600.toDouble())      // 2000 metres radius
-                    mapRipple.withRippleDuration(12000)    //12000ms
-                    mapRipple.withTransparency(0.4f)
+                mapRipple.withNumberOfRipples(4)
+                mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
+                mapRipple.withDistance(600.toDouble())      // 2000 metres radius
+                mapRipple.withRippleDuration(12000)    //12000ms
+                mapRipple.withTransparency(0.4f)
                 mapRipple.startRippleMapAnimation()
 
 
-                SharedPrefrenceManager.setUserLatitude(this@HomeActivity,mLastLocation.latitude.toString())
-                SharedPrefrenceManager.setUserLatitude(this@HomeActivity,mLastLocation.longitude.toString())
+                SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
+                SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.longitude.toString())
 
-                if(Helpers.isInternetConnection(this@HomeActivity)){
+                if (Helpers.isInternetConnection(this@HomeActivity)) {
                     val lat = mLastLocation.latitude
                     val long = mLastLocation.longitude
 
-                    setupAllNearByRestMarkers(lat,long)
+                    setupAllNearByRestMarkers(lat, long)
 
 
                 }
@@ -323,24 +334,34 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             }
         }
     }
-    private fun checkPermission(){
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+    private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE
+            )
             return
         }
     }
 
     override fun onMapReady(p0: GoogleMap?) {
-        if(p0 != null){
+        if (p0 != null) {
 
             mMap = p0
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
                     mMap.isMyLocationEnabled = true
                 }
-            }else
+            } else
                 mMap.isMyLocationEnabled = true
             mMap.uiSettings.isZoomControlsEnabled = false
             mMap.uiSettings.isMapToolbarEnabled = false
@@ -358,19 +379,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.hunt_main_menu,menu)
+        menuInflater.inflate(R.menu.hunt_main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item != null){
-            when(item.itemId){
+        if (item != null) {
+            when (item.itemId) {
                 R.id.profile_item -> launchActivity<UserProfileActivity>()
-                R.id.filter_item->{
+                R.id.filter_item -> {
                     val bottomSheet = FilterBottomSheetDialog(this)
-                    bottomSheet.show(supportFragmentManager,"FilterBottomSheetDialog")
+                    bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
                 }
-                R.id.notify_item->launchActivity<NotificationsActivity>()
+                R.id.notify_item -> launchActivity<NotificationsActivity>()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -378,29 +399,33 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode){
+        when (requestCode) {
             TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE -> {
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                         checkPermission()
                     buildLocationRequest()
                     buildLocationCallBack()
                     fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-                    fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
+                    fusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallback,
+                        Looper.myLooper()
+                    )
                     turn_on_gps_btn.text = resources.getString(R.string.continuee)
-                }else{
-                    Helpers.showErrorSnackBar(this,"Turn on Location!","Please allow for location")
+                } else {
+                    Helpers.showErrorSnackBar(this, "Turn on Location!", "Please allow for location")
                 }
             }
         }
     }
 }
 
-class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter{
+class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
     override fun getInfoContents(marker: Marker?): View {
-        val view = context.layoutInflater.inflate(R.layout.custom_infowindow,null)
-        if(marker != null){
-         view.info_window_rest_name.text = marker.title
+        val view = context.layoutInflater.inflate(R.layout.custom_infowindow, null)
+        if (marker != null) {
+            view.info_window_rest_name.text = marker.title
         }
         return view
     }

@@ -60,7 +60,6 @@ import kotlin.collections.ArrayList
 class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
 
 
-
     companion object{
         const val socialTypeKey = "social_type_key"
         const val userSocialModel = "user_social_key"

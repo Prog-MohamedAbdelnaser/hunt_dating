@@ -33,6 +33,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.nguyenhoanglam.imagepicker.helper.ImageHelper.createImageFile
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
+import com.recep.hunt.profile.UserProfileEditActivity
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
@@ -52,6 +53,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
     }
 
+    private var imgFlag: String? = null
     private var mPath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +65,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     private fun init() {
-
+        imgFlag = intent.getStringExtra(UserProfileEditActivity.imgBlock)
         camera_layout.setOnClickListener { takePhoto() }
         gallery_layout.setOnClickListener { selectImageInAlbum() }
 
@@ -76,6 +78,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
         }
     }
+
     private var currentPhotoPath = ""
     @Throws(IOException::class)
     private fun createImageFile(): File {
@@ -95,13 +98,14 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     private var count = 1
 
     private fun takePhoto() {
-        val dir = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)}+/huntCameraPictures/"
+        val dir =
+            "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)}+/huntCameraPictures/"
         val newDir = File(dir)
         newDir.mkdir()
-        if(checkPermission()){
+        if (checkPermission()) {
             count++
             val file = "$newDir$count.jpg"
-            try{
+            try {
                 val newFile = File(file)
 //                val opURI = Uri.fromFile(newFile)
                 val opURI = FileProvider.getUriForFile(this, "$packageName.fileprovider", newFile)
@@ -109,58 +113,92 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 //                intent1.putExtra(MediaStore.EXTRA_OUTPUT,opURI)
                 startActivityForResult(intent1, 9)
 
-            }catch (e:Exception){
-                Log.e("Exception",":$e")
+            } catch (e: Exception) {
+                Log.e("Exception", ":$e")
             }
-        }else{
-            ActivityCompat.requestPermissions(this,
-                arrayOf(android.Manifest.permission.CAMERA), REQUEST_TAKE_PHOTO)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_TAKE_PHOTO)
         }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             checkPermission()
 
     }
-    private fun checkPermission():Boolean{
-        return ActivityCompat.checkSelfPermission(this,
-            android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+
+    private fun checkPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null){
+        if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
-            if(images != null){
-                val imageString = images.toString()
-                launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI,imageString) }
+            val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images);
+            if (!imgFlag.equals("0")) {
+                setImage(imagesBtm)
+            } else {
+                if (images != null) {
+                    val imageString = images.toString()
+                    launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
+                }
             }
-        }else if(requestCode == 9 && resultCode == Activity.RESULT_OK && data != null){
-            Log.e("Data Extras : "," ${data.extras}")
-                val images = data.extras.get("data") as Bitmap
-//                val images = data.data
-                    val imageString = BitMapToString(images)
-//                        val newImage = imageString.toString()
-                        launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI,imageString) }
+        } else if (requestCode == 9 && resultCode == Activity.RESULT_OK && data != null) {
+            Log.e("Data Extras : ", " ${data.extras}")
+            val images = data.extras.get("data") as Bitmap
+            val imageString = BitMapToString(images)
+            if (!imgFlag.equals("0")) {
+                setImage(images)
+            } else {
+                launchActivity<SetupProfileAddedPhotoActivity>
+                {
+                    putExtra(IMGURI, imageString)
+                }
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+
+    private fun setImage(bitmap: Bitmap) {
+        val imageString = BitMapToString(bitmap)
+        if (imgFlag.equals("1")) {
+            SharedPrefrenceManager.setFirstImg(this, imageString)
+        } else if (imgFlag.equals("2")) {
+            SharedPrefrenceManager.setSecImg(this, imageString)
+        } else if (imgFlag.equals("3")) {
+            SharedPrefrenceManager.setThirdImg(this, imageString)
+        } else if (imgFlag.equals("4")) {
+            SharedPrefrenceManager.setFourthImg(this, imageString)
+        } else if (imgFlag.equals("5")) {
+            SharedPrefrenceManager.setFiveImg(this, imageString)
+        } else {
+            SharedPrefrenceManager.setSixImg(this, imageString)
+        }
+
+
+    }
+
     fun BitMapToString(bitmap: Bitmap): String {
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
         val b = baos.toByteArray()
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
-    private fun getImageUri(bitmap: Bitmap):Uri?{
+
+    private fun getImageUri(bitmap: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,bytes)
-        val path = MediaStore.Images.Media.insertImage(this.contentResolver,bitmap,"title",null)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(this.contentResolver, bitmap, "title", null)
         return Uri.parse(path)
     }
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode){
+        when (requestCode) {
             REQUEST_TAKE_PHOTO -> {
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     val intent1 = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     if (intent1.resolveActivity(packageManager) != null) {
                         startActivityForResult(intent1, 9)
