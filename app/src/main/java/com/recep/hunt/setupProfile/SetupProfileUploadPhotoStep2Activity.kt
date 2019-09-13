@@ -41,6 +41,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.Exception
+import java.security.cert.Extension
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.jar.Manifest
@@ -165,19 +166,30 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         val imageString = BitMapToString(bitmap)
         if (imgFlag.equals("1")) {
             SharedPrefrenceManager.setFirstImg(this, imageString)
+            finishActivity()
         } else if (imgFlag.equals("2")) {
             SharedPrefrenceManager.setSecImg(this, imageString)
+            finishActivity()
         } else if (imgFlag.equals("3")) {
             SharedPrefrenceManager.setThirdImg(this, imageString)
+            finishActivity()
         } else if (imgFlag.equals("4")) {
             SharedPrefrenceManager.setFourthImg(this, imageString)
+            finishActivity()
         } else if (imgFlag.equals("5")) {
             SharedPrefrenceManager.setFiveImg(this, imageString)
         } else {
             SharedPrefrenceManager.setSixImg(this, imageString)
+            finishActivity()
         }
 
+    }
 
+    private fun finishActivity() {
+        launchActivity<UserProfileEditActivity>
+        {
+            finish()
+        }
     }
 
     fun BitMapToString(bitmap: Bitmap): String {

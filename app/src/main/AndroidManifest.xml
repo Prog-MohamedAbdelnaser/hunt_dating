@@ -51,22 +51,15 @@
         <activity android:name=".profile.UserProfileEditQuestionActivity"/>
         <activity android:name=".profile.UserProfileSettingsActivity"/>
         <activity android:name=".profile.UserProfileEditActivity"/>
-        <activity android:name=".profile.UserProfileActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+        <activity android:name=".profile.UserProfileActivity"/>
         <activity android:name=".home.HomeActivity"/>
         <activity android:name=".setupProfile.TurnOnGPSActivity"/>
-        <activity
-                android:name=".setupProfile.SetupProfileReferralCodeActivity"
-                android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".setupProfile.SetupProfileReferralCodeActivity"
+                  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".login.ContinueAsSocialActivity"/>
         <activity android:name=".login.InfoYouProvideActivity"/>
         <activity android:name=".setupProfile.SetupProfileAddedPhotoActivity"/>
-        <activity android:name=".setupProfile.SetupProfileUploadPhotoStep2Activity">
-        </activity>
+        <activity android:name=".setupProfile.SetupProfileUploadPhotoStep2Activity"/>
         <activity android:name=".setupProfile.SetupProfileCompletedActivity"/>
         <activity android:name=".setupProfile.SetupProfileInterestedInActivity"/>
         <activity android:name=".setupProfile.SetupProfileLookingForActivity"/>
@@ -82,11 +75,11 @@
                 android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
                 android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".SplashActivity">
-            <!--  <intent-filter>
-                  <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-                  <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <service
                 android:name=".firebaseHelper.FirebaseInstanceClass"

@@ -71,6 +71,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
                 putExtra(imgBlock, flag.toString())
+                finish()
             }
         }
         user_image_2.setOnClickListener() {
@@ -78,6 +79,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
                 putExtra(imgBlock, flag.toString())
+                finish()
             }
         }
         user_image_3.setOnClickListener() {
@@ -85,6 +87,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
                 putExtra(imgBlock, flag.toString())
+                finish()
             }
         }
         user_image_4.setOnClickListener() {
@@ -92,6 +95,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
                 putExtra(imgBlock, flag.toString())
+                finish()
             }
         }
         user_image_5.setOnClickListener() {
@@ -99,6 +103,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
                 putExtra(imgBlock, flag.toString())
+                finish()
             }
         }
         user_image_6.setOnClickListener() {
@@ -106,8 +111,11 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
                 putExtra(imgBlock, flag.toString())
+                finish()
             }
         }
+
+
 
         setupFields()
 
