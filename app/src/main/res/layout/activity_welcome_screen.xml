@@ -12,16 +12,14 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             />
-
-
-
-    <androidx.viewpager.widget.ViewPager
-            android:id="@+id/welcome_screen_viewPager"
+    <ImageView
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout13"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="match_parent"
+            android:src="@drawable/half_black_view"/>
+
+
+
+
 
     <LinearLayout
             android:id="@+id/linearLayout13"
@@ -32,8 +30,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/welcome_screen_viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                >
+        </androidx.viewpager.widget.ViewPager>
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/welcome_screen_indicator"
                 android:layout_width="match_parent"
@@ -50,7 +52,7 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
@@ -70,6 +72,9 @@
                     app:ccp_countryPreference="in,us,nz,gb"
                     app:ccp_defaultLanguage="ENGLISH"
                     app:ccp_hintExampleNumber="true"
+                    app:ccp_arrowColor="@color/white"
+                    app:ccp_contentColor="@color/white"
+                    app:ccp_showFlag="false"
                     app:ccp_textSize="13sp" />
 
             <View

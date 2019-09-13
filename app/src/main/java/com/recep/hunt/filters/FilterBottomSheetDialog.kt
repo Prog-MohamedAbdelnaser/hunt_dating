@@ -18,9 +18,13 @@ import com.jaygoo.widget.RangeSeekBar
 import com.recep.hunt.filters.adapter.FilterAdapter
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.filters.model.LookingForMainModel
+import com.recep.hunt.utilis.NonSwipeableViewPager
 import kotlinx.android.synthetic.main.filter_bottom_sheet_layout.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
+import kotlin.math.abs
+
+
 
 
 /**
@@ -33,7 +37,7 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
 
     private var mBottomSheetListener: FilterBottomSheetListener?=null
     private lateinit var ageRangeSeekBar: RangeSeekBar
-    private lateinit var viewPager : ViewPager
+    private lateinit var viewPager : NonSwipeableViewPager
     private lateinit var filterAgeTextView :TextView
     private lateinit var filterTabLayout: TabLayout
     private lateinit var lookingForModel: LookingForMainModel
@@ -61,6 +65,20 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         val adapter = FilterAdapter(ctx, lookingForModel.getData())
         viewPager.adapter = adapter
         filterTabLayout.setupWithViewPager(viewPager)
+        viewPager.setPageTransformer(false,FadePageTransformer())
+//        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+//            @Override
+//            public void transformPage(@NonNull View page, float position) {
+//                page.setAlpha(0f);
+//                page.setVisibility(View.VISIBLE);
+//
+//                // Start Animation for a short period of time
+//                page.animate()
+//                    .alpha(1f)
+//                    .setDuration(page.getResources().getInteger(android.R.integer.config_shortAnimTime));
+//            }
+//        })
+
 
         filterAgeTextView.text =
             ctx.resources.getString(R.string.fromYears_toYears,"18","50")
@@ -169,4 +187,20 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
     }
 
 
+}
+
+private class FadePageTransformer : ViewPager.PageTransformer {
+    override fun transformPage(view: View, position: Float) {
+        if (position <= -1.0f || position >= 1.0f) {
+            view.translationX = view.width * position
+            view.alpha = 0.0f
+        } else if (position == 0.0f) {
+            view.translationX = view.width * position
+            view.alpha = 1.0f
+        } else {
+            // position is between -1.0F & 0.0F OR 0.0F & 1.0F
+            view.translationX = view.width * -position
+            view.alpha = 1.0f - abs(position)
+        }
+    }
 }

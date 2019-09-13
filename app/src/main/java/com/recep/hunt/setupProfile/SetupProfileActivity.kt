@@ -44,13 +44,5 @@ class SetupProfileActivity : BaseActivity() {
             }
 
         }
-//        setSupportActionBar(setupProfile_toolbar)
     }
-
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        finish()
-//        return super.onOptionsItemSelected(item)
-//    }
-
 }

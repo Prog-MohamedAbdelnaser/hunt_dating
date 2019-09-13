@@ -10,7 +10,10 @@ import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.login.WelcomeScreenActivity
 import com.recep.hunt.payment.PaymentMethodActivity
 import com.recep.hunt.payment.SelectPaymentMethodsActivity
+import com.recep.hunt.profile.UserProfileActivity
+import com.recep.hunt.setupProfile.SetupProfileActivity
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
+import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
 
 class SplashActivity : AppCompatActivity() {
@@ -33,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 }
             }else{
-                val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
+                val intent = Intent(applicationContext, HomeActivity::class.java)
 //                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
                 startActivity(intent)
                 finish()

@@ -105,7 +105,7 @@ class SharedPrefrenceManager {
         fun setUserFirstName(context: Context,value:String){
             setSharedPrefs(context,PersistenceKeys.UserFirstName.toString(),value)
         }
-        fun getUserFirstName(context: Context) = getSharePrefs(context,PersistenceKeys.UserLastName.toString())
+        fun getUserFirstName(context: Context) = getSharePrefs(context,PersistenceKeys.UserFirstName.toString())
 
         //UserLastName
         fun setUserLastName(context: Context,value:String){
@@ -186,7 +186,7 @@ class SharedPrefrenceManager {
         fun setAboutYou(context: Context,value:String){
             setSharedPrefs(context,PersistenceKeys.AboutYou.toString(),value)
         }
-        fun getAboutYou(context: Context) = getSharePrefs(context,PersistenceKeys.AboutYou.toString())
+        fun getAboutYou(context: Context):String? = getSharePrefs(context,PersistenceKeys.AboutYou.toString())
 
         //JobTitle
         fun setJobTitle(context: Context,value:String){

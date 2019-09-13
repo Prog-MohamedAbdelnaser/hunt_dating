@@ -3,6 +3,7 @@ package com.recep.hunt.login
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +16,27 @@ import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_welcome_screen.*
 import org.jetbrains.anko.find
+import java.util.*
+
+
+
 
 class WelcomeScreenActivity : AppCompatActivity() {
 
     private lateinit var videoView: VideoView
     private lateinit var viewPager:ViewPager
     private lateinit var indicators:TabLayout
+    var currentPage = 0
+    var timer: Timer? = null
+    val DELAY_MS: Long = 500//delay in milliseconds before task is to be executed
+    val PERIOD_MS: Long = 3000 // time in milliseconds between successive task executions.
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome_screen)
         init()
     }
+
     private fun init(){
         videoView = find(R.id.video_view)
         viewPager = find(R.id.welcome_screen_viewPager)
@@ -45,13 +56,28 @@ class WelcomeScreenActivity : AppCompatActivity() {
         val subtitleArray = arrayListOf(R.string.be_part_of_hunt,R.string.be_part_of_hunt2,R.string.be_part_of_hunt1)
         viewPager.adapter = WelcomePagerAdapter()
         indicators.setupWithViewPager(viewPager)
+
+        /*After setting the adapter use the timer */
+        val handler = Handler()
+        val Update = Runnable {
+            if (currentPage == 3) {
+                currentPage = 0
+            }
+            viewPager.setCurrentItem(currentPage++, true)
+        }
+
+        timer = Timer() // This will create a new Thread
+        timer?.schedule(object : TimerTask() { // task to be scheduled
+            override fun run() {
+                handler.post(Update)
+            }
+        }, DELAY_MS, PERIOD_MS)
     }
 }
 class WelcomePagerAdapter():PagerAdapter(){
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(container.context).inflate(R.layout.on_board_adapter, container, false)
-//        item.on_board_adapter_title_view.text = context.resources.getString(titleArray[position])
-//        item.on_board_adapter_subtitle_view.text = context.resources.getString(subtitle[position])
+        container.addView(item)
         return item
     }
 

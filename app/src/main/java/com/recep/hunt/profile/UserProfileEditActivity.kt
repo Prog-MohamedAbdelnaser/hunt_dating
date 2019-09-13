@@ -1,6 +1,7 @@
 package com.recep.hunt.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,6 +51,7 @@ class UserProfileEditActivity : BaseActivity(),ProfileBasicInfoTappedListner {
         save_edit_profile_btn.setOnClickListener {
             updateAboutYou()
         }
+        setupFields()
     }
     private fun updateAboutYou(){
         val txt = writeAboutYouEditText.text.toString()
@@ -57,13 +59,17 @@ class UserProfileEditActivity : BaseActivity(),ProfileBasicInfoTappedListner {
             SharedPrefrenceManager.setAboutYou(this,txt)
         }
     }
+    private fun setupFields(){
+        val aboutYou = SharedPrefrenceManager.getAboutYou(this)
+        if(aboutYou != "null")
+        writeAboutYouEditText.setText(aboutYou)
+
+
+    }
     private fun setupRecyclerView(){
         userBasicInfoRecyclerView.adapter = adapter
         userBasicInfoRecyclerView.layoutManager = LinearLayoutManager(this)
-
         addBasicInfoItemViews()
-
-
     }
 
     private fun addBasicInfoItemViews(){

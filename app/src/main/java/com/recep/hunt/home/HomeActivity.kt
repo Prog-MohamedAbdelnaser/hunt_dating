@@ -240,7 +240,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-
     private fun setupSortedListRecyclerView(items:ArrayList<NearByRestaurantsModelResults>){
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)

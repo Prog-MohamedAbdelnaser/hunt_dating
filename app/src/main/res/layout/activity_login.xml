@@ -31,7 +31,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/login_viewPager"
             app:layout_constraintBottom_toTopOf="@+id/login_nxt_btn">
-
     </androidx.viewpager.widget.ViewPager>
 
     <LinearLayout

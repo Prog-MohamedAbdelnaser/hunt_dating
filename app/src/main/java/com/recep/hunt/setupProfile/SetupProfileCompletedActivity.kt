@@ -44,7 +44,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private var mHttpClient: DefaultHttpClient? = null
     private lateinit var userImage : CircleImageView
     private lateinit var userName : TextView
-//    private lateinit var userViewModel: UserViewModel
+    private lateinit var userViewModel: UserViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SharedPrefrenceManager.setIsLoggedIn(this,true)
@@ -57,20 +57,14 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         userName = find(R.id.user_completed_profile_name)
         setSupportActionBar(setupProfile_complete_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-//        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         setupViews()
 
 
 
         lottieAnimationView.playAnimation()
-//        MakeAPICall(this,this).execute(APIUtils.REGISTER)
-//        register()
-//        registerUser {
-//            dialog.dismiss()
-//            lottieAnimationView.playAnimation()
-//        }
 
-        insertUserIntoDb()
+//        insertUserIntoDb()
 
         lets_start_btn.setOnClickListener {
 

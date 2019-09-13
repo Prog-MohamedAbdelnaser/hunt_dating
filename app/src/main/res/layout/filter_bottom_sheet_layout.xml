@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"/>
-    <androidx.viewpager.widget.ViewPager
+    <com.recep.hunt.utilis.NonSwipeableViewPager
             android:layout_width="100dp"
             android:layout_height="145dp"
             android:layout_marginTop="16dp"
@@ -107,9 +107,9 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
                 android:layout_height="match_parent">
-            <ImageView android:layout_width="100dp"
+            <ImageView android:layout_width="90dp"
                        android:id="@+id/filter_male_imageView"
-                       android:layout_height="100dp"
+                       android:layout_height="90dp"
                        android:background="@drawable/unselected_circular_btn"
                        android:padding="30dp"
                        android:src="@drawable/ic_man"
@@ -137,9 +137,9 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_height="match_parent">
-            <ImageView android:layout_width="100dp"
+            <ImageView android:layout_width="90dp"
                        android:id="@+id/filter_female_imageView"
-                       android:layout_height="100dp"
+                       android:layout_height="90dp"
                        android:background="@drawable/unselected_circular_btn"
                        android:padding="30dp"
                        android:clickable="true"
@@ -167,9 +167,9 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_height="match_parent">
-            <ImageView android:layout_width="100dp"
+            <ImageView android:layout_width="90dp"
                        android:id="@+id/filter_both_imageView"
-                       android:layout_height="100dp"
+                       android:layout_height="90dp"
                        android:background="@drawable/unselected_circular_btn"
                        android:padding="30dp"
                        android:src="@drawable/ic_others_gender"

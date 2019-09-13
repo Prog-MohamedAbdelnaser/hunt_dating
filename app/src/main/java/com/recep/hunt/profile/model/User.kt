@@ -13,21 +13,26 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user")
 data class User(
-    val firstName:String?,
-    val lastName:String?,
+    val firstName:String,
+    val lastName:String,
 
     val email:String?,
-    val gender:String?,
+    val gender:String,
 
     @ColumnInfo(name = "user_dob")
     val dateOfBirth:String?,
     val userImage:String?,
     val lookingFor:String,
-    val interestedIn:String
-
+    val interestedIn:String,
+    val aboutYou:String?,
+    val jobTitle:String?,
+    val company:String?,
+    val homeTown:String?,
+    val schoolUniversity:String?
 ){
     @PrimaryKey(autoGenerate = true)
     var userId:Int = 0
 
 }
+
 

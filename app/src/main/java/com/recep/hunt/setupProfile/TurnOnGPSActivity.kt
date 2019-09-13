@@ -1,7 +1,9 @@
 package com.recep.hunt.setupProfile
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -81,6 +83,17 @@ class TurnOnGPSActivity : AppCompatActivity() {
             }
         }
     }
+    private fun turnOnGPS(){
+        val provider = android.provider.Settings.Secure.getString(contentResolver,android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+        if(!provider.contains("gps")){
+            val intent = Intent()
+            intent.setClassName("com.android.settings","com.android.settings.widget.SettingsAppWidgetProvider")
+            intent.addCategory(Intent.CATEGORY_ALTERNATIVE)
+            intent.setData(Uri.parse("3"))
+            sendBroadcast(intent)
+        }
+
+    }
     private fun checkPermissionForBtn():Boolean{
         return ActivityCompat.checkSelfPermission(this,
             android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -104,8 +117,11 @@ class TurnOnGPSActivity : AppCompatActivity() {
                         checkPermission()
                     buildLocationRequest()
                     buildLocationCallBack()
+                    turnOnGPS()
+                    init()
                     fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
                     fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
+
                 }else{
                     Helpers.showErrorSnackBar(this,"Turn on Location!","Please allow for location")
                 }
