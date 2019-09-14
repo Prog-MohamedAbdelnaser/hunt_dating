@@ -130,6 +130,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 .build()
         )
         horizontal_list_near_by_user.setSlideOnFling(true)
+
     }
 
     private fun nearByRestaurants(
@@ -317,17 +318,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 mapRipple.withTransparency(0.4f)
                 mapRipple.startRippleMapAnimation()
 
-
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.longitude.toString())
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
                     val lat = mLastLocation.latitude
                     val long = mLastLocation.longitude
-
                     setupAllNearByRestMarkers(lat, long)
-
-
                 }
 
 
