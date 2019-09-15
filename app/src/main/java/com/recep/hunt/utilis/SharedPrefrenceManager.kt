@@ -40,6 +40,18 @@ enum class PersistenceKeys {
     ProfileFourImg,
     ProfileFiveImg,
     ProfileSixImg,
+    UserGenderChanged,
+    RelationShipStatus,
+    Height,
+    Gym,
+    EducationLevel,
+    Drink,
+    Smoke,
+    Pets,
+    LookingFor,
+    Kids,
+    Zodiac,
+    Religion
 
 }
 
@@ -213,7 +225,7 @@ class SharedPrefrenceManager {
             setSharedPrefs(context, PersistenceKeys.AboutYou.toString(), value)
         }
 
-        fun getAboutYou(context: Context): String? = getSharePrefs(context, PersistenceKeys.AboutYou.toString())
+        fun getAboutYou(context: Context) = getSharePrefs(context, PersistenceKeys.AboutYou.toString())
 
         //JobTitle
         fun setJobTitle(context: Context, value: String) {
@@ -250,7 +262,6 @@ class SharedPrefrenceManager {
 
         fun getFirstImg(context: Context) = getSharePrefs(context, PersistenceKeys.ProfileFirstImg.toString())
 
-
         fun setSecImg(context: Context, value: String) {
             setSharedPrefs(context, PersistenceKeys.ProfileSecImg.toString(), value)
         }
@@ -285,6 +296,92 @@ class SharedPrefrenceManager {
 
         fun getSixImg(context: Context) = getSharePrefs(context, PersistenceKeys.ProfileSixImg.toString())
 
+        fun setUserGenderChanged(context: Context,value: Boolean){
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(PersistenceKeys.UserGenderChanged.toString(), value)
+            editor.apply()
+        }
+
+        fun getUserGenderChanged(context: Context): Boolean {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            return sharedPreferences.getBoolean(PersistenceKeys.UserGenderChanged.toString(), false)
+        }
+
+        fun setRelationshipStatus(context: Context,value: String){
+            setSharedPrefs(context, PersistenceKeys.RelationShipStatus.toString(), value)
+        }
+        fun getRelationShipStatus(context: Context) = getSharePrefs(context,PersistenceKeys.RelationShipStatus.toString())
+
+        fun setUserHeight(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.Height.toString(),value)
+        }
+        fun getUserHeight(context: Context) = getSharePrefs(context,PersistenceKeys.Height.toString())
+
+        fun setUserGym(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Gym.toString(),value)
+        }
+        fun getUserGym(context: Context) = getSharePrefs(context,PersistenceKeys.Gym.toString())
+
+        fun setUserEducationLevel(context: Context,value:String){
+            setSharedPrefs(context,PersistenceKeys.EducationLevel.toString(),value)
+        }
+        fun getUserEducationLevel(context: Context) = getSharePrefs(context,PersistenceKeys.EducationLevel.toString())
+
+        fun setUserDrink(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Drink.toString(),value)
+        }
+        fun getUserDrink(context: Context) = getSharePrefs(context,PersistenceKeys.Drink.toString())
+
+        fun setSmoke(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Smoke.toString(),value)
+        }
+        fun getSomke(context: Context) = getSharePrefs(context,PersistenceKeys.Smoke.toString())
+
+        fun setPets(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Pets.toString(),value)
+        }
+        fun getPets(context: Context) = getSharePrefs(context,PersistenceKeys.Pets.toString())
+
+        fun setLookingFor(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.LookingFor.toString(),value)
+        }
+        fun getLookingFor(context: Context) = getSharePrefs(context,PersistenceKeys.LookingFor.toString())
+
+        fun setKids(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Kids.toString(),value)
+        }
+        fun getKids(context: Context) = getSharePrefs(context,PersistenceKeys.Kids.toString())
+
+        fun setZodiac(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Zodiac.toString(),value)
+        }
+        fun getZodiac(context: Context) = getSharePrefs(context,PersistenceKeys.Zodiac.toString())
+
+        fun setReligion(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.Religion.toString(),value)
+        }
+        fun getReligion(context: Context) = getSharePrefs(context,PersistenceKeys.Religion.toString())
+
+
+
+
+
+
+
+
+
+//        RelationShipStatus,
+//        Height,
+//        Gym,
+//        EducationLevel,
+//        Drink,
+//        Smoke,
+//        Pets,
+//        LookingFor,
+//        Kids,
+//        Zodiac,
+//        Religion
 
         private fun setSharedPrefs(context: Context, key: String, value: String) {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)

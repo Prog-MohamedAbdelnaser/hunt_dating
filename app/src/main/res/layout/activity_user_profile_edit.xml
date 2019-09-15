@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
         android:background="@color/table_view_bg"
         tools:context=".profile.UserProfileEditActivity">
 
@@ -36,7 +37,6 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="8dp"
-                        android:text="About Rishabh"
                         android:textColor="@color/app_text_black"
                         android:textSize="13sp"
                         android:fontFamily="@font/montserrat"
@@ -271,7 +271,7 @@
                     android:layout_height="wrap_content">
 
                 <Button
-                        android:id="@+id/profile_male_gender_btn"
+                        android:id="@+id/edit_profile_male_gender_btn"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
@@ -290,7 +290,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                        android:id="@+id/profile_female_gender_btn"
+                        android:id="@+id/edit_profile_female_gender_btn"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
@@ -302,12 +302,12 @@
                         android:textAllCaps="false"
                         android:textColor="@color/app_light_text_color"
                         android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/profile_male_gender_btn"
-                        app:layout_constraintStart_toEndOf="@+id/profile_male_gender_btn"
-                        app:layout_constraintTop_toTopOf="@+id/profile_male_gender_btn" />
+                        app:layout_constraintBottom_toBottomOf="@+id/edit_profile_male_gender_btn"
+                        app:layout_constraintStart_toEndOf="@+id/edit_profile_male_gender_btn"
+                        app:layout_constraintTop_toTopOf="@+id/edit_profile_male_gender_btn" />
 
                 <Button
-                        android:id="@+id/profile_other_gender_btn"
+                        android:id="@+id/edit_profile_other_gender_btn"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
@@ -319,9 +319,9 @@
                         android:textAllCaps="false"
                         android:textColor="@color/app_light_text_color"
                         android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/profile_female_gender_btn"
-                        app:layout_constraintStart_toEndOf="@+id/profile_female_gender_btn"
-                        app:layout_constraintTop_toTopOf="@+id/profile_female_gender_btn" />
+                        app:layout_constraintBottom_toBottomOf="@+id/edit_profile_female_gender_btn"
+                        app:layout_constraintStart_toEndOf="@+id/edit_profile_female_gender_btn"
+                        app:layout_constraintTop_toTopOf="@+id/edit_profile_female_gender_btn" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout

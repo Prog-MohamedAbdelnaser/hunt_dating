@@ -296,6 +296,8 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 user.displayName!!,
                 user.email!!
             )
+
+
             val json: String = gson.toJson(userDetailsModel)
             Log.e("Full name : ${user.displayName}","")
             val fullname = user.displayName!!.split(" ").toTypedArray()

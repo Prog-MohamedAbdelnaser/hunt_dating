@@ -16,6 +16,15 @@ import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
+import android.R.string.cancel
+import android.content.Context
+import android.content.DialogInterface
+import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
+import android.location.LocationManager
+
+
+
 
 class TurnOnGPSActivity : AppCompatActivity() {
 
@@ -37,6 +46,8 @@ class TurnOnGPSActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_turn_on_gps)
         init()
+//        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+
     }
 
     private fun init() {
@@ -52,13 +63,30 @@ class TurnOnGPSActivity : AppCompatActivity() {
         turn_on_gps_btn.setOnClickListener {
             val btnTitle = turn_on_gps_btn.text.toString()
             if(btnTitle == resources.getString(R.string.turn_on_gps)){
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    checkPermission()
+                showGPSDisabledAlertToUser()
             }else{
                 launchActivity<SetupProfileCompletedActivity>()
             }
         }
 
+
+    }
+
+    private fun showGPSDisabledAlertToUser() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+            .setCancelable(false)
+            .setPositiveButton("Goto Settings Page To Enable GPS"
+            ) { dialog, id ->
+                val callGPSSettingIntent = Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                )
+                startActivity(callGPSSettingIntent)
+            }
+        alertDialogBuilder.setNegativeButton("Cancel"
+        ) { dialog, _ -> dialog.cancel() }
+        val alert = alertDialogBuilder.create()
+        alert.show()
     }
 
     private fun buildLocationRequest(){
@@ -95,8 +123,10 @@ class TurnOnGPSActivity : AppCompatActivity() {
 
     }
     private fun checkPermissionForBtn():Boolean{
-        return ActivityCompat.checkSelfPermission(this,
-            android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+//        return ActivityCompat.checkSelfPermission(this,
+//            android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
     private fun checkPermission(){
         if (ActivityCompat.checkSelfPermission(this,

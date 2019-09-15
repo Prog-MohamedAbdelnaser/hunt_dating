@@ -1,16 +1,21 @@
 package com.recep.hunt.home
 
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -45,6 +50,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
 import kotlinx.android.synthetic.main.custom_infowindow.view.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.image
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.toast
 
@@ -54,13 +60,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     }
 
-    private lateinit var toolbar: Toolbar
+//    private lateinit var toolbar: Toolbar
     private lateinit var mMap: GoogleMap
     private lateinit var mapRipple: MapRipple
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val animateZoomTo = 12f
+        private const val animateZoomTo = 11f
     }
 
     private var latitude = 0.toDouble()
@@ -96,15 +102,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         val mapFrag = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFrag.getMapAsync(this)
 
-        toolbar = find(R.id.home_toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+//        toolbar = find(R.id.home_toolbar)
+//        setSupportActionBar(toolbar)
+//        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         showSortedListCardView = find(R.id.sorted_near_by_restaurants_list_card)
         showMyLocationCardView = find(R.id.my_location_crd)
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
 
         setupCardClicks()
+        setupToolbarClicks()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             checkPermission()
@@ -116,8 +123,18 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
 
     }
-
-
+    private fun showIncognitoBtn(){
+        val ll =  LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
+        val dialog = Dialog(this)
+        dialog.setContentView(ll)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val gotItBtn : Button = dialog.find(R.id.got_it_btn)
+        gotItBtn .setOnClickListener {
+            home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
     private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
@@ -235,15 +252,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 isListshowing = false
                 sortedListRecyclerView.visibility = View.VISIBLE
                 horizontal_list_near_by_user.visibility = View.INVISIBLE
-                Helpers.runAnimation(sortedListRecyclerView)
+                list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
+//                Helpers.runAnimation(sortedListRecyclerView)
             } else {
                 isListshowing = true
-                Helpers.runReverseAnimation(sortedListRecyclerView)
-
-                Run.after(705) {
-                    sortedListRecyclerView.visibility = View.INVISIBLE
-                    horizontal_list_near_by_user.visibility = View.VISIBLE
-                }
+                sortedListRecyclerView.visibility = View.INVISIBLE
+                horizontal_list_near_by_user.visibility = View.VISIBLE
+                list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
 
             }
 
@@ -364,12 +379,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             mMap.uiSettings.isMapToolbarEnabled = false
             mMap.uiSettings.isMyLocationButtonEnabled = false
             mMap.setInfoWindowAdapter(CustomInfoWindowView(this))
-//            mMap.setOnInfoWindowClickListener {
-//                it.
-//
-//            }
-
-
         }
 
     }
@@ -380,19 +389,39 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            when (item.itemId) {
-                R.id.profile_item -> launchActivity<UserProfileActivity>()
-                R.id.filter_item -> {
-                    val bottomSheet = FilterBottomSheetDialog(this)
-                    bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
-                }
-                R.id.notify_item -> launchActivity<NotificationsActivity>()
-            }
+    private fun setupToolbarClicks(){
+        home_filter_btn.setOnClickListener {
+            val bottomSheet = FilterBottomSheetDialog(this)
+            bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
         }
-        return super.onOptionsItemSelected(item)
+
+        home_incoginoti_btn.setOnClickListener {
+            showIncognitoBtn()
+        }
+
+        home_notification_btn.setOnClickListener {
+            launchActivity<NotificationsActivity>()
+        }
+
+        home_profile_btn.setOnClickListener {
+            launchActivity<UserProfileActivity>()
+        }
     }
+
+
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        if (item != null) {
+//            when (item.itemId) {
+//                R.id.profile_item -> launchActivity<UserProfileActivity>()
+//                R.id.filter_item -> {
+//                    val bottomSheet = FilterBottomSheetDialog(this)
+//                    bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
+//                }
+//                R.id.notify_item -> launchActivity<NotificationsActivity>()
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -430,5 +459,3 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
     override fun getInfoWindow(p0: Marker?) = null
 
 }
-
-

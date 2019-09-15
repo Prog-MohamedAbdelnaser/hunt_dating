@@ -144,6 +144,11 @@ class Helpers {
             return transformation
         }
 
+
+        fun isGenderChangedAllowed(ctx:Context):Boolean{
+            return SharedPrefrenceManager.getUserGenderChanged(ctx)
+        }
+
     }
 
 }

@@ -49,9 +49,26 @@ class Constants {
 
         const val MALE = "Male"
         const val FEMALE = "Female"
+        const val OTHERS = "Others"
         const val BOTH = "Both"
+        const val isUserGenderChanged = false
 
         var defaultWidth = 600
+
+        const val NULL = "null"
+
+        const val RELATIONSHIP = 0
+        const val HEIGHT = 1
+        const val GYM = 2
+        const val EDUCATIONLEVEL = 3
+        const val DRINK = 4
+        const val SMOKE = 5
+        const val PETS = 6
+        const val LOOKINGFOR = 7
+        const val KIDS = 8
+        const val ZODIAC = 9
+        const val RELIGION = 10
+
 
 //        val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
 

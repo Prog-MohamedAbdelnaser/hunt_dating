@@ -60,8 +60,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         setupViews()
 
-
-
+        SharedPrefrenceManager.setUserGenderChanged(this,true)
         lottieAnimationView.playAnimation()
 
 //        insertUserIntoDb()

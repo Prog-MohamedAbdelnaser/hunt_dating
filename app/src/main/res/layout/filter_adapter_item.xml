@@ -4,9 +4,9 @@
                                                    android:orientation="vertical"
                                                    android:layout_width="wrap_content"
                                                    android:layout_height="145dp">
-    <ImageView android:layout_width="100dp"
+    <ImageView android:layout_width="90dp"
                android:id="@+id/filter_adapter_item_image"
-               android:layout_height="100dp"
+               android:layout_height="90dp"
                android:background="@drawable/selected_cirular_btn"
                android:padding="30dp"
                android:src="@drawable/ic_date_white"

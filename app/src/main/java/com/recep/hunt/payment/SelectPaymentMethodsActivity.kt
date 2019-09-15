@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -28,6 +29,7 @@ class SelectPaymentMethodsActivity : BaseActivity() {
         init()
     }
     private fun init(){
+        this.hideKeyboard()
         recyclerView = find(R.id.select_methods_recyclerView)
         setupRecyclerView()
 

@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
     implementation 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    implementation 'com.github.shts:StoriesProgressView:3.0.0'
 
 
     // Room components

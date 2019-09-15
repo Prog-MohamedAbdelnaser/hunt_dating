@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.setupProfile.adapters.AddRemoveMode
 import com.recep.hunt.setupProfile.adapters.LookingForListeners
 import com.recep.hunt.setupProfile.adapters.SetupProfileInterestedInAdapter
@@ -67,7 +68,7 @@ class SetupProfileGenderActivity : BaseActivity() ,
                 LookingForModel(
                     R.drawable.ic_man,
                     R.drawable.ic_man_white,
-                    "Male",
+                    Constants.MALE,
                     false,
                     null
                 )
@@ -76,7 +77,7 @@ class SetupProfileGenderActivity : BaseActivity() ,
                 LookingForModel(
                     R.drawable.ic_female,
                     R.drawable.ic_female_white,
-                    "Female",
+                    Constants.FEMALE,
                     false,
                     null
                 )
@@ -85,7 +86,7 @@ class SetupProfileGenderActivity : BaseActivity() ,
                 LookingForModel(
                     R.drawable.ic_others_gender,
                     R.drawable.ic_other_white,
-                    "Others",
+                    Constants.OTHERS,
                     false,
                     null
                 )

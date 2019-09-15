@@ -62,6 +62,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         setScreenTitle(R.string.setup_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
+        SharedPrefrenceManager.setUserGenderChanged(this,true)
         init()
     }
 
@@ -137,26 +138,31 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
             val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images);
-            if (!imgFlag.equals("0")) {
-                setImage(imagesBtm)
-            } else {
+            if(imgFlag == null){
                 if (images != null) {
                     val imageString = images.toString()
                     launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
                 }
+            }else{
+                setImage(imagesBtm)
             }
         } else if (requestCode == 9 && resultCode == Activity.RESULT_OK && data != null) {
             Log.e("Data Extras : ", " ${data.extras}")
             val images = data.extras.get("data") as Bitmap
             val imageString = BitMapToString(images)
-            if (!imgFlag.equals("0")) {
+            if(imgFlag == null){
+                launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
+            }else{
                 setImage(images)
-            } else {
-                launchActivity<SetupProfileAddedPhotoActivity>
-                {
-                    putExtra(IMGURI, imageString)
-                }
             }
+//            if (!imgFlag.equals("0")) {
+//                setImage(images)
+//            } else {
+//                launchActivity<SetupProfileAddedPhotoActivity>
+//                {
+//                    putExtra(IMGURI, imageString)
+//                }
+//            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

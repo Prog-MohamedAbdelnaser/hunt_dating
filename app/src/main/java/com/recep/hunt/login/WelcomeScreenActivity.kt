@@ -1,5 +1,6 @@
 package com.recep.hunt.login
 
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.VideoView
+import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.recep.hunt.R
 import com.recep.hunt.login.adapter.OnBoardAdapter
+import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_welcome_screen.*
 import org.jetbrains.anko.find
@@ -50,6 +53,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
             launchActivity<SocialLoginActivity>()
         }
         setupViewPager()
+        checkPermission()
     }
     private fun setupViewPager(){
         val titleArray = arrayListOf(R.string.wanna_go_hunting,R.string.wanna_go_hunting1,R.string.wanna_go_hunting2)
@@ -72,6 +76,17 @@ class WelcomeScreenActivity : AppCompatActivity() {
                 handler.post(Update)
             }
         }, DELAY_MS, PERIOD_MS)
+    }
+
+    private fun checkPermission(){
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE
+            )
+            return
+        }
     }
 }
 class WelcomePagerAdapter():PagerAdapter(){

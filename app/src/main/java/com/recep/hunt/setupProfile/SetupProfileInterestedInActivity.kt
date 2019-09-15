@@ -51,8 +51,9 @@ class SetupProfileInterestedInActivity : BaseActivity(),
                 if(count < 3){
                     showAddExtraChoiceDialog()
                 }else{
-                    toast(selectedInterstedIn)
-                    launchActivity<TurnOnGPSActivity>()
+//                    toast(selectedInterstedIn)
+//                    launchActivity<TurnOnGPSActivity>()
+                    launchActivity<TurnOnGPSUpdateAcitivity>()
                 }
             }else{
                 Helpers.showErrorSnackBar(this@SetupProfileInterestedInActivity,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))

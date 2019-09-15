@@ -53,6 +53,8 @@ class UserProfileActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        adapter.clear()
+        setupRecyclerView()
         adapter.notifyDataSetChanged()
     }
 
@@ -75,49 +77,52 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun addSixPhotosItemView() {
-        adapter.add(ProfileSixPhotosView(this))
+        val firstImage = SharedPrefrenceManager.getFirstImg(this)
+        val secondImage = SharedPrefrenceManager.getSecImg(this)
+        val thirdImage = SharedPrefrenceManager.getThirdImg(this)
+        val fourthImage = SharedPrefrenceManager.getFourthImg(this)
+        val fifthImage = SharedPrefrenceManager.getFiveImg(this)
+        val sixthImage = SharedPrefrenceManager.getSixImg(this)
+
+        if(firstImage != Constants.NULL || secondImage != Constants.NULL || thirdImage != Constants.NULL || fourthImage != Constants.NULL || fifthImage != Constants.NULL || sixthImage != Constants.NULL)
+            adapter.add(ProfileSixPhotosView(this))
     }
 
     private fun addHomeTownAndSchoolItemView() {
-        adapter.add(ProfileHeaderTitle(resources.getString(R.string.hometown)))
-        adapter.add(ProfileSimpleItem("India"))
-        adapter.add(ProfileHeaderTitle(resources.getString(R.string.schooloruniversity)))
-        adapter.add(ProfileSimpleItem("J.D Tytler school , New Delhi"))
+        val homeTown = SharedPrefrenceManager.getHomeTown(this)
+        val school = SharedPrefrenceManager.getSchoolUniversity(this)
+
+        if(homeTown != Constants.NULL){
+            adapter.add(ProfileHeaderTitle(resources.getString(R.string.hometown)))
+            adapter.add(ProfileSimpleItem(homeTown))
+        }
+
+        if(school != Constants.NULL){
+            adapter.add(ProfileHeaderTitle(resources.getString(R.string.schooloruniversity)))
+            adapter.add(ProfileSimpleItem(school))
+        }
+
         adapter.add(ProfileHeaderTitle(resources.getString(R.string.iam)))
     }
 
     private fun addUserGenderItemView() {
-        adapter.add(ProfileGenderItemView(this, Constants.male, false))
+        adapter.add(ProfileGenderItemView(this, SharedPrefrenceManager.getUserGender(this), false))
     }
 
     private fun addBasicInfoItemViews() {
         val basicModel = ArrayList<UserBasicInfoModel>()
         val questionModel = getBasicInfoQuestions()
-        basicModel.add(
-            UserBasicInfoModel(
-                "Relationship status",
-                "Single",
-                R.drawable.relationship_icon,
-                questionModel[0]
-            )
-        )
-        basicModel.add(UserBasicInfoModel("Height", null, R.drawable.height_icon, questionModel[1]))
-        basicModel.add(UserBasicInfoModel("Gym", null, R.drawable.gym_icon, questionModel[2]))
-        basicModel.add(
-            UserBasicInfoModel(
-                "Education level",
-                "Engineering",
-                R.drawable.education_icon,
-                questionModel[3]
-            )
-        )
-        basicModel.add(UserBasicInfoModel("Drink", "Socially", R.drawable.drink_icon, questionModel[4]))
-        basicModel.add(UserBasicInfoModel("Smoke", null, R.drawable.smoke_icon, questionModel[5]))
-        basicModel.add(UserBasicInfoModel("Pets", null, R.drawable.pets_icon, questionModel[6]))
-        basicModel.add(UserBasicInfoModel("Looking for", "Dating", R.drawable.looking_for_icon, questionModel[7]))
-        basicModel.add(UserBasicInfoModel("Kids", "Want someday", R.drawable.kids_icon, questionModel[8]))
-        basicModel.add(UserBasicInfoModel("Zodiac", "Libra", R.drawable.zodiac_icon, questionModel[9]))
-        basicModel.add(UserBasicInfoModel("Religion", "Punjabi", R.drawable.religion_icon, questionModel[10]))
+        basicModel.add(UserBasicInfoModel("Relationship status",SharedPrefrenceManager.getRelationShipStatus(this),R.drawable.relationship_icon,questionModel[0]))
+        basicModel.add(UserBasicInfoModel("Height", SharedPrefrenceManager.getUserHeight(this), R.drawable.height_icon, questionModel[1]))
+        basicModel.add(UserBasicInfoModel("Gym", SharedPrefrenceManager.getUserGym(this), R.drawable.gym_icon, questionModel[2]))
+        basicModel.add(UserBasicInfoModel("Education level", SharedPrefrenceManager.getUserEducationLevel(this), R.drawable.education_icon,questionModel[3]))
+        basicModel.add(UserBasicInfoModel("Drink", SharedPrefrenceManager.getUserDrink(this), R.drawable.drink_icon, questionModel[4]))
+        basicModel.add(UserBasicInfoModel("Smoke", SharedPrefrenceManager.getSomke(this), R.drawable.smoke_icon, questionModel[5]))
+        basicModel.add(UserBasicInfoModel("Pets",SharedPrefrenceManager.getPets(this), R.drawable.pets_icon, questionModel[6]))
+        basicModel.add(UserBasicInfoModel("Looking for", SharedPrefrenceManager.getLookingFor(this), R.drawable.looking_for_icon, questionModel[7]))
+        basicModel.add(UserBasicInfoModel("Kids", SharedPrefrenceManager.getKids(this), R.drawable.kids_icon, questionModel[8]))
+        basicModel.add(UserBasicInfoModel("Zodiac", SharedPrefrenceManager.getZodiac(this), R.drawable.zodiac_icon, questionModel[9]))
+        basicModel.add(UserBasicInfoModel("Religion", SharedPrefrenceManager.getReligion(this), R.drawable.religion_icon, questionModel[10]))
 
         for (model in basicModel) {
             adapter.add(ProfileBasicInfoItemView(this, model, null))
@@ -139,7 +144,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.relation_option_5
                 ),
                 null,
-                R.string.relation_option_1
+                SharedPrefrenceManager.getRelationShipStatus(this)
             )
         )
 
@@ -149,7 +154,7 @@ class UserProfileActivity : AppCompatActivity() {
                 false,
                 null,
                 R.string.height_placeholder,
-                null
+                SharedPrefrenceManager.getUserHeight(this)
             )
         )
 
@@ -159,7 +164,7 @@ class UserProfileActivity : AppCompatActivity() {
                 true,
                 arrayListOf(R.string.gym_option_1, R.string.gym_option_2, R.string.gym_option_3),
                 null,
-                null
+                SharedPrefrenceManager.getUserGym(this)
             )
         )
 
@@ -176,7 +181,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.education_option_6
                 ),
                 null,
-                R.string.education_option_4
+                SharedPrefrenceManager.getUserEducationLevel(this)
             )
         )
 
@@ -190,7 +195,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.drink_option_3
                 ),
                 null,
-                R.string.drink_option_2
+                SharedPrefrenceManager.getUserDrink(this)
             )
         )
 
@@ -204,7 +209,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.smoke_option_3
                 ),
                 null,
-                R.string.smoke_option_2
+                SharedPrefrenceManager.getSomke(this)
             )
         )
 
@@ -221,7 +226,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.pet_option_6
                 ),
                 null,
-                R.string.pet_option_2
+                SharedPrefrenceManager.getPets(this)
             )
         )
 
@@ -237,7 +242,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.looking_for_option_4
                 ),
                 null,
-                R.string.looking_for_option_3
+                SharedPrefrenceManager.getLookingFor(this)
             )
         )
 
@@ -253,7 +258,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.kids_option_4
                 ),
                 null,
-                R.string.looking_for_option_3
+                SharedPrefrenceManager.getKids(this)
             )
         )
 
@@ -279,7 +284,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.zodiac_option_12
                 ),
                 null,
-                R.string.zodiac_option_2
+                SharedPrefrenceManager.getZodiac(this)
             )
         )
 
@@ -297,7 +302,7 @@ class UserProfileActivity : AppCompatActivity() {
                     R.string.religin_option_6
                 ),
                 null,
-                R.string.religin_option_3
+                SharedPrefrenceManager.getReligion(this)
             )
         )
 
@@ -324,25 +329,24 @@ class UserProfileActivity : AppCompatActivity() {
 
 //ProfileHeader
 class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
-    var userName: String? = ""
-    var userJobtitle: String? = ""
-    var aboutYou: String? = ""
-
     override fun getLayout() = R.layout.profile_header_layout_item
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        userName = SharedPrefrenceManager.getUserFirstName(context)
-        userJobtitle = SharedPrefrenceManager.getJobTitle(context)
-        aboutYou = SharedPrefrenceManager.getAboutYou(context)
+        val userName = SharedPrefrenceManager.getUserFirstName(context)
+        val userJobtitle = SharedPrefrenceManager.getJobTitle(context)
+        val aboutYou = SharedPrefrenceManager.getAboutYou(context)
         val userImage = SharedPrefrenceManager.getUserImage(context)
 
         Picasso.get().load(userImage)
             .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
             .into(viewHolder.itemView.profile_header_user_image)
 
+
         viewHolder.itemView.profile_header_user_name.text = userName
+        if(aboutYou != Constants.NULL)
         viewHolder.itemView.user_aboutus.text = aboutYou
+        if(userJobtitle != Constants.NULL)
         viewHolder.itemView.user_job_title_tv.text = userJobtitle
 
     }
@@ -411,25 +415,25 @@ class ProfileGenderItemView(private val context: Context, private val gender: St
         }
 
         maleBtn.setOnClickListener {
-            setupSelectedGender(Constants.male)
+            setupSelectedGender(Constants.MALE)
         }
 
         femaleBtn.setOnClickListener {
-            setupSelectedGender(Constants.female)
+            setupSelectedGender(Constants.FEMALE)
         }
 
         otherBtn.setOnClickListener {
-            setupSelectedGender(Constants.others)
+            setupSelectedGender(Constants.OTHERS)
         }
 
-        setupSelectedGender(gender)
+        setupSelectedGender(SharedPrefrenceManager.getUserGender(context))
 
 
     }
 
     private fun setupSelectedGender(selectedgender: String) {
         when (selectedgender) {
-            Constants.male -> {
+            Constants.MALE -> {
                 maleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 maleBtn.textColor = context.resources.getColor(R.color.white)
 
@@ -439,7 +443,7 @@ class ProfileGenderItemView(private val context: Context, private val gender: St
                 otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
-            Constants.female -> {
+            Constants.FEMALE -> {
                 femaleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 femaleBtn.textColor = context.resources.getColor(R.color.white)
 
@@ -476,9 +480,9 @@ class ProfileBasicInfoItemView(
         viewHolder.itemView.basic_info_title.text = model.title
         val questionModel = model.questions
 
-        if (questionModel.selectedValue != null) {
+        if (questionModel.selectedValue != Constants.NULL) {
             viewHolder.itemView.basic_info_add_image.visibility = View.GONE
-            viewHolder.itemView.basic_info_detail.text = context.resources.getString(questionModel.selectedValue)
+            viewHolder.itemView.basic_info_detail.text = questionModel.selectedValue
         } else {
             viewHolder.itemView.basic_info_add_image.visibility = View.VISIBLE
             viewHolder.itemView.basic_info_detail.text = ""

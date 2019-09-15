@@ -37,7 +37,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="Rishabh"
                 android:textAlignment="center"
                 android:textColor="@color/app_text_black"
                 android:textSize="24sp"

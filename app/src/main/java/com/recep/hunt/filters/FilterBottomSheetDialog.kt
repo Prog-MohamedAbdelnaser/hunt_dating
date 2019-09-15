@@ -34,7 +34,7 @@ import kotlin.math.abs
  */
 
 class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
-
+    
     private var mBottomSheetListener: FilterBottomSheetListener?=null
     private lateinit var ageRangeSeekBar: RangeSeekBar
     private lateinit var viewPager : NonSwipeableViewPager
@@ -66,19 +66,6 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         viewPager.adapter = adapter
         filterTabLayout.setupWithViewPager(viewPager)
         viewPager.setPageTransformer(false,FadePageTransformer())
-//        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-//            @Override
-//            public void transformPage(@NonNull View page, float position) {
-//                page.setAlpha(0f);
-//                page.setVisibility(View.VISIBLE);
-//
-//                // Start Animation for a short period of time
-//                page.animate()
-//                    .alpha(1f)
-//                    .setDuration(page.getResources().getInteger(android.R.integer.config_shortAnimTime));
-//            }
-//        })
-
 
         filterAgeTextView.text =
             ctx.resources.getString(R.string.fromYears_toYears,"18","50")

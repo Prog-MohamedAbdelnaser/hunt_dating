@@ -15,4 +15,4 @@ data class UserBasicInfoQuestionModel(val question:Int,
                                       val isListTypeQuestion:Boolean,
                                       val options:ArrayList<Int>?,
                                       val optionPlaceholder:Int?,
-                                      val selectedValue:Int?):Parcelable
+                                      val selectedValue:String?):Parcelable

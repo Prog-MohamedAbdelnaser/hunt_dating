@@ -17,10 +17,6 @@
             android:layout_height="match_parent"
             android:src="@drawable/half_black_view"/>
 
-
-
-
-
     <LinearLayout
             android:id="@+id/linearLayout13"
             android:layout_width="match_parent"
