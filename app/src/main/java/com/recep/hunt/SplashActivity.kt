@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
             val isLoggedIn = SharedPrefrenceManager.getIsLoggedIn(this)
             if(isOtpVerified){
                 if(isLoggedIn){
-                    val intent = Intent(applicationContext,HomeActivity::class.java)
+                    val intent = Intent(applicationContext,SocialLoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }else{
@@ -37,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 }
             }else{
-                val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
+                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
 //                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
                 startActivity(intent)
                 finish()

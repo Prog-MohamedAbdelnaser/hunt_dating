@@ -65,7 +65,6 @@ import kotlin.collections.ArrayList
 
 class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
@@ -276,7 +275,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     firebaseAuthWithGoogle(account)
                 // G+
                 var m= mGoogleApiClient
-                var person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
+                val person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
                 Log.i(TAG, "--------------------------------")
                 Log.i(TAG, "Display Name: " + person.displayName)
                 Log.i(TAG, "Gender: " + person.gender)

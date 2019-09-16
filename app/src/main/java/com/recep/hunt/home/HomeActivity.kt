@@ -172,7 +172,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             }
             allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
             val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
-            completion(APIState.Success, results)
+            completion(APIState.SUCCESS, results)
             setupSortedListRecyclerView(results)
 
         }
@@ -181,7 +181,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     private fun setupAllNearByRestMarkers(lat: Double, long: Double) {
         nearByRestaurants(lat, long, "1000") { response, results ->
-            if (response == APIState.Success) {
+            if (response == APIState.SUCCESS) {
                 val markerOptions = MarkerOptions()
                 if (results != null) {
                     for (i in 0 until results.size - 1) {
@@ -215,7 +215,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     private fun setupNearByResUnder600M(lat: Double, long: Double) {
         nearByRestaurants(lat, long, "600") { response, results ->
-            if (response == APIState.Success) {
+            if (response == APIState.SUCCESS) {
                 val markerOptions = MarkerOptions()
                 if (results != null) {
                     for (i in 0 until results.size - 1) {

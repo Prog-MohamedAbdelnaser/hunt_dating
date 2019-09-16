@@ -4,83 +4,13 @@
         android:orientation="vertical"
         android:id="@+id/bottom_sheet_layout"
         android:layout_width="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/white"
+        android:background="@drawable/round_dialog"
         android:layout_height="match_parent">
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/user_detail_recyclerView"
             android:layout_width="match_parent"
-            android:layout_marginTop="24dp"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            />
 
-        <TextView
-                android:id="@+id/user_detail_username_txtView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="John, 23"
-                android:textSize="25sp"
-                android:layout_centerInParent="true"
-                android:textColor="@color/app_text_black"
-                android:fontFamily="@font/montserrat_semibold"/>
-
-        <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/user_detail_username_txtView"
-                android:layout_toRightOf="@+id/user_detail_username_txtView"
-                android:background="@drawable/light_blue_circle"
-                android:padding="8dp"
-                android:src="@drawable/ic_like_filled" />
-
-        <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/user_online_status"
-                android:layout_toStartOf="@id/user_detail_username_txtView"
-                android:layout_toLeftOf="@id/user_detail_username_txtView"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"/>
-
-    </RelativeLayout>
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Job title"
-            android:textAlignment="center"
-            android:textColor="@color/app_text_black"
-            android:fontFamily="@font/montserrat"
-            android:textSize="16sp"
-            android:layout_marginTop="12dp"/>
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:fontFamily="@font/montserrat"
-            android:textColor="#9A9DA4"
-            android:text="About You"
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"/>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/seprator_color"
-            android:layout_marginTop="16dp"
-        />
-
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/basic_info"
-            android:textSize="20sp"
-            android:fontFamily="@font/montserrat_medium"
-            android:textColor="@color/app_text_black"
-            android:layout_marginTop="16dp"/>
 
 </LinearLayout>

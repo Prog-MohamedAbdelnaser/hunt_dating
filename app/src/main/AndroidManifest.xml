@@ -74,10 +74,6 @@
         <activity android:name=".setupProfile.SetupProfileDobActivity"/>
         <activity android:name=".setupProfile.SetupProfileActivity"/>
         <activity android:name=".login.SocialLoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".login.OtpVerificationActivity"/>
         <activity android:name=".login.LoginActivity"/>
@@ -86,11 +82,11 @@
                 android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
                 android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".SplashActivity">
-            <!--  <intent-filter>
+            <intent-filter>
                   <action android:name="android.intent.action.MAIN" />
 
                   <category android:name="android.intent.category.LAUNCHER" />
-              </intent-filter>-->
+              </intent-filter>
         </activity>
 
         <service

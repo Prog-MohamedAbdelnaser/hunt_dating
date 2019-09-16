@@ -12,10 +12,10 @@ import org.json.JSONObject
 /**
  * Created by RishabhShukla on 11/02/19.
  */
-enum class APIState{
-    Success,
-    Error
-}
+enum class APIState(val result: Boolean) {
+    SUCCESS(true),
+    FAILURE(false)}
+
 class ServiceVolley : ServiceInterface {
     val TAG = ServiceVolley::class.java.simpleName
 //    val basePath = Constants.BASEURL

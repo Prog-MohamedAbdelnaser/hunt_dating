@@ -35,7 +35,7 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
         setScreenTitle(R.string.setup_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
-      //  init()
+        init()
     }
 
     private fun init() {

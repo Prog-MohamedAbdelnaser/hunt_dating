@@ -4,7 +4,9 @@ package com.recep.hunt.utilis
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -147,6 +149,17 @@ class Helpers {
 
         fun isGenderChangedAllowed(ctx:Context):Boolean{
             return SharedPrefrenceManager.getUserGenderChanged(ctx)
+        }
+
+        fun stringToBitmap(img: String?): Bitmap? {
+            val bitmap : Bitmap?
+            if (img != null) {
+                val b = Base64.decode(img, Base64.DEFAULT)
+                bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
+                return bitmap
+            }
+            return null
+
         }
 
     }
