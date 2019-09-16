@@ -35,7 +35,7 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
         setScreenTitle(R.string.setup_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
-        init()
+      //  init()
     }
 
     private fun init() {
@@ -46,8 +46,7 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
 
 
         change_pic_tv.setOnClickListener {
-            ImagePicker.with(this).setShowCamera(true).setMultipleMode(false)
-                .start()
+            ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
         setup_profile_upload_pic_next_btn.setOnClickListener {
             launchActivity<SetupProfileGenderActivity>()

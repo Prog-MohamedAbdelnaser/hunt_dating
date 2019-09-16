@@ -22,10 +22,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.Scope
+import com.google.android.gms.plus.Plus
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -57,29 +63,33 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
+class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
-    companion object{
+    companion object {
         const val socialTypeKey = "social_type_key"
         const val userSocialModel = "user_social_key"
     }
+
     private val TAG = SocialLoginActivity::class.java.simpleName
     //Google Login Request Code
     private val RC_SIGN_IN = 7
     //Google Sign In Client
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var callbackManager : CallbackManager
+    private lateinit var callbackManager: CallbackManager
+    private lateinit var mGoogleApiClient: GoogleApiClient
     //Firebase Auth
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var userDetailsModel : UserSocialModel
-    private lateinit var dialog : KProgressHUD
+    private lateinit var userDetailsModel: UserSocialModel
+    private lateinit var dialog: KProgressHUD
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var messageEditText :EditText
+    private lateinit var messageEditText: EditText
 
-    private lateinit var userViewModel : UserViewModel
-
+    private lateinit var userViewModel: UserViewModel
 
 
     private val adapter = GroupAdapter<ViewHolder>()
@@ -98,17 +108,18 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
 //        printHashKey(this)
     }
 
-    private fun init(){
+    private fun init() {
         recyclerView = find(R.id.social_login_recyclerView)
         messageEditText = find(R.id.type_msg_et)
         setupRecyclerView()
 
     }
+
     override fun onClick(v: View?) {
-        if(v != null){
-            when(v.id){
+        if (v != null) {
+            when (v.id) {
                 R.id.send_msg_btn -> {
-                    if(messageEditText.text.isNotEmpty()){
+                    if (messageEditText.text.isNotEmpty()) {
                         addMessage()
                     }
                 }
@@ -125,29 +136,39 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             }
         }
     }
-    private fun setupGoogleAuth(){
+
+    private fun setupGoogleAuth() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
+            .requestScopes(Scope(Scopes.PROFILE))
+            .requestScopes(Scope(Scopes.PLUS_LOGIN))
+            .requestProfile()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+            .enableAutoManage(this, this)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+            .addApi(Plus.API)
+            .build()
     }
 
-    private fun getDeviceToken(){
+    private fun getDeviceToken() {
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-            if(!it.isSuccessful){
+            if (!it.isSuccessful) {
                 return@addOnCompleteListener
             }
             val token = it.result?.token
-            if(token != null){
-                SharedPrefrenceManager.setDeviceToken(this@SocialLoginActivity,token)
-                Log.e(TAG,"Device Token : $token")
+            if (token != null) {
+                SharedPrefrenceManager.setDeviceToken(this@SocialLoginActivity, token)
+                Log.e(TAG, "Device Token : $token")
             }
         }
     }
 
-    private fun setupFbLoginAuth(){
+    private fun setupFbLoginAuth() {
         // Initialize Facebook Login button
 
         LoginManager.getInstance().logOut()
@@ -155,12 +176,14 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             this@SocialLoginActivity,
             Arrays.asList("public_profile", "user_friends", "email", "user_birthday")
         )
+
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     Log.e("loginResult ", loginResult.toString())
                     getUserDetails(loginResult)
                 }
+
                 override fun onCancel() {
                     Log.e("loginResult ", "cancel")
                 }
@@ -171,22 +194,23 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             })
 
     }
-    private fun setupRecyclerView(){
+
+    private fun setupRecyclerView() {
         val linearLayout = LinearLayoutManager(this@SocialLoginActivity)
         linearLayout.stackFromEnd = true
         recyclerView.layoutManager = linearLayout
         recyclerView.adapter = adapter
         val chatData = dummyChatdata()
-        for(data in chatData){
+        for (data in chatData) {
             //msg type case
-            if(data.type == Constants.messageSentType){
+            if (data.type == Constants.messageSentType) {
                 adapter.add(
                     SocialLoginChatSentAdapter(
                         this@SocialLoginActivity,
                         data
                     )
                 )
-            }else{
+            } else {
                 adapter.add(
                     SocialLoginChatReceivedAdapter(
                         this@SocialLoginActivity,
@@ -199,25 +223,19 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         Helpers.runAnimation(recyclerView)
     }
 
-    private fun addMessage(){
+    private fun addMessage() {
         val message = messageEditText.text.toString()
-        val model =
-            LoginChatMessageModel(message, Constants.messageSentType)
-        adapter.add(
-            SocialLoginChatSentAdapter(
-                this@SocialLoginActivity,
-                model
-            )
-        )
+        val model = LoginChatMessageModel(message, Constants.messageSentType)
+        adapter.add(SocialLoginChatSentAdapter(this@SocialLoginActivity, model))
         adapter.notifyDataSetChanged()
         messageEditText.setText("")
         this@SocialLoginActivity.hideKeyboard()
     }
 
     //Dummy Chat Data
-    private fun dummyChatdata():ArrayList<LoginChatMessageModel>{
+    private fun dummyChatdata(): ArrayList<LoginChatMessageModel> {
         val data = ArrayList<LoginChatMessageModel>()
-        if(data.size == 0){
+        if (data.size == 0) {
             data.add(
                 LoginChatMessageModel(
                     "You might like to become a member of our loyalty program and accumulate points.",
@@ -226,8 +244,7 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             )
             data.add(
                 LoginChatMessageModel(
-                    "Interesting",
-                    Constants.messageReceivedType
+                    "Interesting", Constants.messageReceivedType
                 )
             )
             data.add(
@@ -255,8 +272,18 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(Exception::class.java)
-                if(account != null)
-                firebaseAuthWithGoogle(account)
+                if (account != null)
+                    firebaseAuthWithGoogle(account)
+                // G+
+                var m= mGoogleApiClient
+                var person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
+                Log.i(TAG, "--------------------------------")
+                Log.i(TAG, "Display Name: " + person.displayName)
+                Log.i(TAG, "Gender: " + person.gender)
+                Log.i(TAG, "AboutMe: " + person.aboutMe)
+                Log.i(TAG, "Birthday: " + person.birthday)
+                Log.i(TAG, "Current Location: " + person.currentLocation)
+                Log.i(TAG, "Language: " + person.language)
             } catch (e: Exception) {
                 // Google Sign In failed, update UI appropriately
                 Log.e(TAG, "Google sign in failed", e)
@@ -279,16 +306,15 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.e(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(this,"Failed",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
                 }
 
 
             }
     }
 
-    private fun updateGoogleUI(user: FirebaseUser?){
-        if(user != null){
-
+    private fun updateGoogleUI(user: FirebaseUser?) {
+        if (user != null) {
             val gson = GsonBuilder().setPrettyPrinting().create()
             userDetailsModel = UserSocialModel(
                 user.uid,
@@ -298,44 +324,47 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             )
 
 
+            //  var userInf  = user.providerData
+
+
             val json: String = gson.toJson(userDetailsModel)
-            Log.e("Full name : ${user.displayName}","")
+            Log.e("Full name : ${user.displayName}", "")
             val fullname = user.displayName!!.split(" ").toTypedArray()
 
-            val firstName : String = fullname[0]
-            val lastName:String = fullname[1]
+            val firstName: String = fullname[0]
+            val lastName: String = fullname[1]
 
-            SharedPrefrenceManager.setUserFirstName(this,firstName)
-            SharedPrefrenceManager.setUserLastName(this,lastName)
-            SharedPrefrenceManager.setUserEmail(this,user.email!!)
-            SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity,json)
-            SharedPrefrenceManager.setUserImage(this,user.photoUrl.toString())
+            SharedPrefrenceManager.setUserFirstName(this, firstName)
+            SharedPrefrenceManager.setUserLastName(this, lastName)
+            SharedPrefrenceManager.setUserEmail(this, user.email!!)
+            SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
+            SharedPrefrenceManager.setUserImage(this, user.photoUrl.toString())
             launchActivity<ContinueAsSocialActivity> {
-                putExtra(socialTypeKey,Constants.socialGoogleType)
-                putExtra(userSocialModel,json)
+                putExtra(socialTypeKey, Constants.socialGoogleType)
+                putExtra(userSocialModel, json)
             }
 
-        }
-        else{
+        } else {
             toast("userNotFound")
         }
     }
 
-    private fun getUserDetails(loginResult:LoginResult) {
+    private fun getUserDetails(loginResult: LoginResult) {
         val data_request = GraphRequest.newMeRequest(loginResult.accessToken) { json_object, response ->
             try {
-                    Log.e(TAG,"facebook respone : $json_object")
-                    val picture = json_object.getJSONObject("picture")
-                    val data = picture.getJSONObject("data")
-                    //Fetch the data from the response
-                    val facebook_pic = data.optString("url", null)
-                    val social_name = json_object.optString("name", null)
-                    val social_email = json_object.optString("email", null)
-                    val id = json_object.getString("id")
-                    val social_pic = URLEncoder.encode(facebook_pic, "UTF-8")
-                    Log.e("peofile_pic", social_pic)
-                    Log.e("peofile_name", social_name)
-                    Log.e("peofile_email", social_email)
+                Log.e(TAG, "facebook respone : $json_object")
+                val picture = json_object.getJSONObject("picture")
+                val data = picture.getJSONObject("data")
+                //Fetch the data from the response
+                val facebook_pic = data.optString("url", null)
+                val social_name = json_object.optString("name", null)
+                val social_email = json_object.optString("email", null)
+                val id = json_object.getString("id")
+                val gender = json_object.getString("gender")
+                val social_pic = URLEncoder.encode(facebook_pic, "UTF-8")
+                Log.e("peofile_pic", social_pic)
+                Log.e("peofile_name", social_name)
+                Log.e("peofile_email", social_email)
 
                 userDetailsModel = UserSocialModel(
                     id,
@@ -348,18 +377,19 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
                 val json: String = gson.toJson(userDetailsModel)
 
                 val fullname = social_name.split(" ").toTypedArray()
-                val firstName : String = fullname[0]
-                val lastName:String = fullname[1]
+                val firstName: String = fullname[0]
+                val lastName: String = fullname[1]
 
-                SharedPrefrenceManager.setUserFirstName(this,firstName)
-                SharedPrefrenceManager.setUserLastName(this,lastName)
-                SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity,json)
-                SharedPrefrenceManager.setUserEmail(this,social_email)
-                SharedPrefrenceManager.setUserImage(this,social_pic)
+                SharedPrefrenceManager.setUserFirstName(this, firstName)
+                SharedPrefrenceManager.setUserLastName(this, lastName)
+                SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
+                SharedPrefrenceManager.setUserEmail(this, social_email)
+                SharedPrefrenceManager.setUserImage(this, social_pic)
+                SharedPrefrenceManager.setUserGender(this, gender)
 
                 launchActivity<ContinueAsSocialActivity> {
-                    putExtra(socialTypeKey,Constants.socialFBType)
-                    putExtra(userSocialModel,json)
+                    putExtra(socialTypeKey, Constants.socialFBType)
+                    putExtra(userSocialModel, json)
                 }
             } catch (e: JSONException) {
                 Log.d("JSONException: ", e.message, e)
@@ -368,14 +398,14 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
             }
         }
         val permission_param = Bundle()
-        permission_param.putString("fields", "id,name,email,picture.width(480).height(480)")
+        permission_param.putString("fields", "id,name,email,picture.width(480).height(480),gender")
         data_request.parameters = permission_param
         data_request.executeAsync()
 
     }
 
-    private fun showInstaAuthDialog(){
-        val ll =  LayoutInflater.from(this).inflate(R.layout.instagram_auth_dialog, null)
+    private fun showInstaAuthDialog() {
+        val ll = LayoutInflater.from(this).inflate(R.layout.instagram_auth_dialog, null)
         val dialog = Dialog(this@SocialLoginActivity)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -405,6 +435,5 @@ class SocialLoginActivity : AppCompatActivity(),View.OnClickListener {
         }
 
     }
-
 
 }

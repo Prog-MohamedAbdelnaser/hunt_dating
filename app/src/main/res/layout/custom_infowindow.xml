@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="wrap_content"
-              android:background="@drawable/info_window_box"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+        >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:padding="5sp"
+            android:background="@drawable/info_window_box"
+            android:id="@+id/clInfoId"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingLeft="2sp"
+            android:paddingTop="5sp"
+            android:paddingRight="2sp"
+            android:paddingBottom="5sp">
 
         <ImageView
                 android:id="@+id/info_window_rest_image"
-                android:layout_width="60dp"
+                android:layout_width="65dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/demo_restaurant_1"
+                app:layout_constrainedHeight="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -91,5 +95,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ImageView android:layout_width="24sp"
+               android:layout_below="@+id/clInfoId"
+               android:src="@drawable/tooltip"
+               android:scaleType="fitXY"
+               android:layout_centerHorizontal="true"
+               android:layout_height="30sp"/>
 
-</LinearLayout >
+</RelativeLayout>

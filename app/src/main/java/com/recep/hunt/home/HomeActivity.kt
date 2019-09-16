@@ -60,7 +60,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     }
 
-//    private lateinit var toolbar: Toolbar
+    //    private lateinit var toolbar: Toolbar
     private lateinit var mMap: GoogleMap
     private lateinit var mapRipple: MapRipple
 
@@ -123,18 +123,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
 
     }
-    private fun showIncognitoBtn(){
-        val ll =  LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
+
+    private fun showIncognitoBtn() {
+        val ll = LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
         val dialog = Dialog(this)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val gotItBtn : Button = dialog.find(R.id.got_it_btn)
-        gotItBtn .setOnClickListener {
+        val gotItBtn: Button = dialog.find(R.id.got_it_btn)
+        gotItBtn.setOnClickListener {
             home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
             dialog.dismiss()
         }
         dialog.show()
     }
+
     private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
@@ -158,15 +160,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     ) {
         val path = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
         Log.e("Lat long", "$lat,$long")
-        val params =
-            "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
+        val params = "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
         val serviceVolley = ServiceVolley()
         val apiController = APIController(serviceVolley)
         val url = "$path?$params"
         Log.e("URL", "$url")
         val dialog = Helpers.showDialog(this, this, "Getting near by restaurants").show()
         apiController.get(path, params) { response ->
-            dialog.dismiss()
+            if (dialog != null) {
+                dialog.dismiss()
+            }
             allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
             val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
             completion(APIState.Success, results)
@@ -389,7 +392,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun setupToolbarClicks(){
+    private fun setupToolbarClicks() {
         home_filter_btn.setOnClickListener {
             val bottomSheet = FilterBottomSheetDialog(this)
             bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
@@ -448,7 +451,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 }
 
 class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
-    override fun getInfoContents(marker: Marker?): View {
+    override fun getInfoWindow(marker: Marker?): View {
         val view = context.layoutInflater.inflate(R.layout.custom_infowindow, null)
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
@@ -456,6 +459,7 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
         return view
     }
 
-    override fun getInfoWindow(p0: Marker?) = null
+    //getInfoWindow
+    override fun getInfoContents(p0: Marker?) = null
 
 }

@@ -22,13 +22,11 @@ import org.jetbrains.anko.find
 import java.util.*
 
 
-
-
 class WelcomeScreenActivity : AppCompatActivity() {
 
     private lateinit var videoView: VideoView
-    private lateinit var viewPager:ViewPager
-    private lateinit var indicators:TabLayout
+    private lateinit var viewPager: ViewPager
+    private lateinit var indicators: TabLayout
     var currentPage = 0
     var timer: Timer? = null
     val DELAY_MS: Long = 500//delay in milliseconds before task is to be executed
@@ -40,7 +38,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         init()
     }
 
-    private fun init(){
+    private fun init() {
         videoView = find(R.id.video_view)
         viewPager = find(R.id.welcome_screen_viewPager)
         indicators = find(R.id.welcome_screen_indicator)
@@ -55,9 +53,10 @@ class WelcomeScreenActivity : AppCompatActivity() {
         setupViewPager()
         checkPermission()
     }
-    private fun setupViewPager(){
-        val titleArray = arrayListOf(R.string.wanna_go_hunting,R.string.wanna_go_hunting1,R.string.wanna_go_hunting2)
-        val subtitleArray = arrayListOf(R.string.be_part_of_hunt,R.string.be_part_of_hunt2,R.string.be_part_of_hunt1)
+
+    private fun setupViewPager() {
+        val titleArray = arrayListOf(R.string.wanna_go_hunting, R.string.wanna_go_hunting1, R.string.wanna_go_hunting2)
+        val subtitleArray = arrayListOf(R.string.be_part_of_hunt, R.string.be_part_of_hunt2, R.string.be_part_of_hunt1)
         viewPager.adapter = WelcomePagerAdapter()
         indicators.setupWithViewPager(viewPager)
 
@@ -78,10 +77,14 @@ class WelcomeScreenActivity : AppCompatActivity() {
         }, DELAY_MS, PERIOD_MS)
     }
 
-    private fun checkPermission(){
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
+    private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE
             )
@@ -89,7 +92,8 @@ class WelcomeScreenActivity : AppCompatActivity() {
         }
     }
 }
-class WelcomePagerAdapter():PagerAdapter(){
+
+class WelcomePagerAdapter() : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(container.context).inflate(R.layout.on_board_adapter, container, false)
         container.addView(item)
