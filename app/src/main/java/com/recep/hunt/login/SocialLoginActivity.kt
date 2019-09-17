@@ -44,7 +44,7 @@ import com.recep.hunt.R
 import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
 import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.login.instagramDetail.InstagramApp
+import com.recep.hunt.login.instagramClassesJava.InstagramApp
 import com.recep.hunt.login.model.LoginChatMessageModel
 import com.recep.hunt.login.model.UserSocialModel
 import com.recep.hunt.profile.viewmodel.UserViewModel
@@ -139,10 +139,10 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             }
 
             override fun onFail(error: String) {
-                Toast.makeText(this@SocialLoginActivity, error, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SocialLoginActivity, error, Toast.LENGTH_SHORT)
+                    .show()
             }
         })
-
 
         if (mApp!!.hasAccessToken()) {
             mApp!!.fetchUserName(handler)
@@ -396,7 +396,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 val social_name = json_object.optString("name", null)
                 val social_email = json_object.optString("email", null)
                 val id = json_object.getString("id")
-                val gender = json_object.getString("gender")
+               // val gender = json_object.getString("gender")
                 val social_pic = URLEncoder.encode(facebook_pic, "UTF-8")
                 Log.e("peofile_pic", social_pic)
                 Log.e("peofile_name", social_name)
@@ -418,7 +418,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
                 SharedPrefrenceManager.setUserEmail(this, social_email)
                 SharedPrefrenceManager.setUserImage(this, social_pic)
-                SharedPrefrenceManager.setUserGender(this, gender)
+               // SharedPrefrenceManager.setUserGender(this, gender)
 
                 launchActivity<ContinueAsSocialActivity> {
                     putExtra(socialTypeKey, Constants.socialFBType)
