@@ -8,8 +8,12 @@ package com.recep.hunt.constants
  */
 
 class Constants {
-    companion object{
+    companion object {
 
+        const val CLIENT_ID = "50861e5c85324044a5c2b888735d7ca8"
+        const val CLIENT_SECRET = "ad97c323aaa94ffdb5bdf5a6a25435e1"
+        // public static final String CALLBACK_URL = "instagram://connect";
+        const val CALLBACK_URL = "https://www.gethunt.app/"
 
         //BASEURl =
         const val baseURL = "http://165.22.18.129/dev/api"
@@ -22,7 +26,7 @@ class Constants {
         const val IMGURI = "image_uri"
         const val socialFBType = "socialFBType"
         const val socialInstaType = "socialInstaType "
-        const val socialGoogleType  = "socialGoogleType"
+        const val socialGoogleType = "socialGoogleType"
 
         const val apiDateFormat = "yyyy-MM-dd"
         const val isOTPVerified = true

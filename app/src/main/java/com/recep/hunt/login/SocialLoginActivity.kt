@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +44,7 @@ import com.recep.hunt.R
 import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
 import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.login.instagramDetail.InstagramApp
 import com.recep.hunt.login.model.LoginChatMessageModel
 import com.recep.hunt.login.model.UserSocialModel
 import com.recep.hunt.profile.viewmodel.UserViewModel
@@ -89,6 +92,17 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     private lateinit var messageEditText: EditText
 
     private lateinit var userViewModel: UserViewModel
+    private var mApp: InstagramApp? = null
+
+    private var userInfoHashmap = HashMap<String, String>()
+    private val handler = Handler(Handler.Callback { msg ->
+        if (msg.what == InstagramApp.WHAT_FINALIZE) {
+            userInfoHashmap = mApp!!.userInfo
+        } else if (msg.what == InstagramApp.WHAT_FINALIZE) {
+            Toast.makeText(this@SocialLoginActivity, "Check your network.", Toast.LENGTH_SHORT).show()
+        }
+        false
+    })
 
 
     private val adapter = GroupAdapter<ViewHolder>()
@@ -100,7 +114,9 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         mAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
         setupGoogleAuth()
+        setupInstaAuth()
         init()
+
 
 //        userViewModel.logUsers()
 
@@ -111,6 +127,26 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         recyclerView = find(R.id.social_login_recyclerView)
         messageEditText = find(R.id.type_msg_et)
         setupRecyclerView()
+
+    }
+
+    private fun setupInstaAuth() {
+        mApp = InstagramApp(this@SocialLoginActivity, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.CALLBACK_URL)
+        mApp!!.setListener(object : InstagramApp.OAuthAuthenticationListener {
+            override fun onSuccess() {
+                // userInfoHashmap = mApp.
+                mApp!!.fetchUserName(handler)
+            }
+
+            override fun onFail(error: String) {
+                Toast.makeText(this@SocialLoginActivity, error, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+        if (mApp!!.hasAccessToken()) {
+            mApp!!.fetchUserName(handler)
+        }
 
     }
 
@@ -130,7 +166,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     val signInIntent = mGoogleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
                 }
-                R.id.connect_with_insta_btn -> toast("Coming soon.. !")
+                R.id.connect_with_insta_btn ->// toast("Coming soon.. !")
+                    launchingInst()
                 R.id.social_login_skip_btn -> launchActivity<SetupProfileActivity>()
             }
         }
@@ -274,7 +311,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 if (account != null)
                     firebaseAuthWithGoogle(account)
                 // G+
-                var m= mGoogleApiClient
+                var m = mGoogleApiClient
                 val person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
                 Log.i(TAG, "--------------------------------")
                 Log.i(TAG, "Display Name: " + person.displayName)
@@ -366,10 +403,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 Log.e("peofile_email", social_email)
 
                 userDetailsModel = UserSocialModel(
-                    id,
-                    social_pic,
-                    social_name,
-                    social_email
+                    id, social_pic, social_name, social_email
                 )
 
                 val gson = GsonBuilder().setPrettyPrinting().create()
@@ -416,7 +450,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         dialog.show()
     }
 
-
     fun printHashKey(pContext: Context) {
         try {
             val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
@@ -433,6 +466,23 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             Log.e(TAG, "printHashKey()", e)
         }
 
+    }
+
+
+    private fun launchingInst() {
+        if (mApp!!.hasAccessToken()) {
+            val builder = AlertDialog.Builder(this@SocialLoginActivity)
+            builder.setMessage("Disconnect from Instagram?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    mApp!!.resetAccessToken()
+                }
+                .setNegativeButton("No") { dialog, id -> dialog.cancel() }
+            val alert = builder.create()
+            alert.show()
+        } else {
+            mApp!!.authorize()
+        }
     }
 
 }
