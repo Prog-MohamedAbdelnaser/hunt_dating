@@ -56,6 +56,7 @@ class UserDetalBottomSheetFragment(private val ctx:Context) : BottomSheetDialogF
     ): View? {
         val view = inflater.inflate(R.layout.user_detail_bottom_sheet_layout,container,false)
         basicInfoViewModel = ViewModelProviders.of(this).get(BasicInfoViewModel::class.java)
+
         init(view)
         return view
     }
@@ -72,17 +73,40 @@ class UserDetalBottomSheetFragment(private val ctx:Context) : BottomSheetDialogF
     }
 
     private fun setupAdapters(){
+        val images = getUserImages()
         adapter.add(UserDetailHeaderItem(ctx))
         adapter.add(UserDetailBasicInfoItem(basicInfoViewModel,act,ctx))
-        adapter.add(UserDetailPhotoInfoItem(ctx))
+        adapter.add(UserDetailPhotoInfoItem(images,ctx))
+    }
+
+    private fun getUserImages():ArrayList<String>{
+        val image1 = SharedPrefrenceManager.getFirstImg(ctx)
+        val image2 = SharedPrefrenceManager.getSecImg(ctx)
+        val image3 = SharedPrefrenceManager.getThirdImg(ctx)
+        val image4 = SharedPrefrenceManager.getFourthImg(ctx)
+        val image5 = SharedPrefrenceManager.getFiveImg(ctx)
+        val image6 = SharedPrefrenceManager.getSixImg(ctx)
+
+        val images = arrayListOf<String>()
+
+        if(image1 != Constants.NULL)
+            images.add(image1)
+        if(image2 != Constants.NULL)
+            images.add(image2)
+        if(image3 != Constants.NULL)
+            images.add(image3)
+        if(image4 != Constants.NULL)
+            images.add(image4)
+        if(image5 != Constants.NULL)
+            images.add(image5)
+        if(image6 != Constants.NULL)
+            images.add(image6)
+
+        return images
     }
 
 
 }
-
-
-
-
 
 class UserDetailHeaderItem(private val ctx:Context):Item<ViewHolder>(){
     override fun getLayout() = R.layout.user_detail_header_item
@@ -129,7 +153,7 @@ class UserDetailBasicInfoItem(private val basicInfoViewModel: BasicInfoViewModel
     }
 }
 
-class UserDetailPhotoInfoItem(private val ctx:Context):Item<ViewHolder>(){
+class UserDetailPhotoInfoItem(private val images:ArrayList<String>,private val ctx:Context):Item<ViewHolder>(){
     override fun getLayout() = R.layout.user_detail_photos_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".inviteFriend.InviteAFriendActivity">
+
+    <View
+            android:id="@+id/view6"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/seprator_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/send_invite_contact_btn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/rectangle_app_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+                android:id="@+id/textView39"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/send_invite"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+                android:id="@+id/number_of_contact_selected"
+                android:layout_width="40dp"
+                android:visibility="gone"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/red_notification_bg"
+                android:text="2"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/textView39"
+                app:layout_constraintStart_toEndOf="@+id/textView39"
+                app:layout_constraintTop_toTopOf="@+id/textView39" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+            android:id="@+id/button4"
+            android:layout_width="65dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/credit_btn_bg"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="$15"
+            android:textColor="#E50A45"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_arrow_back_black" />
+
+    <TextView
+            android:id="@+id/textView38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invite_a_friend"
+            android:fontFamily="@font/montserrat"
+            android:textSize="18sp"
+            android:textColor="@color/app_text_black"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

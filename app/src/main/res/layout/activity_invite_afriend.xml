@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".inviteFriend.InviteAFriendActivity">
+
+    <ImageView
+            android:id="@+id/imageView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view6"
+            app:srcCompat="@drawable/invite_a_friend_icon" />
+
+    <View
+            android:id="@+id/view6"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/seprator_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <Button android:layout_width="match_parent"
+            android:background="@drawable/rectangle_app_btn"
+            android:layout_height="60dp"
+            android:text="@string/send_invite"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat"
+            android:textSize="17sp"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/send_invite_btn"
+            />
+
+    <Button
+            android:id="@+id/button4"
+            android:layout_width="65dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/credit_btn_bg"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="$15"
+            android:textColor="#E50A45"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_arrow_back_black" />
+
+    <TextView
+            android:id="@+id/textView35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="@string/invite_a_friend_and_earn"
+            android:textColor="@color/app_text_black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView23" />
+
+    <TextView
+            android:id="@+id/textView37"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/send_the_invite_code_to_friend"
+            android:textAlignment="center"
+            android:textColor="#CDD1D9"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView35"
+            app:layout_constraintStart_toStartOf="@+id/textView35"
+            app:layout_constraintTop_toBottomOf="@+id/textView35" />
+
+    <TextView
+            android:id="@+id/textView36"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/your_invite_code"
+            android:textAllCaps="true"
+            android:textColor="#CDD1D9"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView37"
+            app:layout_constraintStart_toStartOf="@+id/textView37"
+            app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+    <Button
+            android:id="@+id/button3"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/invite_code_btn_bg"
+            android:paddingStart="24dp"
+            android:paddingLeft="24dp"
+            android:paddingEnd="24dp"
+            android:paddingRight="24dp"
+            android:text="@string/demo_invite_code"
+            app:layout_constraintEnd_toEndOf="@+id/textView36"
+            app:layout_constraintStart_toStartOf="@+id/textView36"
+            app:layout_constraintTop_toBottomOf="@+id/textView36" />
+
+    <TextView
+            android:id="@+id/textView38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invite_a_friend"
+            android:fontFamily="@font/montserrat"
+            android:textSize="18sp"
+            android:textColor="@color/app_text_black"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

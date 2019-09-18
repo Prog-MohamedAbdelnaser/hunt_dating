@@ -236,7 +236,7 @@
     <string name="questions">Questions</string>
     <string name="help_support">Help &amp; Support</string>
     <string name="tickets">Tickets</string>
-    <string name="invite_a_friend">Invite a Friend</string>
+    <string name="invite_a_friend">Invite A Friend</string>
     <string name="legal">Legal</string>
     <string name="license">License</string>
     <string name="privacy_policy">Privacy Policy</string>
@@ -359,6 +359,22 @@
     <string name="incognito_mode">Incognito Mode</string>
     <string name="incognito_detail">By turning Incognito mode on you will\nno longer be seen by the others but\nyou can still search for your perfect\nmatch.</string>
     <string name="got_it">Got it!</string>
+
+
+    <string name="invite_friend">Invite A Friend</string>
+    <string name="invite_a_friend_and_earn">Invite a Friend &amp; earn
+        <font fgcolor='#E3004C'>$1</font> Credit
+    </string>
+
+    <string name="send_the_invite_code_to_friend">Send the invite Code to a friend Every\n successful login from your invite Code will earn\nyou $1 credit!</string>
+    <string name="your_invite_code">Your Invite Code</string>
+    <string name="demo_invite_code">SKDJS333##</string>
+    <string name="send_invite">Send Invite</string>
+
+    <string name="my_invite_credit">My invite Credit</string>
+    <string name="total_credit">Total Credit</string>
+    <string name="redeem_credit">Redeem Credit</string>
+    <string name="invite_history">Invite History</string>
 
 
     <string name="facebook_app_id">428189314461041</string>

@@ -35,10 +35,13 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         val count = getStoryData().size
         userImagesStoriesData = getStoryData()
         storyProgressView.setStoriesCount(count)
-        storyProgressView.setStoryDuration(1500L)
+        storyProgressView.setStoryDuration(3500L)
         storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
         storyProgressView.setStoriesListener(this)
         storyProgressView.startStories()
+
+        skip.setOnClickListener { onNext() }
+        reverse.setOnClickListener { onPrev() }
 
     }
     override fun onNext() {

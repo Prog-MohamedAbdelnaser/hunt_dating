@@ -67,43 +67,43 @@ class SetupProfileDobActivity : BaseActivity() {
 
     }
 
-    private fun showDatePicker() {
-        alert {
-
-            isCancelable = false
-
-            lateinit var datePicker: DatePicker
-
-            customView {
-                verticalLayout {
-                    datePicker = datePicker {
-                        maxDate = System.currentTimeMillis()
-
-                    }
-                }
-            }
-
-            yesButton {
-                //dd/M/yyyy parsed date format
-
-                val parsedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
-                val formatedDate = getFormattedDate(parsedDate)
-                apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
-                val age = getAge(parsedDate)
-                dobTextView.text = formatedDate
-                dobTextView.textColor = resources.getColor(R.color.app_text_black)
-                years_old_textView.text = resources.getString(R.string.years_old, age.toString())
-                dob = formatedDate
-                dob_layout.clearFocus()
-                it.dismiss()
-                it.cancel()
-                hideKeyboard()
-            }
-
-            noButton { }
-
-        }.show()
-    }
+//    private fun showDatePicker() {
+//        alert {
+//
+//            isCancelable = false
+//
+//            lateinit var datePicker: DatePicker
+//
+//            customView {
+//                verticalLayout {
+//                    datePicker = datePicker {
+//                        maxDate = System.currentTimeMillis()
+//
+//                    }
+//                }
+//            }
+//
+//            yesButton {
+//                //dd/M/yyyy parsed date format
+//
+//                val parsedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
+//                val formatedDate = getFormattedDate(parsedDate)
+//                apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
+//                val age = getAge(parsedDate)
+//                dobTextView.text = formatedDate
+//                dobTextView.textColor = resources.getColor(R.color.app_text_black)
+//                years_old_textView.text = resources.getString(R.string.years_old, age.toString())
+//                dob = formatedDate
+//                dob_layout.clearFocus()
+//                it.dismiss()
+//                it.cancel()
+//                hideKeyboard()
+//            }
+//
+//            noButton { }
+//
+//        }.show()
+//    }
 
     private fun getFormattedDate(
         input: String,
@@ -176,9 +176,9 @@ class SetupProfileDobActivity : BaseActivity() {
             }).textConfirm("Done") //text of confirm button
             .textCancel("Cancel") //text of cancel button
             .btnTextSize(18) // button text size
-            .viewTextSize(25) // pick view text size
-            .colorCancel(Color.parseColor("#6B40BE")) //color of cancel button
-            .colorConfirm(Color.parseColor("#6B40BE"))//color of confirm button
+            .viewTextSize(22) // pick view text size
+            .colorCancel(Color.parseColor("#F7531B"))
+            .colorConfirm(Color.parseColor("#F7531B"))
             .minYear(1900) //min year in loop
             .maxYear(currentyear()+1) // max year in loop
             .dateChose(currentDate()) // date chose when init popwindow

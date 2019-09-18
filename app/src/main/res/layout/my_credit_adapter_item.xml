@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/invite_history_imageView"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/boy_casual_eyes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+            android:id="@+id/linearLayout16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/invite_history_imageView"
+            app:layout_constraintEnd_toStartOf="@+id/invite_history_got_amount"
+            app:layout_constraintStart_toEndOf="@+id/invite_history_imageView"
+            app:layout_constraintTop_toTopOf="@+id/invite_history_imageView">
+
+        <TextView
+                android:id="@+id/invite_history_userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:text="Rishabh shukla"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/app_text_black"
+                android:textSize="18sp" />
+
+        <TextView
+                android:id="@+id/invite_history_you_got_bth_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/montserrat"
+                android:text="You both get $1 Credit"
+                android:textColor="#9A9DA4"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+        <Button
+                android:id="@+id/cancel_invite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/credit_btn_bg"
+                android:fontFamily="@font/montserrat"
+                android:paddingStart="16dp"
+                android:paddingLeft="16dp"
+                android:paddingEnd="16dp"
+                android:paddingRight="16dp"
+                android:text="Cancel Invite"
+                android:textAllCaps="false"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="#E50A45"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toTopOf="@+id/view6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/invite_history_got_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:fontFamily="@font/montserrat"
+            android:text="$ 0"
+            android:textColor="#9A9DA4"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout16" />
+</androidx.constraintlayout.widget.ConstraintLayout>

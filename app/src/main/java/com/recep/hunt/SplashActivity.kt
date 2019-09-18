@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.inviteFriend.InviteAFriendActivity
 import com.recep.hunt.login.LoginActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.login.WelcomeScreenActivity
@@ -27,18 +28,18 @@ class SplashActivity : AppCompatActivity() {
             val isLoggedIn = SharedPrefrenceManager.getIsLoggedIn(this)
             if(isOtpVerified){
                 if(isLoggedIn){
-                    val intent = Intent(applicationContext,SocialLoginActivity::class.java)
+                    val intent = Intent(applicationContext,WelcomeScreenActivity::class.java)
                     startActivity(intent)
                     finish()
                 }else{
-                    val intent = Intent(applicationContext,SocialLoginActivity::class.java)
+                    val intent = Intent(applicationContext,WelcomeScreenActivity::class.java)
 //                    val intent = Intent(applicationContext,UserProfileSettingsActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
             }else{
-                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
 //                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
+                val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
                 startActivity(intent)
                 finish()
             }
