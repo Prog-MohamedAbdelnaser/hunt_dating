@@ -58,9 +58,8 @@
         <activity android:name=".home.HomeActivity">
         </activity>
         <activity android:name=".setupProfile.TurnOnGPSActivity"/>
-        <activity
-                android:name=".setupProfile.SetupProfileReferralCodeActivity"
-                android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".setupProfile.SetupProfileReferralCodeActivity"
+                  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".login.ContinueAsSocialActivity"/>
         <activity android:name=".login.InfoYouProvideActivity"/>
         <activity android:name=".setupProfile.SetupProfileAddedPhotoActivity"/>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-        >
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@drawable/info_window_box"
             android:id="@+id/clInfoId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/info_window_box"
             android:paddingLeft="2sp"
             android:paddingTop="5sp"
             android:paddingRight="2sp"
@@ -20,6 +20,7 @@
                 android:id="@+id/info_window_rest_image"
                 android:layout_width="65dp"
                 android:layout_height="0dp"
+                android:layout_marginLeft="3sp"
                 android:scaleType="fitXY"
                 android:src="@drawable/demo_restaurant_1"
                 app:layout_constrainedHeight="true"
@@ -96,10 +97,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView android:layout_width="24sp"
+               android:layout_height="20sp"
                android:layout_below="@+id/clInfoId"
-               android:src="@drawable/tooltip"
-               android:scaleType="fitXY"
                android:layout_centerHorizontal="true"
-               android:layout_height="30sp"/>
+               android:scaleType="fitXY"
+               android:src="@drawable/tooltip"/>
 
 </RelativeLayout>

@@ -72,7 +72,6 @@ class UserProfileActivity : AppCompatActivity() {
         adapter.add(ProfileHeaderTitle(resources.getString(R.string.basic_info)))
         addBasicInfoItemViews()
 
-
     }
 
     private fun addProfileHeader() {

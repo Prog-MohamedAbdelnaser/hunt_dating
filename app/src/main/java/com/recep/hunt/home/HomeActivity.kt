@@ -144,11 +144,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             ScaleTransformer.Builder()
                 .setMinScale(0.7f)
                 .setMaxScale(1.1f)
-                .setPivotX(Pivot.X.CENTER) // CENTER is a default one
                 .setPivotY(Pivot.Y.BOTTOM)
                 .build()
+            // .setPivotX(Pivot.X.CENTER) // CENTER is a default one
         )
         horizontal_list_near_by_user.setSlideOnFling(true)
+        horizontal_list_near_by_user.scrollToPosition(1)
+        //  horizontal_list_near_by_user.setOffscreenItems(2)
+
 
     }
 
@@ -160,7 +163,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     ) {
         val path = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
         Log.e("Lat long", "$lat,$long")
-        val params = "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
+        val params =
+            "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
         val serviceVolley = ServiceVolley()
         val apiController = APIController(serviceVolley)
         val url = "$path?$params"

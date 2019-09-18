@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bruce.pickerview.popwindow.DatePickerPopWin
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -32,7 +33,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.common.api.Scope
+import com.google.android.gms.plus.People
 import com.google.android.gms.plus.Plus
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -70,10 +73,10 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     override fun onConnectionFailed(p0: ConnectionResult) {
     }
 
-
     companion object {
         const val socialTypeKey = "social_type_key"
         const val userSocialModel = "user_social_key"
+        //  private val HTTP_TRANSPORT: HttpTransport = AndroidHttp.newCompatibleTransport()
     }
 
     private val TAG = SocialLoginActivity::class.java.simpleName
@@ -104,7 +107,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         false
     })
 
-
     private val adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,7 +133,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     }
 
     private fun setupInstaAuth() {
-        mApp = InstagramApp(this@SocialLoginActivity, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.CALLBACK_URL)
+        mApp =
+            InstagramApp(this@SocialLoginActivity, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.CALLBACK_URL)
         mApp!!.setListener(object : InstagramApp.OAuthAuthenticationListener {
             override fun onSuccess() {
                 // userInfoHashmap = mApp.
@@ -177,9 +180,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
-            .requestScopes(Scope(Scopes.PROFILE))
-            .requestScopes(Scope(Scopes.PLUS_LOGIN))
             .requestProfile()
+            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE))
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -188,6 +190,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             .enableAutoManage(this, this)
             .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
             .addApi(Plus.API)
+            .addScope(Scope(Scopes.PLUS_ME))
+            .addScope(Scope(Scopes.PROFILE))
             .build()
     }
 
@@ -305,13 +309,15 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         callbackManager.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(Exception::class.java)
+                val acct = result.getSignInAccount()
                 if (account != null)
                     firebaseAuthWithGoogle(account)
-                // G+
-                var m = mGoogleApiClient
+
+                Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 val person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
                 Log.i(TAG, "--------------------------------")
                 Log.i(TAG, "Display Name: " + person.displayName)
@@ -330,7 +336,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.d("Login", "firebaseAuthWithGoogle:" + acct.id!!)
-
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -396,7 +401,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 val social_name = json_object.optString("name", null)
                 val social_email = json_object.optString("email", null)
                 val id = json_object.getString("id")
-               // val gender = json_object.getString("gender")
+                // val gender = json_object.getString("gender")
                 val social_pic = URLEncoder.encode(facebook_pic, "UTF-8")
                 Log.e("peofile_pic", social_pic)
                 Log.e("peofile_name", social_name)
@@ -418,7 +423,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
                 SharedPrefrenceManager.setUserEmail(this, social_email)
                 SharedPrefrenceManager.setUserImage(this, social_pic)
-               // SharedPrefrenceManager.setUserGender(this, gender)
+                // SharedPrefrenceManager.setUserGender(this, gender)
 
                 launchActivity<ContinueAsSocialActivity> {
                     putExtra(socialTypeKey, Constants.socialFBType)
@@ -484,5 +489,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             mApp!!.authorize()
         }
     }
+
+
+
 
 }
