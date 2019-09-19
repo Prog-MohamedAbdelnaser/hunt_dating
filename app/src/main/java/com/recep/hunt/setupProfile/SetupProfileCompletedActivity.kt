@@ -2,9 +2,12 @@ package com.recep.hunt.setupProfile
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
@@ -42,12 +45,13 @@ import java.net.URL
 class SetupProfileCompletedActivity : AppCompatActivity() {
 
     private var mHttpClient: DefaultHttpClient? = null
-    private lateinit var userImage : CircleImageView
-    private lateinit var userName : TextView
+    private lateinit var userImage: CircleImageView
+    private lateinit var userName: TextView
     private lateinit var userViewModel: UserViewModel
+    private lateinit var bitmap: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SharedPrefrenceManager.setIsLoggedIn(this,true)
+        SharedPrefrenceManager.setIsLoggedIn(this, true)
         setContentView(R.layout.activity_setup_profile_completed)
         init()
     }
@@ -60,7 +64,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         setupViews()
 
-        SharedPrefrenceManager.setUserGenderChanged(this,true)
+        SharedPrefrenceManager.setUserGenderChanged(this, true)
         lottieAnimationView.playAnimation()
 
 //        insertUserIntoDb()
@@ -71,15 +75,18 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupViews(){
-        val userImageString = SharedPrefrenceManager.getUserImage(this)
-        Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
+    private fun setupViews() {
+        val userImageString = SharedPrefrenceManager.getProfileImg(this)
+        userImage.setImageBitmap(StringToBitmap(userImageString))
+        //val userImageString = SharedPrefrenceManager.getUserImage(this)
+        //Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
 
         userName.text = "$firstName $lastName"
     }
-    private fun insertUserIntoDb(){
+
+    private fun insertUserIntoDb() {
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
         val gender = SharedPrefrenceManager.getUserGender(this)
@@ -89,13 +96,15 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 //        val user = User(firstName,lastName,email,gender,userDob,userImage,)
 //        userViewModel.insert(user)
     }
-    inner class MakeAPICall(val activity:Activity,val context : Context) : AsyncTask<String,Void,String>(){
+
+    inner class MakeAPICall(val activity: Activity, val context: Context) : AsyncTask<String, Void, String>() {
         var receivedResponse = ""
-        val dialog = Helpers.showDialog(activity,context,"Setting up your profile").show()
+        val dialog = Helpers.showDialog(activity, context, "Setting up your profile").show()
         override fun onPreExecute() {
             super.onPreExecute()
             dialog.show()
         }
+
         override fun doInBackground(vararg params: String?): String {
 //            val dialog =
             val url = URL(params[0])
@@ -128,46 +137,45 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
             val google_token = ""
             val reference_code = ""
 
-            request.addFormField("first_name",first_name)
-            request.addFormField("last_name",last_name)
-            request.addFormField("mobile_no",mobile_no)
-            request.addFormField("country_code",country_code)
-            request.addFormField("gender",gender)
-            request.addFormField("dob",dob)
-            request.addFormField("email",email)
-            request.addFormField("country",country)
-            request.addFormField("lat",lat)
-            request.addFormField("lang",lang)
-            request.addFormField("device_type",device_type)
-            request.addFormField("device_id",device_id)
-            request.addFormField("device_token",device_token)
-            request.addFormField("for_date",for_date)
-            request.addFormField("for_bussiness",for_bussiness)
-            request.addFormField("for_friendship",for_friendship)
-            request.addFormField("fb_id",fb_id)
-            request.addFormField("fb_token",fb_token)
-            request.addFormField("insta_id",insta_id)
-            request.addFormField("insta_token",insta_token)
-            request.addFormField("google_id",google_id)
-            request.addFormField("google_token",google_token)
-            request.addFormField("reference_code",reference_code)
+            request.addFormField("first_name", first_name)
+            request.addFormField("last_name", last_name)
+            request.addFormField("mobile_no", mobile_no)
+            request.addFormField("country_code", country_code)
+            request.addFormField("gender", gender)
+            request.addFormField("dob", dob)
+            request.addFormField("email", email)
+            request.addFormField("country", country)
+            request.addFormField("lat", lat)
+            request.addFormField("lang", lang)
+            request.addFormField("device_type", device_type)
+            request.addFormField("device_id", device_id)
+            request.addFormField("device_token", device_token)
+            request.addFormField("for_date", for_date)
+            request.addFormField("for_bussiness", for_bussiness)
+            request.addFormField("for_friendship", for_friendship)
+            request.addFormField("fb_id", fb_id)
+            request.addFormField("fb_token", fb_token)
+            request.addFormField("insta_id", insta_id)
+            request.addFormField("insta_token", insta_token)
+            request.addFormField("google_id", google_id)
+            request.addFormField("google_token", google_token)
+            request.addFormField("reference_code", reference_code)
             val selectedFileUri = SharedPrefrenceManager.getUserImage(context)
             val selectedFilePath = FilePath.getPath(applicationContext, Uri.parse(selectedFileUri))
-            request.addFilePart("profile_pic",File(selectedFilePath),selectedFileUri,".jpg")
+            request.addFilePart("profile_pic", File(selectedFilePath), selectedFileUri, ".jpg")
 
 
-
-            val listener = object : Multipart.OnFileUploadedListener{
+            val listener = object : Multipart.OnFileUploadedListener {
 
                 override fun onFileUploadingSuccess(response: String) {
                     dialog.dismiss()
-                    Log.e(SetupProfileCompletedActivity::class.java.simpleName,"Json Response - $response")
+                    Log.e(SetupProfileCompletedActivity::class.java.simpleName, "Json Response - $response")
                     lottieAnimationView.playAnimation()
                     receivedResponse = response
                 }
 
                 override fun onFileUploadingFailed(responseCode: Int) {
-                    Log.e(SetupProfileCompletedActivity::class.java.simpleName,"Json Failed - $responseCode")
+                    Log.e(SetupProfileCompletedActivity::class.java.simpleName, "Json Failed - $responseCode")
 
                 }
 
@@ -183,8 +191,8 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         }
     }
 
-    fun register(){
-        val dialog = Helpers.showDialog(this,this,"Setting up your profile").show()
+    fun register() {
+        val dialog = Helpers.showDialog(this, this, "Setting up your profile").show()
         val url = URL(APIUtils.REGISTER)
         val request = Multipart(url)
         val first_name = SharedPrefrenceManager.getUserFirstName(this)
@@ -214,40 +222,39 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         val google_token = ""
         val reference_code = ""
 
-        request.addFormField("first_name",first_name)
-        request.addFormField("last_name",last_name)
-        request.addFormField("mobile_no",mobile_no)
-        request.addFormField("country_code",country_code)
-        request.addFormField("gender",gender)
-        request.addFormField("dob",dob)
-        request.addFormField("email",email)
-        request.addFormField("country",country)
-        request.addFormField("lat",lat)
-        request.addFormField("lang",lang)
-        request.addFormField("device_type",device_type)
-        request.addFormField("device_id",device_id)
-        request.addFormField("device_token",device_token)
-        request.addFormField("for_date",for_date)
-        request.addFormField("for_bussiness",for_bussiness)
-        request.addFormField("for_friendship",for_friendship)
-        request.addFormField("fb_id",fb_id)
-        request.addFormField("fb_token",fb_token)
-        request.addFormField("insta_id",insta_id)
-        request.addFormField("insta_token",insta_token)
-        request.addFormField("google_id",google_id)
-        request.addFormField("google_token",google_token)
-        request.addFormField("reference_code",reference_code)
+        request.addFormField("first_name", first_name)
+        request.addFormField("last_name", last_name)
+        request.addFormField("mobile_no", mobile_no)
+        request.addFormField("country_code", country_code)
+        request.addFormField("gender", gender)
+        request.addFormField("dob", dob)
+        request.addFormField("email", email)
+        request.addFormField("country", country)
+        request.addFormField("lat", lat)
+        request.addFormField("lang", lang)
+        request.addFormField("device_type", device_type)
+        request.addFormField("device_id", device_id)
+        request.addFormField("device_token", device_token)
+        request.addFormField("for_date", for_date)
+        request.addFormField("for_bussiness", for_bussiness)
+        request.addFormField("for_friendship", for_friendship)
+        request.addFormField("fb_id", fb_id)
+        request.addFormField("fb_token", fb_token)
+        request.addFormField("insta_id", insta_id)
+        request.addFormField("insta_token", insta_token)
+        request.addFormField("google_id", google_id)
+        request.addFormField("google_token", google_token)
+        request.addFormField("reference_code", reference_code)
         val selectedFileUri = SharedPrefrenceManager.getUserImage(this)
         val selectedFilePath = FilePath.getPath(applicationContext, Uri.parse(selectedFileUri))
-        request.addFilePart("profile_pic",File(selectedFilePath),selectedFileUri,".jpg")
+        request.addFilePart("profile_pic", File(selectedFilePath), selectedFileUri, ".jpg")
 
 
-
-        val listener = object : Multipart.OnFileUploadedListener{
+        val listener = object : Multipart.OnFileUploadedListener {
 
             override fun onFileUploadingSuccess(response: String) {
                 dialog.dismiss()
-                Log.e(SetupProfileCompletedActivity::class.java.simpleName,"Json Response - $response")
+                Log.e(SetupProfileCompletedActivity::class.java.simpleName, "Json Response - $response")
                 lottieAnimationView.playAnimation()
             }
 
@@ -261,52 +268,52 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         request.upload(listener)
     }
 
-    private fun registerUser(completion:()->Unit) {
+    private fun registerUser(completion: () -> Unit) {
         val params = BasicHttpParams()
         params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1)
         mHttpClient = DefaultHttpClient(params)
         try {
 
             val httppost = HttpPost(APIUtils.REGISTER)
-            Log.e(SetupProfileCompletedActivity::class.java.simpleName,"params :${APIUtils.REGISTER}")
+            Log.e(SetupProfileCompletedActivity::class.java.simpleName, "params :${APIUtils.REGISTER}")
             val multipartEntity = MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE)
             val interestArea = SharedPrefrenceManager.getUserInterestedIn(this)
 //            multipartEntity.addPart("first_name",StringBody())
-            multipartEntity.addPart("last_name",StringBody(SharedPrefrenceManager.getUserLastName(this)))
+            multipartEntity.addPart("last_name", StringBody(SharedPrefrenceManager.getUserLastName(this)))
 //            multipartEntity.addPart("mobile_no",StringBody(SharedPrefrenceManager.getUserMobileNumber(this)))
-            multipartEntity.addPart("mobile_no",StringBody("9650900979"))
+            multipartEntity.addPart("mobile_no", StringBody("9650900979"))
 //            multipartEntity.addPart("country_code",StringBody(SharedPrefrenceManager.getUserCountryCode(this)))
-            multipartEntity.addPart("country_code",StringBody("+91"))
-            multipartEntity.addPart("gender",StringBody(SharedPrefrenceManager.getUserGender(this)))
-            multipartEntity.addPart("dob",StringBody(SharedPrefrenceManager.getUserDob(this)))
-            multipartEntity.addPart("email",StringBody(SharedPrefrenceManager.getUserEmail(this)))
+            multipartEntity.addPart("country_code", StringBody("+91"))
+            multipartEntity.addPart("gender", StringBody(SharedPrefrenceManager.getUserGender(this)))
+            multipartEntity.addPart("dob", StringBody(SharedPrefrenceManager.getUserDob(this)))
+            multipartEntity.addPart("email", StringBody(SharedPrefrenceManager.getUserEmail(this)))
 //            multipartEntity.addPart("email",StringBody("ris"))
 //            multipartEntity.addPart("country",StringBody(SharedPrefrenceManager.getUserCountry(this)))
-            multipartEntity.addPart("country",StringBody("India"))
-            multipartEntity.addPart("lat",StringBody(SharedPrefrenceManager.getUserLatitude(this)))
-            multipartEntity.addPart("lang",StringBody(SharedPrefrenceManager.getUserLongitude(this)))
-            multipartEntity.addPart("device_type",StringBody("android"))
-            multipartEntity.addPart("device_id",StringBody("1"))
-            multipartEntity.addPart("device_token",StringBody(SharedPrefrenceManager.getDeviceToken(this)))
-            multipartEntity.addPart("for_date",StringBody(interestArea))
-            multipartEntity.addPart("for_bussiness",StringBody(interestArea))
-            multipartEntity.addPart("for_friendship",StringBody(interestArea))
-            multipartEntity.addPart("fb_id",StringBody(""))
-            multipartEntity.addPart("fb_token",StringBody(""))
-            multipartEntity.addPart("insta_id",StringBody(""))
-            multipartEntity.addPart("insta_token",StringBody(""))
-            multipartEntity.addPart("google_id",StringBody(""))
-            multipartEntity.addPart("google_token",StringBody(""))
-            multipartEntity.addPart("reference_code",StringBody(""))
+            multipartEntity.addPart("country", StringBody("India"))
+            multipartEntity.addPart("lat", StringBody(SharedPrefrenceManager.getUserLatitude(this)))
+            multipartEntity.addPart("lang", StringBody(SharedPrefrenceManager.getUserLongitude(this)))
+            multipartEntity.addPart("device_type", StringBody("android"))
+            multipartEntity.addPart("device_id", StringBody("1"))
+            multipartEntity.addPart("device_token", StringBody(SharedPrefrenceManager.getDeviceToken(this)))
+            multipartEntity.addPart("for_date", StringBody(interestArea))
+            multipartEntity.addPart("for_bussiness", StringBody(interestArea))
+            multipartEntity.addPart("for_friendship", StringBody(interestArea))
+            multipartEntity.addPart("fb_id", StringBody(""))
+            multipartEntity.addPart("fb_token", StringBody(""))
+            multipartEntity.addPart("insta_id", StringBody(""))
+            multipartEntity.addPart("insta_token", StringBody(""))
+            multipartEntity.addPart("google_id", StringBody(""))
+            multipartEntity.addPart("google_token", StringBody(""))
+            multipartEntity.addPart("reference_code", StringBody(""))
             val selectedFileUri = SharedPrefrenceManager.getUserImage(this)
             val selectedFilePath = FilePath.getPath(applicationContext, Uri.parse(selectedFileUri))
             multipartEntity.addPart("profile_pic", FileBody(File(selectedFilePath)))
 
-            Log.e(SetupProfileCompletedActivity::class.java.simpleName,"params :$multipartEntity")
+            Log.e(SetupProfileCompletedActivity::class.java.simpleName, "params :$multipartEntity")
             httppost.entity = multipartEntity
             Thread {
                 //Do some Network Request
-                mHttpClient!!.execute(httppost,PhotoUploadResponseHandler())
+                mHttpClient!!.execute(httppost, PhotoUploadResponseHandler())
                 runOnUiThread {
                     //Update UI
                     toast("Done")
@@ -329,16 +336,16 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private inner class PhotoUploadResponseHandler : ResponseHandler<Any> {
         @Throws(ClientProtocolException::class, IOException::class)
         override fun handleResponse(response: HttpResponse): Any? {
-            val httpEntity= response.entity
+            val httpEntity = response.entity
             val responseString = EntityUtils.toString(httpEntity)
             try {
                 val jsonParser = JSONParser()
                 val jsonObject = jsonParser.parse(responseString) as org.json.simple.JSONObject
                 applicationContext.runOnUiThread {
-                    Log.e(SetupProfileCompletedActivity::class.java.simpleName,"Json Response - $jsonObject")
-                    if(jsonObject["message"].toString() == "Register Successfull"){
+                    Log.e(SetupProfileCompletedActivity::class.java.simpleName, "Json Response - $jsonObject")
+                    if (jsonObject["message"].toString() == "Register Successfull") {
                         toast("Success")
-                    }else{
+                    } else {
                         toast("FAILED")
                     }
                 }
@@ -348,4 +355,14 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
             return null
         }
     }
+
+    fun StringToBitmap(img: String): Bitmap? {
+        if (img != null) {
+            var b = Base64.decode(img, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
+
+        }
+        return bitmap
+    }
+
 }

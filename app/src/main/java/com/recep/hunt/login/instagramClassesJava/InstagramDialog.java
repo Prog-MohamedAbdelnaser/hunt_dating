@@ -102,9 +102,13 @@ public class InstagramDialog extends Dialog {
             Log.d(TAG, "Redirecting URL " + url);
             //InstagramApp.mCallbackUrl
             if (url.startsWith(Constants.CALLBACK_URL)) {
-                String urls[] = url.split("=");
-                mListener.onComplete(urls[1]);
-                InstagramDialog.this.dismiss();
+                try {
+                    String urls[] = url.split("=");
+                    mListener.onComplete(urls[1]);
+                    InstagramDialog.this.dismiss();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
                 return true;
             }
             return false;

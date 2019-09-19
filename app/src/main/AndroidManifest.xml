@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:dist="http://schemas.android.com/apk/distribution"
-        package="com.recep.hunt">
+          xmlns:dist="http://schemas.android.com/apk/distribution"
+          package="com.recep.hunt">
 
-    <dist:module dist:instant="true" />
+    <dist:module dist:instant="true"/>
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <uses-feature
             android:name="android.hardware.camera"
-            android:required="true" />
+            android:required="true"/>
 
     <application
             android:name=".application.MyApplication"
@@ -34,60 +34,57 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
         <activity android:name=".inviteFriend.InviteFriendContactActivity"></activity>
-        <activity android:name=".inviteFriend.MyInviteCreditActivity" />
-        <activity android:name=".inviteFriend.InviteAFriendActivity" />
-        <activity android:name=".userDetail.UserDetailActivity" />
-        <activity android:name=".login.WelcomeScreenActivity" />
-        <activity android:name=".payment.SelectPaymentMethodsActivity" />
-        <activity android:name=".payment.AddPaymentMethod" />
-        <activity android:name=".payment.PaymentMethodActivity" />
-        <activity android:name=".premium.MyCardsActivity" />
-        <activity android:name=".contactUs.ChatWithUsChatActivity" />
-        <activity android:name=".contactUs.ContactUsEmailActivity" />
-        <activity android:name=".contactUs.ChatWithUsActivity" />
-        <activity android:name=".contactUs.FAQsActivty" />
-        <activity android:name=".contactUs.ContactUsActivity" />
-        <activity android:name=".notifications.NotificationsActivity" />
-        <activity android:name=".premium.AddNewPaymentActivity" />
-        <activity android:name=".premium.HuntPremiumActivity" />
-        <activity android:name=".profile.ChangeMyPhoneNumberActivity" />
-        <activity android:name=".profile.PhoneNumberSettingActivity" />
-        <activity android:name=".profile.IcebreakerQuestionActivity" />
-        <activity android:name=".profile.PushNotificationsSettingsActivity" />
-        <activity android:name=".profile.EmailSettingsActivity" />
-        <activity android:name=".profile.UserProfileEditQuestionActivity" />
-        <activity android:name=".profile.UserProfileSettingsActivity" />
-        <activity android:name=".profile.UserProfileEditActivity" />
-        <activity android:name=".profile.UserProfileActivity" />
-        <activity android:name=".home.HomeActivity" />
-        <activity android:name=".setupProfile.TurnOnGPSActivity" />
-        <activity
-                android:name=".setupProfile.SetupProfileReferralCodeActivity"
-                android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".login.ContinueAsSocialActivity" />
-        <activity android:name=".login.InfoYouProvideActivity" />
-        <activity android:name=".setupProfile.SetupProfileAddedPhotoActivity" />
-        <activity android:name=".setupProfile.SetupProfileUploadPhotoStep2Activity" />
-        <activity android:name=".setupProfile.SetupProfileCompletedActivity" />
-        <activity android:name=".setupProfile.SetupProfileInterestedInActivity" />
-        <activity android:name=".setupProfile.SetupProfileLookingForActivity" />
-        <activity android:name=".setupProfile.SetupProfileGalleryActivity" />
-        <activity android:name=".setupProfile.SetupProfileGenderActivity" />
-        <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity" />
-        <activity android:name=".setupProfile.SetupProfileDobActivity" />
-        <activity android:name=".setupProfile.SetupProfileActivity" />
-        <activity android:name=".login.SocialLoginActivity" />
-        <activity android:name=".login.OtpVerificationActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".setupProfile.TurnOnGPSUpdateAcitivity" />
-        <activity
-                android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-                android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".inviteFriend.MyInviteCreditActivity"/>
+        <activity android:name=".inviteFriend.InviteAFriendActivity"/>
+        <activity android:name=".userDetail.UserDetailActivity"/>
+        <activity android:name=".login.WelcomeScreenActivity"/>
+        <activity android:name=".payment.SelectPaymentMethodsActivity"/>
+        <activity android:name=".payment.AddPaymentMethod"/>
+        <activity android:name=".payment.PaymentMethodActivity"/>
+        <activity android:name=".premium.MyCardsActivity"/>
+        <activity android:name=".contactUs.ChatWithUsChatActivity"/>
+        <activity android:name=".contactUs.ContactUsEmailActivity"/>
+        <activity android:name=".contactUs.ChatWithUsActivity"/>
+        <activity android:name=".contactUs.FAQsActivty"/>
+        <activity android:name=".contactUs.ContactUsActivity"/>
+        <activity android:name=".notifications.NotificationsActivity"/>
+        <activity android:name=".premium.AddNewPaymentActivity"/>
+        <activity android:name=".premium.HuntPremiumActivity"/>
+        <activity android:name=".profile.ChangeMyPhoneNumberActivity"/>
+        <activity android:name=".profile.PhoneNumberSettingActivity"/>
+        <activity android:name=".profile.IcebreakerQuestionActivity"/>
+        <activity android:name=".profile.PushNotificationsSettingsActivity"/>
+        <activity android:name=".profile.EmailSettingsActivity"/>
+        <activity android:name=".profile.UserProfileEditQuestionActivity"/>
+        <activity android:name=".profile.UserProfileSettingsActivity"/>
+        <activity android:name=".profile.UserProfileEditActivity"/>
+        <activity android:name=".profile.UserProfileActivity"/>
+        <activity android:name=".home.HomeActivity"/>
+        <activity android:name=".setupProfile.TurnOnGPSActivity"/>
+        <activity android:name=".setupProfile.SetupProfileReferralCodeActivity"
+                  android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".login.ContinueAsSocialActivity"/>
+        <activity android:name=".login.InfoYouProvideActivity"/>
+        <activity android:name=".setupProfile.SetupProfileAddedPhotoActivity"/>
+        <activity android:name=".setupProfile.SetupProfileUploadPhotoStep2Activity"/>
+        <activity android:name=".setupProfile.SetupProfileCompletedActivity"/>
+        <activity android:name=".setupProfile.SetupProfileInterestedInActivity"/>
+        <activity android:name=".setupProfile.SetupProfileLookingForActivity"/>
+        <activity android:name=".setupProfile.SetupProfileGalleryActivity"/>
+        <activity android:name=".setupProfile.SetupProfileGenderActivity"/>
+        <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity"/>
+        <activity android:name=".setupProfile.SetupProfileDobActivity"/>
+        <activity android:name=".setupProfile.SetupProfileActivity"/>
+        <activity android:name=".login.SocialLoginActivity"/>
+        <activity android:name=".login.OtpVerificationActivity"/>
+        <activity android:name=".login.LoginActivity"/>
+        <activity android:name=".setupProfile.TurnOnGPSUpdateAcitivity"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+                  android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -95,22 +92,22 @@
                 android:name=".firebaseHelper.FirebaseInstanceClass"
                 android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <meta-data
                 android:name="preloaded_fonts"
-                android:resource="@array/preloaded_fonts" />
+                android:resource="@array/preloaded_fonts"/>
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
-                android:value="@string/facebook_app_id" />
+                android:value="@string/facebook_app_id"/>
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_maps_key" />
+                android:value="@string/google_maps_key"/>
         <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/filepaths"/>
     </application>
 
 </manifest>

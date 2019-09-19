@@ -48,7 +48,6 @@ import java.util.jar.Manifest
 
 
 class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
-
     companion object {
         private val REQUEST_TAKE_PHOTO = 0
         private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
@@ -62,7 +61,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         setScreenTitle(R.string.setup_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
-        SharedPrefrenceManager.setUserGenderChanged(this,true)
+        SharedPrefrenceManager.setUserGenderChanged(this, true)
         init()
     }
 
@@ -138,21 +137,23 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
             val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images);
-            if(imgFlag == null){
+            if (imgFlag == null) {
                 if (images != null) {
                     val imageString = images.toString()
+                    SharedPrefrenceManager.setProfileImg(this, BitMapToString(imagesBtm))
                     launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
                 }
-            }else{
+            } else {
                 setImage(imagesBtm)
             }
         } else if (requestCode == 9 && resultCode == Activity.RESULT_OK && data != null) {
             Log.e("Data Extras : ", " ${data.extras}")
             val images = data.extras.get("data") as Bitmap
             val imageString = BitMapToString(images)
-            if(imgFlag == null){
+            if (imgFlag == null) {
+                SharedPrefrenceManager.setProfileImg(this, imageString)
                 launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
-            }else{
+            } else {
                 setImage(images)
             }
 //            if (!imgFlag.equals("0")) {

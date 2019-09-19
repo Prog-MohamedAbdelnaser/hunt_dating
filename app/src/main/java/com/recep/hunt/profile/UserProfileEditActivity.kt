@@ -1,19 +1,28 @@
 package com.recep.hunt.profile
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nguyenhoanglam.imagepicker.model.Config
+import com.nguyenhoanglam.imagepicker.model.Image
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
@@ -22,12 +31,18 @@ import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
 import com.recep.hunt.utilis.*
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_setup_profile_added_photo.*
 import kotlinx.android.synthetic.main.activity_user_profile_edit.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
@@ -35,7 +50,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     override fun onItemClicked(position: Int, questionModel: UserBasicInfoQuestionModel, icon: Int) {
         launchActivity<UserProfileEditQuestionActivity> {
             putExtra(questionModelKey, questionModel)
-            putExtra(questionPositionKey,position)
+            putExtra(questionPositionKey, position)
             putExtra(questionImageKey, icon)
         }
     }
@@ -45,10 +60,13 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     private lateinit var companyNameEditText: EditText
     private lateinit var homeTownEditText: EditText
     private lateinit var schoolOrUniversityEditText: EditText
+    private lateinit var ivPencilEditProfileId: ImageView
+    private lateinit var ivEditProfielId: CircleImageView
 
-    private lateinit var maleGenderBtn : Button
-    private lateinit var femaleGenderBtn : Button
-    private lateinit var otherGenderBtn : Button
+
+    private lateinit var maleGenderBtn: Button
+    private lateinit var femaleGenderBtn: Button
+    private lateinit var otherGenderBtn: Button
 
     private var count = 1
     private var flag = 0
@@ -70,11 +88,13 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         setScreenTitle(R.string.edit_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
-        SharedPrefrenceManager.setUserGenderChanged(this,true)
+        SharedPrefrenceManager.setUserGenderChanged(this, true)
         init()
     }
 
     private fun init() {
+        ivPencilEditProfileId = find(R.id.ivPencilEditProfileId)
+        ivEditProfielId = find(R.id.ivEditProfielId)
         writeAboutYouEditText = find(R.id.write_about_us_et)
         userBasicInfoRecyclerView = find(R.id.edit_profile_user_basic_details_recyclerView)
         jobTitleEditText = find(R.id.add_job_title_et)
@@ -86,9 +106,8 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         femaleGenderBtn = find(R.id.edit_profile_female_gender_btn)
         otherGenderBtn = find(R.id.edit_profile_other_gender_btn)
 
-        about_header.text = resources.getString(R.string.about_you,SharedPrefrenceManager.getUserFirstName(this))
-
-        val dialog = Helpers.showDialog(this,this,"Updating Profile")
+        about_header.text = resources.getString(R.string.about_you, SharedPrefrenceManager.getUserFirstName(this))
+        val dialog = Helpers.showDialog(this, this, "Updating Profile")
 
         save_edit_profile_btn.setOnClickListener {
             dialog.show()
@@ -98,7 +117,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             updateHomeTown()
             updateSchool()
 
-            Run.after(2000){
+            Run.after(2000) {
                 dialog.dismiss()
                 finish()
 
@@ -111,12 +130,48 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         setupRecyclerView()
         sharePrefeImageSetup()
         setupChangeGenderBtn()
-
         setupSelectedGender(SharedPrefrenceManager.getUserGender(this))
+
+
+        ivPencilEditProfileId.setOnClickListener()
+        {
+            ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val imageFile: File
+        if (requestCode === Config.RC_PICK_IMAGES && resultCode === Activity.RESULT_OK && data != null) {
+            val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
+            if (images.size == 1) {
+                imageFile = File(images[0].path)
+                MediaScannerConnection.scanFile(
+                    this, arrayOf(imageFile.getAbsolutePath()), null
+                ) { path, uri ->
+                    CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).start(this)
+                }
+
+            }
+        }
+        if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode === Activity.RESULT_OK) {
+                val resultUri = result.uri
+                var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                SharedPrefrenceManager.setProfileImg(this@UserProfileEditActivity, bitMapToString(bitmap))
+                //ivEditProfielId.setImageURI(resultUri)
+                ivEditProfielId.setImageBitmap(bitmap)
+            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
 
     }
 
     private fun sharePrefeImageSetup() {
+        ivEditProfielId.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getProfileImg(this)))
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
@@ -124,17 +179,17 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
 
-        if(firstImage != Constants.NULL)
+        if (firstImage != Constants.NULL)
             user_image_1.setImageBitmap(StringToBitmap(firstImage))
-        if(secondImage != Constants.NULL)
+        if (secondImage != Constants.NULL)
             user_image_2.setImageBitmap(StringToBitmap(secondImage))
-        if(thirdImage != Constants.NULL)
+        if (thirdImage != Constants.NULL)
             user_image_3.setImageBitmap(StringToBitmap(thirdImage))
-        if(fourthImage != Constants.NULL)
+        if (fourthImage != Constants.NULL)
             user_image_4.setImageBitmap(StringToBitmap(fourthImage))
-        if(fifthImage != Constants.NULL)
+        if (fifthImage != Constants.NULL)
             user_image_5.setImageBitmap(StringToBitmap(fifthImage))
-        if(sixthImage != Constants.NULL)
+        if (sixthImage != Constants.NULL)
             user_image_6.setImageBitmap(StringToBitmap(sixthImage))
 
     }
@@ -146,50 +201,51 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         }
     }
 
-    private fun updateJobTitle(){
+    private fun updateJobTitle() {
         val txt = jobTitleEditText.text.toString()
         if (txt.isNotEmpty()) {
             SharedPrefrenceManager.setJobTitle(this, txt)
         }
     }
-    private fun updateCompanyName(){
+
+    private fun updateCompanyName() {
         val txt = companyNameEditText.text.toString()
         if (txt.isNotEmpty()) {
             SharedPrefrenceManager.setCompanyName(this, txt)
         }
     }
 
-    private fun updateHomeTown(){
+    private fun updateHomeTown() {
         val txt = homeTownEditText.text.toString()
         if (txt.isNotEmpty()) {
             SharedPrefrenceManager.setHomeTown(this, txt)
         }
     }
 
-    private fun updateSchool(){
+    private fun updateSchool() {
         val txt = schoolOrUniversityEditText.text.toString()
         if (txt.isNotEmpty()) {
             SharedPrefrenceManager.setSchoolUniversity(this, txt)
         }
     }
 
-    private fun setupChangeGenderBtn(){
+    private fun setupChangeGenderBtn() {
 
         maleGenderBtn.setOnClickListener {
-            if(Helpers.isGenderChangedAllowed(this)){
+            if (Helpers.isGenderChangedAllowed(this)) {
                 showGenderOnlyChangedOnceDialog(Constants.MALE)
 
             }
         }
 
         femaleGenderBtn.setOnClickListener {
-            if(Helpers.isGenderChangedAllowed(this)){
+            if (Helpers.isGenderChangedAllowed(this)) {
                 showGenderOnlyChangedOnceDialog(Constants.FEMALE)
 
             }
         }
         otherGenderBtn.setOnClickListener {
-            if(Helpers.isGenderChangedAllowed(this)){
+            if (Helpers.isGenderChangedAllowed(this)) {
                 showGenderOnlyChangedOnceDialog(Constants.OTHERS)
 
             }
@@ -204,10 +260,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         adapter.notifyDataSetChanged()
     }
 
-    private fun showGenderOnlyChangedOnceDialog(gender:String){
-        val yesButton : Button
-        val noButton : Button
-        val ll =  LayoutInflater.from(this).inflate(R.layout.change_user_gender_only_once, null)
+    private fun showGenderOnlyChangedOnceDialog(gender: String) {
+        val yesButton: Button
+        val noButton: Button
+        val ll = LayoutInflater.from(this).inflate(R.layout.change_user_gender_only_once, null)
         val dialog = Dialog(this)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -217,7 +273,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             dialog.dismiss()
             setupSelectedGender(gender)
 //            SharedPrefrenceManager.setUserGenderChanged(this,false)
-            SharedPrefrenceManager.setUserGender(this,gender)
+            SharedPrefrenceManager.setUserGender(this, gender)
 
 
         }
@@ -273,16 +329,14 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         if (aboutYou != Constants.NULL)
             writeAboutYouEditText.setText(aboutYou)
-        if(jobTitle != Constants.NULL)
+        if (jobTitle != Constants.NULL)
             jobTitleEditText.setText(jobTitle)
-        if(companyName != Constants.NULL)
+        if (companyName != Constants.NULL)
             companyNameEditText.setText(companyName)
-        if(homeTown != Constants.NULL)
+        if (homeTown != Constants.NULL)
             homeTownEditText.setText(homeTown)
-        if(school != Constants.NULL)
+        if (school != Constants.NULL)
             schoolOrUniversityEditText.setText(school)
-
-
 
 
     }
@@ -301,7 +355,8 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             adapter.add(ProfileBasicInfoItemView(this, model, this))
         }
     }
-    private fun bindSixImages(){
+
+    private fun bindSixImages() {
         user_image_1.setOnClickListener() {
             flag = 1
             launchActivity<SetupProfileUploadPhotoStep2Activity>
@@ -351,6 +406,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             }
         }
     }
+
     fun StringToBitmap(img: String): Bitmap? {
         if (img != null) {
             var b = Base64.decode(img, Base64.DEFAULT);
@@ -358,6 +414,13 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         }
         return bitmap
+    }
+
+    fun bitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
 

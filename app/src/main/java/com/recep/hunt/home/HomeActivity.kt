@@ -92,8 +92,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     override fun onStop() {
         super.onStop()
-        if (mapRipple.isAnimationRunning) {
-            mapRipple.stopRippleMapAnimation()
+        if (mapRipple == null) {
+        } else {
+            if (mapRipple.isAnimationRunning) {
+                mapRipple.stopRippleMapAnimation()
+            }
         }
     }
 

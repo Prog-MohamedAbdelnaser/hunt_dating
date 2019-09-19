@@ -86,7 +86,7 @@ class UserProfileActivity : AppCompatActivity() {
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
 
-        if(firstImage != Constants.NULL || secondImage != Constants.NULL || thirdImage != Constants.NULL || fourthImage != Constants.NULL || fifthImage != Constants.NULL || sixthImage != Constants.NULL)
+        if (firstImage != Constants.NULL || secondImage != Constants.NULL || thirdImage != Constants.NULL || fourthImage != Constants.NULL || fifthImage != Constants.NULL || sixthImage != Constants.NULL)
             adapter.add(ProfileSixPhotosView(this))
     }
 
@@ -94,12 +94,12 @@ class UserProfileActivity : AppCompatActivity() {
         val homeTown = SharedPrefrenceManager.getHomeTown(this)
         val school = SharedPrefrenceManager.getSchoolUniversity(this)
 
-        if(homeTown != Constants.NULL){
+        if (homeTown != Constants.NULL) {
             adapter.add(ProfileHeaderTitle(resources.getString(R.string.hometown)))
             adapter.add(ProfileSimpleItem(homeTown))
         }
 
-        if(school != Constants.NULL){
+        if (school != Constants.NULL) {
             adapter.add(ProfileHeaderTitle(resources.getString(R.string.schooloruniversity)))
             adapter.add(ProfileSimpleItem(school))
         }
@@ -141,6 +141,7 @@ class UserProfileActivity : AppCompatActivity() {
 
 //ProfileHeader
 class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
+    var bitmap: Bitmap? = null
     override fun getLayout() = R.layout.profile_header_layout_item
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -148,23 +149,34 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
         val userName = SharedPrefrenceManager.getUserFirstName(context)
         val userJobtitle = SharedPrefrenceManager.getJobTitle(context)
         val aboutYou = SharedPrefrenceManager.getAboutYou(context)
-        val userImage = SharedPrefrenceManager.getUserImage(context)
+        val userImage = SharedPrefrenceManager.getProfileImg(context)
 
-        Picasso.get().load(userImage)
-            .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
-            .into(viewHolder.itemView.profile_header_user_image)
+        /* Picasso.get().load(userImage)
+             .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
+             .into(viewHolder.itemView.profile_header_user_image)*/
 
+        viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
 
         viewHolder.itemView.profile_header_user_name.text = userName
-        if(aboutYou != Constants.NULL)
-        viewHolder.itemView.user_aboutus.text = aboutYou
-        if(userJobtitle != Constants.NULL)
-        viewHolder.itemView.user_job_title_tv.text = userJobtitle
+        if (aboutYou != Constants.NULL)
+            viewHolder.itemView.user_aboutus.text = aboutYou
+        if (userJobtitle != Constants.NULL)
+            viewHolder.itemView.user_job_title_tv.text = userJobtitle
 
         viewHolder.itemView.view_my_profile_as_others_btn.setOnClickListener {
             context.launchActivity<UserDetailActivity>()
         }
 
+    }
+
+
+    fun StringToBitmap(img: String): Bitmap? {
+        if (img != null) {
+            var b = Base64.decode(img, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
+
+        }
+        return bitmap
     }
 }
 

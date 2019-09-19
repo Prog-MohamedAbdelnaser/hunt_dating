@@ -42,7 +42,6 @@
     <string name="select_gender">Select Your Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="other">Other</string>
     <string name="both">Both</string>
     <string name="continuee">Continue</string>
     <string name="resend_code">Resend code</string>
@@ -241,7 +240,6 @@
     <string name="license">License</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_conditions">Terms &amp; Conditions</string>
-    <string name="delete_account">Delete Account</string>
     <string name="logout">Logout</string>
 
     <string name="Email_Address">Email Address</string>
@@ -275,9 +273,9 @@
 
     <string name="change_my_phone_no">Change My Phone Number</string>
     <string name="change">Change</string>
-    <string name="success">Success!</string>
+
     <string name="you_have_change_phone_nummber">You have successfully changed your phone number</string>
-    <string name="ok">OK</string>
+
 
 
     <string name="hunt_premium">HUNT PREMIUM</string>
@@ -384,6 +382,20 @@
     <string name="insta_base_url">https://api.instagram.com/</string>
     <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
     <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="tell_us_why_and_we_ll_see_what_we_can_do">Tell us why and we\'ll see what we can do!</string>
+    <string name="unsure_which_package_i_should_use">Unsure which package i should use</string>
+    <string name="i_want_to_test_the_app_some_more">I want to test the app some more</string>
+    <string name="price">Price</string>
+    <string name="i_don_t_want_to_subscribe_to_premium">I don\'t want to subscribe to Premium</string>
+    <string name="not_enough_value_for_the_cost">Not enough value for the cost</string>
+    <string name="other">Other</string>
+    <string name="back">Back</string>
+    <string name="submit">Submit</string>
+    <string name="ok">OK</string>
+    <string name="the_accounts">the accounts</string>
+    <string name="you_have_successfully_deactivated">You have successfully deactivated</string>
+    <string name="success">Success!</string>
 
 
 </resources>

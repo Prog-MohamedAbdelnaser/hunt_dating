@@ -40,6 +40,7 @@ enum class PersistenceKeys {
     ProfileFourImg,
     ProfileFiveImg,
     ProfileSixImg,
+    ProfileImg,
     UserGenderChanged,
     RelationShipStatus,
     Height,
@@ -295,6 +296,14 @@ class SharedPrefrenceManager {
         }
 
         fun getSixImg(context: Context) = getSharePrefs(context, PersistenceKeys.ProfileSixImg.toString())
+
+
+        fun setProfileImg(context: Context, value: String) {
+            setSharedPrefs(context, PersistenceKeys.ProfileImg.toString(), value)
+        }
+
+        fun getProfileImg(context: Context) = getSharePrefs(context, PersistenceKeys.ProfileImg.toString())
+
 
         fun setUserGenderChanged(context: Context,value: Boolean){
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)

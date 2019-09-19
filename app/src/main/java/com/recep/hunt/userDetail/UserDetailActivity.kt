@@ -18,7 +18,6 @@ import org.jetbrains.anko.find
 
 class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListener {
 
-
     var counter = 0
     private lateinit var storyProgressView: StoriesProgressView
     private lateinit var storyImageView: ImageView

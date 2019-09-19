@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/delete_account"
+                android:textAlignment="center"
+                android:textColor="@color/pink"
+                android:textSize="12sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/tell_us_why_and_we_ll_see_what_we_can_do"
+                android:textAlignment="center"
+                android:textColor="@color/pink"
+                android:textSize="12sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:text="@string/unsure_which_package_i_should_use"
+                android:textAlignment="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:text="@string/i_want_to_test_the_app_some_more"
+                android:textAlignment="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:text="@string/price"
+                android:textAlignment="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:text="@string/i_don_t_want_to_subscribe_to_premium"
+                android:textAlignment="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:text="@string/not_enough_value_for_the_cost"
+                android:textAlignment="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvOtherddId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:text="@string/other"
+                android:textAlignment="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
