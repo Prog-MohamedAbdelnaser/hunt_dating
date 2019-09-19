@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.inviteFriend.InviteAFriendActivity
+import com.recep.hunt.inviteFriend.InviteFriendContactActivity
 import com.recep.hunt.login.LoginActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.login.WelcomeScreenActivity
@@ -13,6 +14,7 @@ import com.recep.hunt.payment.PaymentMethodActivity
 import com.recep.hunt.payment.SelectPaymentMethodsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.setupProfile.SetupProfileActivity
+import com.recep.hunt.setupProfile.SetupProfileDobActivity
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.userDetail.UserDetailActivity

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+    <com.github.vipulasri.timelineview.TimelineView
+            android:id="@+id/timeline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:markerSize="18dp"
+            app:lineWidth="1dp"
+            app:startLineColor="@color/app_light_text_color"
+            app:endLineColor="@color/app_light_text_color"
+            app:lineStyle="dash"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="5dp"
+
+            android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_timeline_date"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/app_text_black"
+                tools:text="24 JAN"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:id="@+id/text_timeline_title"
+                android:textSize="14sp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/app_light_text_color"
+                tools:text="Order Successfully Completed"/>
+
+    </LinearLayout>
+
+</LinearLayout>

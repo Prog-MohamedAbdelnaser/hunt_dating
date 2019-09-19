@@ -12,6 +12,9 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat.checkSelfPermission
 import com.recep.hunt.R
 import org.jetbrains.anko.toast
+import androidx.room.util.CursorUtil.getColumnIndex
+
+
 
 class InviteFriendContactActivity : AppCompatActivity() {
 
@@ -31,6 +34,35 @@ class InviteFriendContactActivity : AppCompatActivity() {
         } else {
 
         }
+    }
+    fun getNameEmailDetails(): ArrayList<String> {
+        val names = ArrayList<String>()
+        val cr = contentResolver
+        val cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+        if (cur!!.count > 0) {
+            while (cur.moveToNext()) {
+                val id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID))
+                val cur1 = cr.query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                    arrayOf(id), null
+                )
+                while (cur1!!.moveToNext()) {
+                    //to get the contact names
+                    val name =
+                        cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                    Log.e("Name :", name)
+                    val email =
+                        cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
+                    Log.e("Email", email)
+                    if (email != null) {
+                        names.add(name)
+                    }
+                }
+                cur1.close()
+            }
+        }
+        return names
     }
     private fun getContacts(): StringBuilder {
         val builder = StringBuilder()

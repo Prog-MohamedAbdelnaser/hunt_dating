@@ -2,6 +2,7 @@ package com.recep.hunt.userDetail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.recep.hunt.R
@@ -32,6 +33,7 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         storyImageView = find(R.id.story_image_userdetail)
         setupUserDetailBottomSheet()
         val count = getStoryData().size
+        Log.e("Stories","Total count : $count")
         userImagesStoriesData = getStoryData()
         storyProgressView.setStoriesCount(count)
         storyProgressView.setStoryDuration(3500L)
@@ -65,7 +67,7 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
 
-        userImagesStoriesData.add(SharedPrefrenceManager.getUserImage(this))
+//        userImagesStoriesData.add(SharedPrefrenceManager.getUserImage(this))
 
         if(firstImage != Constants.NULL)
             userImagesStoriesData.add(firstImage)

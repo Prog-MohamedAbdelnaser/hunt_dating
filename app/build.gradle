@@ -88,6 +88,7 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'com.github.shts:StoriesProgressView:3.0.0'
     implementation 'com.brucetoo.pickview:library:1.2.3'
+    implementation 'com.github.vipulasri:timelineview:1.1.0'
 
 
     // Room components

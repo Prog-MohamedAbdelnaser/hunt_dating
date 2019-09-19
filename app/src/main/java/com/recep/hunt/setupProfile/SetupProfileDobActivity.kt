@@ -44,8 +44,8 @@ class SetupProfileDobActivity : BaseActivity() {
         dobTextView = find(R.id.user_dob)
         this.hideKeyboard()
         show_dob_dialog_btn.setOnClickListener {
-            //showDatePicker()
-            datepicker()
+            showDatePicker()
+//            datepicker()
         }
 
         setup_profile_dob_next_btn.setOnClickListener {

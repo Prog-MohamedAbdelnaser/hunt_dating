@@ -48,7 +48,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         videoView.setOnCompletionListener { videoView.start() }
 
         login_nxt_btn.setOnClickListener {
-            launchActivity<SocialLoginActivity>()
+            launchActivity<OtpVerificationActivity>()
         }
         setupViewPager()
         checkPermission()
@@ -69,8 +69,8 @@ class WelcomeScreenActivity : AppCompatActivity() {
             viewPager.setCurrentItem(currentPage++, true)
         }
 
-        timer = Timer() // This will create a new Thread
-        timer?.schedule(object : TimerTask() { // task to be scheduled
+        timer = Timer()
+        timer?.schedule(object : TimerTask() {
             override fun run() {
                 handler.post(Update)
             }
@@ -93,7 +93,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
     }
 }
 
-class WelcomePagerAdapter() : PagerAdapter() {
+class WelcomePagerAdapter : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(container.context).inflate(R.layout.on_board_adapter, container, false)
         container.addView(item)

@@ -19,87 +19,97 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
 
-            <RelativeLayout
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center">
-
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content">
 
                 <RelativeLayout
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="20sp"
-                        android:layout_marginBottom="10sp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/ivEditProfielId"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/boy_casual_eyes"
-                            app:civ_border_color="@color/black"
-                            app:civ_border_overlay="true"
-                            app:civ_border_width="0dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
 
                     <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/ivEditProfielId"
-                            android:layout_alignRight="@+id/ivEditProfielId"
-                            android:layout_alignBottom="@+id/ivEditProfielId"
-                            android:paddingLeft="5.8sp"
-                            android:paddingRight="5.8sp">
+                            android:layout_width="160dp"
+                            android:layout_height="160dp"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="20sp"
+                            android:layout_marginBottom="10sp">
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/ivPencilEditProfileId"
-                                android:layout_width="match_parent"
-                                android:layout_height="40sp"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/partial_dark"/>
+                        <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/ivEditProfielId"
+                                android:layout_width="140dp"
+                                android:layout_height="140dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/boy_casual_eyes"
+                                app:civ_border_color="@color/black"
+                                app:civ_border_overlay="true"
+                                app:civ_border_width="0dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
 
                         <RelativeLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="8sp">
+                                android:layout_alignLeft="@+id/ivEditProfielId"
+                                android:layout_alignRight="@+id/ivEditProfielId"
+                                android:layout_alignBottom="@+id/ivEditProfielId"
+                                android:paddingLeft="5.8sp"
+                                android:paddingRight="5.8sp">
 
                             <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/ivEditId"
-                                    android:layout_width="15sp"
-                                    android:layout_height="15sp"
-                                    android:layout_centerVertical="true"
+                                    android:id="@+id/ivPencilEditProfileId"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40sp"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/ic_mode_edit_white_24dp"/>
+                                    android:src="@drawable/partial_dark" />
 
-                            <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/change_pic_tv"
+
+                            <RelativeLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/ivEditId"
-                                    android:text="@string/change_pic"
-                                    android:textColor="@color/white"
-                                    android:textSize="11sp"
-                                    android:textStyle="normal"/>
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="8sp">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                        android:id="@+id/ivEditId"
+                                        android:layout_width="15sp"
+                                        android:layout_height="15sp"
+                                        android:layout_centerVertical="true"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/ic_mode_edit_white_24dp" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                        android:id="@+id/change_pic_tv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_toRightOf="@+id/ivEditId"
+                                        android:text="@string/change_pic"
+                                        android:textColor="@color/white"
+                                        android:textSize="11sp"
+                                        android:textStyle="normal" />
+
+                            </RelativeLayout>
 
                         </RelativeLayout>
 
                     </RelativeLayout>
 
                 </RelativeLayout>
-
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <include
                     layout="@layout/six_photos_item_layout"

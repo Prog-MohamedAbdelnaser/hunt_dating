@@ -72,9 +72,10 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         otpPinView.setPinViewEventListener{ pinview, fromUser ->
 
-            Log.e("OTP","${pinview.value}")
-            Log.e("OTP FROM FIRE","${otp}")
-            authenticate(pinview.value)
+            launchActivity<SocialLoginActivity>()
+//            Log.e("OTP","${pinview.value}")
+//            Log.e("OTP FROM FIRE","${otp}")
+//            authenticate(pinview.value)
 
         }
 
