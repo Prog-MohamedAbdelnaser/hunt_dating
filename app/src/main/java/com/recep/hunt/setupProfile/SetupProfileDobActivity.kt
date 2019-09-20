@@ -30,6 +30,7 @@ class SetupProfileDobActivity : BaseActivity() {
     private val TAG = SetupProfileDobActivity::class.java.simpleName
     private var dob = ""
     private lateinit var dobTextView: TextView
+    private lateinit var calendar: Calendar;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_dob)
@@ -44,8 +45,8 @@ class SetupProfileDobActivity : BaseActivity() {
         dobTextView = find(R.id.user_dob)
         this.hideKeyboard()
         show_dob_dialog_btn.setOnClickListener {
-            showDatePicker()
-//            datepicker()
+            //            showDatePicker()
+            datepicker()
         }
 
         setup_profile_dob_next_btn.setOnClickListener {
@@ -161,51 +162,35 @@ class SetupProfileDobActivity : BaseActivity() {
     }
 
     private fun datepicker() {
-        /* val pickerPopWin = DatePickerPopWin.Builder(this@SetupProfileDobActivity,
-             object : DatePickerPopWin.OnDatePickedListener {
-                 override fun onDatePickCompleted(year: Int, month: Int, day: Int, dateDesc: String) {
-                     // Toast.makeText(this@SetupProfileDobActivity, dateDesc, Toast.LENGTH_SHORT).show()
-                     val parsedDate = "${day}/${month + 1}/${year}"
-                     val formatedDate = getFormattedDate(parsedDate)
-                     apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
-                     val age = getAge(parsedDate)
-                     dobTextView.text = formatedDate
-                     dobTextView.textColor = resources.getColor(R.color.app_text_black)
-                     years_old_textView.text = resources.getString(R.string.years_old, age.toString())
-
-                 }
-             }).textConfirm("Done") //text of confirm button
-             .textCancel("Cancel") //text of cancel button
-             .btnTextSize(18) // button text size
-             .viewTextSize(22) // pick view text size
-             .colorCancel(Color.parseColor("#F7531B"))
-             .colorConfirm(Color.parseColor("#F7531B"))
-             .minYear(1900) //min year in loop
-             .maxYear(currentyear()+1) // max year in loop
-             .dateChose(currentDate()) // date chose when init popwindow
-             .build()
-         pickerPopWin.showPopWin(this@SetupProfileDobActivity)*/
-
-
         val datePicker = DatePickerPopUpWindow.Builder(applicationContext)
             .setMinYear(1900)
-            .setMaxYear(currentyear()+1)
+            .setMaxYear(currentyear() + 1)
             .setSelectedDate(currentDate())
             .setLocale(Locale.getDefault())
-            .setConfirmButtonText("Cancel")
-            .setCancelButtonText("Done")
+            .setConfirmButtonText("Done")
+            .setCancelButtonText("Cancel")
+            .setOnDateSelectedListener(this::onDateSelected)
             .setConfirmButtonTextColor(Color.parseColor("#999999"))
             .setCancelButtonTextColor(Color.parseColor("#009900"))
-            .setButtonTextSize(16)
-            .setViewTextSize(15)
+            .setButtonTextSize(18)
+            .setViewTextSize(20)
             .setShowShortMonths(true)
             .setShowDayMonthYear(true)
             .build()
         datePicker.show(this@SetupProfileDobActivity)
     }
 
-    private fun currentyear(): Int {
+    private fun onDateSelected(year: Int, month: Int, dayOfMonth: Int) {
+        val parsedDate = "${dayOfMonth}/${month + 1}/${year}"
+        val formatedDate = getFormattedDate(parsedDate)
+        apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
+        val age = getAge(parsedDate)
+        dobTextView.text = formatedDate
+        dobTextView.textColor = resources.getColor(R.color.app_text_black)
+        years_old_textView.text = resources.getString(R.string.years_old, age.toString())
+    }
 
+    private fun currentyear(): Int {
         return Calendar.getInstance().get(Calendar.YEAR)
     }
 

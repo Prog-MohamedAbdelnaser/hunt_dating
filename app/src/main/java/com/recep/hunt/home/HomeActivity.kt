@@ -152,10 +152,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             // .setPivotX(Pivot.X.CENTER) // CENTER is a default one
         )
         horizontal_list_near_by_user.setSlideOnFling(true)
-        horizontal_list_near_by_user.scrollToPosition(1)
+      //  horizontal_list_near_by_user.scrollToPosition(1)
         //  horizontal_list_near_by_user.setOffscreenItems(2)
-
-
     }
 
     private fun nearByRestaurants(

@@ -28,26 +28,27 @@ class SplashActivity : AppCompatActivity() {
         if (!isFinishing) {
             val isOtpVerified = SharedPrefrenceManager.getIsOtpVerified(this@SplashActivity)
             val isLoggedIn = SharedPrefrenceManager.getIsLoggedIn(this)
-            if(isOtpVerified){
-                if(isLoggedIn){
-                    val intent = Intent(applicationContext,WelcomeScreenActivity::class.java)
+            if (isOtpVerified) {
+                if (isLoggedIn) {
+                    val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
                     startActivity(intent)
                     finish()
-                }else{
-                    val intent = Intent(applicationContext,WelcomeScreenActivity::class.java)
+                } else {
+                    val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
 //                    val intent = Intent(applicationContext,UserProfileSettingsActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
-            }else{
-//                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
-                val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
+            } else {
+                val intent = Intent(applicationContext, SocialLoginActivity::class.java)
+                //val intent = Intent(applicationContext, WelcomeScreenActivity::class.java)
                 startActivity(intent)
                 finish()
             }
 
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -55,6 +56,7 @@ class SplashActivity : AppCompatActivity() {
         mDelayHandler!!.postDelayed(mRunnable, SPLASH_DELAY)
 
     }
+
     public override fun onDestroy() {
         if (mDelayHandler != null) {
             mDelayHandler!!.removeCallbacks(mRunnable)

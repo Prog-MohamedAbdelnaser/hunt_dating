@@ -24,6 +24,7 @@
     <color name="app_light_text_color">#9AA7A4</color>
     <color name="app_seperator_color">#9A9DA4</color>
     <color name="app_gray_color">#CDD1D9</color>
+    <color name="app_half_gray_color">#80CDD1D9</color>
     <color name="edit_questions_bg_color">#FF9057</color>
 
     <color name="map_ripple_color">#C2A1F8</color>

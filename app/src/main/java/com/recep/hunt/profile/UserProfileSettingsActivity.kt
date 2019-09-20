@@ -6,10 +6,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -264,10 +266,44 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)
         val tvOtherddId = dialog.find<TextView>(R.id.tvOtherddId)
+        val tvUnsecureId = dialog.find<TextView>(R.id.tvUnsecureId)
+        val tvIwantId = dialog.find<TextView>(R.id.tvIwantId)
+        val tvIPriceId = dialog.find<TextView>(R.id.tvIPriceId)
+        val tvIDontId = dialog.find<TextView>(R.id.tvIDontId)
+        val tvNotEnoughId = dialog.find<TextView>(R.id.tvNotEnoughId)
+
+
+
         tvOtherddId.setOnClickListener {
             dialog.dismiss()
             deletAccountReasonDialoge();
         }
+
+        tvUnsecureId.setOnClickListener {
+            dialog.dismiss()
+            deletAccountSuccessDialoge();
+        }
+
+        tvIwantId.setOnClickListener {
+            dialog.dismiss()
+            deletAccountSuccessDialoge();
+        }
+        tvIPriceId.setOnClickListener {
+            dialog.dismiss()
+            deletAccountSuccessDialoge();
+        }
+        tvIDontId.setOnClickListener {
+            dialog.dismiss()
+            deletAccountSuccessDialoge();
+        }
+        tvNotEnoughId.setOnClickListener {
+            dialog.dismiss()
+            deletAccountSuccessDialoge();
+        }
+
+
+
+
         dialog.show()
 
     }
@@ -279,9 +315,22 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)
         val tvSubmitddId = dialog.find<TextView>(R.id.tvSubmitddId)
+        val tvCancelddId = dialog.find<TextView>(R.id.tvCancelddId)
+        val etReasonDdId = dialog.find<EditText>(R.id.etReasonDdId)
+
+
         tvSubmitddId.setOnClickListener {
+
+            if (TextUtils.isEmpty(etReasonDdId.text.toString())) {
+                etReasonDdId.setHint("Can't leave empty")
+            } else {
+                dialog.dismiss()
+                deletAccountSuccessDialoge()
+            }
+
+        }
+        tvCancelddId.setOnClickListener {
             dialog.dismiss()
-            deletAccountSuccessDialoge()
         }
         dialog.show()
 

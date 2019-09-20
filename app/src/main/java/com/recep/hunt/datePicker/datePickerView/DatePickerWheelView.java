@@ -84,11 +84,10 @@ public final class DatePickerWheelView extends LinearLayout {
                 showDayMonthYear = array.getBoolean(R.styleable.DatePickerWheelView_datePickerWheelViewShowDayMonthYear, false);
                 showShortMonths = array.getBoolean(R.styleable.DatePickerWheelView_datePickerWheelViewShowShortMonths, false);
 
-                textSize = array.getDimension(R.styleable.DatePickerWheelView_datePickerWheelViewTextSize, 16F);
+                textSize = array.getDimension(R.styleable.DatePickerWheelView_datePickerWheelViewTextSize, 20F);
 
                 minYear = array.getInt(R.styleable.DatePickerWheelView_datePickerWheelViewMinYear, 1980);
                 maxYear = array.getInt(R.styleable.DatePickerWheelView_datePickerWheelViewMaxYear, 2100);
-
                 initialDate = array.getString(R.styleable.DatePickerWheelView_datePickerWheelViewInitialDate);
             }
         } finally {
@@ -98,13 +97,18 @@ public final class DatePickerWheelView extends LinearLayout {
         }
     }
 
+    private int  currentYear()
+    {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        return year;
+    }
+
     private void drawDatePickerWheelView() {
         rootView = LayoutInflater.from(getContext()).inflate(showDayMonthYear ? R.layout.date_picker_inverted : R.layout.date_picker, this, true);
-
         yearSpinner = (WheelView) rootView.findViewById(R.id.picker_year);
         monthSpinner = (WheelView) rootView.findViewById(R.id.picker_month);
         daySpinner = (WheelView) rootView.findViewById(R.id.picker_day);
-
 
         yearSpinner.setLineColor(lineColor);
         monthSpinner.setLineColor(lineColor);

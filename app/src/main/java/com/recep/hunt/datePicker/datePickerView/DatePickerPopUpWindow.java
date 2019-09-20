@@ -131,7 +131,6 @@ public final class DatePickerPopUpWindow extends PopupWindow implements View.OnC
 
     private void onDateSelected(int year, int month, int dayOfMonth) {
         calendar = Calendar.getInstance(Locale.getDefault());
-
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -184,12 +183,12 @@ public final class DatePickerPopUpWindow extends PopupWindow implements View.OnC
         private boolean showShortMonths = false;
         private int minYear = DEFAULT_MIN_YEAR;
         private int maxYear = Calendar.getInstance().get(Calendar.YEAR) + 1;
-        private String cancelButtonText = "Done";
-        private String confirmButtonText = "Cancel";
+        private String cancelButtonText = "Cancel";
+        private String confirmButtonText = "Done";
         private int cancelButtonTextColor = Color.parseColor("#999999");
         private int confirmButtonTextColor = Color.parseColor("#303F9F");
         private String selectedDate;
-        private int buttonTextSize = 16;
+        private int buttonTextSize = 20;
         private int viewTextSize = 25;
         private Locale locale;
         public Builder(@NonNull final Context context) {

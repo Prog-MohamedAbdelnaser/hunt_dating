@@ -114,7 +114,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         getDeviceToken()
         mAuth = FirebaseAuth.getInstance()
-        FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create()
         setupGoogleAuth()
         setupInstaAuth()
@@ -123,7 +122,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
 //        userViewModel.logUsers()
 
-       //printHashKey(this)
+        //printHashKey(this)
     }
 
     private fun init() {
@@ -215,7 +214,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         LoginManager.getInstance().logOut()
         LoginManager.getInstance().logInWithReadPermissions(
             this@SocialLoginActivity,
-            Arrays.asList("public_profile", "user_friends", "email")
+            Arrays.asList("public_profile", "email")
         )
 
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -398,9 +397,9 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 val picture = json_object.getJSONObject("picture")
                 val data = picture.getJSONObject("data")
                 //Fetch the data from the response
-                val facebook_pic = data.optString("url", null)
-                val social_name = json_object.optString("name", null)
-                val social_email = json_object.optString("email", null)
+                val facebook_pic = data.optString("url", "")
+                val social_name = json_object.optString("name", "")
+                val social_email = json_object.optString("email", "")
                 val id = json_object.getString("id")
                 // val gender = json_object.getString("gender")
                 val social_pic = URLEncoder.encode(facebook_pic, "UTF-8")
@@ -435,7 +434,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             }
         }
         val permission_param = Bundle()
-        permission_param.putString("fields", "id,name,email,picture.width(480).height(480)")
+        permission_param.putString("fields", "id,name,email,picture.width(480).height(480),gender,birthday")
         data_request.parameters = permission_param
         data_request.executeAsync()
 

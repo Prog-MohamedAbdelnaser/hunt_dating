@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="14dp">
+            android:paddingTop="14sp">
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -20,6 +20,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_medium"
+                android:paddingLeft="14sp"
+                android:paddingRight="14dp"
                 android:text="@string/delete_account"
                 android:textAlignment="center"
                 android:textColor="@color/pink"
@@ -32,6 +34,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/montserrat_medium"
+                android:paddingLeft="14sp"
+                android:paddingRight="14dp"
                 android:text="@string/tell_us_why_and_we_ll_see_what_we_can_do"
                 android:textAlignment="center"
                 android:textColor="@color/pink"
@@ -45,6 +49,8 @@
                 android:layout_marginLeft="10sp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/montserrat_medium"
+                android:paddingLeft="14sp"
+                android:paddingRight="14dp"
                 android:text="Try other reason here"
                 android:textAlignment="center"
                 android:textColor="@color/transparent_black"
@@ -55,7 +61,9 @@
                 android:id="@+id/dob_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10sp"
                 android:background="@drawable/round_app_stroke_bg">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -82,11 +90,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+        <View android:layout_width="match_parent"
+              android:layout_height="0.1dp"
+              android:layout_marginTop="25sp"
+              android:background="@color/app_half_gray_color"/>
+
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="30sp"
                 android:layout_marginRight="15dp"
                 android:weightSum="2">
 
@@ -94,24 +107,29 @@
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCancelddId"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50sp"
                     android:layout_marginRight="10sp"
                     android:layout_weight="1"
                     android:fontFamily="@font/montserrat_medium"
+                    android:gravity="center"
                     android:text="@string/back"
                     android:textColor="@color/light_grey"
                     android:textSize="17sp"/>
 
+            <View android:layout_width="0.1dp"
+                  android:layout_height="50sp"
+                  android:background="@color/app_half_gray_color"/>
+
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvSubmitddId"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50sp"
                     android:layout_marginLeft="10sp"
                     android:layout_weight="1"
                     android:fontFamily="@font/montserrat_medium"
-                    android:gravity="right"
+                    android:gravity="center"
                     android:text="@string/submit"
-                    android:textColor="@color/material_orange"
+                    android:textColor="@color/edit_questions_bg_color"
                     android:textSize="17sp"/>
 
         </LinearLayout>

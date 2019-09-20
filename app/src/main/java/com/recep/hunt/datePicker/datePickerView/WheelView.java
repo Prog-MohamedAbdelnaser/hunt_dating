@@ -140,7 +140,7 @@ public final class WheelView extends View {
             }
         }
 
-        lineSpacingMultiplier = 2.0F;
+        lineSpacingMultiplier = 2.2F;
 
         if (Build.VERSION.SDK_INT >= 11) {
             setLayerType(LAYER_TYPE_SOFTWARE, null);
@@ -223,7 +223,7 @@ public final class WheelView extends View {
         itemHeight = lineSpacingMultiplier * maxTextHeight;
         //auto calculate the text's left/right value when draw
         paddingLeftRight = (widgetWidth - maxTextWidth) / 2;
-        paddingTopBottom = (widgetHeight - circularDiameter) / 2;
+        paddingTopBottom = (widgetHeight - circularDiameter) /3;
 
         //topLineY = diameter/2 - itemHeight(itemHeight)/2 + paddingTopBottom
         topLineY = (int) ((circularDiameter - itemHeight) / 2.0F) + paddingTopBottom;
