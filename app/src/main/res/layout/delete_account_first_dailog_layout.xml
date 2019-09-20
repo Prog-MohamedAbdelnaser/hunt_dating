@@ -10,6 +10,7 @@
         app:cardCornerRadius="16dp">
 
     <LinearLayout
+            android:id="@+id/llParentDdid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -38,6 +39,7 @@
                 android:textSize="12sp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvUnsecureId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -50,7 +52,10 @@
                 android:textColor="@color/transparent_black"
                 android:textSize="14sp"/>
 
+
+
         <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvIwantId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -62,7 +67,10 @@
                 android:textAlignment="center"
                 android:textColor="@color/transparent_black"
                 android:textSize="14sp"/>
+
+
         <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvIPriceId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -74,7 +82,12 @@
                 android:textAlignment="center"
                 android:textColor="@color/transparent_black"
                 android:textSize="14sp"/>
+
+
+
+
         <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvIDontId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -88,6 +101,7 @@
                 android:textSize="14sp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNotEnoughId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"

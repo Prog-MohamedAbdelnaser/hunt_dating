@@ -114,6 +114,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         getDeviceToken()
         mAuth = FirebaseAuth.getInstance()
+        FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create()
         setupGoogleAuth()
         setupInstaAuth()
@@ -122,7 +123,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
 //        userViewModel.logUsers()
 
-//        printHashKey(this)
+       //printHashKey(this)
     }
 
     private fun init() {
@@ -214,7 +215,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         LoginManager.getInstance().logOut()
         LoginManager.getInstance().logInWithReadPermissions(
             this@SocialLoginActivity,
-            Arrays.asList("public_profile", "user_friends", "email", "user_birthday")
+            Arrays.asList("public_profile", "user_friends", "email")
         )
 
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -407,9 +408,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 Log.e("peofile_name", social_name)
                 Log.e("peofile_email", social_email)
 
-                userDetailsModel = UserSocialModel(
-                    id, social_pic, social_name, social_email
-                )
+                userDetailsModel = UserSocialModel(id, social_pic, social_name, social_email)
 
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val json: String = gson.toJson(userDetailsModel)
@@ -436,7 +435,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             }
         }
         val permission_param = Bundle()
-        permission_param.putString("fields", "id,name,email,picture.width(480).height(480),gender")
+        permission_param.putString("fields", "id,name,email,picture.width(480).height(480)")
         data_request.parameters = permission_param
         data_request.executeAsync()
 
@@ -489,8 +488,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             mApp!!.authorize()
         }
     }
-
-
 
 
 }

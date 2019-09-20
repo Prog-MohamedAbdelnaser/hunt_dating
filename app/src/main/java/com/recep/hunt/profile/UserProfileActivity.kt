@@ -14,7 +14,7 @@ import androidx.constraintlayout.solver.widgets.Helper
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.share.Share
+/*import com.facebook.share.Share*/
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel

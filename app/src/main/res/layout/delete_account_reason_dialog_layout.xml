@@ -59,7 +59,7 @@
                 android:background="@drawable/round_app_stroke_bg">
 
             <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/user_dob"
+                    android:id="@+id/etReasonDdId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
@@ -70,6 +70,7 @@
                     android:fontFamily="@font/montserrat"
                     android:hint="Type here..."
                     android:padding="10sp"
+                    android:singleLine="true"
                     android:textColor="@color/transparent_black"
                     android:textColorHint="@color/app_light_text_color"
                     android:textSize="14sp"
@@ -91,6 +92,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCancelddId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10sp"

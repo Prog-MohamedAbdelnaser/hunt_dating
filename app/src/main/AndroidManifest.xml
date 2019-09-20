@@ -57,6 +57,7 @@
         <activity android:name=".profile.EmailSettingsActivity"/>
         <activity android:name=".profile.UserProfileEditQuestionActivity"/>
         <activity android:name=".profile.UserProfileSettingsActivity"/>
+
         <activity android:name=".profile.UserProfileEditActivity"/>
         <activity android:name=".profile.UserProfileActivity"/>
         <activity android:name=".home.HomeActivity"/>
@@ -75,17 +76,22 @@
         <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity"/>
         <activity android:name=".setupProfile.SetupProfileDobActivity"/>
         <activity android:name=".setupProfile.SetupProfileActivity"/>
-        <activity android:name=".login.SocialLoginActivity"/>
+        <activity android:name=".login.SocialLoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".login.OtpVerificationActivity"/>
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".setupProfile.TurnOnGPSUpdateAcitivity"/>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
                   android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            <!--  <intent-filter>
+                  <action android:name="android.intent.action.MAIN"/>
+                  <category android:name="android.intent.category.LAUNCHER"/>
+              </intent-filter>-->
         </activity>
 
         <service
@@ -108,6 +114,23 @@
         <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths"/>
+<!--
+        <activity android:name="com.facebook.FacebookActivity"
+                  android:configChanges=
+                          "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+                  android:label="@string/app_name" />
+
+        <activity
+                android:name="com.facebook.CustomTabActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>-->
+
     </application>
 
 </manifest>
