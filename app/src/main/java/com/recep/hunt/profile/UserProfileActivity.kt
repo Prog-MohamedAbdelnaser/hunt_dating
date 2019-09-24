@@ -112,7 +112,8 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun addBasicInfoItemViews() {
-        val basicInfoViewModel = ViewModelProviders.of(this).get(BasicInfoViewModel::class.java)
+//        val basicInfoViewModel = ViewModelProviders.of(this).get(BasicInfoViewModel::class.java)
+        val basicInfoViewModel = BasicInfoViewModel.getInstace(this.application)
         val basicModel = basicInfoViewModel.getData()
 
         for (model in basicModel) {

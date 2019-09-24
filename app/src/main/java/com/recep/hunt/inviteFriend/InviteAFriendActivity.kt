@@ -17,5 +17,8 @@ class InviteAFriendActivity : AppCompatActivity() {
         send_invite_btn.setOnClickListener {
             launchActivity<MyInviteCreditActivity>()
         }
+
+        invite_friend_back_btn.setOnClickListener { finish() }
+
     }
 }

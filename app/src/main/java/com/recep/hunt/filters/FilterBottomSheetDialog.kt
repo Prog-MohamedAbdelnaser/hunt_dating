@@ -77,6 +77,8 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
 
         setupInterstedInSelecters(0)
 
+
+
         moveLeftBtn.setOnClickListener {
 
             val position = getItem(-1)

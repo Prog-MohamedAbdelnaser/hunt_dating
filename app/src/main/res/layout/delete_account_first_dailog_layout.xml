@@ -1,141 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="16dp">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="10dp"
+        android:layout_height="wrap_content">
 
     <LinearLayout
-            android:id="@+id/llParentDdid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="14dp">
+            android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+        <TextView
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/montserrat_medium"
                 android:text="@string/delete_account"
-                android:textAlignment="center"
                 android:textColor="@color/pink"
-                android:textSize="12sp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
                 android:fontFamily="@font/montserrat_medium"
+                android:textSize="13sp"
+                android:layout_marginTop="16dp"
+                android:textAlignment="center"
+                />
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/tell_us_why_and_we_ll_see_what_we_can_do"
-                android:textAlignment="center"
+                android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/pink"
+                android:textAlignment="center"
                 android:textSize="12sp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvUnsecureId"
-                android:layout_width="wrap_content"
+        <Button
+                android:id="@+id/reason1_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:text="@string/unsure_which_package_i_should_use"
-                android:textAlignment="center"
-                android:textColor="@color/transparent_black"
-                android:textSize="14sp"/>
-
-
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvIwantId"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/reason1"
+                android:textAllCaps="false"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"
+                android:textColor="@color/app_text_black"
+                android:fontFamily="@font/montserrat"
+                android:textSize="13sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/seprator_color"/>
+        <Button
+                android:id="@+id/reason2_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:text="@string/i_want_to_test_the_app_some_more"
-                android:textAlignment="center"
-                android:textColor="@color/transparent_black"
-                android:textSize="14sp"/>
-
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvIPriceId"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/reason2"
+                android:textAllCaps="false"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/app_text_black"
+                android:fontFamily="@font/montserrat"
+                android:textSize="13sp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/seprator_color"/>
+        <Button
+                android:id="@+id/reason3_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:text="@string/price"
-                android:textAlignment="center"
-                android:textColor="@color/transparent_black"
-                android:textSize="14sp"/>
-
-
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvIDontId"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/reason3"
+                android:textAllCaps="false"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/app_text_black"
+                android:fontFamily="@font/montserrat"
+                android:textSize="13sp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/seprator_color"/>
+        <Button
+                android:id="@+id/reason4_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:text="@string/i_don_t_want_to_subscribe_to_premium"
-                android:textAlignment="center"
-                android:textColor="@color/transparent_black"
-                android:textSize="14sp"/>
-
-
-
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvNotEnoughId"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/reason4"
+                android:textAllCaps="false"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/app_text_black"
+                android:fontFamily="@font/montserrat"
+                android:textSize="13sp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/seprator_color"/>
+        <Button
+                android:id="@+id/reason5_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:text="@string/not_enough_value_for_the_cost"
-                android:textAlignment="center"
-                android:textColor="@color/transparent_black"
-                android:textSize="14sp"/>
-
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvOtherddId"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/reason5"
+                android:textAllCaps="false"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/app_text_black"
+                android:fontFamily="@font/montserrat"
+                android:textSize="13sp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/seprator_color"/>
+        <Button
+                android:id="@+id/reason6_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:text="@string/other"
-                android:textAlignment="center"
-                android:textColor="@color/transparent_black"
-                android:textSize="14sp"/>
-
+                android:layout_marginTop="8dp"
+                android:text="@string/reason6"
+                android:textAllCaps="false"
+                android:textAlignment="textStart"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/app_text_black"
+                android:fontFamily="@font/montserrat"
+                android:textSize="13sp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

@@ -34,15 +34,20 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         setupUserDetailBottomSheet()
         val count = getStoryData().size
         Log.e("Stories","Total count : $count")
-        userImagesStoriesData = getStoryData()
-        storyProgressView.setStoriesCount(count)
-        storyProgressView.setStoryDuration(3500L)
-        storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
-        storyProgressView.setStoriesListener(this)
-        storyProgressView.startStories()
+        if(userImagesStoriesData.size != 0 ){
+            userImagesStoriesData = getStoryData()
+            storyProgressView.setStoriesCount(count)
+            storyProgressView.setStoryDuration(3500L)
+            storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
+            storyProgressView.setStoriesListener(this)
+            skip.setOnClickListener { onNext() }
+            reverse.setOnClickListener { onPrev() }
+            storyProgressView.startStories()
+        }
 
-        skip.setOnClickListener { onNext() }
-        reverse.setOnClickListener { onPrev() }
+
+
+
 
     }
     override fun onNext() {
@@ -66,9 +71,10 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         val fourthImage = SharedPrefrenceManager.getFourthImg(this)
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
+        val userImage = SharedPrefrenceManager.getUserImage(this)
 
-//        userImagesStoriesData.add(SharedPrefrenceManager.getUserImage(this))
-
+        if(userImage != Constants.NULL)
+            userImagesStoriesData.add(userImage)
         if(firstImage != Constants.NULL)
             userImagesStoriesData.add(firstImage)
         if(secondImage != Constants.NULL)

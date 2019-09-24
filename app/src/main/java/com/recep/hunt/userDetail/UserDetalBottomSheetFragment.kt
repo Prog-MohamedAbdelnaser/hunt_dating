@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.report_profile_item_layout.view.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
 import kotlinx.android.synthetic.main.user_detail_bottom_sheet_layout.view.*
 import kotlinx.android.synthetic.main.user_detail_header_item.view.*
+import kotlinx.coroutines.flow.flow
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.support.v4.find
@@ -51,6 +52,7 @@ class UserDetalBottomSheetFragment(private val ctx:Context) : BottomSheetDialogF
     private lateinit var basicInfoViewModel:BasicInfoViewModel
     private lateinit var recyclerView: RecyclerView
     private var adapter = GroupAdapter<ViewHolder>()
+    private var basicInfo = ArrayList<UserBasicInfoModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +60,6 @@ class UserDetalBottomSheetFragment(private val ctx:Context) : BottomSheetDialogF
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.user_detail_bottom_sheet_layout,container,false)
-        basicInfoViewModel = ViewModelProviders.of(this).get(BasicInfoViewModel::class.java)
         init(view)
         return view
     }
@@ -66,6 +67,10 @@ class UserDetalBottomSheetFragment(private val ctx:Context) : BottomSheetDialogF
     private fun init(view:View?){
         if(view != null){
             act = activity ?: return
+            basicInfoViewModel = BasicInfoViewModel.getInstace(act.application)
+            if(basicInfo.size == 0)
+                basicInfo = basicInfoViewModel.getData()
+
             recyclerView = view.find(R.id.user_detail_recyclerView)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(ctx)
@@ -79,7 +84,7 @@ class UserDetalBottomSheetFragment(private val ctx:Context) : BottomSheetDialogF
     private fun setupAdapters(){
         val images = getUserImages()
         adapter.add(UserDetailHeaderItem(ctx))
-        adapter.add(UserDetailBasicInfoItem(basicInfoViewModel.getData(),act,ctx))
+        adapter.add(UserDetailBasicInfoItem(basicInfo,act,ctx))
         adapter.add(UserDetailPhotoInfoItem(images,ctx))
         adapter.add(UserDetailFacebookItem())
         adapter.add(UserDetailInstagramItem())
@@ -172,11 +177,21 @@ class UserDetailBasicInfoItem(private val basicInfoViewModel: ArrayList<UserBasi
         setupBasicInfoList()
     }
     private fun setupBasicInfoList(){
-        for(model in basicInfoViewModel){
-            if(model.questions.selectedValue != Constants.NULL){
-                addChip(model)
+        if(flowLayout.childCount == 0){
+            for(model in basicInfoViewModel){
+                if(model.questions.selectedValue != Constants.NULL){
+                    addChip(model)
+                }
+            }
+        }else{
+            flowLayout.removeAllViews()
+            for(model in basicInfoViewModel){
+                if(model.questions.selectedValue != Constants.NULL){
+                    addChip(model)
+                }
             }
         }
+
     }
     private fun addChip(model:UserBasicInfoModel) {
         val layoutInflater = act.baseContext
@@ -187,7 +202,9 @@ class UserDetailBasicInfoItem(private val basicInfoViewModel: ArrayList<UserBasi
 
         title.text = model.questions.selectedValue
         icon.image = context.resources.getDrawable(model.icon)
+//        flowLayout.removeAllViews()
         flowLayout.addView(newView)
+
 
     }
 }

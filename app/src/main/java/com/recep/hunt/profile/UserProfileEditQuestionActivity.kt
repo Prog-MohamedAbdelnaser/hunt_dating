@@ -83,7 +83,11 @@ class UserProfileEditQuestionActivity : AppCompatActivity(),QuestionAnswerSelect
         setupQuestionType()
 
         save_height_btn.setOnClickListener {
-            onAnswerSelected(Integer.parseInt(heightEditText.text.toString()))
+            val txt =heightEditText.text.toString()
+            if(txt.isNotEmpty()){
+                onAnswerSelected(Integer.parseInt(txt))
+            }
+
         }
     }
     private fun setupQuestionType(){

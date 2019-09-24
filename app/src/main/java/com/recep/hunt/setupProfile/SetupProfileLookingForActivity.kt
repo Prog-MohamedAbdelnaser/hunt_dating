@@ -47,6 +47,7 @@ class SetupProfileLookingForActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_looking_for)
         setScreenTitle(R.string.setup_profile)
+        getBaseCancelBtn().setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
         getBackButton().setOnClickListener {
             finish()
         }

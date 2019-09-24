@@ -51,7 +51,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private lateinit var bitmap: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SharedPrefrenceManager.setIsLoggedIn(this, true)
+
         setContentView(R.layout.activity_setup_profile_completed)
         init()
     }
@@ -67,10 +67,12 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         SharedPrefrenceManager.setUserGenderChanged(this, true)
         lottieAnimationView.playAnimation()
 
+
 //        insertUserIntoDb()
 
         lets_start_btn.setOnClickListener {
-
+            SharedPrefrenceManager.setIsLoggedIn(this, true)
+            SharedPrefrenceManager.setIsOtpVerified(this,true)
             launchActivity<HomeActivity>()
         }
     }

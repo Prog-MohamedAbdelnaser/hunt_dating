@@ -37,6 +37,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_height="50dp">
 
         <LinearLayout
@@ -75,7 +76,7 @@
                 android:id="@+id/textView40"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/share_your_fb_photos"
+                android:text="@string/share_your_spotify_top_artist"
                 android:textColor="#99A0AB"
                 android:fontFamily="@font/montserrat"
                 android:textSize="16sp"

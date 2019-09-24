@@ -5,12 +5,12 @@
     <string name="be_part_of_hunt">Be a part of the Hunt and find the minded people to Hunt with</string>
 
     <string name="wanna_go_hunting1">Wanna go Hunting New Text?</string>
-    <string name="be_part_of_hunt1">Be a part of the Hunt and find the minded people to Hunt with New Text</string>
+    <string name="be_part_of_hunt1">A new adventure is just swipe away</string>
 
     <string name="wanna_go_hunting2">Wanna go Hunting? Second Text</string>
-    <string name="be_part_of_hunt2">Be a part of the Hunt and find the minded people to Hunt with NEw Text 1</string>
+    <string name="be_part_of_hunt2">Let the Hunt begin.</string>
 
-    <string name="enter_your_phone_number">Enter your number ..</string>
+    <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="enter_number_recevie_otp">Enter your cellphone number to receive the one time verification</string>
     <string name="verification">Verification</string>
     <string name="didnt_recive_otp">Didn\'t receive the code? Please wait…</string>
@@ -277,6 +277,7 @@
     <string name="you_have_change_phone_nummber">You have successfully changed your phone number</string>
 
 
+
     <string name="hunt_premium">HUNT PREMIUM</string>
     <string name="select_payment_method">Select payment method</string>
     <string name="new_payment_method">New payment method</string>
@@ -323,9 +324,7 @@
     <string name="security_details">All question related security</string>
 
 
-    <string name="dont_want_to_join_hunt">Don\'t wanna join Hunt Premium today?\nTell us why and we\'ll see what we can
-        do!
-    </string>
+    <string name="dont_want_to_join_hunt">Don\'t wanna join Hunt Premium today?\nTell us why and we\'ll see what we can do!</string>
     <string name="reason1">Unsure which package I should use</string>
     <string name="reason2">I want to test the app some more</string>
     <string name="reason3">Price</string>
@@ -343,39 +342,29 @@
     <string name="by_clicking_here">By clicking here login you agree with</string>
 
     <string name="select_methods">Select methods</string>
-    <string name="just_select_a_payment_method">just select a payment method or simply add \nanother card to buy
-        subscriptions
-    </string>
+    <string name="just_select_a_payment_method">just select a payment method or simply add \nanother card to buy subscriptions</string>
     <string name="or_buy_your_subscription_with">Or buy your subscription with</string>
     <string name="about_you">About %1$s</string>
 
 
     <string name="storage_permission_rationale_title">Storage permission required</string>
-    <string name="storage_permition_rationale_message">In order to take a picture, you must grant this permission!
-    </string>
-    <string name="storage_permission_denied_message">Storage permission is required in order to take a photo with the
-        camera
-    </string>
+    <string name="storage_permition_rationale_message">In order to take a picture, you must grant this permission!</string>
+    <string name="storage_permission_denied_message">Storage permission is required in order to take a photo with the camera</string>
 
     <string name="really_want_to_switch_gender">Do you really want to switch\nyour gender ?</string>
     <string name="you_can_switch_gender_only_once">you can switch your gender just 1 time \nin your application</string>
 
     <string name="incognito_mode">Incognito Mode</string>
-    <string name="incognito_detail">By turning Incognito mode on you will\nno longer be seen by the others but\nyou can
-        still search for your perfect\nmatch.
-    </string>
+    <string name="incognito_detail">By turning Incognito mode on you will\nno longer be seen by the others but\nyou can still search for your perfect\nmatch.</string>
     <string name="got_it">Got it!</string>
 
 
     <string name="invite_friend">Invite A Friend</string>
     <string name="invite_a_friend_and_earn">Invite a Friend &amp; earn
-        <font fgcolor='#E3004C'>$1</font>
-        Credit
+        <font fgcolor='#E3004C'>$1</font> Credit
     </string>
 
-    <string name="send_the_invite_code_to_friend">Send the invite Code to a friend Every\n successful login from your
-        invite Code will earn\nyou $1 credit!
-    </string>
+    <string name="send_the_invite_code_to_friend">Send the invite Code to a friend Every\n successful login from your invite Code will earn\nyou $1 credit!</string>
     <string name="your_invite_code">Your Invite Code</string>
     <string name="demo_invite_code">SKDJS333##</string>
     <string name="send_invite">Send Invite</string>
@@ -384,15 +373,12 @@
     <string name="total_credit">Total Credit</string>
     <string name="redeem_credit">Redeem Credit</string>
     <string name="invite_history">Invite History</string>
+    <string name="experience">Experience</string>
+    <string name="education">Education</string>
+    <string name="share_your_linkdn_details">Share your Linkedin\ndetails</string>
 
-    <string name="facebook_app_id">428189314461041</string>
-    <string name="insta_client_id">50861e5c85324044a5c2b888735d7ca8</string>
-    <string name="insta_client_secret">ad97c323aaa94ffdb5bdf5a6a25435e</string>
-    <string name="insta_callback_url">https://www.gethunt.app/</string>
-    <string name="insta_base_url">https://api.instagram.com/</string>
-    <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
-    <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
-    <string name="delete_account">Delete Account</string>
+
+
     <string name="tell_us_why_and_we_ll_see_what_we_can_do">Tell us why and we\'ll see what we can do!</string>
     <string name="unsure_which_package_i_should_use">Unsure which package i should use</string>
     <string name="i_want_to_test_the_app_some_more">I want to test the app some more</string>
@@ -403,17 +389,32 @@
     <string name="back">Back</string>
     <string name="submit">Submit</string>
     <string name="ok">OK</string>
-    <string name="the_accounts">the accounts</string>
-    <string name="you_have_successfully_deactivated">You have successfully deactivated</string>
+    <string name="you_have_successfully_deactivated">You have successfully deactivated\nyour account</string>
     <string name="success">Success!</string>
 
-    <string name="my_top_spotify_artists">My top spotify artists</string>
+
+    <string name="share_your_facebook_photos">Share your Facebook\nphotos</string>
     <string name="connect">Connect</string>
-    <string name="share_your_fb_photos">Share your fb photos</string>
-    <string name="education">Education</string>
-    <string name="share_your_linkdn_details">Share your linkdn details</string>
-    <string name="share_your_insta_photos">Share your insta photos</string>
-    <string name="experience">Experience</string>
+    <string name="share_your_instagram_photos">Share your Instagram\nphotos</string>
+    <string name="my_top_spotify_artists">My Top Spotify Artists</string>
+    <string name="share_your_spotify_top_artist">Share your Spotify\ntop artist</string>
+
+    <string name="type_other_reason_here">Type other reason here</string>
+    <string name="type_here">Type here…</string>
+
+
+    <!--    Keep these on LAST-->
+
+    <string name="facebook_app_id">428189314461041</string>
+    <string name="insta_client_id">50861e5c85324044a5c2b888735d7ca8</string>
+    <string name="insta_client_secret">ad97c323aaa94ffdb5bdf5a6a25435e</string>
+    <string name="insta_callback_url">https://www.gethunt.app/</string>
+    <string name="insta_base_url">https://api.instagram.com/</string>
+    <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
+    <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
+    <string name="delete_account">Delete Account</string>
+
+
 
 </resources>
 

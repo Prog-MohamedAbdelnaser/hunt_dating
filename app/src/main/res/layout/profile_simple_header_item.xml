@@ -15,7 +15,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="TextView"
-            android:textColor="@color/app_light_text_color"
+            android:textColor="#CDD1D9"
             android:textSize="14sp"
             android:fontFamily="@font/montserrat"
             app:layout_constraintBottom_toBottomOf="parent"

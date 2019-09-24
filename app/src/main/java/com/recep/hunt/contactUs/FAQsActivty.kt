@@ -32,7 +32,7 @@ class FAQsActivty : BaseActivity(),ContactUsInterface {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         for(item in getData()){
-            adapter.add(ContactUsAdapterItem(this,item,false,this))
+            adapter.add(ContactUsAdapterItem(this,item,true,this))
         }
     }
 

@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         app:cardCornerRadius="25dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +36,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2" />
 
         <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/number_change_success_dialog_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -61,7 +62,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/ok_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                app:layout_constraintTop_toBottomOf="@+id/number_change_success_dialog_title" />
 
         <Button
                 android:id="@+id/ok_btn"

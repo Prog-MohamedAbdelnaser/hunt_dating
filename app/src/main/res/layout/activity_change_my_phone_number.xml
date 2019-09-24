@@ -10,7 +10,7 @@
     <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
@@ -33,6 +33,10 @@
                 app:ccp_countryPreference="in,us,nz,gb"
                 app:ccp_defaultLanguage="ENGLISH"
                 app:ccp_textSize="13sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                app:ccp_contentColor="@color/app_light_text_color"
+                app:ccp_showFlag="false"
                 app:ccp_hintExampleNumber="true" />
 
         <View

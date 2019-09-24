@@ -109,6 +109,7 @@
                 android:layout_marginTop="40dp"
                 android:text="@string/login_paypal"
                 android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/white"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textSize="16sp"

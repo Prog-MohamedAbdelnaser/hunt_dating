@@ -185,6 +185,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             finishActivity()
         } else if (imgFlag.equals("5")) {
             SharedPrefrenceManager.setFiveImg(this, imageString)
+            finishActivity()
         } else {
             SharedPrefrenceManager.setSixImg(this, imageString)
             finishActivity()

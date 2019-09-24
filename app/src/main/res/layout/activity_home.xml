@@ -20,7 +20,6 @@
             android:layout_height="55dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,8 +28,8 @@
 
         <ImageView
                 android:id="@+id/home_filter_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/settings"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,8 +37,8 @@
 
         <ImageView
                 android:id="@+id/home_incoginoti_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -49,8 +48,8 @@
 
         <ImageView
                 android:id="@+id/home_notification_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -60,8 +59,8 @@
 
         <ImageView
                 android:id="@+id/home_profile_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -84,15 +83,15 @@
             android:id="@+id/cardView"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:elevation="10dp"
             app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="@+id/home_toolbar"
             app:layout_constraintStart_toStartOf="@+id/home_toolbar"
             app:layout_constraintTop_toBottomOf="@+id/home_toolbar">
+
         <androidx.constraintlayout.widget.ConstraintLayout
+                android:foreground="?android:attr/selectableItemBackground"
+                android:id="@+id/search_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -101,10 +100,15 @@
                     android:id="@+id/imageView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp" android:layout_marginLeft="16dp"
-                    android:layout_marginTop="13dp" android:layout_marginBottom="13dp"
-                    android:src="@drawable/ic_search_gray" app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="13dp"
+                    android:src="@drawable/ic_search_gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                     android:id="@+id/textView6"
                     android:layout_width="0dp"
@@ -120,7 +124,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView8"
-                    app:layout_constraintTop_toTopOf="@+id/imageView8"/>
+                    app:layout_constraintTop_toTopOf="@+id/imageView8" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -186,10 +190,11 @@
             android:id="@+id/sorted_near_by_restaurants_recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp" android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp" android:layout_marginBottom="8dp"
-            android:visibility="gone" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout3" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"/>
 

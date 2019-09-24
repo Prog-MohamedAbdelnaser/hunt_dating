@@ -69,7 +69,6 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="@string/the_accounts"
                 android:textAlignment="center"
                 android:textColor="@color/transparent_black"
                 android:textSize="13sp"/>

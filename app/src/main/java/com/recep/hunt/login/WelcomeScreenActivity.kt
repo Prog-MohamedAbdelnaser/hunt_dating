@@ -1,5 +1,6 @@
 package com.recep.hunt.login
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +19,10 @@ import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_welcome_screen.*
+import kotlinx.android.synthetic.main.on_board_adapter.view.*
 import org.jetbrains.anko.find
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class WelcomeScreenActivity : AppCompatActivity() {
@@ -48,7 +51,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         videoView.setOnCompletionListener { videoView.start() }
 
         login_nxt_btn.setOnClickListener {
-            launchActivity<OtpVerificationActivity>()
+            launchActivity<SocialLoginActivity>()
         }
         setupViewPager()
         checkPermission()
@@ -56,8 +59,8 @@ class WelcomeScreenActivity : AppCompatActivity() {
 
     private fun setupViewPager() {
         val titleArray = arrayListOf(R.string.wanna_go_hunting, R.string.wanna_go_hunting1, R.string.wanna_go_hunting2)
-        val subtitleArray = arrayListOf(R.string.be_part_of_hunt, R.string.be_part_of_hunt2, R.string.be_part_of_hunt1)
-        viewPager.adapter = WelcomePagerAdapter()
+        val subtitleArray = arrayListOf(R.string.be_part_of_hunt, R.string.be_part_of_hunt1, R.string.be_part_of_hunt2)
+        viewPager.adapter = WelcomePagerAdapter(this,subtitleArray)
         indicators.setupWithViewPager(viewPager)
 
         /*After setting the adapter use the timer */
@@ -93,16 +96,17 @@ class WelcomeScreenActivity : AppCompatActivity() {
     }
 }
 
-class WelcomePagerAdapter : PagerAdapter() {
+class WelcomePagerAdapter(private val context: Context,private val subtitle:ArrayList<Int>) : PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(container.context).inflate(R.layout.on_board_adapter, container, false)
+        item.on_board_adapter_subtitle_view.text = context.getString(subtitle[position])
         container.addView(item)
         return item
     }
 
 
     override fun getCount(): Int {
-        return 3
+        return subtitle.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {

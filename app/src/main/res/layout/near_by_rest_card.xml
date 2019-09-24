@@ -7,6 +7,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:orientation="vertical"
         android:background="@drawable/near_by_rest_horizontal_card_bg">
         <!--//    android:layout_marginEnd="8dp"
@@ -24,6 +26,7 @@
                 android:layout_marginRight="8dp"
                 android:fontFamily="@font/montserrat_semibold"
                 android:text="TextView"
+                android:maxLines="1"
                 android:textColor="@color/app_text_black"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +40,7 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/montserrat"
                 android:maxLines="1"
+                android:lines="1"
                 android:text="TextView"
                 android:textColor="@color/app_light_text_color"
                 android:textSize="12sp"
@@ -63,7 +67,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginBottom="8dp"
-
                         android:src="@drawable/ic_near_by_rest_user" />
 
                 <ImageView

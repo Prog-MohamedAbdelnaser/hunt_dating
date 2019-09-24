@@ -55,6 +55,7 @@
                 android:background="@drawable/app_btn_round"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="@string/got_it"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp"

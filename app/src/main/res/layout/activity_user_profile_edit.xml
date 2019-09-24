@@ -64,7 +64,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_alignLeft="@+id/ivEditProfielId"
+                                android:layout_alignStart="@id/ivEditProfielId"
                                 android:layout_alignRight="@+id/ivEditProfielId"
+                                android:layout_alignEnd="@id/ivEditProfielId"
                                 android:layout_alignBottom="@+id/ivEditProfielId"
                                 android:paddingLeft="5.8sp"
                                 android:paddingRight="5.8sp">

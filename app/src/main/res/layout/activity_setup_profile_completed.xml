@@ -31,7 +31,6 @@
             android:src="@drawable/boy_casual_eyes"
             app:civ_border_color="@color/white"
             app:civ_border_width="4dp"
-            android:elevation="6dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"/>
     <TextView
@@ -86,8 +85,9 @@
             android:layout_height="60dp"
             android:text="@string/lets_start"
             android:textColor="@color/white"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/montserrat_medium"
             android:textAllCaps="false"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

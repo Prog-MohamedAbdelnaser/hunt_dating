@@ -13,6 +13,9 @@ import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelRe
 import com.recep.hunt.utilis.Helpers
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
+import android.view.animation.AnimationUtils.loadAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 
 
 /**
@@ -40,6 +43,7 @@ class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRes
         var restaurantImage : ImageView = view.find(R.id.restaurant_image)
         var restaurantName : TextView =  view.find(R.id.restaurant_name)
         var restaurantDetail : TextView = view.find(R.id.restaurant_detail)
+
 
         fun setupViews(model:NearByRestaurantsModelResults?){
 

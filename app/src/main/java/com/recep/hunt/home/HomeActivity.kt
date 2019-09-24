@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -49,10 +50,7 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
 import kotlinx.android.synthetic.main.custom_infowindow.view.*
-import org.jetbrains.anko.find
-import org.jetbrains.anko.image
-import org.jetbrains.anko.layoutInflater
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
 
@@ -62,11 +60,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     //    private lateinit var toolbar: Toolbar
     private lateinit var mMap: GoogleMap
-    private lateinit var mapRipple: MapRipple
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val animateZoomTo = 11f
+        private const val animateZoomTo = 17.0f
     }
 
     private var latitude = 0.toDouble()
@@ -83,6 +80,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private lateinit var sortedListRecyclerView: RecyclerView
     private var isListshowing = true
     private var adapter = GroupAdapter<ViewHolder>()
+    private var callAPIOnlyOnceStatus = 1
+    private lateinit var locationButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,24 +89,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         init()
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (mapRipple == null) {
-        } else {
-            if (mapRipple.isAnimationRunning) {
-                mapRipple.stopRippleMapAnimation()
-            }
-        }
-    }
 
     private fun init() {
         MapsInitializer.initialize(this)
         val mapFrag = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFrag.getMapAsync(this)
-
-//        toolbar = find(R.id.home_toolbar)
-//        setSupportActionBar(toolbar)
-//        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
+            .findViewById(Integer.parseInt("2"))
 
         showSortedListCardView = find(R.id.sorted_near_by_restaurants_list_card)
         showMyLocationCardView = find(R.id.my_location_crd)
@@ -124,6 +112,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+
+        search_bar_layout.setOnClickListener {
+            toast("Search")
+        }
 
     }
 
@@ -145,15 +137,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(
             ScaleTransformer.Builder()
-                .setMinScale(0.7f)
-                .setMaxScale(1.1f)
-                .setPivotY(Pivot.Y.BOTTOM)
-                .build()
-            // .setPivotX(Pivot.X.CENTER) // CENTER is a default one
-        )
+                .build())
         horizontal_list_near_by_user.setSlideOnFling(true)
-      //  horizontal_list_near_by_user.scrollToPosition(1)
-        //  horizontal_list_near_by_user.setOffscreenItems(2)
     }
 
     private fun nearByRestaurants(
@@ -175,10 +160,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             if (dialog != null) {
                 dialog.dismiss()
             }
-            allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
-            val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
-            completion(APIState.SUCCESS, results)
-            setupSortedListRecyclerView(results)
+            if(response != null){
+                allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
+                val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
+                completion(APIState.SUCCESS, results)
+                setupSortedListRecyclerView(results)
+            }
+
 
         }
 
@@ -205,15 +193,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
                         marker.showInfoWindow()
                     }
-                    Run.after(1000) {
-                        setupNearByResUnder600M(lat, long)
-                    }
                     setupNearByRestaurantsRecyclerView(results)
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
+                    mMap.setMaxZoomPreference(animateZoomTo)
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
                 }
             }
 
+        }
+
+        runOnUiThread{
+
+        }
+        Run.after(1000) {
+            setupNearByResUnder600M(lat, long)
         }
 
     }
@@ -251,8 +244,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     private fun setupCardClicks() {
         showMyLocationCardView.setOnClickListener {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
+            locationButton.callOnClick()
+
+
         }
 
         showSortedListCardView.setOnClickListener {
@@ -261,7 +257,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 sortedListRecyclerView.visibility = View.VISIBLE
                 horizontal_list_near_by_user.visibility = View.INVISIBLE
                 list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
-//                Helpers.runAnimation(sortedListRecyclerView)
+//                home_root_view.backgroundColor = Color.parseColor("#CCFFFFFF")
+
             } else {
                 isListshowing = true
                 sortedListRecyclerView.visibility = View.INVISIBLE
@@ -305,6 +302,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 5000
         locationRequest.smallestDisplacement = 10f
+//        locationRequest.numUpdates = 1
 
     }
 
@@ -330,24 +328,30 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 //                mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(11f))
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
 
-                mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude, mLastLocation.longitude), this@HomeActivity)
-
-                mapRipple.withNumberOfRipples(4)
-                mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
-                mapRipple.withDistance(600.toDouble())      // 2000 metres radius
-                mapRipple.withRippleDuration(12000)    //12000ms
-                mapRipple.withTransparency(0.4f)
-                mapRipple.startRippleMapAnimation()
+//                mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude, mLastLocation.longitude), this@HomeActivity)
+//
+//                mapRipple.withNumberOfRipples(4)
+//                mapRipple.withStrokeColor(resources.getColor(R.color.map_ripple_color))
+//                mapRipple.withStrokewidth(1)
+//                mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
+//                mapRipple.withDistance(100.toDouble())      // 2000 metres radius
+//                mapRipple.withRippleDuration(10000)    //12000ms
+//                mapRipple.withTransparency(0.4f)
+//                mapRipple.startRippleMapAnimation()
 
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.longitude.toString())
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
-                    val lat = mLastLocation.latitude
-                    val long = mLastLocation.longitude
-                    setupAllNearByRestMarkers(lat, long)
+                    if(callAPIOnlyOnceStatus == 1){
+                        val lat = mLastLocation.latitude
+                        val long = mLastLocation.longitude
+                        setupAllNearByRestMarkers(lat, long)
+                        callAPIOnlyOnceStatus = 0
+                    }
+
                 }
 
 
@@ -385,7 +389,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 mMap.isMyLocationEnabled = true
             mMap.uiSettings.isZoomControlsEnabled = false
             mMap.uiSettings.isMapToolbarEnabled = false
-            mMap.uiSettings.isMyLocationButtonEnabled = false
+            locationButton.visibility = View.GONE
             mMap.setInfoWindowAdapter(CustomInfoWindowView(this))
         }
 
@@ -416,22 +420,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        if (item != null) {
-//            when (item.itemId) {
-//                R.id.profile_item -> launchActivity<UserProfileActivity>()
-//                R.id.filter_item -> {
-//                    val bottomSheet = FilterBottomSheetDialog(this)
-//                    bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
-//                }
-//                R.id.notify_item -> launchActivity<NotificationsActivity>()
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE -> {
@@ -446,7 +434,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         locationCallback,
                         Looper.myLooper()
                     )
-                    turn_on_gps_btn.text = resources.getString(R.string.continuee)
                 } else {
                     Helpers.showErrorSnackBar(this, "Turn on Location!", "Please allow for location")
                 }

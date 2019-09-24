@@ -35,9 +35,8 @@ class SetupProfileDobActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_dob)
         setScreenTitle(R.string.setup_profile)
-        getBackButton().setOnClickListener {
-            finish()
-        }
+        getBaseCancelBtn().setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
+        getBackButton().setOnClickListener { finish() }
         init()
     }
 
@@ -45,8 +44,8 @@ class SetupProfileDobActivity : BaseActivity() {
         dobTextView = find(R.id.user_dob)
         this.hideKeyboard()
         show_dob_dialog_btn.setOnClickListener {
-            //            showDatePicker()
-            datepicker()
+            showDatePicker()
+//            datepicker()
         }
 
         setup_profile_dob_next_btn.setOnClickListener {
@@ -183,6 +182,7 @@ class SetupProfileDobActivity : BaseActivity() {
     private fun onDateSelected(year: Int, month: Int, dayOfMonth: Int) {
         val parsedDate = "${dayOfMonth}/${month + 1}/${year}"
         val formatedDate = getFormattedDate(parsedDate)
+        dob = formatedDate
         apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
         val age = getAge(parsedDate)
         dobTextView.text = formatedDate

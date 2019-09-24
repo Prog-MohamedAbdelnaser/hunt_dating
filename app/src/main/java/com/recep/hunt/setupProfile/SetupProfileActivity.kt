@@ -27,6 +27,7 @@ class SetupProfileActivity : BaseActivity() {
         setContentView(R.layout.activity_setup_profile)
         setScreenTitle(R.string.setup_profile)
         getBackButton().setOnClickListener { finish() }
+        getBaseCancelBtn().setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
         init()
         this.hideKeyboard()
     }

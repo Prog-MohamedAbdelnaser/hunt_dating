@@ -3,6 +3,7 @@ package com.recep.hunt.utilis
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.login.SocialLoginActivity
 import com.squareup.picasso.Transformation
 import org.aviran.cookiebar2.CookieBar
 
@@ -160,6 +162,12 @@ class Helpers {
             }
             return null
 
+        }
+
+        fun segueToSocialLoginScreen(context: Context){
+            val intent = Intent(context,SocialLoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
         }
 
     }

@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.contactUs.model.ChatwithusModel
 import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_chat_with_us.*
 import kotlinx.android.synthetic.main.chat_with_us_adapter_item.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
@@ -47,6 +49,7 @@ class ChatWithUsActivity : BaseActivity(),ChatWithUsListeners {
     private fun init(){
         recyclerView = find(R.id.chat_with_us_recyclerView)
         setupRecyclerView()
+        chat_with_us_header_userName.text = "Hi ${SharedPrefrenceManager.getUserFirstName(this)}"
     }
     private fun setupRecyclerView(){
         recyclerView.adapter = adapter

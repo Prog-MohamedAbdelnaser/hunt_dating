@@ -14,7 +14,10 @@ import com.recep.hunt.utilis.SharedPrefrenceManager
  * Email : rishabh1450@gmail.com
  */
 
-class BasicInfoViewModel(private val app: Application) : AndroidViewModel(app){
+class BasicInfoViewModel(private val app: Application) {
+    companion object{
+        fun getInstace(app:Application):BasicInfoViewModel = BasicInfoViewModel(app)
+    }
      fun getData():ArrayList<UserBasicInfoModel>{
         val basicModel = ArrayList<UserBasicInfoModel>()
         val questionModel = getBasicInfoQuestions()

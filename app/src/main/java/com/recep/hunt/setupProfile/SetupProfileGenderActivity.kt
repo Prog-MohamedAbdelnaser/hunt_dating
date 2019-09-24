@@ -29,6 +29,7 @@ class SetupProfileGenderActivity : BaseActivity() ,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_gender)
         setScreenTitle(R.string.setup_profile)
+        getBaseCancelBtn().setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
         getBackButton().setOnClickListener {
             finish()
         }
