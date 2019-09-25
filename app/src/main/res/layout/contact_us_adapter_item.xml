@@ -13,6 +13,7 @@
         android:background="@drawable/chat_with_us_item_bg"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="8dp"
+        android:elevation="1dp"
         android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout

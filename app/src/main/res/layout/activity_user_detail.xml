@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-                android:id="@+id/home_filter_btn"
+                android:id="@+id/user_detail_filter_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="16dp"
@@ -50,38 +50,38 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-                android:id="@+id/home_incoginoti_btn"
+                android:id="@+id/user_detail_incoginoti_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/home_filter_btn"
+                app:layout_constraintEnd_toStartOf="@+id/user_detail_filter_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ghost" />
 
         <ImageView
-                android:id="@+id/home_notification_btn"
+                android:id="@+id/user_detail_notification_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/home_incoginoti_btn"
+                app:layout_constraintEnd_toStartOf="@+id/user_detail_incoginoti_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/notify" />
 
         <ImageView
-                android:id="@+id/home_profile_btn"
+                android:id="@+id/user_detail_profile_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/home_notification_btn"
+                app:layout_constraintEnd_toStartOf="@+id/user_detail_notification_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_menu_profile" />
 
@@ -101,6 +101,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
             android:orientation="horizontal">
 
         <View

@@ -4,7 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".contactUs.ContactUsActivity">
+        android:background="@color/table_view_bg"
+        tools:context=".contactUs.FAQsActivty">
 
     <View
             android:id="@+id/view5"

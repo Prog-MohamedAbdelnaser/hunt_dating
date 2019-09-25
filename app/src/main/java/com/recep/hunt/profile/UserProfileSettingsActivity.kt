@@ -366,7 +366,6 @@ class SocialSwitchItemAdapter(
 
         viewHolder.itemView.social_switch_title.text = title
         viewHolder.itemView.social_switch_image.image = ctx.resources.getDrawable(socialIcon)
-
         viewHolder.itemView.social_switch_control.isChecked = switchValue
 
     }

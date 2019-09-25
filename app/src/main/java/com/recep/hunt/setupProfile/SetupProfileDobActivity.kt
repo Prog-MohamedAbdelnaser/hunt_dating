@@ -45,7 +45,6 @@ class SetupProfileDobActivity : BaseActivity() {
         this.hideKeyboard()
         show_dob_dialog_btn.setOnClickListener {
             showDatePicker()
-//            datepicker()
         }
 
         setup_profile_dob_next_btn.setOnClickListener {
@@ -94,6 +93,7 @@ class SetupProfileDobActivity : BaseActivity() {
                 dobTextView.text = formatedDate
                 dobTextView.textColor = resources.getColor(R.color.app_text_black)
                 years_old_textView.text = resources.getString(R.string.years_old, age.toString())
+                SharedPrefrenceManager.setUserage(this@SetupProfileDobActivity,age.toString())
                 dob = formatedDate
                 dob_layout.clearFocus()
                 it.dismiss()

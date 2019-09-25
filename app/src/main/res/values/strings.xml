@@ -402,6 +402,9 @@
     <string name="type_other_reason_here">Type other reason here</string>
     <string name="type_here">Type here…</string>
 
+    <string name="delete_question">Delete Question</string>
+    <string name="delete_question_detail">Are you sure you want to\ndelete this question?</string>
+
 
     <!--    Keep these on LAST-->
 

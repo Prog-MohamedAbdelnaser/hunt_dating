@@ -17,6 +17,8 @@ import com.google.android.material.tabs.TabLayout
 import com.recep.hunt.R
 import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_welcome_screen.*
 import kotlinx.android.synthetic.main.on_board_adapter.view.*
@@ -49,12 +51,19 @@ class WelcomeScreenActivity : AppCompatActivity() {
         videoView.setVideoURI(uri)
         videoView.start()
         videoView.setOnCompletionListener { videoView.start() }
+        //TODO
+        Helpers.setupBasicSharedPrefrences(this)
 
         login_nxt_btn.setOnClickListener {
             launchActivity<SocialLoginActivity>()
         }
         setupViewPager()
         checkPermission()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        videoView.start()
     }
 
     private fun setupViewPager() {
@@ -94,6 +103,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
             return
         }
     }
+
 }
 
 class WelcomePagerAdapter(private val context: Context,private val subtitle:ArrayList<Int>) : PagerAdapter() {

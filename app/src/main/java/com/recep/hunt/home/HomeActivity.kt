@@ -54,11 +54,10 @@ import org.jetbrains.anko.*
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
 
-    override fun onOptionClick(text: String) {
 
+    override fun onOptionClick(text: String) {
     }
 
-    //    private lateinit var toolbar: Toolbar
     private lateinit var mMap: GoogleMap
 
     companion object {
@@ -118,19 +117,27 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
 
     }
-
     private fun showIncognitoBtn() {
-        val ll = LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
-        val dialog = Dialog(this)
-        dialog.setContentView(ll)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val gotItBtn: Button = dialog.find(R.id.got_it_btn)
-        gotItBtn.setOnClickListener {
-            home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
-            dialog.dismiss()
+        val isIncognito = SharedPrefrenceManager.getisIncognito(this)
+        if(isIncognito){
+            SharedPrefrenceManager.setisIncognito(this,false)
+            val ll = LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
+            val dialog = Dialog(this)
+            dialog.setContentView(ll)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val gotItBtn: Button = dialog.find(R.id.got_it_btn)
+            gotItBtn.setOnClickListener {
+                home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
+                dialog.dismiss()
+            }
+            dialog.show()
+        }else{
+            home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost)
+            SharedPrefrenceManager.setisIncognito(this,true)
         }
-        dialog.show()
+
     }
+
 
     private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)

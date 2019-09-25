@@ -2,6 +2,7 @@ package com.recep.hunt.setupProfile
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.recep.hunt.R
 import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.profile.viewmodel.UserViewModel
 import com.recep.hunt.utilis.*
 import com.squareup.picasso.Picasso
@@ -67,13 +69,12 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         SharedPrefrenceManager.setUserGenderChanged(this, true)
         lottieAnimationView.playAnimation()
 
-
-//        insertUserIntoDb()
-
         lets_start_btn.setOnClickListener {
             SharedPrefrenceManager.setIsLoggedIn(this, true)
             SharedPrefrenceManager.setIsOtpVerified(this,true)
-            launchActivity<HomeActivity>()
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 

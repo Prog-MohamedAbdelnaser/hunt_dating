@@ -52,7 +52,10 @@ enum class PersistenceKeys {
     LookingFor,
     Kids,
     Zodiac,
-    Religion
+    Religion,
+    IsIncognito,
+    UserAge
+
 
 }
 
@@ -82,6 +85,18 @@ class SharedPrefrenceManager {
         fun getIsLoggedIn(context: Context): Boolean {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
             return sharedPreferences.getBoolean(PersistenceKeys.IsLoggedIn.toString(), false)
+        }
+        //isIncognito
+        fun setisIncognito(context: Context, value: Boolean) {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(PersistenceKeys.IsIncognito.toString(), value)
+            editor.apply()
+        }
+
+        fun getisIncognito(context: Context): Boolean {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            return sharedPreferences.getBoolean(PersistenceKeys.IsIncognito.toString(), false)
         }
 
         //IsUserLoggedIn
@@ -126,6 +141,12 @@ class SharedPrefrenceManager {
         }
 
         fun getDeviceToken(context: Context) = getSharePrefs(context, PersistenceKeys.DeviceToken.toString())
+
+        //UserAge
+        fun setUserage(context: Context,value: String){
+            setSharedPrefs(context,PersistenceKeys.UserAge.toString(), value)
+        }
+        fun getUserAge(context: Context) = getSharePrefs(context,PersistenceKeys.UserAge.toString())
 
         //UserFirstName
         fun setUserFirstName(context: Context, value: String) {

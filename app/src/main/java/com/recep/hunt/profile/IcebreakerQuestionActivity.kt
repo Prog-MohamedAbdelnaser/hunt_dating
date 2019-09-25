@@ -41,14 +41,32 @@ class IcebreakerQuestionActivity : BaseActivity(),IceBreakerListeners {
 
     override fun btnClicked(title: String, position: Int,question: IceBreakerModel) {
         when(title){
-            resources.getString(R.string.delete) -> deleteQuestion(position,question.id)
+            resources.getString(R.string.delete) -> deleteQuestionDialog(position,question.id)
             else -> addEditQuestion(question)
         }
     }
 
-    private fun deleteQuestion(position: Int,id: Int){
-        iceBreakerViewModel.deleteQuestion(id)
-        adapter.notifyItemRemoved(position)
+    private fun deleteQuestionDialog(position: Int,id: Int){
+        val yesButton : Button
+        val noButton : Button
+        val ll =  LayoutInflater.from(this).inflate(R.layout.delete_question_dialog_layout, null)
+        val dialog = Dialog(this)
+        dialog.setContentView(ll)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        yesButton = dialog.find(R.id.delete_question_yes_btn)
+        noButton = dialog.find(R.id.delete_question_no_btn)
+        yesButton.setOnClickListener {
+            iceBreakerViewModel.deleteQuestion(id)
+            adapter.notifyItemRemoved(position)
+            dialog.dismiss()
+
+
+        }
+        noButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+
     }
     private lateinit var recyclerView: RecyclerView
     private lateinit var addNewQuestionBtn : Button
@@ -85,8 +103,8 @@ class IcebreakerQuestionActivity : BaseActivity(),IceBreakerListeners {
                 adapter.setQuestions(it)
 
             })
-
     }
+
     private fun addEditQuestion(questionModel:IceBreakerModel? = null){
         val cancelButton : Button
         val addButton : Button
@@ -174,7 +192,7 @@ class IceBreakerAdapter(val listeners: IceBreakerListeners) : RecyclerView.Adapt
     class IcebreakerViewHolder(view:View) : RecyclerView.ViewHolder(view){
 
         val editBtn = view.find<Button>(R.id.ice_breaker_edit_btn)
-         val deleteBtn = view.find<Button>(R.id.ice_breaker_delete_btn)
+        val deleteBtn = view.find<Button>(R.id.ice_breaker_delete_btn)
         private val question  =  view.find<TextView>(R.id.ice_breaker_question_txt)
         private val dateTextView =  view.find<TextView>(R.id.ice_breaker_date_time_txt)
 

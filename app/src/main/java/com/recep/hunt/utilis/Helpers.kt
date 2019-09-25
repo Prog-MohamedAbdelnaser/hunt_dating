@@ -2,23 +2,38 @@
 package com.recep.hunt.utilis
 
 import android.app.Activity
+import android.app.Application
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.util.Base64
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
+import android.widget.Button
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.login.SocialLoginActivity
+import com.recep.hunt.notifications.NotificationsActivity
+import com.recep.hunt.profile.UserProfileActivity
 import com.squareup.picasso.Transformation
+import kotlinx.android.synthetic.main.activity_home.*
 import org.aviran.cookiebar2.CookieBar
+import org.jetbrains.anko.find
+import org.jetbrains.anko.image
 
 
 /**
@@ -170,6 +185,67 @@ class Helpers {
             context.startActivity(intent)
         }
 
+        fun setupBasicSharedPrefrences(ctx: Context){
+            SharedPrefrenceManager.setisIncognito(ctx,true)
+        }
+
+        fun baseToolbarSegues(context: Context,view:View,activity: Activity,incoginitoImage:ImageView){
+            when(view.id){
+                R.id.user_detail_filter_btn or R.id.home_filter_btn ->{
+                    val bottomSheet = FilterBottomSheetDialog(context)
+                    bottomSheet.show((activity as AppCompatActivity).supportFragmentManager, "FilterBottomSheetDialog")
+                }
+                R.id.user_detail_incoginoti_btn or R.id.home_incoginoti_btn ->{
+                    showIncognitoBtn(context,incoginitoImage)
+                }
+                R.id.user_detail_profile_btn or R.id.home_profile_btn ->{
+                    context.launchActivity<UserProfileActivity>()
+                }
+                R.id.user_detail_notification_btn or R.id.home_notification_btn ->{
+                    context.launchActivity<NotificationsActivity>()
+                }
+            }
+        }
+
+
+         private fun showIncognitoBtn(context: Context,button:ImageView) {
+            val isIncognito = SharedPrefrenceManager.getisIncognito(context)
+            if(isIncognito){
+                SharedPrefrenceManager.setisIncognito(context,false)
+                val ll = LayoutInflater.from(context).inflate(R.layout.incoginito_dialog_layout, null)
+                val dialog = Dialog(context)
+                dialog.setContentView(ll)
+                dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val gotItBtn: Button = dialog.find(R.id.got_it_btn)
+                gotItBtn.setOnClickListener {
+                    button.image = context.resources.getDrawable(R.drawable.ghost_on)
+                    dialog.dismiss()
+                }
+                dialog.show()
+            }else{
+                button.image = context.resources.getDrawable(R.drawable.ghost)
+                SharedPrefrenceManager.setisIncognito(context,true)
+            }
+
+        }
+
     }
 
 }
+//
+//home_filter_btn.setOnClickListener {
+//    val bottomSheet = FilterBottomSheetDialog(this)
+//    bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
+//}
+//
+//home_incoginoti_btn.setOnClickListener {
+//    showIncognitoBtn()
+//}
+//
+//home_notification_btn.setOnClickListener {
+//    launchActivity<NotificationsActivity>()
+//}
+//
+//home_profile_btn.setOnClickListener {
+//    launchActivity<UserProfileActivity>()
+//}
