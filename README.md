@@ -61,9 +61,12 @@ https://www.youtube.com/watch?v=6MOA48WCwoU
 Profile setting Prototype
 https://www.youtube.com/watch?v=zDvVX7KufF8
 
- filter process prototype
+Filter process prototype
 https://www.youtube.com/watch?v=zKYxXM6waXA&t=3s
-\
+
+Search on maps page prototype:
+https://www.youtube.com/watch?v=YXSATaj72h0
+
 
 
 
