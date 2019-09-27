@@ -17,7 +17,6 @@
           app:layout_constraintTop_toTopOf="parent"/>
 
 
-
     <Button
             android:id="@+id/button4"
             android:layout_width="65dp"
@@ -78,7 +77,8 @@
           android:layout_width="wrap_content"
           android:layout_height="1dp"
           android:background="@color/seprator_color"
-          app:layout_constraintBottom_toBottomOf="@+id/tvSearchContactId"
+          app:layout_constraintBottom_toTopOf="@+id/rlshareHuntId"
+          app:layout_constraintEnd_toEndOf="@+id/tvSearchContactId"
           app:layout_constraintTop_toBottomOf="@+id/tvSearchContactId"/>
 
 
@@ -121,7 +121,8 @@
           android:layout_width="wrap_content"
           android:layout_height="1dp"
           android:background="@color/seprator_color"
-          app:layout_constraintBottom_toBottomOf="@+id/rlshareHuntId"
+          app:layout_constraintBottom_toTopOf="@+id/rvInviteFriendId"
+          app:layout_constraintEnd_toEndOf="@+id/rlshareHuntId"
           app:layout_constraintTop_toBottomOf="@+id/rlshareHuntId"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -172,7 +173,6 @@
                 app:layout_constraintTop_toTopOf="@+id/textView39"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
