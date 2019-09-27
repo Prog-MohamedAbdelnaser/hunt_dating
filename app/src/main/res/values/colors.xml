@@ -15,6 +15,7 @@
     <color name="transparent_black">#99000000</color>
     <color name="seprator_color">#efefef</color>
     <color name="table_view_bg">#F5F7FB</color>
+    <color name="color_bg">#F9FAF9</color>
     <color name="light_grey">#ff9a9da4</color>
     <color name="light_grey_title">#ff3c4a6d</color>
     <color name="dusk">#3c4a6d</color>
@@ -26,10 +27,7 @@
     <color name="app_gray_color">#CDD1D9</color>
     <color name="app_half_gray_color">#80CDD1D9</color>
     <color name="edit_questions_bg_color">#FF9057</color>
-
     <color name="map_ripple_color">#C2A1F8</color>
-
-
     <color name="purple_color">#6B40BE</color>
 
 

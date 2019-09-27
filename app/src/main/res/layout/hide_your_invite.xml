@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_bg"
+            android:padding="10sp">
+
+        <LinearLayout
+                android:id="@+id/llTopHideId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:paddingLeft="10sp"
+                    android:text="gethunt.com/reco/u10"
+                    android:textColor="#ffcacfd7"
+                    android:textSize="12dp"/>
+
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="86dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/rectangle_with_less_round_app_btn"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center"
+                        android:text="Copy"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+                android:id="@+id/rlSharOnId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llTopHideId"
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="5sp"
+                android:gravity="center"
+                android:padding="10sp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:fontFamily="@font/montserrat"
+                    android:text="or Share on"
+                    android:textColor="#ffbac0cb"
+                    android:textSize="12dp"/>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlSharOnId"
+                android:weightSum="4">
+
+
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                <RelativeLayout
+                        android:layout_width="61sp"
+                        android:layout_height="58sp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/fb_btn">
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/fb_circle"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="60sp"
+                        android:layout_height="61sp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/insta"
+                />
+
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="61sp"
+                        android:layout_height="58sp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/u_twitter"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="62dp"
+                        android:layout_height="60sp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/more_btn"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center"
+                        android:text="More"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

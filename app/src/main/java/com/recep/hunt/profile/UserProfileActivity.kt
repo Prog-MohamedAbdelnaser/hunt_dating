@@ -3,6 +3,7 @@ package com.recep.hunt.profile
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
@@ -151,12 +152,18 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
         val userJobtitle = SharedPrefrenceManager.getJobTitle(context)
         val aboutYou = SharedPrefrenceManager.getAboutYou(context)
         val userImage = SharedPrefrenceManager.getProfileImg(context)
+        val socialType = SharedPrefrenceManager.getsocialType(context)
 
-        /* Picasso.get().load(userImage)
-             .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
-             .into(viewHolder.itemView.profile_header_user_image)*/
-
-        viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
+        if (socialType.equals("social")) {
+//            Picasso.get().load(userImage)
+//                .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
+//                .into(viewHolder.itemView.profile_header_user_image)
+            Picasso.get().load(userImage).placeholder(R.drawable.account_icon)
+                .into(viewHolder.itemView.profile_header_user_image)
+        } else {
+            viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
+        }
+        //     viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
 
         viewHolder.itemView.profile_header_user_name.text = userName
         if (aboutYou != Constants.NULL)
@@ -169,7 +176,6 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
         }
 
     }
-
 
     fun StringToBitmap(img: String): Bitmap? {
         if (img != null) {

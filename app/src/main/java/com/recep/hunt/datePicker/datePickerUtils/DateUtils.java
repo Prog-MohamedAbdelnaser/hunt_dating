@@ -11,7 +11,7 @@ import java.util.Locale;
 
 
 public final class DateUtils {
-    private static final String DEFAULT_DATE_TEMPLATE = "dd-MMMM-yyyy";
+    private static final String DEFAULT_DATE_TEMPLATE = "dd-MMM-yyyy";
 
     private DateUtils() {
     }

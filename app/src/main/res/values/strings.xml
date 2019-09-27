@@ -360,6 +360,7 @@
 
 
     <string name="invite_friend">Invite A Friend</string>
+    <string name="refer_a_friend">Refer a Friend</string>
     <string name="invite_a_friend_and_earn">Invite a Friend &amp; earn
         <font fgcolor='#E3004C'>$1</font> Credit
     </string>

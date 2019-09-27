@@ -97,11 +97,10 @@ public final class DatePickerWheelView extends LinearLayout {
         }
     }
 
-    private int  currentYear()
-    {
+    private int currentYear() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        return year;
+        return year+1;
     }
 
     private void drawDatePickerWheelView() {
@@ -160,31 +159,36 @@ public final class DatePickerWheelView extends LinearLayout {
 
     private void onDateSelected(@NonNull Object item, int position) {
         if (null != onDateSelectedListener) {
-            final Calendar calendar = Calendar.getInstance(locale);
-            calendar.set(Calendar.YEAR, Integer.valueOf(years.get(yearPos)));
-            calendar.set(Calendar.MONTH, monthPos);
-            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(days.get(dayPos)));
-            final int year = calendar.get(Calendar.YEAR);
-            final int month = calendar.get(Calendar.MONTH);
-            final int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            onDateSelectedListener.onDateSelected(year, month, dayOfMonth);
+            try {
+                final Calendar calendar = Calendar.getInstance(locale);
+                calendar.set(Calendar.YEAR, Integer.valueOf(years.get(yearPos)));
+                calendar.set(Calendar.MONTH, monthPos);
+                calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(days.get(dayPos)));
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                onDateSelectedListener.onDateSelected(year, month, dayOfMonth);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void setInitialPositions() {
         final Calendar calendar = DateUtils.parseDateString(initialDate);
         yearPos = years.indexOf(String.valueOf(calendar.get(Calendar.YEAR)));
-        monthPos = months.indexOf(String.valueOf(calendar.get(Calendar.MONTH) + 1));
+        monthPos = Integer.parseInt(months.get(calendar.get(Calendar.MONTH)-1));
         dayPos = days.indexOf(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         yearSpinner.setInitialPosition(yearPos);
         monthSpinner.setInitialPosition(monthPos);
         daySpinner.setInitialPosition(dayPos);
+        
     }
 
     private void drawYearPickerView() {
         deleteAll(years);
         calendar = Calendar.getInstance(locale);
-        final int yearCount = maxYear - minYear;
+        final int yearCount = currentYear() - minYear;
         for (int i = 0; i < yearCount; i++) {
             calendar.set(Calendar.YEAR, minYear + i);
             years.add(i, formatDate(calendar, locale, YEAR_FORMAT));
@@ -193,18 +197,23 @@ public final class DatePickerWheelView extends LinearLayout {
     }
 
     private void drawMonthPickerView() {
-        deleteAll(months);
-        calendar = Calendar.getInstance(locale);
-        final String dateFormat = showShortMonths ? SHORT_MONTH_FORMAT : MONTH_FORMAT;
-        for (int j = 0; j <= calendar.getActualMaximum(Calendar.MONTH); j++) {
-            calendar.set(Calendar.YEAR, Integer.valueOf(years.get(yearPos)));
-            calendar.set(Calendar.MONTH, j);
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            String formattedMonth = formatDate(calendar, locale, dateFormat);
-            formattedMonth = showShortMonths ? formattedMonth.toUpperCase(locale) : formattedMonth;
-            months.add(j, formattedMonth);
+        try {
+            deleteAll(months);
+            calendar = Calendar.getInstance(locale);
+            final String dateFormat = showShortMonths ? SHORT_MONTH_FORMAT : MONTH_FORMAT;
+            for (int j = 0; j <= calendar.getActualMaximum(Calendar.MONTH); j++) {
+                calendar.set(Calendar.YEAR, Integer.valueOf(years.get(yearPos)));
+                calendar.set(Calendar.MONTH, j);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                String formattedMonth = formatDate(calendar, locale, dateFormat);
+                formattedMonth = showShortMonths ? formattedMonth.toUpperCase(locale) : formattedMonth;
+                months.add(j, formattedMonth);
+            }
+            monthSpinner.setItems(months);
+        }catch (ArrayIndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
         }
-        monthSpinner.setItems(months);
     }
 
     private void drawDayPickerView() {

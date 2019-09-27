@@ -54,9 +54,8 @@ enum class PersistenceKeys {
     Zodiac,
     Religion,
     IsIncognito,
-    UserAge
-
-
+    UserAge,
+    socialType
 }
 
 class SharedPrefrenceManager {
@@ -111,6 +110,13 @@ class SharedPrefrenceManager {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
             return sharedPreferences.getBoolean(PersistenceKeys.IsUserLoggedIn.toString(), false)
         }
+
+        //UserLoginType
+        fun setsocialType(context: Context, value: String) {
+            setSharedPrefs(context, PersistenceKeys.socialType.toString(), value)
+        }
+
+        fun getsocialType(context: Context) = getSharePrefs(context, PersistenceKeys.socialType.toString())
 
 
         //User model
@@ -423,6 +429,11 @@ class SharedPrefrenceManager {
         private fun getSharePrefs(context: Context, key: String): String {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
             return sharedPreferences.getString(key, "null") ?: ""
+        }
+
+        fun clearAllSharePreference(context: Context) {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0).edit()
+            sharedPreferences.clear()
         }
 
 

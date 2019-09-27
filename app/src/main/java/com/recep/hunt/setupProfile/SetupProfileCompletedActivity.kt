@@ -80,7 +80,13 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
     private fun setupViews() {
         val userImageString = SharedPrefrenceManager.getProfileImg(this)
-        userImage.setImageBitmap(StringToBitmap(userImageString))
+        val socialType = SharedPrefrenceManager.getsocialType(this)
+        if (socialType.equals("social")) {
+            Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
+        } else {
+            userImage.setImageBitmap(StringToBitmap(userImageString))
+        }
+        //  userImage.setImageBitmap(StringToBitmap(userImageString))
         //val userImageString = SharedPrefrenceManager.getUserImage(this)
         //Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
         val firstName = SharedPrefrenceManager.getUserFirstName(this)

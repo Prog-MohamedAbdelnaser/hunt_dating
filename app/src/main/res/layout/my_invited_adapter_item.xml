@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_bg">
+
+    <LinearLayout
+            android:id="@+id/linearLayout16"
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginRight="2sp"
+            android:layout_marginBottom="10sp"
+            android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvInvitedUserNameId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Recep12@gmail.com"
+                android:textColor="#ffbac0cb"
+                android:textSize="12sp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/invite_history_you_got_bth_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Signed up"
+                android:textColor="#ffff9057"
+                android:textSize="10sp"
+                android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/invite_history_got_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="30sp"
+            android:layout_marginEnd="10sp"
+            android:layout_marginRight="10sp"
+            android:fontFamily="@font/montserrat"
+            android:text="13 days ago"
+            android:textColor="#ffbac0cb"
+            android:textSize="10sp"/>
+</RelativeLayout>

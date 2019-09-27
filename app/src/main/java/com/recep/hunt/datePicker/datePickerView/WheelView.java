@@ -43,7 +43,7 @@ public final class WheelView extends View {
     private final List<OnLoopScrollListener> listeners = new ArrayList<>();
 
     @NonNull
-    private final SimpleOnGestureListener onGestureListener  = new WheelViewGestureListener();
+    private final SimpleOnGestureListener onGestureListener = new WheelViewGestureListener();
     private GestureDetector gestureDetector;
 
     private final Paint topBottomTextPaint = new Paint();  //paint that draw top and bottom text
@@ -223,7 +223,7 @@ public final class WheelView extends View {
         itemHeight = lineSpacingMultiplier * maxTextHeight;
         //auto calculate the text's left/right value when draw
         paddingLeftRight = (widgetWidth - maxTextWidth) / 2;
-        paddingTopBottom = (widgetHeight - circularDiameter) /3;
+        paddingTopBottom = (widgetHeight - circularDiameter) / 3;
 
         //topLineY = diameter/2 - itemHeight(itemHeight)/2 + paddingTopBottom
         topLineY = (int) ((circularDiameter - itemHeight) / 2.0F) + paddingTopBottom;
@@ -242,7 +242,11 @@ public final class WheelView extends View {
         //the length of single item is itemHeight
         int mChangingItem = (int) (totalScrollY / (itemHeight));
 
-        currentIndex = initialPosition + mChangingItem % items.size();
+        try {
+            currentIndex = initialPosition + mChangingItem % items.size();
+        } catch (ArithmeticException e) {
+            e.printStackTrace();
+        }
 
         if (!canLoop) { // can loop
             currentIndex = (currentIndex < 0) ? 0 : currentIndex;
@@ -399,7 +403,7 @@ public final class WheelView extends View {
     }
 
     private void onItemSelected() {
-        for (OnLoopScrollListener onLoopScrollListener: listeners) {
+        for (OnLoopScrollListener onLoopScrollListener : listeners) {
             onLoopScrollListener.onLoopScrollFinish(items.get(selectedIndex), items.indexOf(items.get(selectedIndex)));
         }
     }
@@ -522,7 +526,7 @@ public final class WheelView extends View {
         public void run() {
             if (velocity == Integer.MAX_VALUE) {
                 if (Math.abs(velocityY) > 2000F) {
-                    velocity = (velocityY > 0.0F) ? 2000F : - 2000F;
+                    velocity = (velocityY > 0.0F) ? 2000F : -2000F;
                 } else {
                     velocity = velocityY;
                 }

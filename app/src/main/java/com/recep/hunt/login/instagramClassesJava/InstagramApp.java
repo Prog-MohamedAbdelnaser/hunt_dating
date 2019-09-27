@@ -3,16 +3,30 @@ package com.recep.hunt.login.instagramClassesJava;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import com.google.gson.GsonBuilder;
 import android.util.Log;
+import com.google.gson.Gson;
+import com.recep.hunt.constants.Constants;
+import com.recep.hunt.login.ContinueAsSocialActivity;
+import com.recep.hunt.login.model.UserSocialModel;
+import com.recep.hunt.utilis.SharedPrefrenceManager;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.recep.hunt.login.SocialLoginActivity.socialTypeKey;
+import static com.recep.hunt.login.SocialLoginActivity.userSocialModel;
 
 
 public class InstagramApp {
@@ -21,17 +35,26 @@ public class InstagramApp {
     private OAuthAuthenticationListener mListener;
     private ProgressDialog mProgress;
     private HashMap<String, String> userInfo = new HashMap<String, String>();
+    private ArrayList<String> imageThumbList = new ArrayList<String>();
     private String mAuthUrl;
     private String mTokenUrl;
     private String mAccessToken;
     private Context mCtx;
+    private String json;
+    private StringBuilder stringBuilder = new StringBuilder();
 
     private String mClientId;
     private String mClientSecret;
+    private String firstName, lastName;
+    private UserSocialModel userDetailsModel;
 
     public static int WHAT_FINALIZE = 0;
     public static int WHAT_ERROR = 1;
     private static int WHAT_FETCH_INFO = 2;
+    public static final String TAG_DATA = "data";
+    public static final String TAG_IMAGES = "images";
+    public static final String TAG_THUMBNAIL = "thumbnail";
+    public static final String TAG_URL = "url";
 
     /**
      * Callback url, as set in 'Manage OAuth Costumers' page
@@ -43,7 +66,6 @@ public class InstagramApp {
     private static final String TOKEN_URL = "https://api.instagram.com/oauth/access_token";
     private static final String API_URL = "https://api.instagram.com/v1";
     private static final String TAG = "InstagramAPI";
-    public static final String TAG_DATA = "data";
     public static final String TAG_ID = "id";
     public static final String TAG_PROFILE_PICTURE = "profile_picture";
     public static final String TAG_USERNAME = "username";
@@ -132,6 +154,7 @@ public class InstagramApp {
                             "full_name");
 
                     mSession.storeAccessToken(mAccessToken, id, user, name);
+                    // getAllMediaImages();
 
                 } catch (Exception ex) {
                     what = WHAT_ERROR;
@@ -144,10 +167,12 @@ public class InstagramApp {
     }
 
     public void fetchUserName(final Handler handler) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Constants.prefsName, 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
         mProgress = new ProgressDialog(mCtx);
         mProgress.setMessage("Loading ...");
         mProgress.show();
-
         new Thread() {
             @Override
             public void run() {
@@ -168,6 +193,7 @@ public class InstagramApp {
 
                     userInfo.put(TAG_PROFILE_PICTURE, data_obj.getString(TAG_PROFILE_PICTURE));
 
+
                     userInfo.put(TAG_USERNAME, data_obj.getString(TAG_USERNAME));
 
                     userInfo.put(TAG_BIO, data_obj.getString(TAG_BIO));
@@ -187,14 +213,46 @@ public class InstagramApp {
                     JSONObject meta_obj = jsonObj.getJSONObject(TAG_META);
 
                     userInfo.put(TAG_CODE, meta_obj.getString(TAG_CODE));
+
+
+                    String[] fullname = data_obj.getString(TAG_FULL_NAME).split(" ");
+                    if (fullname.length > 1) {
+                        firstName = fullname[0];
+                        lastName = fullname[1];
+                    } else {
+
+                        firstName = data_obj.getString(TAG_FULL_NAME);
+                        lastName = "";
+                    }
+
+                    userDetailsModel = new UserSocialModel(data_obj.getString(TAG_ID), data_obj.getString(TAG_PROFILE_PICTURE),
+                            data_obj.getString(TAG_FULL_NAME), data_obj.getString(TAG_USERNAME));
+
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences(Constants.prefsName, 0); // 0 - for private mode
+                    SharedPreferences.Editor editor = pref.edit();
+
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    json = gson.toJson(userDetailsModel);
+                    editor.putString("UserModel", String.valueOf(json)); // Storing string
+                    editor.putString("UserFirstName", firstName); // Storing string
+                    editor.putString("UserLastName", lastName); // Storing string
+                    editor.putString("UserEmail", data_obj.getString(TAG_USERNAME)); // Storing string
+                    editor.putString("ProfileImg", data_obj.getString(TAG_PROFILE_PICTURE)); //
+                    editor.putString("socialType", "social"); //
+                    editor.commit(); // commit changes
+
                 } catch (Exception ex) {
                     what = WHAT_ERROR;
                     ex.printStackTrace();
                 }
                 mProgress.dismiss();
                 handler.sendMessage(handler.obtainMessage(what, 2, 0));
+
             }
         }.start();
+
+        mProgress.dismiss();
+        getAllMediaImages();
 
     }
 
@@ -215,6 +273,26 @@ public class InstagramApp {
             }
         }
     };
+
+
+    private Handler mHandlerForImages = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == WHAT_ERROR) {
+                mProgress.dismiss();
+                if (msg.arg1 == 1) {
+                    mListener.onFail("Failed to get access token");
+                } else if (msg.arg1 == 2) {
+                    mListener.onFail("Failed to get user information");
+                }
+            } else if (msg.what == WHAT_FETCH_INFO) {
+                // fetchUserName();
+                mProgress.dismiss();
+                mListener.onSuccess();
+            }
+        }
+    };
+
 
     public HashMap<String, String> getUserInfo() {
         return userInfo;
@@ -265,5 +343,61 @@ public class InstagramApp {
         public abstract void onFail(String error);
     }
 
+    public void getAllMediaImages() {
+        mProgress = ProgressDialog.show(mCtx, "", "Loading images...");
+        mProgress.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int what = WHAT_FINALIZE;
+                try {
+                    URL url = new URL("https://api.instagram.com/v1/users/self/media/recent/?access_token=" + mAccessToken);
+                    //Log.d(TAG, "Opening URL " + url.toString());
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setDoInput(true);
+                    urlConnection.connect();
+                    String response = Utils.streamToString(urlConnection.getInputStream());
+                    System.out.println(response);
+                    JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
+                    JSONArray data = jsonObj.getJSONArray(TAG_DATA);
+                    stringBuilder.setLength(0);
+                    for (int data_i = 0; data_i < data.length(); data_i++) {
+                        JSONObject data_obj = data.getJSONObject(data_i);
+                        JSONObject images_obj = data_obj.getJSONObject(TAG_IMAGES);
+                        JSONObject thumbnail_obj = images_obj.getJSONObject(TAG_THUMBNAIL);
+                        String str_url = thumbnail_obj.getString(TAG_URL);
+                        imageThumbList.add(str_url);
+                        stringBuilder.append(str_url + ",");
+                    }
+
+                    String allImages = removeLastChar(stringBuilder.toString());
+                    Log.v("images", allImages);
+
+                    mProgress.dismiss();
+                    Intent intent = new Intent(mCtx, ContinueAsSocialActivity.class);
+                    intent.putExtra("social_type_key", Constants.socialInstaType);
+                    intent.putExtra("user_social_key", String.valueOf(json));
+                    mCtx.startActivity(intent);
+
+                    // System.out.println("jsonObject::" + jsonObject);
+
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    what = WHAT_ERROR;
+                    mProgress.dismiss();
+                }
+                // mProgress.dismiss();
+                mHandlerForImages.sendEmptyMessage(what);
+            }
+        }).
+
+                start();
+
+    }
+
+    private static String removeLastChar(String str) {
+        return str.substring(0, str.length() - 1);
+    }
 
 }

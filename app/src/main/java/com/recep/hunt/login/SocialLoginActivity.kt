@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Message
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -48,6 +49,7 @@ import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
 import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.login.instagramClassesJava.InstagramApp
+import com.recep.hunt.login.instagramClassesJava.InstagramApp.WHAT_FINALIZE
 import com.recep.hunt.login.model.LoginChatMessageModel
 import com.recep.hunt.login.model.UserSocialModel
 import com.recep.hunt.profile.viewmodel.UserViewModel
@@ -107,6 +109,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         false
     })
 
+
     private val adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,6 +142,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             override fun onSuccess() {
                 // userInfoHashmap = mApp.
                 mApp!!.fetchUserName(handler)
+                // mApp!!.getAllMediaImages()
             }
 
             override fun onFail(error: String) {
@@ -146,11 +150,9 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     .show()
             }
         })
-
         if (mApp!!.hasAccessToken()) {
             mApp!!.fetchUserName(handler)
         }
-
     }
 
     override fun onClick(v: View?) {
@@ -210,17 +212,14 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
     private fun setupFbLoginAuth() {
         // Initialize Facebook Login button
-
         LoginManager.getInstance().logOut()
-        LoginManager.getInstance().logInWithReadPermissions(
-            this@SocialLoginActivity,
-            Arrays.asList("public_profile", "email")
-        )
-
+        LoginManager.getInstance()
+            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     Log.e("loginResult ", loginResult.toString())
+                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
                     getUserDetails(loginResult)
                 }
 
@@ -343,6 +342,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     // Sign in success, update UI with the signed-in user's information
                     Log.e(TAG, "signInWithCredential:success")
                     val user = mAuth.currentUser
+                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
                     updateGoogleUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
@@ -367,7 +367,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
             //  var userInf  = user.providerData
 
-
             val json: String = gson.toJson(userDetailsModel)
             Log.e("Full name : ${user.displayName}", "")
             val fullname = user.displayName!!.split(" ").toTypedArray()
@@ -379,7 +378,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             SharedPrefrenceManager.setUserLastName(this, lastName)
             SharedPrefrenceManager.setUserEmail(this, user.email!!)
             SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
-            SharedPrefrenceManager.setUserImage(this, user.photoUrl.toString())
+            SharedPrefrenceManager.setProfileImg(this, user.photoUrl.toString())
+            SharedPrefrenceManager.setsocialType(this, "social")
             launchActivity<ContinueAsSocialActivity> {
                 putExtra(socialTypeKey, Constants.socialGoogleType)
                 putExtra(userSocialModel, json)
@@ -420,9 +420,10 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 SharedPrefrenceManager.setUserLastName(this, lastName)
                 SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
                 SharedPrefrenceManager.setUserEmail(this, social_email)
-                SharedPrefrenceManager.setUserImage(this, social_pic)
+                SharedPrefrenceManager.setProfileImg(this, social_pic)
+                SharedPrefrenceManager.setsocialType(this, "social")
                 // SharedPrefrenceManager.setUserGender(this, gender)
-
+                fbUserImages(id)
                 launchActivity<ContinueAsSocialActivity> {
                     putExtra(socialTypeKey, Constants.socialFBType)
                     putExtra(userSocialModel, json)
@@ -439,6 +440,22 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         data_request.executeAsync()
 
     }
+
+
+    private fun fbUserImages(id: String) {
+        GraphRequest(AccessToken.getCurrentAccessToken(),
+            //"/{user-id}/photos",
+            "http://graph.facebook.com/{$id}/photos",
+            null,
+            HttpMethod.GET,
+            GraphRequest.Callback() {
+                fun onCompleted(response: GraphResponse) {
+                    /* handle the result */
+                }
+            }
+        ).executeAsync();
+    }
+
 
     private fun showInstaAuthDialog() {
         val ll = LayoutInflater.from(this).inflate(R.layout.instagram_auth_dialog, null)
@@ -473,19 +490,20 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
 
     private fun launchingInst() {
-        if (mApp!!.hasAccessToken()) {
-            val builder = AlertDialog.Builder(this@SocialLoginActivity)
-            builder.setMessage("Disconnect from Instagram?")
-                .setCancelable(false)
-                .setPositiveButton("Yes") { dialog, id ->
-                    mApp!!.resetAccessToken()
-                }
-                .setNegativeButton("No") { dialog, id -> dialog.cancel() }
-            val alert = builder.create()
-            alert.show()
-        } else {
-            mApp!!.authorize()
-        }
+        mApp!!.authorize()
+        /* if (mApp!!.hasAccessToken()) {
+             val builder = AlertDialog.Builder(this@SocialLoginActivity)
+             builder.setMessage("Disconnect from Instagram?")
+                 .setCancelable(false)
+                 .setPositiveButton("Yes") { dialog, id ->
+                     mApp!!.resetAccessToken()
+                 }
+                 .setNegativeButton("No") { dialog, id -> dialog.cancel() }
+             val alert = builder.create()
+             alert.show()
+         } else {
+             mApp!!.authorize()
+         }*/
     }
 
 

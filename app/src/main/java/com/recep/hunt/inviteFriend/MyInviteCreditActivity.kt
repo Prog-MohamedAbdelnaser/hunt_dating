@@ -59,7 +59,6 @@ class InviteHistoryItems(private val model: InviteHistoryModel):Item<ViewHolder>
                 viewHolder.itemView.invite_history_you_got_bth_txt.visibility = View.VISIBLE
                 viewHolder.itemView.invite_history_got_amount.text = "$ 1"
                 viewHolder.itemView.invite_history_got_amount.textColor = Color.parseColor("#03D57A")
-
             }
             else->{
                 viewHolder.itemView.cancel_invite_btn.visibility = View.VISIBLE

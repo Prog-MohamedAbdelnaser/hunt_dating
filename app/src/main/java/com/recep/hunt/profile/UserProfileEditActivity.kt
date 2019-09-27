@@ -31,6 +31,7 @@ import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
 import com.recep.hunt.utilis.*
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
@@ -132,7 +133,6 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         setupChangeGenderBtn()
         setupSelectedGender(SharedPrefrenceManager.getUserGender(this))
 
-
         ivPencilEditProfileId.setOnClickListener()
         {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
@@ -160,6 +160,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 val resultUri = result.uri
                 var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                 SharedPrefrenceManager.setProfileImg(this@UserProfileEditActivity, bitMapToString(bitmap))
+                SharedPrefrenceManager.setsocialType(this@UserProfileEditActivity, "none")
                 //ivEditProfielId.setImageURI(resultUri)
                 ivEditProfielId.setImageBitmap(bitmap)
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -171,13 +172,21 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     }
 
     private fun sharePrefeImageSetup() {
-        ivEditProfielId.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getProfileImg(this)))
+        //ivEditProfielId.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getProfileImg(this)))
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
         val fourthImage = SharedPrefrenceManager.getFourthImg(this)
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
+        val socialTypeStr = SharedPrefrenceManager.getsocialType(this)
+
+        if (socialTypeStr.equals("social")) {
+            Picasso.get().load(Uri.parse(SharedPrefrenceManager.getProfileImg(this)))
+                .placeholder(R.drawable.account_icon).into(ivEditProfielId)
+        } else {
+            ivEditProfielId.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getProfileImg(this)))
+        }
 
         if (firstImage != Constants.NULL)
             user_image_1.setImageBitmap(StringToBitmap(firstImage))

@@ -54,8 +54,7 @@ public class InstagramDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dialog = KProgressHUD.create(context)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        dialog = KProgressHUD.create(context).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
         // mSpinner.show();
         mContent = new LinearLayout(getContext());
         mContent.setOrientation(LinearLayout.VERTICAL);
