@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_bg"
         tools:context=".inviteFriend.InviteAFriendActivity">
 
     <View android:id="@+id/view6"
@@ -55,22 +56,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSearchContactId"
+    <RelativeLayout
+            android:id="@+id/rlSearchContactId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
-            android:fontFamily="@font/montserrat"
-            android:paddingLeft="10sp"
-            android:paddingTop="20dp"
-            android:paddingRight="10sp"
-            android:paddingBottom="20dp"
-            android:text="Search Contacts"
-            android:textColor="#ffcacfd7"
-            android:textSize="15dp"
-            app:layout_constraintTop_toBottomOf="@+id/view6"/>
+            app:layout_constraintTop_toBottomOf="@+id/view6">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvInviteFriendCheckedId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:layout_marginRight="10sp"
+                android:layout_marginLeft="10sp"
+                android:paddingBottom="20dp"
+                android:visibility="gone"
+                android:orientation="horizontal"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSearchContactId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:fontFamily="@font/montserrat"
+                android:paddingLeft="10sp"
+                android:paddingTop="20dp"
+                android:paddingRight="10sp"
+                android:paddingBottom="20dp"
+                android:text="Search Contacts"
+                android:textColor="#ffcacfd7"
+                android:textSize="15dp"
+                android:visibility="visible"/>
+
+    </RelativeLayout>
 
 
     <View android:id="@+id/view7"
@@ -78,8 +97,8 @@
           android:layout_height="1dp"
           android:background="@color/seprator_color"
           app:layout_constraintBottom_toTopOf="@+id/rlshareHuntId"
-          app:layout_constraintEnd_toEndOf="@+id/tvSearchContactId"
-          app:layout_constraintTop_toBottomOf="@+id/tvSearchContactId"/>
+          app:layout_constraintEnd_toEndOf="@+id/rlSearchContactId"
+          app:layout_constraintTop_toBottomOf="@+id/rlSearchContactId"/>
 
 
     <RelativeLayout
@@ -98,7 +117,7 @@
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="12sp"
+                android:layout_marginLeft="14sp"
                 android:src="@drawable/ic_share_black"/>
 
         <androidx.appcompat.widget.AppCompatTextView

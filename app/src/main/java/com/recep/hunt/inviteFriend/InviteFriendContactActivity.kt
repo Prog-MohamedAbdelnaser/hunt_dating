@@ -1,35 +1,79 @@
 package com.recep.hunt.inviteFriend
 
 import android.Manifest
-import android.content.ContentResolver
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.content.ContentUris
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.ContextCompat.checkSelfPermission
+import android.provider.MediaStore
+import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
-import org.jetbrains.anko.toast
-import androidx.room.util.CursorUtil.getColumnIndex
-import com.recep.hunt.inviteFriend.InviteFragment.ShowYourInviteFrag
-import com.recep.hunt.inviteFriend.model.InvitesAFriendModle
-import com.recep.hunt.inviteFriend.model.InvitesModel
+import com.kaopiz.kprogresshud.KProgressHUD
+import com.recep.hunt.inviteFriend.inviteAdapter.ContactListAdapter
+import com.recep.hunt.inviteFriend.model.ChipsInvitesModel
+import com.recep.hunt.inviteFriend.model.ContactHistoryModel
 import com.recep.hunt.utilis.SimpleDividerItemDecoration
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
+import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.my_friend_invited_adapter.view.*
-import kotlinx.android.synthetic.main.my_invited_adapter_item.view.*
+import kotlinx.android.synthetic.main.activity_invite_friend_contact.*
+import kotlinx.android.synthetic.main.chips_friend_invited_adapter.view.*
+
 import org.jetbrains.anko.find
+import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class InviteFriendContactActivity : AppCompatActivity() {
+class InviteFriendContactActivity : AppCompatActivity(), ContactListAdapter.OnItemClickListener {
+    override fun onItemClick(item: ContactHistoryModel, position: Int) {
+        // chipContactList.add(item)
+        tvSearchContactId.visibility = View.GONE
+        rvInviteFriendCheckedId.visibility = View.VISIBLE
+        var userName = item.userName.split(" ");
+        var sShort: String = ""
+        var fshort: String = ""
+        var shorName: String = ""
 
+        if (userName.get(0) == null) {
+            fshort = userName[0]
+            if (userName[1] == null) {
+                sShort = userName.get(1)
+            }
+            shorName = "$fshort $sShort"
+        }
+
+        var chipsInvitesModel = ChipsInvitesModel(userName[0], shorName)
+        chipContactList.add(chipsInvitesModel)
+        rvInviteFriendCheckedId.adapter = adapter
+        rvInviteFriendCheckedId.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        rvInviteFriendCheckedId.addItemDecoration(SimpleDividerItemDecoration(this))
+        for (modle in chipContactList) {
+            adapter.add(ChipsInviteItems(modle))
+        }
+    }
+
+    val chipContactList = LinkedList<ChipsInvitesModel>()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var rvInviteFriendCheckedId: RecyclerView
+    private lateinit var tvSearchContactId: TextView
+    private lateinit var dialog: KProgressHUD
+    private var bitmap: Bitmap? = null
+
     private val adapter = GroupAdapter<ViewHolder>()
 
     companion object {
@@ -40,46 +84,27 @@ class InviteFriendContactActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite_friend_contact)
         init()
+        checkPermission();
     }
-
 
     private fun init() {
+        tvSearchContactId = find(R.id.tvSearchContactId)
         recyclerView = find(R.id.rvInviteFriendId)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(SimpleDividerItemDecoration(this))
-        for (model in getInviteData()) {
-            adapter.add(InviteFriendModleItems(model))
-        }
-
+        rvInviteFriendCheckedId = find(R.id.rvInviteFriendCheckedId)
     }
 
-
-    private fun getInviteData(): ArrayList<InvitesAFriendModle> {
-        val data = ArrayList<InvitesAFriendModle>()
-        if (data.size == 0) {
-            data.add(InvitesAFriendModle("Sara Adam", userNumber = "+4556456786"))
-            data.add(InvitesAFriendModle("Tim Hieght", userNumber = "+4556409786"))
-            data.add(InvitesAFriendModle("Jaane Mabry", userNumber = "+4556409723"))
-            data.add(InvitesAFriendModle("Joh Doe", userNumber = "+4551109786"))
-            data.add(InvitesAFriendModle("King Doe", userNumber = "+4551109786"))
-            data.add(InvitesAFriendModle("Smith Doe", userNumber = "+4551109786"))
-            data.add(InvitesAFriendModle("James Gosling", userNumber = "+4551894386"))
-            data.add(InvitesAFriendModle("Mr Sidhizi", userNumber = "+4551109123"))
-            data.add(InvitesAFriendModle("Tone Marrow", userNumber = "+4551009786"))
-        }
-        return data
-    }
-
-    class InviteFriendModleItems(private val model: InvitesAFriendModle) : Item<ViewHolder>() {
-        override fun getLayout() = R.layout.my_friend_invited_adapter
+    class ChipsInviteItems(private val model: ChipsInvitesModel) : Item<ViewHolder>() {
+        override fun getLayout() = R.layout.chips_friend_invited_adapter
         override fun bind(viewHolder: ViewHolder, position: Int) {
-            viewHolder.itemView.tvFriendInvitUserNameId.text = model.userName
-            viewHolder.itemView.tvFriendInvitUserNumberId.text = model.userNumber
+            viewHolder.itemView.tvChipShortNameId.text = model.userShortName
+            viewHolder.itemView.tvChipNameId.text = model.userName
+            viewHolder.itemView.ivChipsCloseId.setOnClickListener()
+            {
+
+            }
 
         }
     }
-
 
     private fun checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(
@@ -87,102 +112,102 @@ class InviteFriendContactActivity : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(
-                arrayOf(Manifest.permission.READ_CONTACTS),
+                arrayOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS),
                 PERMISSIONS_REQUEST_READ_CONTACTS
             )
-            //callback onRequestPermissionsResult
+
         } else {
-
+            adapterSetup();
         }
-    }
-
-    fun getNameEmailDetails(): ArrayList<String> {
-        val names = ArrayList<String>()
-        val cr = contentResolver
-        val cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
-        if (cur!!.count > 0) {
-            while (cur.moveToNext()) {
-                val id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID))
-                val cur1 = cr.query(
-                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
-                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                    arrayOf(id), null
-                )
-                while (cur1!!.moveToNext()) {
-                    //to get the contact names
-                    val name =
-                        cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                    Log.e("Name :", name)
-                    val email =
-                        cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
-                    Log.e("Email", email)
-                    if (email != null) {
-                        names.add(name)
-                    }
-                }
-                cur1.close()
-            }
-        }
-        return names
-    }
-
-    private fun getContacts(): StringBuilder {
-        val builder = StringBuilder()
-        val resolver: ContentResolver = contentResolver;
-        val cursor = resolver.query(
-            ContactsContract.Contacts.CONTENT_URI, null, null, null,
-            null
-        )
-
-        if (cursor.count > 0) {
-            while (cursor.moveToNext()) {
-                val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val phoneNumber = (cursor.getString(
-                    cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)
-                )).toInt()
-
-                if (phoneNumber > 0) {
-                    val cursorPhone = contentResolver.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null
-                    )
-
-                    if (cursorPhone.count > 0) {
-                        while (cursorPhone.moveToNext()) {
-                            val phoneNumValue = cursorPhone.getString(
-                                cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                            )
-                            builder.append("Contact: ").append(name).append(", Phone Number: ").append(
-                                phoneNumValue
-                            ).append("\n\n")
-                            Log.e("Name ===>", phoneNumValue);
-                        }
-                    }
-                    cursorPhone.close()
-                }
-            }
-        } else {
-            toast("No contacts available!")
-        }
-        cursor.close()
-        return builder
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                loadContacts()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    // checkPermission()
+                } else {
+                    adapterSetup();
+                }
+
             } else {
                 //  toast("Permission must be granted in order to display contacts information")
             }
         }
     }
 
+    private fun adapterSetup() {
+        var contactList = getContacts(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(SimpleDividerItemDecoration(this))
+        var contactListAdapter = ContactListAdapter(contactList, this)
+        recyclerView.adapter = contactListAdapter
+        contactListAdapter.notifyDataSetChanged()
+        /* var contactList = getContacts(this)
+         for (model in contactList) {
+             adapter.add(InviteFriendModleItems(model))
+         }*/
+    }
+
+    fun getContacts(ctx: Context): List<ContactHistoryModel> {
+        val contactList = ArrayList<ContactHistoryModel>()
+        val numberFlag = ArrayList<String>()
+        contactList.clear()
+        numberFlag.clear()
+        val contentResolver = ctx.contentResolver
+        val cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+        if (cursor!!.count > 0) {
+            while (cursor.moveToNext()) {
+                val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+                if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    val cursorInfo = contentResolver.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", arrayOf(id), null
+                    )
+                    val inputStream = ContactsContract.Contacts.openContactPhotoInputStream(
+                        ctx.contentResolver,
+                        ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id.toLong())
+                    )
+                    val person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id.toLong())
+                    var pURI = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY)
+                    var photo: Bitmap? = null
+                    if (inputStream != null) {
+                        photo = BitmapFactory.decodeStream(inputStream)
+                    }
+                    while (cursorInfo!!.moveToNext()) {
+                        var name =
+                            cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+                        var number =
+                            cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        var id = id;
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, pURI)
+
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        val info = ContactHistoryModel(id, name, number, bitmap);
+
+                        if (!numberFlag.contains(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)))) {
+                            numberFlag.add(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)))
+                            contactList.add(info)
+                        }
+                    }
+
+
+                    cursorInfo.close()
+                }
+            }
+            cursor.close()
+        }
+        return contactList
+    }
+
 }
+

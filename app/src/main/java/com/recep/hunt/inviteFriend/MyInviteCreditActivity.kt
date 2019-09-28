@@ -19,7 +19,6 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 
 class MyInviteCreditActivity : AppCompatActivity() {
-
     private lateinit var recyclerView: RecyclerView
     private val adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {

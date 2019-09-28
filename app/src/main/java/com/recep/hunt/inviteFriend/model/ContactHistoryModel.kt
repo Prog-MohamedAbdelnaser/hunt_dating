@@ -1,6 +1,6 @@
 package com.recep.hunt.inviteFriend.model
 
-import com.recep.hunt.R
+import android.graphics.Bitmap
 
 
 /**
@@ -9,7 +9,9 @@ import com.recep.hunt.R
  * Email : rishabh1450@gmail.com
  */
 
-data class InvitesModel(
+data class ContactHistoryModel(
+    val userId: String,
     val userName: String,
-    val userStatus: String, val userDays: String
+    val userNumber: String,
+    val userImg: Bitmap?
 )

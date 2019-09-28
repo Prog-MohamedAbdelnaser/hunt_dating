@@ -36,8 +36,7 @@ class ShowYourInviteFrag : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.show_your_invite, container, false)
         init(view)
         return view
@@ -57,6 +56,9 @@ class ShowYourInviteFrag : Fragment() {
     private fun getInviteHistoryData(): ArrayList<InvitesModel> {
         val data = ArrayList<InvitesModel>()
         if (data.size == 0) {
+            data.add(InvitesModel("Recep@gmail.com", "singed up", "13 days ago"))
+            data.add(InvitesModel("Recep@gmail.com", "singed up", "13 days ago"))
+            data.add(InvitesModel("Recep@gmail.com", "singed up", "13 days ago"))
             data.add(InvitesModel("Recep@gmail.com", "singed up", "13 days ago"))
             data.add(InvitesModel("Recep@gmail.com", "singed up", "13 days ago"))
             data.add(InvitesModel("Recep@gmail.com", "singed up", "13 days ago"))

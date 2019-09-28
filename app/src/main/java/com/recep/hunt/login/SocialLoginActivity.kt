@@ -213,8 +213,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     private fun setupFbLoginAuth() {
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
-        LoginManager.getInstance()
-            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
+        LoginManager.getInstance().logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {

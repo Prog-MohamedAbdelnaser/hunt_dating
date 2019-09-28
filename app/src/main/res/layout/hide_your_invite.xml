@@ -7,7 +7,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_bg"
+            android:background="#ffffffff"
             android:padding="10sp">
 
         <LinearLayout
@@ -32,6 +32,7 @@
 
 
                 <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvHideInviteCopyId"
                         android:layout_width="86dp"
                         android:layout_height="48dp"
                         android:layout_alignParentRight="true"
@@ -63,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:fontFamily="@font/montserrat"
-                    android:text="or Share on"
+                    android:text="or share on"
                     android:textColor="#ffbac0cb"
                     android:textSize="12dp"/>
 
@@ -78,6 +79,7 @@
 
 
             <RelativeLayout
+                    android:id="@+id/rlHideInviteFbId"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -100,7 +102,9 @@
 
             </RelativeLayout>
 
+
             <RelativeLayout
+                    android:id="@+id/rlHideInviteInstaId"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -110,11 +114,13 @@
                         android:layout_height="61sp"
                         android:layout_centerInParent="true"
                         android:scaleType="fitXY"
-                        android:src="@drawable/insta"
-                />
+                        android:src="@drawable/insta"/>
 
             </RelativeLayout>
+
+
             <RelativeLayout
+                    android:id="@+id/rlHideInviteTwitterId"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -130,6 +136,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                    android:id="@+id/rlHideInviteMoreId"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">

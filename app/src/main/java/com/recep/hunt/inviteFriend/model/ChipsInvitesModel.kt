@@ -9,8 +9,7 @@ import com.recep.hunt.R
  * Email : rishabh1450@gmail.com
  */
 
-data class InvitesAFriendModle(
+data class ChipsInvitesModel(
     val userName: String,
-    val userNumber: String,
-    val userImage: Int = R.drawable.boy_casual_eyes
+    val userShortName: String
 )

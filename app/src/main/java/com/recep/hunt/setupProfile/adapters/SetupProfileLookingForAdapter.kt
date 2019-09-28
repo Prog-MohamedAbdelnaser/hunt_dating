@@ -15,6 +15,7 @@ class SetupProfileLookingForAdapter(val context: Context, private var model: Loo
 
 //    private var lookingForModel = ArrayList<LookingForSelectionModel>()
     override fun getLayout() = R.layout.looking_for_adapter_item
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.title_tv.text=model.label
         viewHolder.itemView.dates_imageView.background= context.resources.getDrawable(R.drawable.unselected_circular_btn)

@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffffff"
         tools:context=".inviteFriend.InviteAFriendActivity">
 
 
@@ -110,7 +111,7 @@
     <RelativeLayout
             android:id="@+id/cvShowHideId"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="57dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
@@ -122,18 +123,23 @@
 
 
         <RelativeLayout
+                android:id="@+id/rlHideShowId"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="56sp"
                 android:paddingLeft="10sp"
                 android:paddingRight="10sp">
 
             <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvShowHideInvitesid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="#ff3c4a6d"
                     android:fontFamily="@font/montserrat"
+                    android:shadowColor="#08000000"
+                    android:shadowDx="10"
+                    android:shadowDy="13"
                     android:text="Show your invites"
+                    android:textColor="#ff3c4a6d"
                     android:textSize="12sp"/>
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -146,9 +152,17 @@
                     android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
 
         </RelativeLayout>
-
+        <View android:id="@+id/view9"
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:layout_below="@+id/rlHideShowId"
+              android:background="#A1EFEFEF"
+              android:paddingLeft="10sp"
+              android:paddingRight="10sp"
+              android:visibility="gone"/>
 
     </RelativeLayout>
+
 
     <FrameLayout
             android:id="@+id/flReferFriendId"
@@ -168,13 +182,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5sp"
-            android:background="@color/color_bg"
+            android:background="#ffffffff"
             android:fontFamily="@font/montserrat"
             android:gravity="center"
-            android:padding="10sp"
-            android:textSize="12sp"
-            android:text="FAQs | Terms and conditions"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="FAQs  |  Terms and conditions"
             android:textColor="#ffbac0cb"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 

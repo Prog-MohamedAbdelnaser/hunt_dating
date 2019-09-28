@@ -71,7 +71,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
         lets_start_btn.setOnClickListener {
             SharedPrefrenceManager.setIsLoggedIn(this, true)
-            SharedPrefrenceManager.setIsOtpVerified(this,true)
+            SharedPrefrenceManager.setIsOtpVerified(this, true)
             val intent = Intent(this, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
