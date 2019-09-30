@@ -95,6 +95,7 @@
             app:layout_constraintStart_toStartOf="@+id/textView35"
             app:layout_constraintTop_toBottomOf="@+id/textView35"/>
 
+
     <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView38"
             android:layout_width="wrap_content"
@@ -108,15 +109,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-    <RelativeLayout
+    <LinearLayout
             android:id="@+id/cvShowHideId"
             android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_height="67dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/invite_rect"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView37">
@@ -126,8 +129,8 @@
                 android:id="@+id/rlHideShowId"
                 android:layout_width="match_parent"
                 android:layout_height="56sp"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp">
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp">
 
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvShowHideInvitesid"
@@ -138,6 +141,7 @@
                     android:shadowColor="#08000000"
                     android:shadowDx="10"
                     android:shadowDy="13"
+                    android:paddingLeft="5sp"
                     android:text="Show your invites"
                     android:textColor="#ff3c4a6d"
                     android:textSize="12sp"/>
@@ -149,9 +153,11 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
+                    android:layout_marginRight="10sp"
                     android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
 
         </RelativeLayout>
+
         <View android:id="@+id/view9"
               android:layout_width="match_parent"
               android:layout_height="1dp"
@@ -161,7 +167,7 @@
               android:paddingRight="10sp"
               android:visibility="gone"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <FrameLayout

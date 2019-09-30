@@ -40,36 +40,18 @@ class InviteAFriendActivity : AppCompatActivity() {
             launchActivity<MyInviteCreditActivity>()
         }
 
-
-        rlHideShowId.setOnClickListener()
-        {
-            // rlHideShowId.setBackgroundResource(R.drawable.invites_card)
-            tvShowHideInvitesid.setText("Hide your invites")
-            view9.visibility = View.VISIBLE
-            setupFrag(ShowYourInviteFrag.newInstance(this@InviteAFriendActivity));
-            ivHideShowId.animate().rotation(180F).start();
-            rlHideShowId.isEnabled = false
-            flag = true
-        }
-
         invite_friend_back_btn.setOnClickListener { finish() }
 
-
-        ivHideShowId.setOnClickListener {
+        rlHideShowId.setOnClickListener {
             if (flag == true) {
                 setupFrag(HideYourInviteFrag.newInstance(this@InviteAFriendActivity));
                 ivHideShowId.animate().rotation(360F).start();
                 tvShowHideInvitesid.setText("Show your invites")
-                rlHideShowId.isEnabled = true
-                //rlHideShowId.setBackgroundResource(R.color.white)
-                view9.visibility = View.GONE
+
                 flag = false
             } else {
-                view9.visibility = View.VISIBLE
-                // rlHideShowId.setBackgroundResource(R.drawable.invites_card)
                 setupFrag(ShowYourInviteFrag.newInstance(this@InviteAFriendActivity));
                 ivHideShowId.animate().rotation(180F).start();
-                rlHideShowId.isEnabled = false
                 tvShowHideInvitesid.setText("Hide your invites")
                 flag = true
             }

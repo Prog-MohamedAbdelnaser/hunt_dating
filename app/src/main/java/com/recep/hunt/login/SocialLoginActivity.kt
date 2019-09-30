@@ -98,6 +98,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
     private lateinit var userViewModel: UserViewModel
     private var mApp: InstagramApp? = null
+    private lateinit var gso: GoogleSignInOptions
 
     private var userInfoHashmap = HashMap<String, String>()
     private val handler = Handler(Handler.Callback { msg ->
@@ -146,8 +147,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             }
 
             override fun onFail(error: String) {
-                Toast.makeText(this@SocialLoginActivity, error, Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this@SocialLoginActivity, error, Toast.LENGTH_SHORT).show()
             }
         })
         if (mApp!!.hasAccessToken()) {
@@ -172,14 +172,17 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     startActivityForResult(signInIntent, RC_SIGN_IN)
                 }
                 R.id.connect_with_insta_btn ->// toast("Coming soon.. !")
+                    //setupInstaAuth()
                     launchingInst()
+
                 R.id.social_login_skip_btn -> launchActivity<SetupProfileActivity>()
             }
         }
     }
 
+
     private fun setupGoogleAuth() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .requestProfile()
@@ -213,7 +216,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     private fun setupFbLoginAuth() {
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
-        LoginManager.getInstance().logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
+        LoginManager.getInstance()
+            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
@@ -383,6 +387,9 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 putExtra(socialTypeKey, Constants.socialGoogleType)
                 putExtra(userSocialModel, json)
             }
+            var googleSignInClient = GoogleSignIn.getClient(this@SocialLoginActivity, gso);
+            googleSignInClient.signOut();
+
 
         } else {
             toast("userNotFound")

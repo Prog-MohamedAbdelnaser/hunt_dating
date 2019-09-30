@@ -379,7 +379,7 @@ public class InstagramApp {
                     intent.putExtra("social_type_key", Constants.socialInstaType);
                     intent.putExtra("user_social_key", String.valueOf(json));
                     mCtx.startActivity(intent);
-
+                    mSession.resetAccessToken();
                     // System.out.println("jsonObject::" + jsonObject);
 
                 } catch (Exception exception) {

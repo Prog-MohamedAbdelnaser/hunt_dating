@@ -21,6 +21,10 @@
     <string name="we_will_send_otp">We will send you four digit\nOTP on
         <font fgcolor='#E3004C'>%1$s!</font>
     </string>
+
+    <string name="can_t_find_the_answer_contact_us">Can\'t find the answer?
+        <font fgcolor='#fff64c1f'>Contact us</font>
+    </string>
     <string name="send_again">Send Again</string>
     <string name="connect_with_fb">Connect with Facebook</string>
     <string name="connect_with_insta">Connect with Instagram</string>
@@ -277,7 +281,6 @@
     <string name="you_have_change_phone_nummber">You have successfully changed your phone number</string>
 
 
-
     <string name="hunt_premium">HUNT PREMIUM</string>
     <string name="select_payment_method">Select payment method</string>
     <string name="new_payment_method">New payment method</string>
@@ -297,6 +300,7 @@
 
     <string name="contact_us">Contact us</string>
     <string name="faqs">FAQs</string>
+    <string name="faqs_pay">FAQs (payments)</string>
     <string name="faq_detail">Help on common issues</string>
     <string name="chat_with_us">Chat with us</string>
     <string name="chat_detail">Message us in-app</string>
@@ -324,7 +328,9 @@
     <string name="security_details">All question related security</string>
 
 
-    <string name="dont_want_to_join_hunt">Don\'t wanna join Hunt Premium today?\nTell us why and we\'ll see what we can do!</string>
+    <string name="dont_want_to_join_hunt">Don\'t wanna join Hunt Premium today?\nTell us why and we\'ll see what we can
+        do!
+    </string>
     <string name="reason1">Unsure which package I should use</string>
     <string name="reason2">I want to test the app some more</string>
     <string name="reason3">Price</string>
@@ -342,30 +348,40 @@
     <string name="by_clicking_here">By clicking here login you agree with</string>
 
     <string name="select_methods">Select methods</string>
-    <string name="just_select_a_payment_method">just select a payment method or simply add \nanother card to buy subscriptions</string>
+    <string name="just_select_a_payment_method">just select a payment method or simply add \nanother card to buy
+        subscriptions
+    </string>
     <string name="or_buy_your_subscription_with">Or buy your subscription with</string>
     <string name="about_you">About %1$s</string>
 
 
     <string name="storage_permission_rationale_title">Storage permission required</string>
-    <string name="storage_permition_rationale_message">In order to take a picture, you must grant this permission!</string>
-    <string name="storage_permission_denied_message">Storage permission is required in order to take a photo with the camera</string>
+    <string name="storage_permition_rationale_message">In order to take a picture, you must grant this permission!
+    </string>
+    <string name="storage_permission_denied_message">Storage permission is required in order to take a photo with the
+        camera
+    </string>
 
     <string name="really_want_to_switch_gender">Do you really want to switch\nyour gender ?</string>
     <string name="you_can_switch_gender_only_once">you can switch your gender just 1 time \nin your application</string>
 
     <string name="incognito_mode">Incognito Mode</string>
-    <string name="incognito_detail">By turning Incognito mode on you will\nno longer be seen by the others but\nyou can still search for your perfect\nmatch.</string>
+    <string name="incognito_detail">By turning Incognito mode on you will\nno longer be seen by the others but\nyou can
+        still search for your perfect\nmatch.
+    </string>
     <string name="got_it">Got it!</string>
 
 
     <string name="invite_friend">Invite A Friend</string>
     <string name="refer_a_friend">Refer a Friend</string>
     <string name="invite_a_friend_and_earn">Invite a Friend &amp; earn
-        <font fgcolor='#E3004C'>$1</font> Credit
+        <font fgcolor='#E3004C'>$1</font>
+        Credit
     </string>
 
-    <string name="send_the_invite_code_to_friend">Send the invite Code to a friend Every\n successful login from your invite Code will earn\nyou $1 credit!</string>
+    <string name="send_the_invite_code_to_friend">Send the invite Code to a friend Every\n successful login from your
+        invite Code will earn\nyou $1 credit!
+    </string>
     <string name="your_invite_code">Your Invite Code</string>
     <string name="demo_invite_code">SKDJS333##</string>
     <string name="send_invite">Send Invite</string>
@@ -377,7 +393,6 @@
     <string name="experience">Experience</string>
     <string name="education">Education</string>
     <string name="share_your_linkdn_details">Share your Linkedin\ndetails</string>
-
 
 
     <string name="tell_us_why_and_we_ll_see_what_we_can_do">Tell us why and we\'ll see what we can do!</string>
@@ -417,7 +432,6 @@
     <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
     <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
     <string name="delete_account">Delete Account</string>
-
 
 
 </resources>
