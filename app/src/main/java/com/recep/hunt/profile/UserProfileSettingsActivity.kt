@@ -23,6 +23,7 @@ import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.contactUs.ContactUsActivity
 import com.recep.hunt.inviteFriend.InviteAFriendActivity
+import com.recep.hunt.payment.PaymentFaqActivity
 import com.recep.hunt.payment.PaymentMethodActivity
 import com.recep.hunt.payment.SelectPaymentMethodsActivity
 import com.recep.hunt.premium.HuntPremiumActivity
@@ -56,7 +57,7 @@ class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners 
             resources.getString(R.string.phone_number) -> launchActivity<PhoneNumberSettingActivity>()
             resources.getString(R.string.email) -> launchActivity<EmailSettingsActivity>()
             resources.getString(R.string.push_notifications) -> launchActivity<PushNotificationsSettingsActivity>()
-            resources.getString(R.string.questions) -> launchActivity<IcebreakerQuestionActivity>()
+            resources.getString(R.string.questions) -> launchActivity<PaymentFaqActivity>()
             resources.getString(R.string.tickets) -> launchActivity<ContactUsActivity>()
             resources.getString(R.string.add_payment_details) -> launchActivity<PaymentMethodActivity>()
             resources.getString(R.string.invite_a_friend)->launchActivity<InviteAFriendActivity>()
@@ -354,7 +355,7 @@ class NotificationTitleItemAdapter(
     }
 }
 
-//Social switch item
+//Social switch
 class SocialSwitchItemAdapter(
     private val ctx: Context,
     private val socialIcon: Int,

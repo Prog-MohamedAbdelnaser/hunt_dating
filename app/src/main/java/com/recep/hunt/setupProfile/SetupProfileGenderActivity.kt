@@ -16,8 +16,7 @@ import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_gender.*
 import org.jetbrains.anko.find
 
-class SetupProfileGenderActivity : BaseActivity() ,
-    LookingForListeners {
+class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
 
     override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
         selectedGender = lookingFor

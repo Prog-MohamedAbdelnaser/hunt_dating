@@ -110,7 +110,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         false
     })
 
-
     private val adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,8 +136,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     }
 
     private fun setupInstaAuth() {
-        mApp =
-            InstagramApp(this@SocialLoginActivity, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.CALLBACK_URL)
+        mApp = InstagramApp(this@SocialLoginActivity, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.CALLBACK_URL)
         mApp!!.setListener(object : InstagramApp.OAuthAuthenticationListener {
             override fun onSuccess() {
                 // userInfoHashmap = mApp.
@@ -184,6 +182,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     private fun setupGoogleAuth() {
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
+            .requestScopes(Scope(Scopes.PLUS_LOGIN))
             .requestEmail()
             .requestProfile()
             .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE))
@@ -217,7 +216,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
         LoginManager.getInstance()
-            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
+            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
@@ -234,7 +233,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     Log.e("loginResult ", "error  $exception")
                 }
             })
-
+        6
     }
 
     private fun setupRecyclerView() {
@@ -319,6 +318,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 if (account != null)
                     firebaseAuthWithGoogle(account)
 
+
+
                 Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 val person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
                 Log.i(TAG, "--------------------------------")
@@ -328,6 +329,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 Log.i(TAG, "Birthday: " + person.birthday)
                 Log.i(TAG, "Current Location: " + person.currentLocation)
                 Log.i(TAG, "Language: " + person.language)
+
+
             } catch (e: Exception) {
                 // Google Sign In failed, update UI appropriately
                 Log.e(TAG, "Google sign in failed", e)
@@ -408,12 +411,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 val social_email = json_object.optString("email", "")
                 val id = json_object.getString("id")
                 // val gender = json_object.getString("gender")
-                val social_pic = URLEncoder.encode(facebook_pic, "UTF-8")
-                Log.e("peofile_pic", social_pic)
-                Log.e("peofile_name", social_name)
-                Log.e("peofile_email", social_email)
-
-                userDetailsModel = UserSocialModel(id, social_pic, social_name, social_email)
+              
+                userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
 
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val json: String = gson.toJson(userDetailsModel)
@@ -426,7 +425,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 SharedPrefrenceManager.setUserLastName(this, lastName)
                 SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
                 SharedPrefrenceManager.setUserEmail(this, social_email)
-                SharedPrefrenceManager.setProfileImg(this, social_pic)
+                SharedPrefrenceManager.setProfileImg(this, facebook_pic)
                 SharedPrefrenceManager.setsocialType(this, "social")
                 // SharedPrefrenceManager.setUserGender(this, gender)
                 fbUserImages(id)
@@ -456,8 +455,10 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             HttpMethod.GET,
             GraphRequest.Callback() {
                 fun onCompleted(response: GraphResponse) {
-                    /* handle the result */
+                    val a=response
+                    Log.d(TAG,response.toString())
                 }
+
             }
         ).executeAsync();
     }

@@ -54,8 +54,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-plus:17.0.0'
 
     //facebook
-   //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
-   implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
 
     //google-map / location
     implementation "com.google.android.gms:play-services-location:17.0.0"
@@ -89,8 +89,10 @@ dependencies {
     implementation 'com.github.shts:StoriesProgressView:3.0.0'
     implementation 'com.brucetoo.pickview:library:1.2.3'
     implementation 'com.github.vipulasri:timelineview:1.1.0'
+    implementation 'me.relex:circleindicator:2.1.4'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
 
 
     // Room components

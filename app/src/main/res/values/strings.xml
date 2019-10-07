@@ -227,6 +227,10 @@
     <string name="verify_phone_to_secure">Verify a phone number to help secure your account</string>
     <string name="notifications_setting">Notifications Settings</string>
     <string name="email">Email</string>
+
+
+    <string name="payment_faq"> <![CDATA[ <font color="rgb(249,252,255)"> <b>FAQa</b></font>  <font color="rgb(60,74,109)">(payments)</font>
+    ]]></string>
     <string name="push_notifications">Push Notifications</string>
     <string name="connected_accounts">Connected Accounts</string>
     <string name="fb">Facebook</string>
@@ -432,6 +436,8 @@
     <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
     <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
     <string name="delete_account">Delete Account</string>
+
+    <string name="cant_find_the_answer">Can\'t find the answer? </string>
 
 
 </resources>

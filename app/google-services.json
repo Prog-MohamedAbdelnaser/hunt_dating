@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "331056804133-dj68jdvppsm2evbdkipqnuvf8bm3pde1.apps.googleusercontent.com",
+          "client_id": "331056804133-mn3casp4e8oeggvh9q1g9dg3ifqk1eqh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.recep.hunt",
-            "certificate_hash": "17daec190d39b344c21e91e1bb39369b03e85d7d"
+            "certificate_hash": "dba89b008c9bf5dbac08f46029db692ca6e4ffdb"
+          }
+        },
+        {
+          "client_id": "331056804133-vb8601q8hlikptm8bpg7b0mdt3bms3av.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.recep.hunt",
+            "certificate_hash": "7e45ad0799e95370b0ac38348afaf617b6b0a75a"
           }
         },
         {
@@ -38,6 +46,13 @@
             {
               "client_id": "331056804133-5h7r5goptknupbgruihgh92g948nqvgl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "331056804133-fql2a5ju342pfmtcrfd1ftip03sf0c2m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.recep.Hunt-iOS"
+              }
             }
           ]
         }

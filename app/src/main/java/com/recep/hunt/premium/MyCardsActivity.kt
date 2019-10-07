@@ -1,6 +1,5 @@
 package com.recep.hunt.premium
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,9 +21,9 @@ class MyCardsActivity : BaseActivity() {
 
     }
     private fun init(){
-        my_card_recyclerView.layoutManager = LinearLayoutManager(this)
+        rvFaqsList.layoutManager = LinearLayoutManager(this)
         val adapter = GroupAdapter<ViewHolder>()
-        my_card_recyclerView.adapter = adapter
+        rvFaqsList.adapter = adapter
         adapter.add(MasterCardItemAdapter(this))
         adapter.add(GooglePayCardItemAdapter(this))
         adapter.add(PaypalCardItemAdapter(this))

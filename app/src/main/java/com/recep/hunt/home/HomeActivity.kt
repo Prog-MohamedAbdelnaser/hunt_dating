@@ -142,8 +142,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
-        horizontal_list_near_by_user.setItemTransformer(
-            ScaleTransformer.Builder()
+        horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
                 .build())
         horizontal_list_near_by_user.setSlideOnFling(true)
     }

@@ -19,8 +19,7 @@
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notifications_recyclerView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="visible"
+            android:layout_height="0dp" android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:id="@+id/no_notifications_layout"
+               android:id="@+id/no_notifications_layout"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
