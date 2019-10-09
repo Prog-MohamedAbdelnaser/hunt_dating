@@ -3,6 +3,8 @@
     <color name="colorPrimary">#F7531B</color>
     <color name="colorPrimaryDark">#F64C1F</color>
     <color name="colorAccent">#F64C1F</color>
+
+    <color name="colorCretorBackground">#3ACCE1</color>
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="mytransparentblack">#d31f292e</color>
@@ -35,6 +37,8 @@
     <color name="faq_card_background_color">#f9fcff</color>
     <color name="faq_card_secondary_color">#ffffff</color>
     <color name="colorFaqBackgroud">#f9fcff</color>
+
+    <color name="colorProgressbar">#ff2a4e</color>
 
 
 </resources>
