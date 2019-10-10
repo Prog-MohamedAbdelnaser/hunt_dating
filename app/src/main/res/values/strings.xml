@@ -3,6 +3,7 @@
     <string name="next">Next</string>
     <string name="wanna_go_hunting">Wanna go Hunting?</string>
     <string name="be_part_of_hunt">Be a part of the Hunt and find the minded people to Hunt with</string>
+    <string name="btn_view_ticket">View Tickets</string>
 
     <string name="wanna_go_hunting1">Wanna go Hunting New Text?</string>
     <string name="be_part_of_hunt1">A new adventure is just swipe away</string>
@@ -229,7 +230,7 @@
     <string name="email">Email</string>
 
 
-    <string name="payment_faq"> <![CDATA[ <font color="rgb(249,252,255)"> <b>FAQa</b></font>  <font color="rgb(60,74,109)">(payments)</font>
+    <string name="payment_faq"> <![CDATA[ <font color="rgb(249,252,255)"> <b>FAQs</b></font>  <font color="rgb(60,74,109)">(payments)</font>
     ]]></string>
     <string name="push_notifications">Push Notifications</string>
     <string name="connected_accounts">Connected Accounts</string>

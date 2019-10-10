@@ -132,7 +132,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_circuler_white_backgroud"
             android:gravity="center"
-
             android:textColor="@color/colorProgressbar"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/ProgressBar"

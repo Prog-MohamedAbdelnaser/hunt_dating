@@ -95,7 +95,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
 
-
     // Room components
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"

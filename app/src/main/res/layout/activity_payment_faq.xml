@@ -20,8 +20,9 @@
     <me.relex.circleindicator.CircleIndicator2
             android:id="@+id/indicator"
             android:layout_width="wrap_content"
+            android:layout_marginTop="34dp"
             android:layout_marginLeft="24dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             app:ci_drawable="@drawable/ic_selected_indecator"
             app:ci_drawable_unselected="@drawable/ic_unselected_indecator"
             app:layout_constraintStart_toStartOf="parent"

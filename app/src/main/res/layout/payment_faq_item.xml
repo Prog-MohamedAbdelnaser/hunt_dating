@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
             android:layout_width="292dp"
-            android:layout_height="292dp"
+            android:layout_height="wrap_content"
             android:layout_margin="12dp"
             app:cardElevation="0dp"
             app:cardCornerRadius="4dp"
@@ -79,20 +79,23 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
+
             <TextView
                     android:id="@+id/tvAnswer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:paddingLeft="18dp"
-                    android:text="Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
-                    android:textColor="@color/app_gray_color"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/montserrat"
+                    android:paddingLeft="18dp"
+                    android:text="Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number, a new recipient and typing in their phone number, a new recipient and typing in their phone number, a new recipient and typing in their phone number, a new recipient and typing in their phone number"
+                    android:textColor="@color/app_gray_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAnswerLabel"
-                    />
+
+                    app:layout_constraintTop_toBottomOf="@+id/tvAnswerLabel" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

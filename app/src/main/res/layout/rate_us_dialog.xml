@@ -24,7 +24,7 @@
                 android:layout_height="56dp"
                 android:layout_marginRight="26dp"
                 android:foregroundGravity=""
-                android:src="@drawable/ic_close_black"
+                android:src="@drawable/ic_close_dialog"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -128,12 +128,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#ff9057"
-
                     android:text="Rate us"
                     android:gravity="center"
-                      android:layout_gravity="center"
+                    android:layout_gravity="center"
                     android:textColor="@color/white"
-                   android:textSize="18dp"/>
+                    android:textSize="18dp"/>
 
         </LinearLayout>
 
