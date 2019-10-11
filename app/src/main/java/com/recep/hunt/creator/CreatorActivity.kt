@@ -25,12 +25,14 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaScannerConnection
 import android.os.Handler
 import android.provider.MediaStore
+import android.text.Html
 import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
+import com.goodiebag.pinview.Pinview
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
@@ -40,6 +42,8 @@ import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_creator.*
+import kotlinx.android.synthetic.main.activity_creator.otp_progrss_txt
+import kotlinx.android.synthetic.main.activity_otp_verification.*
 import kotlinx.android.synthetic.main.activity_user_profile_edit.*
 import kotlinx.android.synthetic.main.add_new_ice_breaker_question_dialog.*
 import kotlinx.android.synthetic.main.ask_question_dailog.*
@@ -50,10 +54,16 @@ import kotlin.collections.ArrayList
 
 class CreatorActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
-    private lateinit var progrssbar:ProgressBar
     private lateinit var remanigTime:TextView
     private  lateinit var btnHaveAnIde: Button
     private var imgLivedate=MutableLiveData<Bitmap>()
+    private lateinit var progressBar: ProgressBar
+    private val handler = Handler()
+    private lateinit var cl_progressbar: ConstraintLayout
+    private var pStatus = 4
+    private var pStatusVisible = 5
+
+    private lateinit var otpPinView: Pinview
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,48 +74,54 @@ class CreatorActivity : AppCompatActivity() {
 
     private fun init() {
         recyclerView = find(R.id.question_recyclerView)
-        remanigTime=find(R.id.tvProgress)
-        progrssbar=find(R.id.ProgressBar)
+
         btnHaveAnIde=find(R.id.btnDontHaveAnIdea)
 
         btnHaveAnIde.setOnClickListener {
             askQuestion()
         }
 
-        var progress=0
-        var time=5
-        progrssbar.progress=progress
-        remanigTime.text=4.toString()
-        val handler = Handler()
+        progressBar = find(R.id.otp_progressBar)
+        cl_progressbar = find(R.id.cl_progress_bar)
+
+
+
+        val res = resources
+        val drawable = res.getDrawable(R.drawable.circuler_color_progressbaar)
+        progressBar.progressDrawable = drawable
+        progressBar.progress = 0
+        progressBar.max = 4
 
 
         Thread(Runnable {
-            while (progress < 125) {
+            while (pStatus < 4) {
+                pStatus += 1
+                pStatusVisible -= 1
 
-                progress += 25
-                time = time -1
+                handler.post {
+                    progressBar.progress = pStatus
+                    otp_progrss_txt.text = pStatusVisible.toString()
 
-                try
-                {
+                    if (pStatusVisible == 0) {
+                        runOnUiThread {
+                            progressBar.visibility= View.GONE
+                            remanigTime.visibility=View.GONE
+                            btnHaveAnIde.visibility=View.VISIBLE
+                        }
+                    }
+                }
+                try {
                     Thread.sleep(1000)
-                } catch (e: InterruptedException)
-                {
+
+                } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
 
-                handler.post(Runnable {
-                    progrssbar.progress=progress
-                    remanigTime.text=time.toString()
-
-
-                    if (progress === 125) {
-                        progrssbar.visibility= View.GONE
-                        remanigTime.visibility=View.GONE
-                        btnHaveAnIde.visibility=View.VISIBLE
-                    }
-                })
             }
+
+
         }).start()
+
 
 
         setupRecyclerView()
@@ -237,5 +253,8 @@ class CreatorActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
     }
+
+
+
 
 }

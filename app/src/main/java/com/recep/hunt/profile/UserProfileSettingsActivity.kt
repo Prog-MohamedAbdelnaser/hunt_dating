@@ -57,7 +57,7 @@ class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners 
             resources.getString(R.string.phone_number) -> launchActivity<PhoneNumberSettingActivity>()
             resources.getString(R.string.email) -> launchActivity<EmailSettingsActivity>()
             resources.getString(R.string.push_notifications) -> launchActivity<PushNotificationsSettingsActivity>()
-            resources.getString(R.string.questions) -> launchActivity<PaymentFaqActivity>()
+            resources.getString(R.string.questions) -> launchActivity<IcebreakerQuestionActivity>()
             resources.getString(R.string.tickets) -> launchActivity<ContactUsActivity>()
             resources.getString(R.string.add_payment_details) -> launchActivity<PaymentMethodActivity>()
             resources.getString(R.string.invite_a_friend)->launchActivity<InviteAFriendActivity>()

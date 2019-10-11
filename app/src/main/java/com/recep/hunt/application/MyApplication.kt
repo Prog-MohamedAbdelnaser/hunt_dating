@@ -7,10 +7,20 @@ import androidx.multidex.MultiDexApplication
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import com.recep.hunt.R
+import org.acra.ACRA
+import org.acra.ReportingInteractionMode
+import org.acra.annotation.ReportsCrashes
 
 /**
  * Created by RishabhShukla on 11/02/19.
  */
+
+
+@ReportsCrashes(
+    mailTo = "rudraksh.shukla98@gmail.com",
+    mode = ReportingInteractionMode.TOAST,
+    resToastText =R.string.add_job_title)
 class MyApplication : MultiDexApplication() {
 
     companion object {
@@ -22,6 +32,7 @@ class MyApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        ACRA.init(this);
     }
 
     private val requestQueue: RequestQueue? = null

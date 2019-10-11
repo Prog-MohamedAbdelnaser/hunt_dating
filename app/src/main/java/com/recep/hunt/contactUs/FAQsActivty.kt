@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.payment.PaymentFaqActivity
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
@@ -34,7 +35,7 @@ class FAQsActivty : BaseActivity(), ContactUsInterface {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         for (item in getData()) {
-            adapter.add(ContactUsAdapterItem(this, item, true, this))
+            adapter.add(ContactUsAdapterItem(this, item, false, this))
         }
     }
 
@@ -63,7 +64,7 @@ class FAQsActivty : BaseActivity(), ContactUsInterface {
             R.string.card -> toast(R.string.card)
             R.string.payments -> {
                 toast(R.string.payments)
-                launchActivity<FAQsPayQuestAnsActivty>()
+                launchActivity<PaymentFaqActivity>()
             }
             R.string.paypal -> toast(R.string.paypal)
             R.string.mastercard -> toast(R.string.mastercard)
