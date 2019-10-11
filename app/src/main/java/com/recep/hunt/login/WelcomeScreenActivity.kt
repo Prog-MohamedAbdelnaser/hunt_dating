@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,20 +15,42 @@ import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
+import com.hbb20.CountryCodePicker
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_welcome_screen.*
+import kotlinx.android.synthetic.main.activity_welcome_screen.login_nxt_btn
+import kotlinx.android.synthetic.main.activity_welcome_screen.user_number_edittext
 import kotlinx.android.synthetic.main.on_board_adapter.view.*
 import org.jetbrains.anko.find
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
 class WelcomeScreenActivity : AppCompatActivity() {
+
+    companion object{
+        const val numberKey = "userPhoneNumberKey"
+        const val otpKey = "otpKey"
+        const val verificationIdKey = "verificationId"
+        const val countryCodeKey = "countryCodeKey"
+    }
+    private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var dialog : KProgressHUD
+    private lateinit var countryCodePicker: CountryCodePicker
+    private var verificationId = ""
 
     private lateinit var videoView: VideoView
     private lateinit var viewPager: ViewPager
@@ -40,10 +63,14 @@ class WelcomeScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome_screen)
+        mAuth = FirebaseAuth.getInstance()
         init()
     }
 
     private fun init() {
+        dialog = Helpers.showDialog(this@WelcomeScreenActivity,this@WelcomeScreenActivity,"Verifying")
+        countryCodePicker = find(R.id.ccp)
+
         videoView = find(R.id.video_view)
         viewPager = find(R.id.welcome_screen_viewPager)
         indicators = find(R.id.welcome_screen_indicator)
@@ -55,7 +82,20 @@ class WelcomeScreenActivity : AppCompatActivity() {
         Helpers.setupBasicSharedPrefrences(this)
 
         login_nxt_btn.setOnClickListener {
-            launchActivity<SocialLoginActivity>()
+//            launchActivity<SocialLoginActivity>()
+            //11.10.19 Guang
+            val number = user_number_edittext.text.toString()
+            val numberCode = countryCodePicker.selectedCountryCodeWithPlus
+            val selectedCountry = countryCodePicker.selectedCountryName
+            if(number.isNotEmpty()){
+                dialog.show()
+                SharedPrefrenceManager.setUserCountryCode(this@WelcomeScreenActivity,numberCode)
+                SharedPrefrenceManager.setUserCountry(this@WelcomeScreenActivity,selectedCountry)
+                verify(number,numberCode)
+
+            }else{
+                Helpers.showErrorSnackBar(this@WelcomeScreenActivity,"Enter number","")
+            }
         }
         setupViewPager()
         checkPermission()
@@ -101,6 +141,44 @@ class WelcomeScreenActivity : AppCompatActivity() {
                 TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE
             )
             return
+        }
+    }
+
+    private fun verify(number:String,countryCode:String){
+        verificationCallbacks(number, countryCode)
+        val phoneNumber = "$countryCode$number"
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            phoneNumber,
+            120,
+            TimeUnit.SECONDS,
+            this,
+            mCallbacks
+        )
+    }
+
+    private fun verificationCallbacks(number: String, countryCode: String){
+        mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
+            override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                dialog.dismiss()
+            }
+
+            override fun onVerificationFailed(p0: FirebaseException) {
+                dialog.dismiss()
+                Log.d("Error","Failed to Verify")
+            }
+            override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
+                dialog.dismiss()
+                Log.e("OnCodeSent","OTP : $p0")
+                verificationId = p0
+                dialog.dismiss()
+                launchActivity<OtpVerificationActivity>{
+                    putExtra(WelcomeScreenActivity.verificationIdKey,verificationId)
+                    putExtra(WelcomeScreenActivity.otpKey,p0)
+                    putExtra(WelcomeScreenActivity.countryCodeKey, countryCode)
+                    putExtra(WelcomeScreenActivity.numberKey,number)
+                }
+                finish()
+            }
         }
     }
 
