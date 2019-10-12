@@ -3,6 +3,7 @@ package com.recep.hunt.profile
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -71,6 +72,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     private var count = 1
     private var flag = 0
+    private lateinit var oldGender: String
     private var bitmap: Bitmap? = null
 
     companion object {
@@ -89,7 +91,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         setScreenTitle(R.string.edit_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
-        SharedPrefrenceManager.setUserGenderChanged(this, true)
+//        SharedPrefrenceManager.setUserGenderChanged(this, true)
         init()
     }
 
@@ -109,6 +111,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         about_header.text = resources.getString(R.string.about_you, SharedPrefrenceManager.getUserFirstName(this))
         val dialog = Helpers.showDialog(this, this, "Updating Profile")
+        oldGender = SharedPrefrenceManager.getUserGender(this);
 
         save_edit_profile_btn.setOnClickListener {
             dialog.show()
@@ -117,6 +120,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             updateCompanyName()
             updateHomeTown()
             updateSchool()
+            updateGenderPrefrence()
 
             Run.after(2000) {
                 dialog.dismiss()
@@ -136,6 +140,14 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         ivPencilEditProfileId.setOnClickListener()
         {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
+        }
+
+    }
+
+    private fun updateGenderPrefrence() {
+        var gender = SharedPrefrenceManager.getUserGender(this)
+        if(!gender.equals(oldGender)){
+            SharedPrefrenceManager.setUserGenderChanged(this , false)
         }
 
     }
