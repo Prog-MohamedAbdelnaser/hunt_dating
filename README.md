@@ -68,5 +68,11 @@ Search on maps page prototype:
 https://www.youtube.com/watch?v=YXSATaj72h0
 
 
+**Install those apps and check them daily**
 
+- Tinder
+- Lavoo
+- Badoo 
+- Happn
+- Jaumo
 
