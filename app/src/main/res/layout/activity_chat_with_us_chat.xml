@@ -27,18 +27,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-                android:id="@+id/chat_useImage"
+
+
+        <androidx.cardview.widget.CardView
                 android:layout_width="50dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:id="@+id/chat_useImage"
+                app:cardCornerRadius="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/boy_casual_eyes"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/chat_backBtn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="0dp">
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/boy_casual_eyes"
+                     />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
                 android:id="@+id/chat_userName"

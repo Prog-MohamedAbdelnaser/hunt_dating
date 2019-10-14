@@ -11,13 +11,16 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.find
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.hbb20.CountryCodePicker
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import org.jetbrains.anko.toast
 import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
@@ -69,16 +72,11 @@ class LoginActivity : AppCompatActivity() {
 //        setupViewPager()
 
     }
-    //Setting up view pager
-//    private fun setupViewPager(){
-//        val imagesArray = arrayListOf(R.drawable.on_board_bg_1,R.drawable.on_board_bg_1,R.drawable.on_board_bg_1)
-//        val adapter = OnBoardAdapter(this@LoginActivity, imagesArray)
-//        viewPager.adapter = adapter
-//        springDotsIndicator.setViewPager(viewPager)
-//    }
+
      fun verificationCallbacks(number: String){
         mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                signIn(p0)
                 dialog.dismiss()
             }
 
@@ -89,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
                 dialog.dismiss()
                 Log.e("OnCodeSent","OTP : $p0")
                 verificationId = p0
-                    dialog.dismiss()
+                dialog.dismiss()
                 launchActivity<OtpVerificationActivity>{
                         putExtra(verificationIdKey,verificationId)
                         putExtra(otpKey,p0)
@@ -109,6 +107,31 @@ class LoginActivity : AppCompatActivity() {
             mCallbacks
         )
     }
+
+    private fun signIn(credential: PhoneAuthCredential) {
+        val dialog: KProgressHUD =
+            Helpers.showDialog(this, this, "Verifying OTP")
+        dialog.show()
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    dialog.run { dismiss() }
+                    Log.d("signInWithCredential", "signInWithCredential:success")
+                    SharedPrefrenceManager.setIsOtpVerified(this, Constants.isOTPVerified)
+                    launchActivity<InfoYouProvideActivity>()
+                    finish()
+                } else {
+                    dialog.dismiss()
+                    Log.w("Error : ", "signInWithCredential:failure", task.exception)
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        SharedPrefrenceManager.setIsOtpVerified(this, !Constants.isOTPVerified)
+                        toast("Verification Failed")
+
+                    }
+                }
+            }
+    }
+
 
 
 

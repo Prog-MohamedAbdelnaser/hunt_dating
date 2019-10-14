@@ -41,8 +41,17 @@ import java.util.concurrent.TimeUnit
 
 class OtpVerificationActivity : AppCompatActivity() {
 
-    private val smsBroadcastReceiver by lazy { SMSReceiver() }
 
+    companion object {
+        private const val TAG = "PhoneAuthActivity"
+        private const val KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress"
+        private const val STATE_INITIALIZED = 1
+        private const val STATE_VERIFY_FAILED = 3
+        private const val STATE_VERIFY_SUCCESS = 4
+        private const val STATE_CODE_SENT = 2
+        private const val STATE_SIGNIN_FAILED = 5
+        private const val STATE_SIGNIN_SUCCESS = 6
+    }
     private var pStatus = 60
     private var pStatusVisible = 60
     private lateinit var cl_progressbar: ConstraintLayout
@@ -60,15 +69,37 @@ class OtpVerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verification)
         mAuth = FirebaseAuth.getInstance()
-        init()
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(smsBroadcastReceiver)
-    }
+        mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
 
-    private fun init() {
+            override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                signIn(p0)
+                verifyingDialog.dismiss()
+            }
+
+            override fun onVerificationFailed(p0: FirebaseException) {
+                verifyingDialog.dismiss()
+            }
+            override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
+                verifyingDialog.dismiss()
+                Log.e("OnCodeSent","OTP : $p0")
+                verificationId = p0
+                verifyingDialog.dismiss()
+                otp = p0
+
+                resend_otp_btn.text = "Didn't receive the code? Please wait..."
+                resend_otp_btn.setTextColor(resources.getColor(R.color.light_grey))
+                resend_otp_btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15.0F)
+                progressBar.visibility = View.VISIBLE
+                otp_progrss_txt.visibility = View.VISIBLE
+                we_will_send_you_otp_tv.visibility = View.GONE
+                send_otp_again_btn.visibility = View.GONE
+                otpPinView.setPinBackgroundRes(R.drawable.otp_pin_bg)
+                otpPinView.clearValue()
+
+                setupProgressTimer()
+            }
+        }
         try {
             //11.10.2019
             verificationId = intent.getStringExtra(WelcomeScreenActivity.verificationIdKey)
@@ -78,6 +109,16 @@ class OtpVerificationActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        init()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    private fun init() {
+
+
         verifyingDialog = Helpers.showDialog(this@OtpVerificationActivity,this@OtpVerificationActivity,"Verifying")
         progressBar = find(R.id.otp_progressBar)
         cl_progressbar = find(R.id.cl_progress_bar)
@@ -113,8 +154,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                     //TimeOut
                 }
             }
-            smsBroadcastReceiver.injectListener(listener)
-            registerReceiver(smsBroadcastReceiver, IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION))
+
         }
         retriever.addOnFailureListener {
             //Problem to start listener
@@ -212,34 +252,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun verificationCallbacks(number: String, countryCode: String){
-        mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
-            override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-                verifyingDialog.dismiss()
-            }
 
-            override fun onVerificationFailed(p0: FirebaseException) {
-                verifyingDialog.dismiss()
-            }
-            override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
-                verifyingDialog.dismiss()
-                Log.e("OnCodeSent","OTP : $p0")
-                verificationId = p0
-                verifyingDialog.dismiss()
-                otp = p0
-
-                resend_otp_btn.text = "Didn't receive the code? Please wait..."
-                resend_otp_btn.setTextColor(resources.getColor(R.color.light_grey))
-                resend_otp_btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15.0F)
-                progressBar.visibility = View.VISIBLE
-                otp_progrss_txt.visibility = View.VISIBLE
-                we_will_send_you_otp_tv.visibility = View.GONE
-                send_otp_again_btn.visibility = View.GONE
-                otpPinView.setPinBackgroundRes(R.drawable.otp_pin_bg)
-                otpPinView.clearValue()
-
-                setupProgressTimer()
-            }
-        }
     }
 
 

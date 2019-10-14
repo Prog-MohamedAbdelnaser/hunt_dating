@@ -87,8 +87,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rlSharOnId"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
+                android:paddingLeft="36sp"
+                android:paddingRight="36dp"
                 android:paddingBottom="10sp"
                 android:weightSum="4">
             <RelativeLayout

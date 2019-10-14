@@ -45,8 +45,6 @@ class PaymentFaqActivity : BaseActivity() {
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(recyclerView)
 
-
-
         indicator.attachToRecyclerView(recyclerView, pagerSnapHelper)
 
 
@@ -84,62 +82,7 @@ class PaymentFaqActivity : BaseActivity() {
                 "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
             )
         )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?Explain all",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list,"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money or by adding a new recipient and typing in their phone number"
-            )
-        )
-        faqs.add(
-            FaqPayments(
-                0,
-                "What is Request Payments?",
-                "Request payments allows you to easily  request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number, or by adding a new recipient and typing in their phone number  or by adding a new recipient and typing in their phone number"
-            )
-        )
+
 
         return faqs
 
