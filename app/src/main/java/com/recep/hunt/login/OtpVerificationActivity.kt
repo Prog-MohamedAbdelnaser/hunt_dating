@@ -1,6 +1,7 @@
 package com.recep.hunt.login
 
 import android.app.Dialog
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -20,16 +22,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.goodiebag.pinview.Pinview
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.hideKeyboard
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_otp_verification.*
 import org.jetbrains.anko.find
@@ -41,7 +41,9 @@ import java.util.concurrent.TimeUnit
 
 class OtpVerificationActivity : AppCompatActivity() {
 
-    private var pStatus = 0
+    private val smsBroadcastReceiver by lazy { SMSReceiver() }
+
+    private var pStatus = 60
     private var pStatusVisible = 60
     private lateinit var cl_progressbar: ConstraintLayout
     private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -61,6 +63,11 @@ class OtpVerificationActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(smsBroadcastReceiver)
+    }
+
     private fun init() {
         try {
             //11.10.2019
@@ -77,8 +84,11 @@ class OtpVerificationActivity : AppCompatActivity() {
         otpPinView = find(R.id.otp_pin_view)
         setupProgressTimer()
 
-        resend_otp_btn.setOnClickListener {
-            showResendOtpAlert()
+        we_will_send_you_otp_tv.visibility = View.GONE
+        send_otp_again_btn.visibility = View.GONE
+
+        toolbar.setNavigationOnClickListener {
+            finish()
         }
 
         otpPinView.setPinViewEventListener { pinview, fromUser ->
@@ -90,34 +100,59 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         }
 
+        //Start Receiving SMS
+        val client = SmsRetriever.getClient(this)
+        val retriever = client.startSmsRetriever()
+        retriever.addOnSuccessListener {
+            val listener = object : SMSReceiver.Listener {
+                override fun onSMSReceived(pin: String) {
+                    // HERE you have the pin and can call your server to check. =)
+                    otpPinView.value = pin
+                }
+                override fun onTimeOut() {
+                    //TimeOut
+                }
+            }
+            smsBroadcastReceiver.injectListener(listener)
+            registerReceiver(smsBroadcastReceiver, IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION))
+        }
+        retriever.addOnFailureListener {
+            //Problem to start listener
+            Log.d("Error : ", "Can't start receiver")
+        }
+
 
     }
 
-    //Resend OTP Alert Dialog
+    //Resend OTP Alert Card Show
     private fun showResendOtpAlert() {
-        val ll = LayoutInflater.from(this).inflate(R.layout.resend_otp_dialog_layout, null)
-        val dialog = Dialog(this@OtpVerificationActivity)
 
-        dialog.setContentView(ll)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
-        dialog.setCancelable(false)
-        val textView = dialog.find<TextView>(R.id.we_will_send_you_otp_tv)
-        val styledText = "We will send you another 6 digit <br> OTP on <font color='red'>$countryCode $phoneNumber</font>."
+        resend_otp_btn.text = "Didn't receive the code yet ?"
+        resend_otp_btn.setTextColor(resources.getColor(R.color.app_text_black))
+        resend_otp_btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0F)
+
+        we_will_send_you_otp_tv.visibility = View.VISIBLE
+        send_otp_again_btn.visibility = View.VISIBLE
+
+        progressBar.visibility = View.GONE
+        otp_progrss_txt.visibility = View.GONE
+        val textView = find<TextView>(R.id.we_will_send_you_otp_tv)
+        val styledText = "We will send you another six digit OTP on <br> <font color='#F64C1F'>\"$countryCode $phoneNumber\"</font>"
         textView.text = Html.fromHtml(styledText)
 
-        val sendOtpAgainBtn = dialog.find<Button>(R.id.send_otp_again_btn)
+        val sendOtpAgainBtn = find<Button>(R.id.send_otp_again_btn)
         sendOtpAgainBtn.setOnClickListener {
-            dialog.dismiss()
+//            dialog.dismiss()
             resendOtp()
         }
-        dialog.show()
+//        dialog.show()
 
     }
 
     //Setup ProgressTimer
     private fun setupProgressTimer() {
-        val styledText = "We will send you 6 digit <br> OTP on <font color='red'>$countryCode $phoneNumber</font>."
-        resend_otp_btn.text = Html.fromHtml(styledText)
+//        val styledText = "We will send you six digit <br> OTP on <font color='red'>$countryCode $phoneNumber</font>."
+//        resend_otp_btn.text = Html.fromHtml(styledText)
 
         val res = resources
         val drawable = res.getDrawable(R.drawable.circular_progress_bg)
@@ -127,8 +162,8 @@ class OtpVerificationActivity : AppCompatActivity() {
 
 
         Thread(Runnable {
-            while (pStatus < 60) {
-                pStatus += 1
+            while (pStatus > 0) {
+                pStatus -= 1
                 pStatusVisible -= 1
 
                 handler.post {
@@ -157,9 +192,9 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun resendOtp() {
-        pStatus = 0
+        pStatus = 60
         pStatusVisible = 60
-        verifyingDialog.show();
+        verifyingDialog.show()
         verify(phoneNumber, countryCode)
 
     }
@@ -191,6 +226,17 @@ class OtpVerificationActivity : AppCompatActivity() {
                 verificationId = p0
                 verifyingDialog.dismiss()
                 otp = p0
+
+                resend_otp_btn.text = "Didn't receive the code? Please wait..."
+                resend_otp_btn.setTextColor(resources.getColor(R.color.light_grey))
+                resend_otp_btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15.0F)
+                progressBar.visibility = View.VISIBLE
+                otp_progrss_txt.visibility = View.VISIBLE
+                we_will_send_you_otp_tv.visibility = View.GONE
+                send_otp_again_btn.visibility = View.GONE
+                otpPinView.setPinBackgroundRes(R.drawable.otp_pin_bg)
+                otpPinView.clearValue()
+
                 setupProgressTimer()
             }
         }
@@ -214,6 +260,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                     Log.d("signInWithCredential", "signInWithCredential:success")
                     SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, Constants.isOTPVerified)
                     SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity, phoneNumber)
+                    otpPinView.setPinBackgroundRes(R.drawable.otp_pin_invalid_bg)
                     launchActivity<InfoYouProvideActivity>()
                     finish()
                 } else {
@@ -223,6 +270,9 @@ class OtpVerificationActivity : AppCompatActivity() {
                         // The verification code entered was invalid
                         SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, !Constants.isOTPVerified)
                         toast("Verification Failed")
+                        //Get Last Pin View
+                        otpPinView.setPinBackgroundRes(R.drawable.otp_pin_invalid_bg)
+                        otpPinView.requestPinEntryFocus().setBackgroundResource(R.drawable.otp_pin_invalid_last_bg)
                     }
                 }
             }

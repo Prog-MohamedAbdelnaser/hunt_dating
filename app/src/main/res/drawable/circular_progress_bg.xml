@@ -8,7 +8,7 @@
                 android:thicknessRatio="10.0"
                 android:useLevel="false">
 
-            <solid android:color="@color/light_grey" />
+            <solid android:color="@color/silver" />
         </shape>
     </item>
     <item android:id="@android:id/progress">
@@ -30,7 +30,7 @@
                         android:pivotY="50%"
                         android:toDegrees="360" />
 
-                <solid android:color="@color/colorPrimaryDark"/>
+                <solid android:color="@color/colorProgressbar"/>
 
             </shape>
         </rotate>

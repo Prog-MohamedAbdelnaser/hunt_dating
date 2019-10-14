@@ -16,7 +16,7 @@
     <string name="verification">Verification</string>
     <string name="didnt_recive_otp">Didn\'t receive the code? Please wait…</string>
     <string name="resent_otp">Resend OTP</string>
-    <string name="we_will_send_other_otp">We will send you another four digit\nOTP on
+    <string name="we_will_send_other_otp">We will send you another six digit OTP on\n
         <font fgcolor='#E3004C'>%1$s!</font>
     </string>
     <string name="we_will_send_otp">We will send you four digit\nOTP on
@@ -26,7 +26,7 @@
     <string name="can_t_find_the_answer_contact_us">Can\'t find the answer?
         <font fgcolor='#fff64c1f'>Contact us</font>
     </string>
-    <string name="send_again">Send Again</string>
+    <string name="send_again">Resend code</string>
     <string name="connect_with_fb">Connect with Facebook</string>
     <string name="connect_with_insta">Connect with Instagram</string>
     <string name="connect_with_google">Connect with Google</string>
