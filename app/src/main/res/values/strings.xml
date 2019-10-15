@@ -107,7 +107,7 @@
     </string>
     <string name="complete_form">Complete Form!</string>
     <string name="you_have_complete_form">You must complete the form before moving</string>
-    <string name="search_locations">search locations</string>
+    <string name="search_locations">Search Locations</string>
     <string name="filter">Filter</string>
     <string name="interested_in">Interested in</string>
     <string name="age_range">Age Range</string>
@@ -375,6 +375,11 @@
         still search for your perfect\nmatch.
     </string>
     <string name="got_it">Got it!</string>
+
+    <string name="far_away_title">It\'s far away from you.</string>
+    <string name="far_away_detail">this location is far away from you,\nyou need to go near the location
+    </string>
+    <string name="far_away_okay">Okay</string>
 
 
     <string name="invite_friend">Invite A Friend</string>

@@ -11,16 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsy.maps_library.MapRipple
@@ -33,6 +32,7 @@ import com.recep.hunt.home.adapter.NearByRestaurantsAdapter
 import com.recep.hunt.home.adapter.NearByRestaurantsVerticalAdapter
 import com.recep.hunt.home.adapter.SimpleHeaderItemAdapter
 import com.recep.hunt.filters.FilterBottomSheetDialog
+import com.recep.hunt.home.adapter.FarAwayRestaurantsVerticalAdapter
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModel
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
@@ -43,6 +43,8 @@ import com.recep.hunt.volleyHelper.APIController
 import com.recep.hunt.volleyHelper.APIState
 import com.recep.hunt.volleyHelper.ServiceVolley
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
 import com.yarolegovich.discretescrollview.transform.Pivot
@@ -93,6 +95,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         MapsInitializer.initialize(this)
         val mapFrag = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFrag.getMapAsync(this)
+        val mapFragView = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+        mapFragView.alpha = 0.7f
         locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
             .findViewById(Integer.parseInt("2"))
 
@@ -144,6 +148,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
                 .build())
+        horizontal_list_near_by_user.setOffscreenItems(2)
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
@@ -260,8 +265,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         showSortedListCardView.setOnClickListener {
             if (isListshowing) {
                 isListshowing = false
+
                 sortedListRecyclerView.visibility = View.VISIBLE
                 horizontal_list_near_by_user.visibility = View.INVISIBLE
+                val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+                mapFrag.alpha = 0.15f
                 list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
 //                home_root_view.backgroundColor = Color.parseColor("#CCFFFFFF")
 
@@ -269,6 +277,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 isListshowing = true
                 sortedListRecyclerView.visibility = View.INVISIBLE
                 horizontal_list_near_by_user.visibility = View.VISIBLE
+                val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+                mapFrag.alpha = 0.7f
                 list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
 
             }
@@ -280,8 +290,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
+        adapter.setOnItemClickListener { item, view ->
+            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+            val dialog = Dialog(this)
+            dialog.setContentView(ll)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
+            gotItBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-        for (i in 0 until 2) {
+        for (i in 0 until 3) {
             adapter.add(
                 NearByRestaurantsVerticalAdapter(
                     this@HomeActivity,
@@ -290,15 +311,22 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-        for (i in 3 until items.size) {
+//        for (i in 4 until 6) {
+//            adapter.add(
+//                FarAwayRestaurantsVerticalAdapter(
+//                    this@HomeActivity,
+//                    items
+//                )
+//            )
+//        }
+        for (i in 4 until items.size) {
             adapter.add(
-                NearByRestaurantsVerticalAdapter(
+                FarAwayRestaurantsVerticalAdapter(
                     this@HomeActivity,
                     items
                 )
             )
         }
-
 
     }
 
@@ -354,6 +382,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                     if(callAPIOnlyOnceStatus == 1){
                         val lat = mLastLocation.latitude
                         val long = mLastLocation.longitude
+//                        val lat = 41.8057
+//                        val long = 123.4315
                         setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
                     }

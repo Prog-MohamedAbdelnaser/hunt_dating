@@ -12,14 +12,16 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-    />
+            tools:layout_editor_absoluteX="-16dp"
+            tools:layout_editor_absoluteY="-25dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/home_toolbar"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +31,7 @@
         <ImageView
                 android:id="@+id/home_filter_btn"
                 android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_height="40dp"
                 android:src="@drawable/settings"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,9 +40,9 @@
         <ImageView
                 android:id="@+id/home_incoginoti_btn"
                 android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/home_filter_btn"
                 app:layout_constraintTop_toTopOf="parent"
@@ -49,9 +51,9 @@
         <ImageView
                 android:id="@+id/home_profile_btn"
                 android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/home_notification_btn"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,9 +62,9 @@
         <ImageView
                 android:id="@+id/home_notification_btn"
                 android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/home_incoginoti_btn"
                 app:layout_constraintTop_toTopOf="parent"
@@ -82,18 +84,20 @@
     <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="20dp"
             android:elevation="10dp"
             app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="@+id/home_toolbar"
             app:layout_constraintStart_toStartOf="@+id/home_toolbar"
             app:layout_constraintTop_toBottomOf="@+id/home_toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:foreground="?android:attr/selectableItemBackground"
                 android:id="@+id/search_bar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:foreground="?android:attr/selectableItemBackground">
 
 
             <ImageView
@@ -113,14 +117,14 @@
                     android:id="@+id/textView6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_regular"
                     android:text="@string/search_locations"
-                    android:textColor="@color/app_gray_color"
-                    android:textSize="13sp"
+                    android:textColor="@color/light_grey"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView8"
@@ -186,16 +190,21 @@
             app:layout_constraintStart_toStartOf="parent">
 
     </com.yarolegovich.discretescrollview.DiscreteScrollView>
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sorted_near_by_restaurants_recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp" android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout3" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"/>
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,8 +18,8 @@ import java.lang.Exception
  * Email : rishabh1450@gmail.com
  */
 
-class NearByRestaurantsVerticalAdapter(val context: Context, val item:ArrayList<NearByRestaurantsModelResults>?): Item<ViewHolder>() {
-    override fun getLayout() = R.layout.vertical_restaurant_list_item_layout
+class FarAwayRestaurantsVerticalAdapter(val context: Context, val item:ArrayList<NearByRestaurantsModelResults>?): Item<ViewHolder>() {
+    override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if(item != null){
@@ -41,9 +41,5 @@ class NearByRestaurantsVerticalAdapter(val context: Context, val item:ArrayList<
         }
 
 
-
-
     }
-
-
 }
