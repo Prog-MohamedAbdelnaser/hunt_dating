@@ -1,0 +1,35 @@
+- user detail screen complete 
+- user pictures swipe like instagram
+- faqs 
+- invite a friend (fixed other devs mistakes) 
+- fixed the map screen
+- turn on the gps 
+- complete user profile
+- contact us screen
+- chat with us screen
+- start conversations screen
+- search for near by restaurants 
+- created payments screen 2 times 
+- created debit card view paypal card view google pay card view but since your designer asked me to change it then changed it 
+- implemented gif animation over the splash screen
+- interviewed mukesh 
+- checked mukeshs code
+- fixed conflicts made by mukesh 
+- fixed screens those were having errors in 
+- tested the app 
+- interviewed 3 guys 
+- checked their work 
+- welcome screen with video
+- fixed filters animations 
+- email us dialog
+- icebreaker questiones(add,edit,delete)
+- notifications settings screen
+- email setting screens
+- select what plan user wants 
+- adding payment method - 2 times
+- completed user profile edit 
+- creators card screens flow completed with dialog boxs
+- otp functionality complted fully
+- enter refrel code screen
+- faq for the payment screen
+- registration screen completed

@@ -92,6 +92,7 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         noButton.setOnClickListener {
             dialog.dismiss()
             launchActivity<TurnOnGPSActivity>()
+            launchActivity<SetupProfileReferralCodeActivity>()
         }
         dialog.show()
 
