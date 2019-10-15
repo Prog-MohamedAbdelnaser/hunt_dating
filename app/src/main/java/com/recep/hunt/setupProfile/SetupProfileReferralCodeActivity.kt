@@ -14,6 +14,7 @@ import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_info_you_provide.*
 import kotlinx.android.synthetic.main.activity_setup_profile_referral_code.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.toast
 
 class SetupProfileReferralCodeActivity : AppCompatActivity() {
@@ -21,17 +22,29 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_referral_code)
+
         init()
     }
 
 
 
     private fun init() {
-        setSupportActionBar(setupProfile_code__toolbar)
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        tvSkip.setOnClickListener {
+            launchActivity<SetupProfileCompletedActivity> {  }
+        }
+        ivBack.onClick {
+            onBackPressed()
+        }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         check_code_btn.setOnClickListener {
-            showTryAgainAlert()
 
+            if(edtReferelCode.text.equals("huntwelcome"))
+            {
+                launchActivity<SetupProfileCompletedActivity> {  }
+            }
+            else{
+                showTryAgainAlert()
+            }
 
 
         }
@@ -59,19 +72,5 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.skip_menu,menu)
-        return true
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item != null){
-            when(item.itemId){
-                R.id.skip_item -> launchActivity<SetupProfileCompletedActivity> {  }
-                else -> finish()
-
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }

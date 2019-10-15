@@ -32,10 +32,11 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
     private lateinit var storyProgressView: StoriesProgressView
     private lateinit var storyImageView: ImageView
     private var userImagesStoriesData = ArrayList<String>()
-    private val isIncognito = SharedPrefrenceManager.getisIncognito(this)
+    private var isIncognito :Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
+        isIncognito=SharedPrefrenceManager.getisIncognito(applicationContext)
         init()
     }
     private fun init(){

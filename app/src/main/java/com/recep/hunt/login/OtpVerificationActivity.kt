@@ -274,7 +274,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                     SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, Constants.isOTPVerified)
                     SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity, phoneNumber)
                     otpPinView.setPinBackgroundRes(R.drawable.otp_pin_invalid_bg)
-                    launchActivity<InfoYouProvideActivity>()
+                    launchActivity<SocialLoginActivity>()
                     finish()
                 } else {
                     dialog.dismiss()

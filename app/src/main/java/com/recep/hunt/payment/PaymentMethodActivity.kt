@@ -13,6 +13,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_payment_method.*
+import kotlinx.android.synthetic.main.activity_select_payment_methods.*
 import org.jetbrains.anko.find
 
 class PaymentMethodActivity : BaseActivity() {
@@ -33,8 +34,9 @@ class PaymentMethodActivity : BaseActivity() {
         recyclerView = find(R.id.payment_method_recyclerView)
         noPaymentMethodsImageView = find(R.id.no_payment_methods_imageView)
         add_payment_method_btn.setOnClickListener {
-            launchActivity<AddPaymentMethod>()
+            launchActivity<TrasactionDone>()
         }
+
         setupRecyclerView()
     }
     private fun setupRecyclerView(){

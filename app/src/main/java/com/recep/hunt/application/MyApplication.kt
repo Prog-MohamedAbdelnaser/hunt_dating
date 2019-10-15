@@ -32,7 +32,7 @@ class MyApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        ACRA.init(this);
+//        ACRA.init(this);
     }
 
     private val requestQueue: RequestQueue? = null

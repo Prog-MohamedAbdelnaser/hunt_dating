@@ -159,13 +159,17 @@ class UserDetailHeaderItem(private val ctx:Context):Item<ViewHolder>(){
         val aboutYou = SharedPrefrenceManager.getAboutYou(ctx)
         val jobTitle = SharedPrefrenceManager.getJobTitle(ctx)
         val firstName = SharedPrefrenceManager.getUserFirstName(ctx)
-        val age = SharedPrefrenceManager.getUserAge(ctx)
+        var age = SharedPrefrenceManager.getUserAge(ctx)
 
             if(aboutYou != Constants.NULL)
                 viewHolder.itemView.user_detail_about_you.text = aboutYou
             if(jobTitle != Constants.NULL)
                 viewHolder.itemView.user_detail_job_title.text = jobTitle
 
+        if(age==null)
+        {
+            age="18"
+        }
         viewHolder.itemView.user_detail_username_txtView.text = "$firstName, $age"
     }
 }

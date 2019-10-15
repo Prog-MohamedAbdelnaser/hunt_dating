@@ -32,8 +32,10 @@ import com.recep.hunt.profile.UserProfileActivity
 import com.squareup.picasso.Transformation
 import kotlinx.android.synthetic.main.activity_home.*
 import org.aviran.cookiebar2.CookieBar
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
+import java.net.URL
 
 
 /**
@@ -169,12 +171,26 @@ class Helpers {
         }
 
         fun stringToBitmap(img: String?): Bitmap? {
-            val bitmap : Bitmap?
-            if (img != null) {
-                val b = Base64.decode(img, Base64.DEFAULT)
-                bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
+            var bitmap : Bitmap?
+            try{
+
+                if (img != null) {
+                    val b = Base64.decode(img, Base64.DEFAULT)
+                    bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
+                    return bitmap
+                }
+            }
+            catch (e:Exception)
+            {
+                bitmap=null
+               doAsync {
+                   var url = URL(img);
+                   bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+               }
+
                 return bitmap
             }
+
             return null
 
         }

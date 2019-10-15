@@ -33,3 +33,5 @@
 - enter refrel code screen
 - faq for the payment screen
 - registration screen completed
+- transaction done screen
+- view profile screen as other view bug fix
