@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -171,9 +173,11 @@ class Helpers {
         }
 
         fun stringToBitmap(img: String?): Bitmap? {
+            val policy =  ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
             var bitmap : Bitmap?
             try{
-
                 if (img != null) {
                     val b = Base64.decode(img, Base64.DEFAULT)
                     bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
@@ -182,11 +186,9 @@ class Helpers {
             }
             catch (e:Exception)
             {
-                bitmap=null
-               doAsync {
+
                    var url = URL(img);
                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-               }
 
                 return bitmap
             }

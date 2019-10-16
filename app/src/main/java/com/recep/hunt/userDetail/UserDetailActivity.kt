@@ -24,9 +24,25 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_user_detail.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 
 
-class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListener{
+
+
+class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListener,
+    SimpleGestureFilter.SimpleGestureListener {
+    override fun onSwipe(direction: Int) {
+        when(direction)
+        {
+            SimpleGestureFilter.SWIPE_UP ->{
+                setupUserDetailBottomSheet()
+            }
+        }
+    }
+
+    override fun onDoubleTap() {
+        }
 
     var counter = 0
     private lateinit var storyProgressView: StoriesProgressView
@@ -45,12 +61,15 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         setupUserDetailBottomSheet()
         val count = getStoryData().size
         Log.e("Stories","Total count : $count")
+        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.profile_pic)
 
         userImagesStoriesData = getStoryData()
         if(userImagesStoriesData.size != 0 ){
             storyProgressView.setStoriesCount(count)
             storyProgressView.setStoryDuration(3500L)
-            storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
+
+                storyImageView.setImageBitmap(largeIcon)
+//
             storyProgressView.setStoriesListener(this)
             skip.setOnClickListener { onNext() }
             reverse.setOnClickListener { onPrev() }
@@ -67,7 +86,16 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
     }
     override fun onNext() {
         if(counter != userImagesStoriesData.size)
-        storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[++counter]))
+        {
+            try{
+                storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[++counter]))
+            }
+            catch (e:Exception)
+            {
+                onComplete()
+
+            }
+        }
         else
             onComplete()
     }
@@ -83,6 +111,7 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
 
     private fun getStoryData():ArrayList<String> {
         val userImagesStoriesData = ArrayList<String>()
+
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
@@ -105,6 +134,8 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
             userImagesStoriesData.add(fifthImage)
         if(sixthImage != Constants.NULL)
             userImagesStoriesData.add(sixthImage)
+
+        userImagesStoriesData.add("")
 
         return userImagesStoriesData
     }

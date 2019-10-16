@@ -95,9 +95,15 @@ class OtpVerificationActivity : AppCompatActivity() {
                 we_will_send_you_otp_tv.visibility = View.GONE
                 send_otp_again_btn.visibility = View.GONE
                 otpPinView.setPinBackgroundRes(R.drawable.otp_pin_bg)
-                otpPinView.clearValue()
+                try{
+                    otpPinView.clearValue()
 
-                setupProgressTimer()
+                    setupProgressTimer()
+                }
+                catch (e:Exception)
+                {}
+
+
             }
         }
         try {

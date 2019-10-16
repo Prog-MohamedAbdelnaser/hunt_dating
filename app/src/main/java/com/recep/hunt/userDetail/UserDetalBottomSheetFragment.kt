@@ -170,7 +170,7 @@ class UserDetailHeaderItem(private val ctx:Context):Item<ViewHolder>(){
         {
             age="18"
         }
-        viewHolder.itemView.user_detail_username_txtView.text = "$firstName, $age"
+        viewHolder.itemView.user_detail_username_txtView.text = "$firstName, 18"
     }
 }
 

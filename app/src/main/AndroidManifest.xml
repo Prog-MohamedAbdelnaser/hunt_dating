@@ -34,7 +34,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".payment.TrasactionDone"></activity>
+        <activity android:name=".matchs.MatchQuestionnaireActivity"></activity>
+        <activity android:name=".matchs.LetsMeetActivity" />
+        <activity android:name=".payment.TrasactionDone" />
         <activity android:name=".faq.FaqDashboard" />
         <activity android:name=".creator.TicketGenrated" />
         <activity android:name=".SplashActivity">
