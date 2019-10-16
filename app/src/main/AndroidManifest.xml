@@ -91,7 +91,8 @@
         <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity" />
         <activity android:name=".setupProfile.SetupProfileDobActivity" />
         <activity android:name=".setupProfile.SetupProfileActivity" />
-        <activity android:name=".login.SocialLoginActivity" />
+        <activity android:name=".login.SocialLoginActivity" >
+        </activity>
         <activity android:name=".login.OtpVerificationActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".setupProfile.TurnOnGPSUpdateAcitivity" />
