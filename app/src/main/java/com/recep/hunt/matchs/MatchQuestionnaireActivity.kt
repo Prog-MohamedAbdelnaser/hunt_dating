@@ -1,5 +1,6 @@
 package com.recep.hunt.matchs
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +9,6 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.recep.hunt.R
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
-import kotlinx.android.synthetic.main.activity_match_questionnaire.otp_progrss_txt
 import kotlinx.android.synthetic.main.activity_otp_verification.*
 import org.jetbrains.anko.find
 
@@ -25,17 +25,56 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_questionnaire)
-        progressBar = find(R.id.otp_progressBar)
-        cl_progressbar = find(R.id.cl_progress_bar)
+        progressBar = find(R.id.two_progressBar)
+        cl_progressbar = find(R.id.cl_progress_bar_two)
 
 
+        check_code_btn.setOnClickListener {
+            setpTwo.visibility=View.VISIBLE
+            setpOne.visibility=View.GONE
+            setProgressStart()
+        }
+
+        btn_yes.setOnClickListener {
+            setpThree.visibility=View.GONE
+            stepFour.visibility=View.VISIBLE
+
+        }
+        btn_goto_next_five.setOnClickListener {
+            stepFour.visibility=View.GONE
+            stepFive.visibility=View.VISIBLE
+
+        }
+
+        btn.setOnClickListener {
+            stepFive.visibility=View.GONE
+            stepSix.visibility=View.VISIBLE
+
+        }
+
+        idSubmit.setOnClickListener {
+            tvStepSix.visibility=View.GONE
+            var mIntent= Intent(this,LetsMeetActivity::class.java)
+            startActivity(mIntent)
+
+        }
+
+
+
+    }
+
+    fun goTonext(view: View)
+    {
+        setpThree.visibility=View.VISIBLE
+        setpTwo.visibility=View.GONE
     }
 
     fun setProgressStart()
     {
         progressBar.visibility = View.VISIBLE
-        otp_progrss_txt.visibility = View.VISIBLE
+        two_progrss_txt.visibility = View.VISIBLE
         setupProgressTimer()
+
     }
 
     private fun setupProgressTimer() {
@@ -46,7 +85,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         val drawable = res.getDrawable(R.drawable.circular_progress_bg)
         progressBar.progressDrawable = drawable
         progressBar.progress = 0
-        progressBar.max = 60
+        progressBar.max = 15
 
 
         Thread(Runnable {
@@ -56,11 +95,12 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
                 handler.post {
                     progressBar.progress = pStatus
-                    otp_progrss_txt.text = pStatusVisible.toString()
+                    two_progrss_txt.text = pStatusVisible.toString()
 
                     if (pStatusVisible == 0) {
                         runOnUiThread {
-                            //Change ui
+                            setpThree.visibility=View.VISIBLE
+                            setpThree.visibility=View.GONE
                         }
                     }
                 }
