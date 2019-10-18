@@ -148,7 +148,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
                 .build())
-        horizontal_list_near_by_user.setOffscreenItems(2)
+        horizontal_list_near_by_user.scrollToPosition(0)
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
@@ -311,15 +311,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-//        for (i in 4 until 6) {
-//            adapter.add(
-//                FarAwayRestaurantsVerticalAdapter(
-//                    this@HomeActivity,
-//                    items
-//                )
-//            )
-//        }
-        for (i in 4 until items.size) {
+        for (i in 4 until 6) {
             adapter.add(
                 FarAwayRestaurantsVerticalAdapter(
                     this@HomeActivity,
@@ -327,6 +319,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 )
             )
         }
+//        for (i in 4 until items.size) {
+//            adapter.add(
+//                FarAwayRestaurantsVerticalAdapter(
+//                    this@HomeActivity,
+//                    items
+//                )
+//            )
+//        }
 
     }
 
@@ -376,14 +376,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 //                mapRipple.startRippleMapAnimation()
 
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
-                SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.longitude.toString())
+                SharedPrefrenceManager.setUserLongitude(this@HomeActivity, mLastLocation.longitude.toString())
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
                     if(callAPIOnlyOnceStatus == 1){
-                        val lat = mLastLocation.latitude
-                        val long = mLastLocation.longitude
-//                        val lat = 41.8057
-//                        val long = 123.4315
+//                        val lat = mLastLocation.latitude
+//                        val long = mLastLocation.longitude
+                        val lat = 41.8057
+                        val long = 123.4315
                         setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
                     }

@@ -34,20 +34,19 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".matchs.MatchQuestionnaireActivity">
+        <activity android:name=".matchs.MatchQuestionnaireActivity" />
+        <activity android:name=".matchs.LetsMeetActivity" />
+        <activity android:name=".payment.TrasactionDone"></activity>
+        <activity android:name=".faq.FaqDashboard" />
+        <activity android:name=".creator.TicketGenrated" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".matchs.LetsMeetActivity" />
-        <activity android:name=".payment.TrasactionDone" />
-        <activity android:name=".faq.FaqDashboard" />
-        <activity android:name=".creator.TicketGenrated" />
-        <activity android:name=".SplashActivity">
-
-        </activity>
+        <activity android:name=".swipe.SwipeActivity" />
         <activity android:name=".payment.PaymentFaqActivity" />
         <activity android:name=".inviteFriend.InviteFriendContactActivity" />
         <activity android:name=".inviteFriend.MyInviteCreditActivity" />
