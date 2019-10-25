@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.recep.hunt.R
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
-import com.recep.hunt.swipe.SwipeActivity
+import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
@@ -39,7 +39,7 @@ class NearByRestaurantsVerticalAdapter(val context: Context, val item:ArrayList<
             }
 
             viewHolder.itemView.imageView9.setOnClickListener {
-                context.launchActivity<SwipeActivity> {  }
+                context.launchActivity<SwipeMainActivity> {  }
             }
 
         }
