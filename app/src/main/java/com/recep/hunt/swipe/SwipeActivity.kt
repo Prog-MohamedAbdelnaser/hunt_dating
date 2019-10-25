@@ -1,29 +1,26 @@
 package com.recep.hunt.swipe
 
-import android.graphics.BitmapFactory
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
+import com.lorentzos.flingswipe.SwipeFlingAdapterView
 import com.recep.hunt.R
-import com.recep.hunt.constants.Constants
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import jp.shts.android.storiesprogressview.StoriesProgressView
+import com.recep.hunt.swipe.adapters.SwipeScreenAdapter
+import com.recep.hunt.swipe.model.SwipeUserModel
 import kotlinx.android.synthetic.main.activity_swipe.*
 import org.jetbrains.anko.find
-import org.jetbrains.anko.toast
-import java.lang.Exception
+import org.jetbrains.anko.imageResource
 
-class SwipeActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
+class SwipeActivity : AppCompatActivity() {
 
-
-    var counter = 0
-    var dummyImages : IntArray = intArrayOf(R.drawable.demo_user, R.drawable.demo_user_1, R.drawable.demo_user_2, R.drawable.demo_user_3, R.drawable.demo_user_4)
-
-    private lateinit var storyProgressView: StoriesProgressView
-    private lateinit var storyImageView: ImageView
-    private var userImagesStoriesData = ArrayList<String>()
+    private lateinit var flingContainer: SwipeFlingAdapterView
+    private lateinit var adapter: SwipeScreenAdapter
+//    private var userImagesStoriesData = ArrayList<String>()
+    private var items =  ArrayList<SwipeUserModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,53 +29,109 @@ class SwipeActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
     }
 
     private fun init() {
-        storyProgressView = find(R.id.stories)
-        storyImageView = find(R.id.story_image_userdetail)
-        val count = 5
+
+        //First story will be only loaded to swiping container
+        flingContainer = find(R.id.swipe_screen_frame)
+        items = dummyUsersdata()
+        adapter = SwipeScreenAdapter(this, items)
+        flingContainer.adapter = adapter
+
+        flingContainer.setFlingListener(object: SwipeFlingAdapterView.onFlingListener {
+            override fun removeFirstObjectInAdapter() {
+
+            }
+
+            override fun onLeftCardExit(p0: Any?) {
+                //If card is removed, then new story will be loaded as well
+                items.removeAt(1)
+                items.removeAt(0)
+                items.add(
+                    SwipeUserModel(
+                        "Stella, 28",
+                        "Model at Fashion Club"
+                    )
+                )
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onRightCardExit(p0: Any?) {
+                //If card is removed, then new story will be loaded as well
+                items.removeAt(1)
+                items.removeAt(0)
+                items.add(
+                    SwipeUserModel(
+                        "Stella, 28",
+                        "Model at Fashion Club"
+                    )
+                )
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onAdapterAboutToEmpty(p0: Int) {
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onScroll(scrollProgressPercent: Float) {
+                val view = flingContainer.selectedView
+                if (scrollProgressPercent > 0) {
+                    view.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
+                    view.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
+                    view.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(179, 58, 204, 225))
+                    //If user is dragging card now, next story will be ready for showing
+                    if (items.size == 1) {
+                        items.add(
+                            SwipeUserModel(
+                                "Stella, 28",
+                                "Model at Fashion Club"
+                            )
+                        )
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+
+                else if (scrollProgressPercent < 0) {
+                    view.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
+                    view.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_dislike
+                    view.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(153, 255, 42, 78))
+                    //If user is dragging card now, next story will be ready for showing
+                    if (items.size == 1) {
+                        items.add(
+                            SwipeUserModel(
+                                "Stella, 28",
+                                "Model at Fashion Club"
+                            )
+                        )
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+                else {
+                    view.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 0.0f
+                    view.findViewById<ImageView>(R.id.story_image_userdetail).colorFilter = null
+                    //If user didn't pass card away and swiping container has 2 stories, remove last one as well
+                    if (items.size > 1) {
+                        items.removeAt(1)
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
+        })
+
+        // Optionally add an OnItemClickListener
+        flingContainer.setOnItemClickListener { i, any ->
+            val view = flingContainer.selectedView
+//            view.findViewById<View>(R.id.reverse_detail).setOnClickListener {
+//                adapter.prevImage(i)
+//            }
+//            view.findViewById<View>(R.id.skip_detail).setOnClickListener {
+//                adapter.nextImage()
+//            }
+        }
+
 
 //        userImagesStoriesData = getStoryData()
-//        if(userImagesStoriesData.size != 0 ){
-            storyProgressView.setStoriesCount(count)
-            storyProgressView.setStoryDuration(1000L)
-
-            Picasso.get().load(dummyImages[0]).fit().centerCrop().into(storyImageView, object: Callback {
-                override fun onSuccess() {
-                    storyProgressView.startStories()
-                }
-
-                override fun onError(e: Exception?) {
-
-                }
-
-            })
-
-            //Show next stories
-            storyProgressView.setStoriesListener(this)
-            skip_detail.setOnClickListener{ onNext() }
-            reverse_detail.setOnClickListener{ onPrev() }
-
-//        }
     }
 
-    override fun onComplete() {
-//        counter = 0
-//        toast("Load finished")
-    }
-
-    override fun onPrev() {
-        if ( counter > 0) {
-            counter --
-            Picasso.get().load(dummyImages[counter]).fit().centerCrop().into(storyImageView)
-        }
-    }
-
-    override fun onNext() {
-        if ( counter < 4) {
-            counter ++
-            Picasso.get().load(dummyImages[counter]).fit().centerCrop().into(storyImageView)
-
-        }
-    }
 
     /*
     private fun getStoryData():ArrayList<String> {
@@ -114,7 +167,34 @@ class SwipeActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
     */
 
     override fun onDestroy() {
-        storyProgressView.destroy()
+//        storyProgressView.destroy()
         super.onDestroy()
     }
+
+    //Dummy Users Data
+    private fun dummyUsersdata():ArrayList<SwipeUserModel>{
+        val data = ArrayList<SwipeUserModel>()
+        if(data.size == 0){
+            data.add(
+                SwipeUserModel(
+                    "Valentina, 28",
+                    "Actor at Max Studio"
+                )
+            )
+//            data.add(
+//                SwipeUserModel(
+//                    "Stella, 28",
+//                    "Model at Fashion Club"
+//                )
+//            )
+//            data.add(
+//                SwipeUserModel(
+//                    "Serena, 23",
+//                    "Digital Artist at Blue Tea Productions"
+//                )
+//            )
+        }
+        return data
+    }
+
 }
