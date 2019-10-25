@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="302dp"
+        android:layout_height="268dp"
+        android:background="@drawable/feq_qes_ans_box"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPaymentTitlelid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="left"
+            android:paddingLeft="5sp"
+            android:paddingRight="5sp"
+            android:text="Payments"
+            android:textColor="#fff64c1f"
+            android:textSize="14sp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/montserrat_light"
+            android:gravity="left"
+            android:paddingLeft="5sp"
+            android:paddingRight="5sp"
+            android:text="What is Request Payments?"
+            android:textColor="#ffcdd1d9"
+            android:textSize="12sp"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/on_board_adapter_title_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="left"
+            android:paddingLeft="5sp"
+            android:paddingRight="5sp"
+            android:text="Answer"
+            android:textColor="#fff64c1f"
+            android:textSize="14sp"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/on_board_adapter_subtitle_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat_light"
+            android:gravity="left"
+            android:paddingLeft="5sp"
+            android:paddingRight="10sp"
+            android:text="Request payments allows you to easily request money from someone by simply selecting them from your phone's contacts list, or by adding a new recipient and typing in their phone number"
+            android:textColor="#ffcdd1d9"
+            android:textSize="12sp"/>
+
+
+</LinearLayout>

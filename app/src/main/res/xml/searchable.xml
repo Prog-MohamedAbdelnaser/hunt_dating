@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+            android:label="rishabh_search"
+            android:hint="search_rishabh" >
+</searchable>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffffff">
+
+        <LinearLayout
+                android:id="@+id/llTopHideId"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:background="@drawable/copyshadow"
+                android:gravity="center_vertical"
+                android:padding="4sp"
+                android:weightSum="10">
+
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5sp"
+                        android:text="gethunt.com/reco/u10"
+                        android:textColor="#ffcacfd7"
+                        android:textSize="12dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvHideInviteCopyId"
+                        android:layout_width="86dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/rectangle_with_less_round_app_btn"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center"
+                        android:text="Copy"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+                android:id="@+id/rlSharOnId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llTopHideId"
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="5sp"
+                android:gravity="center"
+                android:padding="10sp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:fontFamily="@font/montserrat"
+                    android:text="or share on"
+                    android:textColor="#ffbac0cb"
+                    android:textSize="12dp"/>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlSharOnId"
+                android:paddingLeft="36sp"
+                android:paddingRight="36dp"
+                android:paddingBottom="10sp"
+                android:weightSum="4">
+            <RelativeLayout
+                    android:id="@+id/rlHideInviteFbId"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                <RelativeLayout
+                        android:layout_width="61sp"
+                        android:layout_height="58sp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/fb_btn">
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/fb_circle"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/rlHideInviteInstaId"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="60sp"
+                        android:layout_height="61sp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/insta"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/rlHideInviteTwitterId"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="61sp"
+                        android:layout_height="58sp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/u_twitter"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/rlHideInviteMoreId"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="62dp"
+                        android:layout_height="60sp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/more_btn"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center"
+                        android:text="More"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

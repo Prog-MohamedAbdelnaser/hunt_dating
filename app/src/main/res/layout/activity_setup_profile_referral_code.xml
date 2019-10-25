@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".setupProfile.SetupProfileReferralCodeActivity"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="horizontal" >
+
+
+        <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="58dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_arrow_back_black"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+                android:id="@+id/textView43"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:gravity="center"
+                android:text="@string/referral_code"
+
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/ivBack"
+                app:layout_constraintTop_toTopOf="@+id/ivBack" />
+
+
+        <TextView
+                android:id="@+id/tvSkip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Skip"
+                android:textColor="#9a9da4"
+                android:textSize="20dp"
+                android:layout_marginRight="18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView43"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView43" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <EditText
+            android:id="@+id/edtReferelCode"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginRight="42dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/round_edit_text"
+            android:fontFamily="@font/montserrat_medium"
+            android:hint="@string/referral_code"
+            android:textAlignment="center"
+            android:textColorHint="@color/app_light_text_color"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+            android:id="@+id/textView42"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="46dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/enter_referral"
+            android:textAlignment="center"
+            android:textColor="#9a9da4"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtReferelCode" />
+
+    <Button
+            android:id="@+id/check_code_btn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="46dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginRight="42dp"
+            android:background="@drawable/app_btn_round"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/check_code"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.566"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView42" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

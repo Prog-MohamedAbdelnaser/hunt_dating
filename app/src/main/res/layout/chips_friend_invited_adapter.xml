@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rlInviteFriendClickId"
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginTop="2sp"
+        android:layout_marginRight="3sp"
+        android:layout_marginBottom="2sp"
+        android:background="@drawable/chips_background">
+
+    <RelativeLayout
+            android:id="@+id/civInviteFriendId"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/pink_circle">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvChipShortNameId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/montserrat"
+                android:singleLine="true"
+                android:text="RC"
+                android:textColor="#FFF"
+                android:textSize="12sp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2sp"
+            android:layout_toRightOf="@+id/civInviteFriendId"
+            android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvChipNameId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginEnd="22sp"
+                android:layout_marginRight="22sp"
+                android:fontFamily="@font/montserrat"
+                android:singleLine="true"
+                android:text="Recep"
+                android:textColor="#ff3c4a6d"
+                android:textSize="12sp"/>
+
+    </LinearLayout>
+    <ImageView
+            android:id="@+id/ivChipsCloseId"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5sp"
+            android:src="@drawable/ic_close_black"/>
+
+</RelativeLayout>
