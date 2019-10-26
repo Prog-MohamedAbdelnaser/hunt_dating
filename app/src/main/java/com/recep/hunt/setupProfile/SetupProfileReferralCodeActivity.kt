@@ -29,6 +29,7 @@ import com.androidnetworking.interfaces.DownloadListener
 import com.androidnetworking.interfaces.DownloadProgressListener
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.RegistrationModule.RegistrationResponse
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,7 +71,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
     private fun registerUser() {
 
         val filePath=Environment.getExternalStorageDirectory().absolutePath
-        val fileName="abc.png"
+        val fileName="abc.jpg"
         var file=File(filePath,fileName)
         if(file.exists())
             file.delete()
@@ -90,12 +91,12 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     val registrationModel=Registration(
                         SharedPrefrenceManager.getUserFirstName(this@SetupProfileReferralCodeActivity),
                         SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity),
-                        SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity),
+                        "8212356789",
                         SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity),
-                        SharedPrefrenceManager.getUserEmail(this@SetupProfileReferralCodeActivity),
                         SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity),
+                        "1993-11-11",
                         filePart,
-                        SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity),
+                        "abc@abc.com",
                         SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity),
                         SharedPrefrenceManager.getUserLatitude(this@SetupProfileReferralCodeActivity),
                         SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity),
@@ -126,6 +127,11 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             response: Response<RegistrationResponse>
 
                         ) {
+                              var data=response.errorBody()?.string();
+                             val jObjError =  JSONObject(data);
+                            var error=jObjError.getString("message")
+
+
                             SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
                             launchActivity<SetupProfileCompletedActivity> {  }
 
@@ -138,8 +144,9 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
                 override fun onError(anError: ANError?) {
 
-                    Log.d("error","error")
+                    Log.d("error",anError?.message)
                 }
+
 
             })
 
