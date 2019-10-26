@@ -134,7 +134,6 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
                             SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
                             launchActivity<SetupProfileCompletedActivity> {  }
-
                         }
 
 
@@ -143,7 +142,6 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                 }
 
                 override fun onError(anError: ANError?) {
-
                     Log.d("error",anError?.message)
                 }
 
