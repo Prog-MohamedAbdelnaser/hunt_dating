@@ -152,13 +152,15 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         }
                         else {
                             containerView.x = ( x_cord - x ).toFloat()
-                            containerView.y = ( y_cord - y ).toFloat()
                             containerView.rotation = ((x_cord - x) * (Math.PI / 256)).toFloat()
 
                             if (x_cord > x) {
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
-                                containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(179, 58, 204, 225))
+                                if ( x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(179, 58, 204, 225))
+                                else if ( (x_cord - x) % 255 < 179)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb((x_cord - x) % 255, 58, 204, 225))
                                 if (x_cord >= (screenCenter + (screenCenter / 4))) {
                                     Likes = 2
                                 } else {
@@ -168,7 +170,10 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             else if (x_cord < x){
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_dislike
-                                containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(153, 255, 42, 78))
+                                if (x - x_cord >= 255 || (x - x_cord) % 255 >= 153)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(153, 255, 42, 78))
+                                else if ( (x - x_cord) % 255 < 153)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb((x - x_cord) % 255, 255, 42, 78))
                                 if (x_cord <= screenCenter - screenCenter / 4) {
                                     Likes = 1
                                 } else {
