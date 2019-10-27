@@ -93,7 +93,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             counter.add(0)
             currentUser = i
             storyProgressViews[i].setStoriesCount(count)
-            storyProgressViews[i].setStoryDuration(1000L)
+            storyProgressViews[i].setStoryDuration(3000L)
 
             Picasso.get().load(dummyImages[0]).fit().centerCrop().into(storyImageView[i], object:
                 Callback {
@@ -195,10 +195,10 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         if (clickDuration < 200) {
                             Log.e("Event_Status :->", "Only Clicked")
                             if (x >= screenCenter) {
-                                onNext()
+                                storyProgressViews[currentUser].skip()
                             }
                             else {
-                                onPrev()
+                                storyProgressViews[currentUser].reverse()
                             }
                             v.parent.requestDisallowInterceptTouchEvent(true)
                         }
