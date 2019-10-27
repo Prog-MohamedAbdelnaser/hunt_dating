@@ -55,7 +55,8 @@ enum class PersistenceKeys {
     Religion,
     IsIncognito,
     UserAge,
-    socialType
+    socialType,
+    refernceCode
 }
 
 class SharedPrefrenceManager {
@@ -85,6 +86,18 @@ class SharedPrefrenceManager {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
             return sharedPreferences.getBoolean(PersistenceKeys.IsLoggedIn.toString(), false)
         }
+
+        fun setRefrencecode(context: Context,value:String){
+            val sharedPrefrenceManager=context.getSharedPreferences(Constants.prefsName, 0)
+            val editor=sharedPrefrenceManager.edit()
+            editor.putString(PersistenceKeys.refernceCode.toString(),value)
+            editor.apply()
+        }
+
+        fun getRefrenceCode(context:Context):String{
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            return sharedPreferences.getString(PersistenceKeys.refernceCode.toString(), "")
+        }
         //isIncognito
         fun setisIncognito(context: Context, value: Boolean) {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
@@ -97,6 +110,8 @@ class SharedPrefrenceManager {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
             return sharedPreferences.getBoolean(PersistenceKeys.IsIncognito.toString(), false)
         }
+
+
 
         //IsUserLoggedIn
         fun setIsUserLoggedIn(context: Context, value: Boolean) {
@@ -117,6 +132,7 @@ class SharedPrefrenceManager {
         }
 
         fun getsocialType(context: Context) = getSharePrefs(context, PersistenceKeys.socialType.toString())
+
 
 
         //User model
@@ -203,11 +219,11 @@ class SharedPrefrenceManager {
             setSharedPrefs(context, PersistenceKeys.UserLookingFor.toString(), value)
         }
 
-        fun getUserLookingFor(context: Context) = getSharePrefs(context, PersistenceKeys.UserLookingFor.toString())
+        fun getUserLookingFor(context: Context, typeLookingFor : String) = getSharePrefs(context,typeLookingFor)
 
         //UserInterestedIn - value for userLooking for
-        fun setUserInterestedIn(context: Context, value: String) {
-            setSharedPrefs(context, PersistenceKeys.UserInterestedIn.toString(), value)
+        fun setUserInterestedIn(context: Context, value: String, typeLookingFor : String) {
+            setSharedPrefs(context, typeLookingFor, value)
         }
 
         fun getUserInterestedIn(context: Context) = getSharePrefs(context, PersistenceKeys.UserInterestedIn.toString())
@@ -400,8 +416,54 @@ class SharedPrefrenceManager {
         fun getReligion(context: Context) = getSharePrefs(context,PersistenceKeys.Religion.toString())
 
 
+        fun getLookingForDate(context: Context)=getSharePrefs(context,"Date")
+
+        fun getLookingForBusniess(context: Context)= getSharePrefs(context,"Business")
+
+        fun getLookingForFriendship(context: Context)= getSharePrefs(context,"Friendship")
 
 
+        fun setGoogleLoginToken(context: Context,value: String){
+            setSharedPrefs(context,"GoogleToken",value)
+        }
+
+        fun getGoogleLoginToken(context: Context)= getSharePrefs(context,"GoogleToken")
+
+
+        fun setFacebookLoginToken(context: Context,value: String){
+            setSharedPrefs(context,"FacebookToken",value)
+        }
+
+
+        fun getFacebookLoginToken(context: Context)= getSharePrefs(context,"FacebookToken")
+
+        fun setInstagramLoginToken(context: Context,value: String){
+            setSharedPrefs(context,"FacebookToken",value)
+        }
+        fun getInstagramLoginToken(context: Context)= getSharePrefs(context,"InstagramToken")
+
+
+
+        fun getInstagramId(context: Context)= getSharePrefs(context,"InstagramId")
+
+        fun setInstagramId(context: Context,value:String)
+        {
+            setSharedPrefs(context,"InstagramId",value)
+        }
+
+        fun getFacebookId(context: Context)= getSharePrefs(context,"FacebookId")
+
+        fun setFacebookId(context: Context,value: String)
+        {
+            setSharedPrefs(context,"FacebookId",value)
+        }
+
+        fun getGoogleId(context: Context)= getSharePrefs(context,"GmailId")
+
+        fun setGoogleId(context: Context,value: String)
+        {
+            setSharedPrefs(context,"GmailId",value)
+        }
 
 
 

@@ -24,13 +24,20 @@ import org.jetbrains.anko.toast
 class SetupProfileInterestedInActivity : BaseActivity(),
     LookingForListeners {
 
-    override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
-        selectedInterstedIn = lookingFor
-        SharedPrefrenceManager.setUserInterestedIn(this@SetupProfileInterestedInActivity,lookingFor)
-    }
 
     private var selectedInterstedIn = ""
     private var selectedInterests = ArrayList<String>()
+
+    override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
+        selectedInterstedIn = lookingFor
+        val iterator = selectedInterests.iterator()
+
+
+
+        iterator.forEach {
+            SharedPrefrenceManager.setUserInterestedIn(this@SetupProfileInterestedInActivity,lookingFor,it)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_interested_in)

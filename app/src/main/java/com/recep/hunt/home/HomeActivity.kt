@@ -28,6 +28,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.home.adapter.NearByRestaurantsAdapter
 import com.recep.hunt.home.adapter.NearByRestaurantsVerticalAdapter
 import com.recep.hunt.home.adapter.SimpleHeaderItemAdapter
@@ -36,6 +37,8 @@ import com.recep.hunt.home.adapter.FarAwayRestaurantsVerticalAdapter
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModel
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
+import com.recep.hunt.model.MakeUserOnline
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.utilis.*
@@ -53,6 +56,9 @@ import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
 import kotlinx.android.synthetic.main.custom_infowindow.view.*
 import org.jetbrains.anko.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
 
@@ -103,6 +109,24 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         showSortedListCardView = find(R.id.sorted_near_by_restaurants_list_card)
         showMyLocationCardView = find(R.id.my_location_crd)
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
+
+        val makeUserOnline=MakeUserOnline(true)
+
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline)
+
+        call.enqueue(object :Callback<MakeUserOnlineResponse> {
+            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<MakeUserOnlineResponse>,
+                response: Response<MakeUserOnlineResponse>
+            ) {
+              Toast.makeText(this@HomeActivity,"Youe online",Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
         setupCardClicks()
         setupToolbarClicks()
@@ -382,8 +406,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                     if(callAPIOnlyOnceStatus == 1){
 //                        val lat = mLastLocation.latitude
 //                        val long = mLastLocation.longitude
-                        val lat = 41.8057
-                        val long = 123.4315
+                        val lat =  mLastLocation.latitude
+                        val long = mLastLocation.longitude
                         setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
                     }

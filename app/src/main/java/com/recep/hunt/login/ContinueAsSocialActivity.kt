@@ -1,7 +1,10 @@
 package com.recep.hunt.login
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -95,4 +98,6 @@ class ContinueAsSocialActivity : AppCompatActivity() {
 
         }
     }
+
+
 }

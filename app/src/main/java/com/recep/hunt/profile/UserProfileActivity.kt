@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,7 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 /*import com.facebook.share.Share*/
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.model.UserProfile.UserInfoModel
+import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
@@ -37,7 +41,9 @@ import kotlinx.android.synthetic.main.profile_simple_header_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_title_item.view.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
 import org.jetbrains.anko.*
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -53,6 +59,27 @@ class UserProfileActivity : AppCompatActivity() {
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         setupRecyclerView()
+        getData()
+    }
+
+    fun getData(){
+        val call = ApiClient.getClient.getUserProfile()
+
+        call.enqueue(object:Callback<UserProfileResponse>{
+            override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                Log.d("AB" , "" + call)
+            }
+
+            override fun onResponse(
+                call: Call<UserProfileResponse>,
+                response: Response<UserProfileResponse>
+            ) {
+
+
+            }
+
+        })
+
     }
 
     override fun onResume() {
@@ -163,7 +190,6 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
         } else {
             viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
         }
-        //     viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
 
         viewHolder.itemView.profile_header_user_name.text = userName
         if (aboutYou != Constants.NULL)

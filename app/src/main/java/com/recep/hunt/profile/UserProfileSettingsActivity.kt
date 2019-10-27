@@ -3,6 +3,7 @@ package com.recep.hunt.profile
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +16,21 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.contactUs.ContactUsActivity
 import com.recep.hunt.inviteFriend.InviteAFriendActivity
+import com.recep.hunt.login.OtpVerificationActivity
+import com.recep.hunt.login.WelcomeScreenActivity
+import com.recep.hunt.model.ReportUser
+import com.recep.hunt.model.logout.LogoutReponse
+import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.payment.PaymentFaqActivity
 import com.recep.hunt.payment.PaymentMethodActivity
 import com.recep.hunt.payment.SelectPaymentMethodsActivity
@@ -46,9 +54,14 @@ import kotlinx.android.synthetic.main.notification_title_item_layout.view.*
 import kotlinx.android.synthetic.main.number_changed_success_layout.*
 import kotlinx.android.synthetic.main.select_plan_header_item_layout.view.*
 import kotlinx.android.synthetic.main.social_switch_item_layout.view.*
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.textColor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners {
 
@@ -60,7 +73,7 @@ class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners 
             resources.getString(R.string.questions) -> launchActivity<IcebreakerQuestionActivity>()
             resources.getString(R.string.tickets) -> launchActivity<ContactUsActivity>()
             resources.getString(R.string.add_payment_details) -> launchActivity<PaymentMethodActivity>()
-            resources.getString(R.string.invite_a_friend)->launchActivity<InviteAFriendActivity>()
+            resources.getString(R.string.invite_a_friend) -> launchActivity<InviteAFriendActivity>()
 
         }
     }
@@ -98,6 +111,7 @@ class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners 
 
     }
 
+
     private fun setupRecyclerView() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -114,10 +128,29 @@ class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners 
             )
         )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.notifications_setting)))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.email), 0, listener = this))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.push_notifications), 0, listener = this))
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.email),
+                0,
+                listener = this
+            )
+        )
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.push_notifications),
+                0,
+                listener = this
+            )
+        )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.connected_accounts)))
-        adapter.add(SocialSwitchItemAdapter(this, R.drawable.facebook_setting, resources.getString(R.string.fb), true))
+        adapter.add(
+            SocialSwitchItemAdapter(
+                this,
+                R.drawable.facebook_setting,
+                resources.getString(R.string.fb),
+                true
+            )
+        )
         adapter.add(
             SocialSwitchItemAdapter(
                 this,
@@ -134,19 +167,69 @@ class UserProfileSettingsActivity : BaseActivity(), UserProfileSettingListeners 
                 false
             )
         )
-        adapter.add(SocialSwitchItemAdapter(this, R.drawable.inst_setting, resources.getString(R.string.insta), false))
+        adapter.add(
+            SocialSwitchItemAdapter(
+                this,
+                R.drawable.inst_setting,
+                resources.getString(R.string.insta),
+                false
+            )
+        )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.payment)))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.add_payment_details), 0, listener = this))
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.add_payment_details),
+                0,
+                listener = this
+            )
+        )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.ice_breaker_questions)))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.questions), 0, listener = this))
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.questions),
+                0,
+                listener = this
+            )
+        )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.help_support)))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.tickets), 2, listener = this))
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.tickets),
+                2,
+                listener = this
+            )
+        )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.other)))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.invite_a_friend), 0, listener = this))
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.invite_a_friend),
+                0,
+                listener = this
+            )
+        )
         adapter.add(MinimalHeaderItemAdapter(resources.getString(R.string.legal)))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.license), 0, false, listener = this))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.privacy_policy), 0, listener = this))
-        adapter.add(NotificationTitleItemAdapter(resources.getString(R.string.terms_conditions), 0, listener = this))
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.license),
+                0,
+                false,
+                listener = this
+            )
+        )
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.privacy_policy),
+                0,
+                listener = this
+            )
+        )
+        adapter.add(
+            NotificationTitleItemAdapter(
+                resources.getString(R.string.terms_conditions),
+                0,
+                listener = this
+            )
+        )
         adapter.add(DeleteAccountAndLogoutItem(this))
 
     }
@@ -159,18 +242,18 @@ class SelectPlanHeaderItem(private val context: Context) : Item<ViewHolder>() {
     private lateinit var oneMonthLayout: LinearLayout
     private lateinit var sixMonthLayout: LinearLayout
     private lateinit var twelveMonthLayout: LinearLayout
-    private lateinit var exclusiveBtn : Button
-    private lateinit var oneMonthText1:TextView
-    private lateinit var oneMonthText2:TextView
-    private lateinit var oneMonthText3:TextView
+    private lateinit var exclusiveBtn: Button
+    private lateinit var oneMonthText1: TextView
+    private lateinit var oneMonthText2: TextView
+    private lateinit var oneMonthText3: TextView
 
-    private lateinit var sixMonthText1:TextView
-    private lateinit var sixMonthText2:TextView
-    private lateinit var sixMonthText3:TextView
+    private lateinit var sixMonthText1: TextView
+    private lateinit var sixMonthText2: TextView
+    private lateinit var sixMonthText3: TextView
 
-    private lateinit var twelveMonthText1:TextView
-    private lateinit var twelveMonthText2:TextView
-    private lateinit var twelveMonthText3:TextView
+    private lateinit var twelveMonthText1: TextView
+    private lateinit var twelveMonthText2: TextView
+    private lateinit var twelveMonthText3: TextView
     private val extendedHeight = 143
     private val extendedWidth = 130
     override fun getLayout() = R.layout.select_plan_header_item_layout
@@ -188,9 +271,9 @@ class SelectPlanHeaderItem(private val context: Context) : Item<ViewHolder>() {
         sixMonthText2 = viewHolder.itemView.find(R.id.hunt_premium_6_month_text2)
         sixMonthText3 = viewHolder.itemView.find(R.id.hunt_premium_6_month_text3)
 
-        twelveMonthText1= viewHolder.itemView.find(R.id.hunt_premium_12_month_text1)
-        twelveMonthText2= viewHolder.itemView.find(R.id.hunt_premium_12_month_text2)
-        twelveMonthText3= viewHolder.itemView.find(R.id.hunt_premium_12_month_text3)
+        twelveMonthText1 = viewHolder.itemView.find(R.id.hunt_premium_12_month_text1)
+        twelveMonthText2 = viewHolder.itemView.find(R.id.hunt_premium_12_month_text2)
+        twelveMonthText3 = viewHolder.itemView.find(R.id.hunt_premium_12_month_text3)
 
         oneMonthLayout.setOnClickListener {
             setSelection(Constants.oneMonthValue)
@@ -209,16 +292,18 @@ class SelectPlanHeaderItem(private val context: Context) : Item<ViewHolder>() {
 
     private val normalMargin = 24
     private val extendedMargin = 16
-    private fun setSelection(value:String){
-        when(value){
+    private fun setSelection(value: String) {
+        when (value) {
             Constants.oneMonthValue -> {
-                oneMonthLayout.setMargins(extendedMargin,0,0,0)
+                oneMonthLayout.setMargins(extendedMargin, 0, 0, 0)
 
-                twelveMonthLayout.setMargins(0,8,normalMargin,8)
+                twelveMonthLayout.setMargins(0, 8, normalMargin, 8)
 
                 sixMonthLayout.background = context.resources.getDrawable(R.drawable.other_month_bg)
-                oneMonthLayout.background = context.resources.getDrawable(R.drawable.six_month_card_bg)
-                twelveMonthLayout.background = context.resources.getDrawable(R.drawable.other_month_bg)
+                oneMonthLayout.background =
+                    context.resources.getDrawable(R.drawable.six_month_card_bg)
+                twelveMonthLayout.background =
+                    context.resources.getDrawable(R.drawable.other_month_bg)
                 exclusiveBtn.visibility = View.GONE
 
                 oneMonthText1.textColor = context.resources.getColor(R.color.pink)
@@ -234,13 +319,15 @@ class SelectPlanHeaderItem(private val context: Context) : Item<ViewHolder>() {
                 twelveMonthText3.textColor = context.resources.getColor(R.color.app_text_black)
             }
             Constants.sixMonthValue -> {
-                oneMonthLayout.setMargins(normalMargin,8,0,8)
+                oneMonthLayout.setMargins(normalMargin, 8, 0, 8)
 
-                twelveMonthLayout.setMargins(0,8,normalMargin,8)
+                twelveMonthLayout.setMargins(0, 8, normalMargin, 8)
 
-                sixMonthLayout.background = context.resources.getDrawable(R.drawable.six_month_card_bg)
+                sixMonthLayout.background =
+                    context.resources.getDrawable(R.drawable.six_month_card_bg)
                 oneMonthLayout.background = context.resources.getDrawable(R.drawable.other_month_bg)
-                twelveMonthLayout.background = context.resources.getDrawable(R.drawable.other_month_bg)
+                twelveMonthLayout.background =
+                    context.resources.getDrawable(R.drawable.other_month_bg)
                 exclusiveBtn.visibility = View.VISIBLE
 
                 oneMonthText1.textColor = context.resources.getColor(R.color.app_text_black)
@@ -255,14 +342,15 @@ class SelectPlanHeaderItem(private val context: Context) : Item<ViewHolder>() {
                 twelveMonthText2.textColor = context.resources.getColor(R.color.app_text_black)
                 twelveMonthText3.textColor = context.resources.getColor(R.color.app_text_black)
             }
-            else->{
-                oneMonthLayout.setMargins(normalMargin,8,0,8)
+            else -> {
+                oneMonthLayout.setMargins(normalMargin, 8, 0, 8)
 
-                twelveMonthLayout.setMargins(0,0,extendedMargin,0)
+                twelveMonthLayout.setMargins(0, 0, extendedMargin, 0)
 
                 sixMonthLayout.background = context.resources.getDrawable(R.drawable.other_month_bg)
                 oneMonthLayout.background = context.resources.getDrawable(R.drawable.other_month_bg)
-                twelveMonthLayout.background = context.resources.getDrawable(R.drawable.six_month_card_bg)
+                twelveMonthLayout.background =
+                    context.resources.getDrawable(R.drawable.six_month_card_bg)
                 exclusiveBtn.visibility = View.GONE
 
                 oneMonthText1.textColor = context.resources.getColor(R.color.app_text_black)
@@ -382,6 +470,40 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
         {
             deleteAccountDialog()
         }
+        viewHolder.itemView.btnLogoutId.setOnClickListener {
+
+            logoutAccount()
+        }
+    }
+
+
+    private fun logoutAccount() {
+
+
+
+        val call = ApiClient.getClient.logoutUser()
+
+        call.enqueue(object :Callback<LogoutReponse> {
+            override fun onFailure(call: Call<LogoutReponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<LogoutReponse>,
+                response: Response<LogoutReponse>
+            ) {
+
+                SharedPrefrenceManager.clearAllSharePreference(ctx)
+                val intent = Intent(ctx, WelcomeScreenActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                ctx.startActivity(intent)
+            }
+
+        })
+
+
+
     }
 
 
@@ -394,23 +516,37 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
 
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+
+
         dialog.reason1_btn.setOnClickListener {
+            reportUser( dialog.reason1_btn.text.toString())
             dialog.dismiss()
         }
         dialog.reason2_btn.setOnClickListener {
+            reportUser( dialog.reason1_btn.text.toString())
+
+
             dialog.dismiss()
         }
         dialog.reason3_btn.setOnClickListener {
+
+            reportUser( dialog.reason1_btn.text.toString())
+
             dialog.dismiss()
 
         }
         dialog.reason4_btn.setOnClickListener {
+            reportUser( dialog.reason1_btn.text.toString())
+
             dialog.dismiss()
         }
         dialog.reason5_btn.setOnClickListener {
+            reportUser( dialog.reason1_btn.text.toString())
+
             dialog.dismiss()
         }
         dialog.reason6_btn.setOnClickListener {
+
             dialog.dismiss()
             otherReasonDialog()
         }
@@ -421,15 +557,17 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
     }
 
     private fun otherReasonDialog() {
-        val ll = LayoutInflater.from(ctx).inflate(R.layout.delete_account_reason_dialog_layout, null)
+        val ll =
+            LayoutInflater.from(ctx).inflate(R.layout.delete_account_reason_dialog_layout, null)
         val dialog = Dialog(ctx)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)
         dialog.delete_account_back_btn.setOnClickListener { dialog.dismiss() }
         dialog.delete_account_submit_btn.setOnClickListener {
+            reportUser( dialog.reason1_btn.text.toString())
+
             dialog.dismiss()
-            deleteAccountSuccessDialog()
 
         }
 
@@ -443,12 +581,49 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)
-        dialog.number_change_success_dialog_title.text = ctx.resources.getText(R.string.you_have_successfully_deactivated)
+        dialog.number_change_success_dialog_title.text =
+            ctx.resources.getText(R.string.you_have_successfully_deactivated)
         dialog.lottieAnimationView2.playAnimation()
-        dialog.ok_btn.setOnClickListener { dialog.dismiss() }
+        dialog.ok_btn.setOnClickListener {
+            SharedPrefrenceManager.clearAllSharePreference(ctx)
+            val intent = Intent(ctx, WelcomeScreenActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            ctx.startActivity(intent)
+            dialog.dismiss()
+
+        }
 
         dialog.show()
     }
+
+    private fun reportUser(resone:String)
+    {
+        val reportUser=SharedPrefrenceManager.getDeviceToken(ctx)
+
+        val reportUserModel=ReportUser(reportUser,resone)
+
+        val call = ApiClient.getClient.reportUser(reportUserModel)
+
+        call.enqueue(object:Callback<ReportUserResponse>{
+            override fun onFailure(call: Call<ReportUserResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<ReportUserResponse>,
+                response: Response<ReportUserResponse>
+            ) {
+                deleteAccountSuccessDialog()
+            }
+
+        })
+
+
+
+
+    }
+
 
 }
 

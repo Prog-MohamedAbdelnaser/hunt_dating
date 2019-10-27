@@ -5,32 +5,48 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import com.recep.hunt.R
+import com.recep.hunt.model.Registration
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import kotlinx.android.synthetic.main.activity_info_you_provide.*
 import kotlinx.android.synthetic.main.activity_setup_profile_referral_code.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.toast
+import java.io.File
+import android.os.Environment
+import android.util.Log
+import android.widget.Toast
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.DownloadListener
+import com.androidnetworking.interfaces.DownloadProgressListener
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.RegistrationModule.RegistrationResponse
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_referral_code)
-
+        AndroidNetworking.initialize(getApplicationContext());
         init()
     }
 
-
-
     private fun init() {
         tvSkip.setOnClickListener {
-            launchActivity<SetupProfileCompletedActivity> {  }
+            SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,"")
+            registerUser()
         }
         ivBack.onClick {
             onBackPressed()
@@ -40,14 +56,101 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
             if(edtReferelCode.text.equals("huntwelcome"))
             {
-                launchActivity<SetupProfileCompletedActivity> {  }
+                SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
+                registerUser()
             }
-            else{
+            else
+            {
                 showTryAgainAlert()
             }
 
 
         }
+    }
+
+    private fun registerUser() {
+
+        val filePath=Environment.getExternalStorageDirectory().absolutePath
+        val fileName="abc.jpg"
+        var file=File(filePath,fileName)
+        if(file.exists())
+            file.delete()
+
+        AndroidNetworking.download(SharedPrefrenceManager.getProfileImg(this),filePath,fileName)
+                 .setTag("downloadTest")
+                 .setPriority(Priority.MEDIUM)
+                 .build().setDownloadProgressListener(object : DownloadProgressListener{
+                override fun onProgress(bytesDownloaded: Long, totalBytes: Long) {
+                }
+            }).startDownload(object :DownloadListener{
+                override fun onDownloadComplete() {
+
+                    val filePart = MultipartBody.Part.createFormData("pics", file!!.getName(), RequestBody.create(
+                        MediaType.parse("image/*"), file));
+
+                    val registrationModel=Registration(
+                        SharedPrefrenceManager.getUserFirstName(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity),
+                        "8212356789",
+                        SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity),
+                        "1993-11-11",
+                        filePart,
+                        "abc@abc.com",
+                        SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getUserLatitude(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity),
+                        "",
+                        SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getLookingForBusniess(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getLookingForFriendship(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getFacebookId(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getFacebookLoginToken(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getInstagramLoginToken(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getGoogleId(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getGoogleLoginToken(this@SetupProfileReferralCodeActivity),
+                        SharedPrefrenceManager.getRefrenceCode(this@SetupProfileReferralCodeActivity)
+                    )
+
+
+                    val call = ApiClient.getClient.createUser(registrationModel)
+
+                    call.enqueue(object : Callback<RegistrationResponse> {
+                        override fun onFailure(call: Call<RegistrationResponse>, t: Throwable) {
+                            Toast.makeText(this@SetupProfileReferralCodeActivity,"Somthing want wrong,Please Try ageain",Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onResponse(
+                            call: Call<RegistrationResponse>,
+                            response: Response<RegistrationResponse>
+
+                        ) {
+                              var data=response.errorBody()?.string();
+                             val jObjError =  JSONObject(data);
+                            var error=jObjError.getString("message")
+
+
+                            SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
+                            launchActivity<SetupProfileCompletedActivity> {  }
+                        }
+
+
+                    })
+
+                }
+
+                override fun onError(anError: ANError?) {
+                    Log.d("error",anError?.message)
+                }
+
+
+            })
+
+
+
+
     }
 
     private fun showTryAgainAlert(){
@@ -71,6 +174,10 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         dialog.show()
 
     }
+
+
+
+
 
 
 }

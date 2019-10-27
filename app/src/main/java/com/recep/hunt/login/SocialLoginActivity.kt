@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -63,7 +65,10 @@ import com.xwray.groupie.ViewHolder
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
 import org.json.JSONException
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.UnsupportedEncodingException
+import java.net.URL
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -386,6 +391,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
             SharedPrefrenceManager.setProfileImg(this, user.photoUrl.toString())
             SharedPrefrenceManager.setsocialType(this, "social")
+            SharedPrefrenceManager.setGoogleLoginToken(this,user.uid)
+            SharedPrefrenceManager.setGoogleId(this,user.uid)
             launchActivity<ContinueAsSocialActivity> {
                 putExtra(socialTypeKey, Constants.socialGoogleType)
                 putExtra(userSocialModel, json)
@@ -410,9 +417,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 val social_name = json_object.optString("name", "")
                 val social_email = json_object.optString("email", "")
                 val id = json_object.getString("id")
-                // val gender = json_object.getString("gender")
-              
-                userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
+                // val gender = json_object.getString("gender").
+                // userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
 
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val json: String = gson.toJson(userDetailsModel)
@@ -425,8 +431,19 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 SharedPrefrenceManager.setUserLastName(this, lastName)
                 SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
                 SharedPrefrenceManager.setUserEmail(this, social_email)
-                SharedPrefrenceManager.setProfileImg(this, facebook_pic)
-                SharedPrefrenceManager.setsocialType(this, "social")
+
+                SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity,id)
+                SharedPrefrenceManager.setFacebookLoginToken(this@SocialLoginActivity,loginResult.accessToken.token.toString())
+
+                try {
+                    val  url =  URL(facebook_pic);
+                    val image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    SharedPrefrenceManager.setProfileImg(this,BitMapToString(image))
+                } catch(e: IOException) {
+                    e.printStackTrace()
+                }
+                SharedPrefrenceManager.setsocialType(this, "Facebook")
+
                 // SharedPrefrenceManager.setUserGender(this, gender)
                 fbUserImages(id)
                 launchActivity<ContinueAsSocialActivity> {
@@ -511,6 +528,14 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
          } else {
              mApp!!.authorize()
          }*/
+    }
+
+
+    fun BitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
 

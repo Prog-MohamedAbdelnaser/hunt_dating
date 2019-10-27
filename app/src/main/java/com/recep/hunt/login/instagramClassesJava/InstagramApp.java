@@ -5,22 +5,31 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import com.google.gson.GsonBuilder;
+
+import android.util.Base64;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.recep.hunt.constants.Constants;
 import com.recep.hunt.login.ContinueAsSocialActivity;
 import com.recep.hunt.login.model.UserSocialModel;
+import com.recep.hunt.utilis.FileUtils;
 import com.recep.hunt.utilis.SharedPrefrenceManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -231,13 +240,21 @@ public class InstagramApp {
                     SharedPreferences pref = getApplicationContext().getSharedPreferences(Constants.prefsName, 0); // 0 - for private mode
                     SharedPreferences.Editor editor = pref.edit();
 
+
+
+
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     json = gson.toJson(userDetailsModel);
                     editor.putString("UserModel", String.valueOf(json)); // Storing string
                     editor.putString("UserFirstName", firstName); // Storing string
                     editor.putString("UserLastName", lastName); // Storing string
-                    editor.putString("UserEmail", data_obj.getString(TAG_USERNAME)); // Storing string
-                    editor.putString("ProfileImg", data_obj.getString(TAG_PROFILE_PICTURE)); //
+                    editor.putString("UserEmail", data_obj.getString(TAG_USERNAME));// Storing string
+                    editor.putString("ProfileImg", getBitmapFromURL(data_obj.getString(TAG_PROFILE_PICTURE)));
+                    editor.putString("InstagramToken",TAG_ID);
+                    editor.putString("InstagramId",TAG_ID);
+
+
+
                     editor.putString("socialType", "social"); //
                     editor.commit(); // commit changes
 
@@ -398,6 +415,33 @@ public class InstagramApp {
 
     private static String removeLastChar(String str) {
         return str.substring(0, str.length() - 1);
+    }
+
+
+    public String  getBitmapFromURL(String imgUrl) {
+        try {
+            URL url = new URL(imgUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return convertString(myBitmap);
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
+    }
+
+    String convertString(Bitmap bitmap)
+    {
+
+        final int lnth=bitmap.getByteCount();
+        ByteBuffer dst= ByteBuffer.allocate(lnth);
+        bitmap.copyPixelsToBuffer( dst);
+        byte[] barray=dst.array();
+        String ans=Base64.encodeToString(barray,Base64.DEFAULT);
+        return ans;
     }
 
 }

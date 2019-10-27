@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
@@ -14,27 +15,36 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.goodiebag.pinview.Pinview
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.google.firebase.iid.FirebaseInstanceId
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.model.LoginModel
+import com.recep.hunt.model.login.LoginResponse
 import com.recep.hunt.utilis.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_otp_verification.*
+import org.aviran.cookiebar2.CookieBar.dismiss
+import org.jetbrains.anko.email
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
@@ -65,11 +75,14 @@ class OtpVerificationActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var mAuth: FirebaseAuth
     private lateinit var verifyingDialog : KProgressHUD
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var dialog: KProgressHUD
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verification)
         mAuth = FirebaseAuth.getInstance()
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
 
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
@@ -112,11 +125,16 @@ class OtpVerificationActivity : AppCompatActivity() {
             otp = intent.getStringExtra(WelcomeScreenActivity.otpKey)
             countryCode = intent.getStringExtra(WelcomeScreenActivity.countryCodeKey)
             phoneNumber = intent.getStringExtra(WelcomeScreenActivity.numberKey)
+
+            verify(phoneNumber, countryCode)
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
         init()
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -151,7 +169,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         val client = SmsRetriever.getClient(this)
         val retriever = client.startSmsRetriever()
         retriever.addOnSuccessListener {
-            val listener = object : SMSReceiver.Listener {
+            val listener = object : SMSReceiver.         Listener {
                 override fun onSMSReceived(pin: String) {
                     // HERE you have the pin and can call your server to check. =)
                     otpPinView.value = pin
@@ -188,7 +206,7 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         val sendOtpAgainBtn = find<Button>(R.id.send_otp_again_btn)
         sendOtpAgainBtn.setOnClickListener {
-//            dialog.dismiss()
+            //            dialog.dismiss()
             resendOtp()
         }
 //        dialog.show()
@@ -262,26 +280,31 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
 
-    private fun authenticate(number: String) {
-        val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(verificationId, number)
-        signIn(credential)
+    private fun authenticate(number: String)
+    {
+        try{
+            val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(verificationId, number)
+            signIn(credential)
 
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(this@OtpVerificationActivity,"Please enter correct otp",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun signIn(credential: PhoneAuthCredential) {
-        val dialog: KProgressHUD =
+        dialog =
             Helpers.showDialog(this@OtpVerificationActivity, this@OtpVerificationActivity, "Verifying OTP")
         dialog.show()
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    dialog.run { dismiss() }
                     Log.d("signInWithCredential", "signInWithCredential:success")
                     SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, Constants.isOTPVerified)
                     SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity, phoneNumber)
                     otpPinView.setPinBackgroundRes(R.drawable.otp_pin_invalid_bg)
-                    launchActivity<SocialLoginActivity>()
-                    finish()
+                    getDeviceToken()
                 } else {
                     dialog.dismiss()
                     Log.w("Error : ", "signInWithCredential:failure", task.exception)
@@ -295,6 +318,89 @@ class OtpVerificationActivity : AppCompatActivity() {
                     }
                 }
             }
+    }
+
+
+    private fun getDeviceToken() {
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+            if (!it.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            val token = it.result?.token
+            if (token != null) {
+                var latitude : Double = 0.0
+                var longitude : Double= 0.0
+
+                SharedPrefrenceManager.setDeviceToken(this@OtpVerificationActivity, token)
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        latitude = location?.latitude!!
+                        longitude = location?.longitude
+
+                        val loginModel= LoginModel(
+                            SharedPrefrenceManager.getUserMobileNumber(this),
+                            SharedPrefrenceManager.getUserCountryCode(this),
+                            true,
+                            latitude,
+                            longitude,
+                            SharedPrefrenceManager.getUserCountry(this),
+                            1,
+                            SharedPrefrenceManager.getDeviceToken(this)
+                        )
+
+                        val call = ApiClient.getClient.loginUser(loginModel)
+
+
+                        call.enqueue(object : Callback<LoginResponse> {
+                            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                                launchActivity<SocialLoginActivity>()
+                                finish()
+                                dialog.run { dismiss() }
+
+                                Toast.makeText(this@OtpVerificationActivity,"Added",Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onResponse(
+                                call: Call<LoginResponse>,
+                                response: Response<LoginResponse>
+                            )
+                            {
+
+                                if(response.body()!!.status==1)
+                                {
+                                    var userInfo=response.body()!!.data.user
+                                    SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity,userInfo.mobile_no)
+                                    SharedPrefrenceManager.setUserCountry(this@OtpVerificationActivity,userInfo.country)
+                                    SharedPrefrenceManager.setUserCountryCode(this@OtpVerificationActivity,userInfo.country_code)
+                                    SharedPrefrenceManager.setUserFirstName(this@OtpVerificationActivity,userInfo.first_name)
+                                    SharedPrefrenceManager.setUserLastName(this@OtpVerificationActivity,userInfo.last_name)
+                                    SharedPrefrenceManager.setDeviceToken(this@OtpVerificationActivity,userInfo.device_token)
+                                    SharedPrefrenceManager.setUserEmail(this@OtpVerificationActivity,userInfo.email)
+                                    SharedPrefrenceManager.setUserDob(this@OtpVerificationActivity,userInfo.dob)
+                                    SharedPrefrenceManager.setUserGender(this@OtpVerificationActivity,userInfo.gender)
+                                    launchActivity<HomeActivity>()
+                                    finish()
+                                    dialog.run { dismiss() }
+                                }
+                                else
+                                {
+
+                                    launchActivity<SocialLoginActivity>()
+                                    finish()
+                                    dialog.run { dismiss() }
+                                }
+
+
+                            }
+
+
+                        })
+
+                    }
+
+                Log.e(TAG, "Device Token : $token")
+            }
+        }
     }
 
 }

@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,10 @@ import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.model.UpdateUserInfoModel
+import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
@@ -43,6 +47,9 @@ import kotlinx.android.synthetic.main.activity_user_profile_edit.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -122,6 +129,36 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             updateSchool()
             updateGenderPrefrence()
 
+            val userModel= UpdateUserInfoModel(
+                SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getSomke(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getPets(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getKids(this@UserProfileEditActivity),
+                SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity),
+                "",
+                SharedPrefrenceManager.getReligion(this@UserProfileEditActivity),
+                "",
+                SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity) )
+
+                 val call = ApiClient.getClient.saveUserDetails(userModel)
+                 call.enqueue(object:
+                     Callback<UpdateUserInfoResponseModel> {
+                     override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
+                         Toast.makeText(this@UserProfileEditActivity,"Somthing want wrong,Please Try ageain",Toast.LENGTH_SHORT).show() }
+                     override fun onResponse(call: Call<UpdateUserInfoResponseModel>, response: Response<UpdateUserInfoResponseModel>)
+                     {
+                         dialog.dismiss()
+                         finish()
+                     } })
+
             Run.after(2000) {
                 dialog.dismiss()
                 finish()
@@ -129,6 +166,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             }
 
         }
+
 
         bindSixImages()
         setupFields()
@@ -173,7 +211,6 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                 SharedPrefrenceManager.setProfileImg(this@UserProfileEditActivity, bitMapToString(bitmap))
                 SharedPrefrenceManager.setsocialType(this@UserProfileEditActivity, "none")
-                //ivEditProfielId.setImageURI(resultUri)
                 ivEditProfielId.setImageBitmap(bitmap)
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error

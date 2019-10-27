@@ -1,5 +1,8 @@
 package com.recep.hunt.contactUs.model
 
+import android.graphics.Bitmap
+import android.net.Uri
+
 
 /**
  * Created by Rishabh Shukla
@@ -7,5 +10,9 @@ package com.recep.hunt.contactUs.model
  * Email : rishabh1450@gmail.com
  */
 
-data class ChatModel(val msg:String,
-                     val type:String)
+data class ChatModel(
+    val msgData:String="",
+    val msgType:Int,
+    val bitmapImage: Bitmap? =null,
+    val uriGif: Uri? =null,
+    val type:String)

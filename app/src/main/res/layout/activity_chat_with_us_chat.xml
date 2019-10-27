@@ -111,6 +111,7 @@
                 android:orientation="horizontal">
 
             <Button
+                    android:id="@+id/BtnTxt"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -121,6 +122,7 @@
                     android:textSize="16sp" />
 
             <Button
+                    android:id="@+id/onGifClick"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="60dp"
                     android:layout_height="30dp"
@@ -134,6 +136,7 @@
                     android:textSize="12sp" />
 
             <Button
+                    android:id="@+id/ivUploadImage"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
