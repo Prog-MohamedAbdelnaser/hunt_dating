@@ -21,6 +21,7 @@ import jp.shts.android.storiesprogressview.StoriesProgressView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import java.lang.Exception
+import java.sql.Time
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,8 +37,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     var y_cord : Int = 0
     var x: Int = 0
     var y : Int = 0
-    var startX: Float = 0.0f
-    var startY : Float = 0.0f
     var startClickTime : Long = 0L
     var Likes : Int = 0
     private var items =  ArrayList<SwipeUserModel>()
@@ -93,7 +92,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             counter.add(0)
             currentUser = i
             storyProgressViews[i].setStoriesCount(count)
-            storyProgressViews[i].setStoryDuration(3000L)
+            storyProgressViews[i].setStoryDuration(3500L)
 
             Picasso.get().load(dummyImages[0]).fit().centerCrop().into(storyImageView[i], object:
                 Callback {
@@ -131,9 +130,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                     MotionEvent.ACTION_DOWN -> {
                         x = event.x.toInt()
                         y = event.y.toInt()
-                        startX = event.x
-                        startY = event.y
-                        startClickTime = Calendar.getInstance().timeInMillis
 
                         Log.v("On touch", x.toString() + " " + y)
                     }
@@ -143,10 +139,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         x_cord = event.rawX.toInt()
                         y_cord = event.rawY.toInt()
 
-                        val endX = event.x
-                        val endY = event.y
-
-                        if (event.eventTime - event.downTime < 200) {
+                        if (isAClick(event.eventTime, event.downTime)) {
                             containerView.x = 0f
                             containerView.y = 0f
                         }
@@ -157,11 +150,17 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             if (x_cord > x) {
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
+//                                if (currentUser > 0) {
+//                                    if ((x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
+//                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
+//                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
+//                                    }
+//                                }
                                 if ( x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
                                     containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(179, 58, 204, 225))
                                 else if ( (x_cord - x) % 255 < 179)
                                     containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb((x_cord - x) % 255, 58, 204, 225))
-                                if (x_cord >= (screenCenter + (screenCenter / 4))) {
+                                if (x_cord >= (screenCenter + 50)) {
                                     Likes = 2
                                 } else {
                                     Likes = 0
@@ -170,11 +169,18 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             else if (x_cord < x){
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_dislike
+
+//                                if (currentUser > 0) {
+//                                    if ((x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
+//                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
+//                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
+//                                    }
+//                                }
                                 if (x - x_cord >= 255 || (x - x_cord) % 255 >= 153)
                                     containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(153, 255, 42, 78))
                                 else if ( (x - x_cord) % 255 < 153)
                                     containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb((x - x_cord) % 255, 255, 42, 78))
-                                if (x_cord <= screenCenter - screenCenter / 4) {
+                                if (x_cord <= screenCenter - 50) {
                                     Likes = 1
                                 } else {
                                     Likes = 0
@@ -191,8 +197,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 0.0f
                         containerView.findViewById<ImageView>(R.id.story_image_userdetail).colorFilter = null
 
-                        var clickDuration = event.eventTime - event.downTime
-                        if (clickDuration < 200) {
+                        if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
                             if (x >= screenCenter) {
                                 storyProgressViews[currentUser].skip()
@@ -209,8 +214,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
                             if (Likes == 0) {
                                 if (currentUser > 0) {
-                                    parentView.getChildAt(currentUser - 1).scaleX = 0.95f
-                                    parentView.getChildAt(currentUser - 1).scaleY = 0.95f
+                                    parentView.getChildAt(currentUser - 1).scaleX = 1f
+                                    parentView.getChildAt(currentUser - 1).scaleY = 1f
                                 }
 
                                 containerView.animate().x(0f).y(0f).rotation(0f).setDuration(300)
@@ -242,13 +247,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 true
             })
 
-            containerView.scaleX = 0.95f
-            containerView.scaleY = 0.95f
-            containerView.elevation = 5f
-            if ( i == size) {
-                containerView.scaleX = 1f
-                containerView.scaleY = 1f
-            }
             parentView.addView(containerView)
         }
     }
@@ -291,14 +289,16 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         return data
     }
 
-    fun isAClick(startX : Float, endX : Float, startY : Float, endY : Float): Boolean {
-        val differenceX = Math.abs(startX - endX)
-        val differenceY = Math.abs(startY - endY)
-        return !(differenceX > CLICK_ACTION_THRESHOLD || differenceY > CLICK_ACTION_THRESHOLD)
+    fun isAClick(dragTime : Long, downTime : Long): Boolean {
+        if (dragTime - downTime < CLICK_ACTION_THRESHOLD)
+            return true
+        else
+            return false
     }
 
     override fun onComplete() {
         counter[currentUser] = 4
+
     }
 
     override fun onPrev() {
