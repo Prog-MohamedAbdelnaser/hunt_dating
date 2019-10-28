@@ -53,7 +53,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         check_code_btn.setOnClickListener {
 
-            if(edtReferelCode.text.equals("huntwelcome"))
+            if(edtReferelCode.text.toString().equals("huntwelcome"))
             {
                 SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
                 registerUser()
@@ -81,7 +81,8 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                  .build().setDownloadProgressListener(object : DownloadProgressListener{
                 override fun onProgress(bytesDownloaded: Long, totalBytes: Long) {
                 }
-            }).startDownload(object :DownloadListener{
+            }).
+                startDownload(object :DownloadListener{
                 override fun onDownloadComplete() {
 
                     val filePart = MultipartBody.Part.createFormData("pics", file!!.getName(), RequestBody.create(
