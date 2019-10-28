@@ -190,7 +190,6 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                 }
 
                 override fun onError(anError: ANError?) {
-
                     Log.d("error",anError?.message)
                 }
 
