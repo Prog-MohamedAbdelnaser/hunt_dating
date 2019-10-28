@@ -5,6 +5,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.net.ssl.SSLSession
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.X509TrustManager
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.security.cert.CertificateException
+
 
 object ApiClient {
 
@@ -28,5 +35,7 @@ object ApiClient {
             return retrofit.create(ApiInterface::class.java)
 
         }
+
+
 
 }
