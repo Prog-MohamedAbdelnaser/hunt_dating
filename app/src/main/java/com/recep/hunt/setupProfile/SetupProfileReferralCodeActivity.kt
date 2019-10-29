@@ -1,11 +1,15 @@
 package com.recep.hunt.setupProfile
 
 import android.app.Dialog
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -19,9 +23,11 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
 import com.androidnetworking.interfaces.DownloadProgressListener
 import com.google.android.gms.common.util.SharedPreferencesUtils
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.RegistrationModule.RegistrationResponse
+import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_referral_code.*
@@ -36,17 +42,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.FileOutputStream
 
 class SetupProfileReferralCodeActivity : AppCompatActivity() {
+
+    private lateinit var dialog : KProgressHUD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_referral_code)
         AndroidNetworking.initialize(getApplicationContext());
+        dialog = Helpers.showDialog(this,this,"Processing")
+
         init()
     }
 
     private fun init() {
+
         tvSkip.setOnClickListener {
             SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,"")
             registerUser()
@@ -73,133 +85,193 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
     private fun registerUser() {
 
+        dialog.show()
+
+        if(checkWriteExternalPermission())
+        {
+
+
+        var file:File
         val filePath=Environment.getExternalStorageDirectory().absolutePath
         val fileName="abc.jpg"
-        var file=File(filePath,fileName)
-        if(file.exists())
-            file.delete()
 
-        AndroidNetworking.download(SharedPrefrenceManager.getProfileImg(this),filePath,fileName)
-                 .setTag("downloadTest")
-                 .setPriority(Priority.MEDIUM)
-                 .build().setDownloadProgressListener(object : DownloadProgressListener{
-                override fun onProgress(bytesDownloaded: Long, totalBytes: Long) {
-                }
-            }).
-                startDownload(object :DownloadListener{
-                override fun onDownloadComplete() {
-
-//                    val filePart = MultipartBody.Part.createFormData("pics", file!!.getName(), RequestBody.create(
-//                        MediaType.parse("image/*"), file));
-//
-//                    val registrationModel=Registration(
-//                        SharedPrefrenceManager.getUserFirstName(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity),
-//                        "8212356789",
-//                        SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity),
-//                        "1993-11-11",
-//                        filePart,
-//                        "abc@abc.com",
-//                        SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getUserLatitude(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity),
-//                        "",
-//                        SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getLookingForBusniess(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getLookingForFriendship(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getFacebookId(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getFacebookLoginToken(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getInstagramLoginToken(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getGoogleId(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getGoogleLoginToken(this@SetupProfileReferralCodeActivity),
-//                        SharedPrefrenceManager.getRefrenceCode(this@SetupProfileReferralCodeActivity)
-//                    )
+        if(SharedPrefrenceManager.getIsFromSocial(this))
+        {
 
 
-                    val builder = MultipartBody.Builder()
-                    builder.setType(MultipartBody.FORM)
-                    builder.addFormDataPart("first_name", SharedPrefrenceManager.getUserFirstName(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("last_name", SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("mobile_no", "9909860786")
-                    builder.addFormDataPart("country_code", SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("gender", "male")
-                    builder.addFormDataPart("dob", "1993-11-11")
+            file=File(filePath,fileName)
+
+
+            if(file.exists())
+                file.delete()
+
+            AndroidNetworking.download(SharedPrefrenceManager.getProfileImg(this),filePath,fileName)
+                .setTag("downloadTest")
+                .setPriority(Priority.MEDIUM)
+                .build().setDownloadProgressListener(object : DownloadProgressListener{
+                    override fun onProgress(bytesDownloaded: Long, totalBytes: Long) {
+                    }
+                }).
+                    startDownload(object :DownloadListener{
+                        override fun onDownloadComplete() {
+
+
+                            val builder = MultipartBody.Builder()
+                            builder.setType(MultipartBody.FORM)
+                            builder.addFormDataPart("first_name", SharedPrefrenceManager.getUserFirstName(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("last_name", SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("mobile_no", SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("country_code", SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("dob", "1993-11-11")
 //                    builder.addFormDataPart("profile_pic", "")
-                    builder.addFormDataPart("email", "abc@abc.com")
-                    builder.addFormDataPart("country", SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("lat", SharedPrefrenceManager.getUserLatitude(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("lang", SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("email", SharedPrefrenceManager.getUserEmail(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("country", SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("lat", SharedPrefrenceManager.getUserLatitude(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("lang", SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity))
 //                    builder.addFormDataPart("device_type", "android")
 //                    builder.addFormDataPart("device_id", SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("for_date", SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("for_bussiness", SharedPrefrenceManager.getLookingForBusniess(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("for_friendship", SharedPrefrenceManager.getLookingForFriendship(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("fb_id", SharedPrefrenceManager.getFacebookId(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("fb_token", SharedPrefrenceManager.getFacebookLoginToken(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("insta_id", SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("insta_token", SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("google_id", SharedPrefrenceManager.getGoogleId(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("google_token", SharedPrefrenceManager.getGoogleLoginToken(this@SetupProfileReferralCodeActivity))
-                    builder.addFormDataPart("reference_code", SharedPrefrenceManager.getRefrenceCode(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("for_date", SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("for_bussiness", SharedPrefrenceManager.getLookingForBusniess(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("for_friendship", SharedPrefrenceManager.getLookingForFriendship(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("fb_id", SharedPrefrenceManager.getFacebookId(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("fb_token", SharedPrefrenceManager.getFacebookLoginToken(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("insta_id", SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("insta_token", SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("google_id", SharedPrefrenceManager.getGoogleId(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("google_token", SharedPrefrenceManager.getGoogleLoginToken(this@SetupProfileReferralCodeActivity))
+                            builder.addFormDataPart("reference_code", SharedPrefrenceManager.getRefrenceCode(this@SetupProfileReferralCodeActivity))
 
-                    if(file!=null && file.exists()) {
-                        builder.addFormDataPart(
-                            "profile_pic",
-                            file.name,
-                            RequestBody.create(MediaType.parse("multipart/form-data"), file)
-                        )
-                    }
-
-                    val call = ApiClient.getClient.createUser(builder.build())
-
-                    call.enqueue(object : Callback<RegistrationResponse> {
-                        override fun onFailure(call: Call<RegistrationResponse>, t: Throwable) {
-                            Toast.makeText(this@SetupProfileReferralCodeActivity,"Somthing want wrong,Please Try ageain",Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<RegistrationResponse>,
-                            response: Response<RegistrationResponse>
-
-                        ) {
-                            if(response.code() == 200){
-                                val mJsonObject =  JSONObject(response.body().toString())
-                                val mJsonObjectData= mJsonObject.optJSONObject("data")
-
-                                if(mJsonObjectData!=null){
-                                    val mJsonObjectUser = mJsonObjectData.optJSONObject("user")
-                                    val token = mJsonObjectData.optString("token")
-                                    if(!TextUtils.isEmpty(token)){
-                                        //do token related code and also store user json
-                                        SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
-                                        launchActivity<SetupProfileCompletedActivity> {  }
-                                    }
-                                }
-
-                            }else{
-                                val data = response.errorBody()?.string()
-                                val mJsonObject =  JSONObject(data)
-                                val mJsonObjectMessage = mJsonObject.optString("message")
-                                Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
+                            if(file!=null && file.exists()) {
+                                builder.addFormDataPart(
+                                    "profile_pic",
+                                    file.name,
+                                    RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                                )
                             }
+
+                            makeApiCall(builder.build())
+
+
+
                         }
+
+                        override fun onError(anError: ANError?) {
+                            Log.d("error",anError?.message)
+                        }
+
+
                     })
 
+        }
+        else {
+            val fileData =
+                StringToBitmap(SharedPrefrenceManager.getProfileImg(this@SetupProfileReferralCodeActivity))
+            file = File(filePath, fileName)
+
+
+            try {
+                val out = FileOutputStream(file);
+                fileData?.let {
+                    it.compress(Bitmap.CompressFormat.PNG, 90, out);
+                }
+                out.flush();
+                out.close();
+
+
+                val builder = MultipartBody.Builder()
+                builder.setType(MultipartBody.FORM)
+                builder.addFormDataPart(
+                    "first_name",
+                    SharedPrefrenceManager.getUserFirstName(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "last_name",
+                    SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart("mobile_no", "22723")
+                builder.addFormDataPart(
+                    "country_code",
+                    SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart("gender", "Male")
+                builder.addFormDataPart("dob", "1993-11-11")
+//                    builder.addFormDataPart("profile_pic", "")
+                builder.addFormDataPart("email", "aa@bbj.f")
+                builder.addFormDataPart(
+                    "country",
+                    SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "lat",
+                    SharedPrefrenceManager.getUserLatitude(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "lang",
+                    SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity)
+                )
+//                    builder.addFormDataPart("device_type", "android")
+//                    builder.addFormDataPart("device_id", SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity))
+                builder.addFormDataPart(
+                    "for_date",
+                    SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "for_bussiness",
+                    SharedPrefrenceManager.getLookingForBusniess(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "for_friendship",
+                    SharedPrefrenceManager.getLookingForFriendship(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "fb_id",
+                    SharedPrefrenceManager.getFacebookId(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "fb_token",
+                    SharedPrefrenceManager.getFacebookLoginToken(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "insta_id",
+                    SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "insta_token",
+                    SharedPrefrenceManager.getInstagramId(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "google_id",
+                    SharedPrefrenceManager.getGoogleId(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "google_token",
+                    SharedPrefrenceManager.getGoogleLoginToken(this@SetupProfileReferralCodeActivity)
+                )
+                builder.addFormDataPart(
+                    "reference_code",
+                    SharedPrefrenceManager.getRefrenceCode(this@SetupProfileReferralCodeActivity)
+                )
+
+                if (file != null && file.exists()) {
+                    builder.addFormDataPart(
+                        "profile_pic",
+                        file.name,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                    )
                 }
 
-                override fun onError(anError: ANError?) {
-                    Log.d("error",anError?.message)
-                }
+                makeApiCall(builder.build())
 
 
-            })
-
-
-
-
+            } catch (e: Exception) {
+                e.printStackTrace();
+            }
+        }
+        }
+        else{
+            Toast.makeText(this@SetupProfileReferralCodeActivity,"Please allow External Storage permission",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showTryAgainAlert(){
@@ -226,7 +298,70 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
 
 
+    fun StringToBitmap(img: String): Bitmap? {
+        var bitmap: Bitmap? =null
+        if (img != null) {
+            var b = Base64.decode(img, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
 
+        }
+        return bitmap
+    }
+
+
+    fun makeApiCall(requestBody : RequestBody)
+    {
+        val call = ApiClient.getClient.createUser(requestBody)
+
+        call.enqueue(object : Callback<RegistrationResponse> {
+            override fun onFailure(call: Call<RegistrationResponse>, t: Throwable) {
+                dialog.dismiss()
+
+                Toast.makeText(this@SetupProfileReferralCodeActivity,"Somthing want wrong,Please Try ageain",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<RegistrationResponse>,
+                response: Response<RegistrationResponse>
+
+            ) {
+                if(response.code() == 200){
+                    dialog.dismiss()
+
+                    var token=""
+
+
+                    response.body()?.let{
+                        token = it.data.token
+
+                            if(!TextUtils.isEmpty(token)){
+                                //do token related code and also store user json
+                                SharedPrefrenceManager.setUserToken(this@SetupProfileReferralCodeActivity,token)
+
+                                SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
+                                launchActivity<SetupProfileCompletedActivity> {  }
+                            }
+                        }
+
+
+                }else{
+                    dialog.dismiss()
+                    val data = response.errorBody()?.string()
+                    val mJsonObject =  JSONObject(data)
+                    val mJsonObjectMessage = mJsonObject.optString("message")
+                    Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+
+    }
+
+    private fun checkWriteExternalPermission():Boolean
+{
+    val permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    val res = this.checkCallingOrSelfPermission(permission);
+    return (res == PackageManager.PERMISSION_GRANTED);
+}
 
 
 }
