@@ -3,7 +3,6 @@ package com.recep.hunt.profile
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -19,7 +18,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nguyenhoanglam.imagepicker.model.Config
@@ -30,9 +28,8 @@ import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.model.UpdateUserInfoModel
 import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
-import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
-import com.recep.hunt.profile.model.UserBasicInfoModel
+import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
 import com.recep.hunt.utilis.*
@@ -42,9 +39,11 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_setup_profile_added_photo.*
 import kotlinx.android.synthetic.main.activity_user_profile_edit.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import retrofit2.Call
@@ -56,7 +55,11 @@ import java.io.File
 
 class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
-    override fun onItemClicked(position: Int, questionModel: UserBasicInfoQuestionModel, icon: Int) {
+    override fun onItemClicked(
+        position: Int,
+        questionModel: UserBasicInfoQuestionModel,
+        icon: Int
+    ) {
         launchActivity<UserProfileEditQuestionActivity> {
             putExtra(questionModelKey, questionModel)
             putExtra(questionPositionKey, position)
@@ -116,9 +119,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         femaleGenderBtn = find(R.id.edit_profile_female_gender_btn)
         otherGenderBtn = find(R.id.edit_profile_other_gender_btn)
 
-        about_header.text = resources.getString(R.string.about_you, SharedPrefrenceManager.getUserFirstName(this))
+        about_header.text =
+            resources.getString(R.string.about_you, SharedPrefrenceManager.getUserFirstName(this))
         val dialog = Helpers.showDialog(this, this, "Updating Profile")
-        oldGender = SharedPrefrenceManager.getUserGender(this);
+        oldGender = SharedPrefrenceManager.getUserGender(this)
 
         save_edit_profile_btn.setOnClickListener {
             dialog.show()
@@ -129,7 +133,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             updateSchool()
             updateGenderPrefrence()
 
-            val userModel= UpdateUserInfoModel(
+            val userModel = UpdateUserInfoModel(
                 SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity),
                 SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity),
                 SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity),
@@ -146,18 +150,58 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 "",
                 SharedPrefrenceManager.getReligion(this@UserProfileEditActivity),
                 "",
-                SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity) )
+                SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity)
+            )
 
-                 val call = ApiClient.getClient.saveUserDetails(userModel)
-                 call.enqueue(object:
-                     Callback<UpdateUserInfoResponseModel> {
-                     override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
-                         Toast.makeText(this@UserProfileEditActivity,"Somthing want wrong,Please Try ageain",Toast.LENGTH_SHORT).show() }
-                     override fun onResponse(call: Call<UpdateUserInfoResponseModel>, response: Response<UpdateUserInfoResponseModel>)
-                     {
-                         dialog.dismiss()
-                         finish()
-                     } })
+//            val builder = MultipartBody.Builder()
+//            builder.setType(MultipartBody.FORM)
+//            builder.addFormDataPart("about", SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity))
+//            builder.addFormDataPart("job_title", SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity))
+//            builder.addFormDataPart("company", SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity))
+//            builder.addFormDataPart("hometown", SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity))
+//            builder.addFormDataPart("school", SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity))
+//            builder.addFormDataPart("height", SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity))
+//            builder.addFormDataPart("gym", SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity))
+//            builder.addFormDataPart("education_level", SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity))
+//            builder.addFormDataPart("drink", SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity))
+//            builder.addFormDataPart("smoke", SharedPrefrenceManager.getSomke(this@UserProfileEditActivity))
+//            builder.addFormDataPart("pets", SharedPrefrenceManager.getPets(this@UserProfileEditActivity))
+//            builder.addFormDataPart("kids", SharedPrefrenceManager.getKids(this@UserProfileEditActivity))
+//            builder.addFormDataPart("zodiac", SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity))
+//            builder.addFormDataPart("religion", SharedPrefrenceManager.getReligion(this@UserProfileEditActivity))
+//            builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity))
+////
+////            if (file != null && file.exists()) {
+////                builder.addFormDataPart(
+////                    "profile_pic",
+////                    file.name,
+////                    RequestBody.create(MediaType.parse("multipart/form-data"), file)
+////                )
+////            }
+
+
+
+
+
+            val call = ApiClient.getClient.saveUserDetails(userModel)
+            call.enqueue(object :
+                Callback<UpdateUserInfoResponseModel> {
+                override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
+                    Toast.makeText(
+                        this@UserProfileEditActivity,
+                        "Somthing want wrong,Please Try ageain",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onResponse(
+                    call: Call<UpdateUserInfoResponseModel>,
+                    response: Response<UpdateUserInfoResponseModel>
+                ) {
+                    dialog.dismiss()
+                    finish()
+                }
+            })
 
             Run.after(2000) {
                 dialog.dismiss()
@@ -184,8 +228,8 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     private fun updateGenderPrefrence() {
         var gender = SharedPrefrenceManager.getUserGender(this)
-        if(!gender.equals(oldGender)){
-            SharedPrefrenceManager.setUserGenderChanged(this , false)
+        if (!gender.equals(oldGender)) {
+            SharedPrefrenceManager.setUserGenderChanged(this, false)
         }
 
     }
@@ -197,7 +241,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             if (images.size == 1) {
                 imageFile = File(images[0].path)
                 MediaScannerConnection.scanFile(
-                    this, arrayOf(imageFile.getAbsolutePath()), null
+                    this, arrayOf(imageFile.absolutePath), null
                 ) { path, uri ->
                     CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).start(this)
                 }
@@ -208,8 +252,12 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             val result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
                 val resultUri = result.uri
-                var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                SharedPrefrenceManager.setProfileImg(this@UserProfileEditActivity, bitMapToString(bitmap))
+                var bitmap =
+                    MediaStore.Images.Media.getBitmap(this.contentResolver, resultUri)
+                SharedPrefrenceManager.setProfileImg(
+                    this@UserProfileEditActivity,
+                    bitMapToString(bitmap)
+                )
                 SharedPrefrenceManager.setsocialType(this@UserProfileEditActivity, "none")
                 ivEditProfielId.setImageBitmap(bitmap)
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -346,33 +394,42 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     private fun setupSelectedGender(selectedgender: String) {
         when (selectedgender) {
             Constants.MALE -> {
-                maleGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_selected_btn)
+                maleGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 maleGenderBtn.textColor = resources.getColor(R.color.white)
 
-                femaleGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                femaleGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 femaleGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
 
-                otherGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                otherGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
             }
             Constants.FEMALE -> {
-                femaleGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_selected_btn)
+                femaleGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 femaleGenderBtn.textColor = resources.getColor(R.color.white)
 
-                maleGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                maleGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 maleGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
 
-                otherGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                otherGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
             }
             else -> {
-                otherGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_selected_btn)
+                otherGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 otherGenderBtn.textColor = resources.getColor(R.color.white)
 
-                maleGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                maleGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 maleGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
 
-                femaleGenderBtn.background = resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                femaleGenderBtn.background =
+                    resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 femaleGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
             }
         }
@@ -416,7 +473,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     }
 
     private fun bindSixImages() {
-        user_image_1.setOnClickListener() {
+        user_image_1.setOnClickListener {
             flag = 1
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
@@ -424,7 +481,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 finish()
             }
         }
-        user_image_2.setOnClickListener() {
+        user_image_2.setOnClickListener {
             flag = 2
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
@@ -432,7 +489,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 finish()
             }
         }
-        user_image_3.setOnClickListener() {
+        user_image_3.setOnClickListener {
             flag = 3
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
@@ -440,7 +497,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 finish()
             }
         }
-        user_image_4.setOnClickListener() {
+        user_image_4.setOnClickListener {
             flag = 4
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
@@ -448,7 +505,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 finish()
             }
         }
-        user_image_5.setOnClickListener() {
+        user_image_5.setOnClickListener {
             flag = 5
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
@@ -456,7 +513,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 finish()
             }
         }
-        user_image_6.setOnClickListener() {
+        user_image_6.setOnClickListener {
             flag = 6
             launchActivity<SetupProfileUploadPhotoStep2Activity>
             {
@@ -468,8 +525,8 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     fun StringToBitmap(img: String): Bitmap? {
         if (img != null) {
-            var b = Base64.decode(img, Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
+            var b = Base64.decode(img, Base64.DEFAULT)
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
 
         }
         return bitmap
