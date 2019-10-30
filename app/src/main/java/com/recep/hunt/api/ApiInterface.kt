@@ -13,6 +13,7 @@ import com.recep.hunt.model.login.User
 import com.recep.hunt.model.logout.LogoutReponse
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
+import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
@@ -75,4 +76,7 @@ interface ApiInterface {
 
     @POST("/api/select-loation")
     fun selectLocation(@Body nearestLocation: NearestLocation):Call<SelectLocation>
+
+    @GET("/api/notification")
+    fun getNotification():Call<NotificationResponse>
 }

@@ -189,7 +189,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     "last_name",
                     SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity)
                 )
-                builder.addFormDataPart("mobile_no", "22723")
+                builder.addFormDataPart("mobile_no", "2                                                                                                                             723")
                 builder.addFormDataPart(
                     "country_code",
                     SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
@@ -197,7 +197,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                 builder.addFormDataPart("gender", "Male")
                 builder.addFormDataPart("dob", "1993-11-11")
 //                    builder.addFormDataPart("profile_pic", "")
-                builder.addFormDataPart("email", "aa@bbj.f")
+                builder.addFormDataPart("email", "aa@bj.f")
                 builder.addFormDataPart(
                     "country",
                     SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity)
