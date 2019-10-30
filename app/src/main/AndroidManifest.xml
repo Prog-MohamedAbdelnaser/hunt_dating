@@ -42,11 +42,7 @@
         <activity android:name=".faq.FaqDashboard" />
         <activity android:name=".creator.TicketGenrated" />
         <activity android:name=".SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".swipe.SwipeActivity" />
         <activity android:name=".payment.PaymentFaqActivity" />
@@ -76,7 +72,13 @@
         <activity android:name=".profile.UserProfileEditQuestionActivity" />
         <activity android:name=".profile.UserProfileSettingsActivity" />
         <activity android:name=".profile.UserProfileEditActivity" />
-        <activity android:name=".profile.UserProfileActivity" />
+        <activity android:name=".profile.UserProfileActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".home.HomeActivity" />
         <activity android:name=".setupProfile.TurnOnGPSActivity" />
         <activity

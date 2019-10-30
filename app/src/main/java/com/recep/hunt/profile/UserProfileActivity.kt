@@ -47,6 +47,7 @@ import retrofit2.Response
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
+    lateinit var userInfo : UserInfoModel
     private var adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,6 @@ class UserProfileActivity : AppCompatActivity() {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        setupRecyclerView()
         getData()
     }
 
@@ -67,14 +67,14 @@ class UserProfileActivity : AppCompatActivity() {
 
         call.enqueue(object:Callback<UserProfileResponse>{
             override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
-                Log.d("AB" , "" + call)
             }
 
             override fun onResponse(
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
             ) {
-//                  var userInfo:UserInfoModel = response.body()!!.data.user_info
+                userInfo= response.body()!!.data.user_info
+                setupRecyclerView()
 
             }
 
@@ -85,7 +85,7 @@ class UserProfileActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.clear()
-        setupRecyclerView()
+//        setupRecyclerView()
         adapter.notifyDataSetChanged()
     }
 
@@ -174,6 +174,7 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.profile_header_layout_item
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+
 
         val userName = SharedPrefrenceManager.getUserFirstName(context)
         val userJobtitle = SharedPrefrenceManager.getJobTitle(context)
