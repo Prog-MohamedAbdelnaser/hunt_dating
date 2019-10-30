@@ -144,6 +144,13 @@ class SharedPrefrenceManager {
         fun getUserDetailModel(context: Context) = getSharePrefs(context, PersistenceKeys.UserModel.toString())
 
 
+        fun setUserToken(context: Context,token:String)
+        {
+            setSharedPrefs(context, "currentToken",token)
+        }
+
+        fun getUserToken(context: Context)= getSharePrefs(context,"currentToken")
+
         //IsFromSocial
         fun setIsFromSocial(context: Context, value: Boolean) {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
@@ -190,7 +197,14 @@ class SharedPrefrenceManager {
             setSharedPrefs(context, PersistenceKeys.UserGender.toString(), value)
         }
 
-        fun getUserGender(context: Context) = getSharePrefs(context, PersistenceKeys.UserGender.toString())
+        fun getUserGender(context: Context) :String{
+            var gender=getSharePrefs(context, PersistenceKeys.UserGender.toString())
+            if(gender==null)
+            {
+                gender="Not Specified"
+            }
+            return gender
+        }
 
         //UserEmail
         fun setUserEmail(context: Context, value: String) {
@@ -495,8 +509,7 @@ class SharedPrefrenceManager {
         }
 
         fun clearAllSharePreference(context: Context) {
-            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0).edit()
-            sharedPreferences.clear()
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0).edit().clear().commit()
         }
 
 

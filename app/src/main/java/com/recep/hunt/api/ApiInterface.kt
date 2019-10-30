@@ -17,10 +17,7 @@ import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 
 interface ApiInterface {
@@ -41,7 +38,7 @@ interface ApiInterface {
     fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
 
     @GET("api/logout")
-    fun  logoutUser():Call<LogoutReponse>
+    fun  logoutUser(@Header("Authorization")  authorization:String):Call<LogoutReponse>
 
     @POST("/api/report-user")
     fun reportUser(@Body reportUser:ReportUser):Call<ReportUserResponse>
