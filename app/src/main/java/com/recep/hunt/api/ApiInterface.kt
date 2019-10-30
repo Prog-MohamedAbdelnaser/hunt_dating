@@ -35,7 +35,7 @@ interface ApiInterface {
     @POST("/api/is-user-online")
     fun makeUserOnline(@Body isUserOnline:MakeUserOnline):Call<MakeUserOnlineResponse>
 
-    @PUT("/api/update-user-profile")
+    @POST("/api/update-user-profile")
     fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
 
     @GET("api/logout")

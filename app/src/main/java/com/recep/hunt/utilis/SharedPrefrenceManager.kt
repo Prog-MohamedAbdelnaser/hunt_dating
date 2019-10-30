@@ -56,7 +56,8 @@ enum class PersistenceKeys {
     IsIncognito,
     UserAge,
     socialType,
-    refernceCode
+    refernceCode,
+    apiToken
 }
 
 class SharedPrefrenceManager {
@@ -509,6 +510,22 @@ class SharedPrefrenceManager {
 
         fun clearAllSharePreference(context: Context) {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0).edit().clear().commit()
+        }
+
+
+        fun setApiToken(context: Context,value:String){
+            val sharedPrefrenceManager=context.getSharedPreferences(Constants.prefsName, 0)
+            val editor=sharedPrefrenceManager.edit()
+            editor.putString(PersistenceKeys.apiToken.toString(),value)
+            editor.apply()
+        }
+
+        fun getApiToken(context:Context):String{
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+             sharedPreferences.getString(PersistenceKeys.apiToken.toString(), "")?.let {
+                 return it
+            }
+            return ""
         }
 
 

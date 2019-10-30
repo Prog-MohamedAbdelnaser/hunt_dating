@@ -20,11 +20,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.model.UserProfile.Data
 import com.recep.hunt.model.UserProfile.UserInfoModel
 import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
+import com.recep.hunt.profile.model.UserProfileModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.userDetail.UserDetailActivity
 import com.recep.hunt.utilis.Helpers
@@ -47,6 +49,7 @@ import retrofit2.Response
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
+    lateinit var userInfo : Data
     private var adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +61,6 @@ class UserProfileActivity : AppCompatActivity() {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        setupRecyclerView()
         getData()
     }
 
@@ -67,14 +69,16 @@ class UserProfileActivity : AppCompatActivity() {
 
         call.enqueue(object:Callback<UserProfileResponse>{
             override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
-                Log.d("AB" , "" + call)
             }
 
             override fun onResponse(
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
             ) {
-//                  var userInfo:UserInfoModel = response.body()!!.data.user_info
+                userInfo= response.body()!!.data
+
+                setPrefData()
+                setupRecyclerView()
 
             }
 
@@ -82,10 +86,23 @@ class UserProfileActivity : AppCompatActivity() {
 
     }
 
+    private fun setPrefData() {
+        SharedPrefrenceManager.setUserFirstName(this , userInfo.first_name)
+        SharedPrefrenceManager.setUserLastName(this , userInfo.last_name)
+        SharedPrefrenceManager.setUserMobileNumber(this , userInfo.mobile_no)
+        SharedPrefrenceManager.setUserCountry(this , userInfo.country)
+        SharedPrefrenceManager.setUserCountryCode(this , userInfo.country_code)
+        SharedPrefrenceManager.setUserGender(this , userInfo.gender)
+        SharedPrefrenceManager.setUserEmail(this , userInfo.email)
+        SharedPrefrenceManager.setUserLatitude(this , userInfo.lat)
+        SharedPrefrenceManager.setProfileImg(this , userInfo.profile_pic)
+
+    }
+
     override fun onResume() {
         super.onResume()
         adapter.clear()
-        setupRecyclerView()
+//        setupRecyclerView()
         adapter.notifyDataSetChanged()
     }
 
@@ -175,6 +192,7 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
+
         val userName = SharedPrefrenceManager.getUserFirstName(context)
         val userJobtitle = SharedPrefrenceManager.getJobTitle(context)
         val aboutYou = SharedPrefrenceManager.getAboutYou(context)
@@ -188,7 +206,9 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
             Picasso.get().load(userImage).placeholder(R.drawable.account_icon)
                 .into(viewHolder.itemView.profile_header_user_image)
         } else {
-            viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
+            Picasso.get().load(userImage).placeholder(R.drawable.account_icon)
+                .into(viewHolder.itemView.profile_header_user_image)
+//            viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
         }
 
         viewHolder.itemView.profile_header_user_name.text = userName
@@ -293,8 +313,8 @@ class ProfileGenderItemView(private val context: Context, private val gender: St
     }
 
     private fun setupSelectedGender(selectedgender: String) {
-        when (selectedgender) {
-            Constants.MALE -> {
+        when (selectedgender.toLowerCase()) {
+            Constants.MALE.toLowerCase() -> {
                 maleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 maleBtn.textColor = context.resources.getColor(R.color.white)
 
@@ -304,7 +324,7 @@ class ProfileGenderItemView(private val context: Context, private val gender: St
                 otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
-            Constants.FEMALE -> {
+            Constants.FEMALE.toLowerCase() -> {
                 femaleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 femaleBtn.textColor = context.resources.getColor(R.color.white)
 
