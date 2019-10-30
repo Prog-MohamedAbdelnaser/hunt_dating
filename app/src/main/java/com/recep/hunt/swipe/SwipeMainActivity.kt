@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -29,26 +30,25 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     private lateinit var parentView : RelativeLayout
     private lateinit var context : Context
+    private lateinit var matchProgressBar: ProgressBar
+    private lateinit var attendanceProgressBar: ProgressBar
+    private lateinit var homeView : ConstraintLayout
+    private var storyProgressViews = ArrayList<StoriesProgressView>()
+    private var storyImageView = ArrayList<ImageView>()
 
-    var CLICK_ACTION_THRESHOLD : Int = 200
+    private var items =  ArrayList<SwipeUserModel>()
+
     var windowwidth : Int = 0
     var screenCenter : Int = 0
     var x_cord : Int = 0
     var y_cord : Int = 0
     var x: Int = 0
     var y : Int = 0
-    var startClickTime : Long = 0L
     var Likes : Int = 0
-    private var items =  ArrayList<SwipeUserModel>()
-
-    private lateinit var matchProgressBar: ProgressBar
-    private lateinit var attendanceProgressBar: ProgressBar
     var counter = ArrayList<Int>()
     var currentUser : Int = 0
-    private var storyProgressViews = ArrayList<StoriesProgressView>()
-    private var storyImageView = ArrayList<ImageView>()
     var dummyImages : IntArray = intArrayOf(R.drawable.demo_user, R.drawable.demo_user_1, R.drawable.demo_user_2, R.drawable.demo_user_3, R.drawable.demo_user_4)
-    private lateinit var homeView : ConstraintLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +63,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         windowwidth = windowManager.defaultDisplay.width
         screenCenter = windowwidth / 2
         items = dummyUsersdata()
+        addNearbyUsersToSwipe()
+    }
+
+    private fun addNearbyUsersToSwipe() {
 
         var size = items.size - 1
-
         for (i in 0..size) {
 
             var containerView = LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
@@ -75,7 +78,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             matchProgressBar.progressDrawable = drawableMatch
             matchProgressBar.progress = 75
             matchProgressBar.max = 100
-
+            //attendance status progress bar
             attendanceProgressBar = containerView.findViewById(R.id.attendance_status_progressBar)
             val drawableAttendance = context.resources.getDrawable(R.drawable.circular_progressbar_attendance_inside_bg)
             attendanceProgressBar.progressDrawable = drawableAttendance
@@ -106,9 +109,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 }
             })
 
-            homeView = containerView.findViewById(R.id.return_home_layout)
             val titleView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
+            val detailView = containerView.findViewById<TextView>(R.id.user_detail_job_title)
             titleView.text = items[i].title
+            detailView.text = items[i].detail
+
+            homeView = containerView.findViewById(R.id.return_home_layout)
             homeView.setOnClickListener {
                 finish()
             }
@@ -151,7 +157,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
                                 containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
 //                                if (currentUser > 0) {
-//                                    if ((x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
+//                                    if ((x_ cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
 //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
 //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
 //                                    }
@@ -228,17 +234,15 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
-                                    parentView.getChildAt(currentUser).elevation = 5f
-                                }
+                                 }
 
                             } else if (Likes == 2) {
-                                Log.e("Event_Status :->", "Liked")
+                                Log.e("Event_Status :->", "Like")
                                 parentView.removeView(containerView)
                                 if (currentUser > 0) {
                                     storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
-                                    parentView.getChildAt(currentUser).elevation = 5f
                                 }
                             }
                         }

@@ -15,6 +15,7 @@ import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,7 +30,9 @@ interface ApiInterface {
     fun loginUser(@Body login: LoginModel): Call<LoginResponse>
 
     @POST("/api/register")
-    fun createUser(@Body login: Registration): Call<RegistrationResponse>
+    fun createUser(@Body file : RequestBody): Call<RegistrationResponse>
+//    @POST("/api/register")
+//    fun createUser(@Body login: Registration): Call<RegistrationResponse>
 
     @POST("/api/is-user-online")
     fun makeUserOnline(@Body isUserOnline:MakeUserOnline):Call<MakeUserOnlineResponse>
@@ -75,4 +78,7 @@ interface ApiInterface {
 
     @POST("/api/select-loation")
     fun selectLocation(@Body nearestLocation: NearestLocation):Call<SelectLocation>
+
+//    @POST("/api/users-list")
+//    fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
 }

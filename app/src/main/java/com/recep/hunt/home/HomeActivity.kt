@@ -29,16 +29,16 @@ import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
-import com.recep.hunt.home.adapter.NearByRestaurantsAdapter
-import com.recep.hunt.home.adapter.NearByRestaurantsVerticalAdapter
-import com.recep.hunt.home.adapter.SimpleHeaderItemAdapter
 import com.recep.hunt.filters.FilterBottomSheetDialog
-import com.recep.hunt.home.adapter.FarAwayRestaurantsVerticalAdapter
+import com.recep.hunt.home.adapter.*
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModel
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.model.MakeUserOnline
+import com.recep.hunt.model.NearestLocation
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
+import com.recep.hunt.model.nearestLocation.NearestLocationData
+import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.utilis.*
@@ -124,6 +124,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 response: Response<MakeUserOnlineResponse>
             ) {
               Toast.makeText(this@HomeActivity,"Youe online",Toast.LENGTH_SHORT).show()
+                
             }
 
         })
@@ -176,6 +177,71 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
+    //integration of nearest-place api
+    private fun nearestPlaces(lat : Double, long: Double) {
+        val nearestLocation = NearestLocation(lat, long)
+        val call = ApiClient.getClient.getNearestPlace(nearestLocation)
+
+        call.enqueue(object :Callback<NearestLocationResponse> {
+            override fun onFailure(call: Call<NearestLocationResponse>, t: Throwable) {
+                Log.d("Api call failure -> " , "" + call)
+            }
+
+            override fun onResponse(
+                call: Call<NearestLocationResponse>,
+                response: Response<NearestLocationResponse>
+            ) {
+                var result = response.body()?.data
+                setupNearByRestaurantsRecyclerViewByApi(result)
+                setupSortedListView(result)
+            }
+
+        })
+    }
+
+    private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?) {
+        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
+        horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
+        horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
+            .build())
+        horizontal_list_near_by_user.scrollToPosition(0)
+        horizontal_list_near_by_user.setSlideOnFling(true)
+    }
+
+    private fun setupSortedListView(items: ArrayList<NearestLocationData>?) {
+        sortedListRecyclerView.adapter = adapter
+        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
+        adapter.setOnItemClickListener { item, view ->
+            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+            val dialog = Dialog(this)
+            dialog.setContentView(ll)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
+            gotItBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
+        for (i in 0 until 3) {
+            adapter.add(
+                NearByRestaurantsVerticalAdapterByAPi(
+                    this@HomeActivity,
+                    items
+                )
+            )
+        }
+        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
+        for (i in 4 until 6) {
+            adapter.add(
+                FarAwayRestaurantsVerticalAdapterByApi(
+                    this@HomeActivity,
+                    items
+                )
+            )
+        }
+    }
+
     private fun nearByRestaurants(
         lat: Double,
         long: Double,
@@ -222,7 +288,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         markerOptions.position(latLong)
                         markerOptions.title(placeName).icon(null)
 
-                        markerOptions.snippet(i.toString())
+                        markerOptions.snippet( i.toString())
 
                         val marker = mMap.addMarker(markerOptions)
                         marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
@@ -404,11 +470,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
                     if(callAPIOnlyOnceStatus == 1){
-//                        val lat = mLastLocation.latitude
-//                        val long = mLastLocation.longitude
                         val lat =  mLastLocation.latitude
                         val long = mLastLocation.longitude
-                        setupAllNearByRestMarkers(lat, long)
+                        nearestPlaces(lat, long)
+//                        setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
                     }
 

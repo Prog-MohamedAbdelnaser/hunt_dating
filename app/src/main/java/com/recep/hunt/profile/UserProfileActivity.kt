@@ -74,7 +74,7 @@ class UserProfileActivity : AppCompatActivity() {
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
             ) {
-
+//                  var userInfo:UserInfoModel = response.body()!!.data.user_info
 
             }
 
