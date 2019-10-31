@@ -27,6 +27,8 @@ import com.recep.hunt.model.nearestLocation.NearestLocationData
 
 class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<NearestLocationData>?):RecyclerView.Adapter<NearByRestaurantsAdapterByApi.NearByRestViewHolder>() {
 
+    private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NearByRestViewHolder {
         return NearByRestViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.near_by_rest_card,parent,false))
     }
@@ -51,12 +53,15 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
             if(model != null){
 
                 if(model.image != null){
+
 //                    val photoRefrence = model.photos[0].photoReference
-//                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
-//                    Log.e("Url","Image : $url")
-//                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
+                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+                    Log.e("Url","Image : $url")
+                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
-                Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
+//                else {
+//                    Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
+//                }
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
             }

@@ -265,7 +265,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
                 val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
                 completion(APIState.SUCCESS, results)
-                setupSortedListRecyclerView(results)
+//                setupSortedListRecyclerView(results)
             }
 
 
@@ -445,7 +445,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 val latLng = LatLng(latitude, longitude)
                 val markerOptions = MarkerOptions()
                     .position(latLng)
-                    .icon(null)
+                     .icon(null)
 
 
                 mMarker = mMap.addMarker(markerOptions)
@@ -472,7 +472,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                     if(callAPIOnlyOnceStatus == 1){
                         val lat =  mLastLocation.latitude
                         val long = mLastLocation.longitude
-                        nearestPlaces(lat, long)
+//                        nearestPlaces(lat, long)
 //                        setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
                     }

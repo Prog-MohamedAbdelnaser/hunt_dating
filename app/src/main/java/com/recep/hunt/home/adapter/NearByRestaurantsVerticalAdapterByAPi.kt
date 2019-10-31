@@ -22,6 +22,9 @@ import java.lang.Exception
  */
 
 class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:ArrayList<NearestLocationData>?): Item<ViewHolder>() {
+
+    private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
+
     override fun getLayout() = R.layout.vertical_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -29,8 +32,9 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
             try{
                 val model = item[position]
                 if(model.image != null){
+                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 //                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"
-//                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image)).placeholder(R.drawable.ic_img_gallery).into(viewHolder.itemView.restaurant_vertical_list_image)
+                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image)).placeholder(R.drawable.ic_img_gallery).into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
