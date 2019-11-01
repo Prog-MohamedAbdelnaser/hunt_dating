@@ -78,5 +78,5 @@ interface ApiInterface {
     fun selectLocation(@Body nearestLocation: NearestLocation):Call<SelectLocation>
 
     @GET("/api/notification")
-    fun getNotification():Call<NotificationResponse>
+    fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>
 }
