@@ -34,20 +34,11 @@ class LookingForMainModel{
         val items = ArrayList<LookingForDataModel>()
         items.add(
             LookingForDataModel(
-                "Date",
+                "Dates",
                 R.drawable.ic_heart,
                 R.drawable.ic_date_white,
                 Constants.FEMALE,
                 Constants.male
-            )
-        )
-        items.add(
-            LookingForDataModel(
-                "Business",
-                R.drawable.ic_buisness_icon,
-                R.drawable.ic_buisness_white,
-                Constants.BOTH,
-                Constants.female
             )
         )
         items.add(
@@ -57,6 +48,15 @@ class LookingForMainModel{
                 R.drawable.friendship_white,
                 Constants.MALE,
                 Constants.both
+            )
+        )
+        items.add(
+            LookingForDataModel(
+                "Business",
+                R.drawable.ic_buisness_icon,
+                R.drawable.ic_buisness_white,
+                Constants.BOTH,
+                Constants.female
             )
         )
         return items

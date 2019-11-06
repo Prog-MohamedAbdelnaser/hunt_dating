@@ -9,14 +9,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
-import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.utilis.Helpers
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
-import android.view.animation.AnimationUtils.loadAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.SelectLocation
 import com.recep.hunt.model.nearestLocation.NearestLocationData
+import com.recep.hunt.model.selectLocation.SelectLocationResponse
+import com.recep.hunt.swipe.SwipeMainActivity
+import com.recep.hunt.utilis.launchActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 /**
@@ -46,28 +50,54 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
         var restaurantImage : ImageView = view.find(R.id.restaurant_image)
         var restaurantName : TextView =  view.find(R.id.restaurant_name)
         var restaurantDetail : TextView = view.find(R.id.restaurant_detail)
-
+        var userNumbers : TextView = view.find(R.id.textView_user_numbers)
+        var goToSwipeView : ImageView = view.find(R.id.imageView9)
 
         fun setupViews(model:NearestLocationData?){
 
             if(model != null){
 
-                if(model.image != null){
+                if(!model.image.isNullOrEmpty()){
 
 //                    val photoRefrence = model.photos[0].photoReference
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
                     Log.e("Url","Image : $url")
                     Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
-//                else {
-//                    Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
-//                }
+                else {
+                    Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
+                }
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
+                userNumbers.text = model.users.toString()
+                goToSwipeView.setOnClickListener {
+                    selectLocationAndGetUsersList(model.place_id, model.name)
+                    context.launchActivity<SwipeMainActivity> {  }
+                }
             }
-
-
-
         }
+
+        fun selectLocationAndGetUsersList(location_id : String, location_name : String) {
+            val location = SelectLocation(location_id, location_name)
+            val call = ApiClient.getClient.selectLocation(location)
+
+            call.enqueue(object : Callback<SelectLocationResponse> {
+                override fun onFailure(call: Call<SelectLocationResponse>, t: Throwable) {
+                    Log.d("Api call failure -> " , "" + call)
+                }
+
+                override fun onResponse(
+                    call: Call<SelectLocationResponse>,
+                    response: Response<SelectLocationResponse>
+                ) {
+                    var result = response.body()?.data
+                    if (result != null) {
+
+                    }
+                }
+
+            })
+        }
+
     }
 }

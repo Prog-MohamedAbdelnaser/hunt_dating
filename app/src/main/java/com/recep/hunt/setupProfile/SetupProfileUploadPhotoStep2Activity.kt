@@ -28,6 +28,7 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.snackbar.Snackbar
 import com.nguyenhoanglam.imagepicker.helper.ImageHelper.createImageFile
@@ -38,6 +39,7 @@ import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImageView
+import org.jetbrains.anko.Android
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.Exception
@@ -51,6 +53,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     companion object {
         private val REQUEST_TAKE_PHOTO = 0
         private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
+        private val WRITE_EXTERNAL_STORAGE_CODE =13
     }
 
     private var imgFlag: String? = null
@@ -68,8 +71,29 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     private fun init() {
         imgFlag = intent.getStringExtra(UserProfileEditActivity.imgBlock)
         camera_layout.setOnClickListener { takePhoto() }
-        gallery_layout.setOnClickListener { selectImageInAlbum() }
+        gallery_layout.setOnClickListener {
+            setupPermissions()
+        }
 
+    }
+
+    private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            makeRequest()
+        }
+        else{
+            selectImageInAlbum()
+        }
+    }
+
+    private fun makeRequest() {
+        ActivityCompat.requestPermissions(this,
+            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            WRITE_EXTERNAL_STORAGE_CODE)
     }
 
     private fun selectImageInAlbum() {
@@ -134,7 +158,11 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
+
+
+        if (requestCode == WRITE_EXTERNAL_STORAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        }
+            if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
             val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images);
             if (imgFlag == null) {

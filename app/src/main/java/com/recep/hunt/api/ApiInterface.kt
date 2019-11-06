@@ -14,6 +14,7 @@ import com.recep.hunt.model.logout.LogoutReponse
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
+import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -77,8 +78,9 @@ interface ApiInterface {
     fun getNearestPlace(@Body nearestLocation: NearestLocation):Call<NearestLocationResponse>
 
     @POST("/api/select-loation")
-    fun selectLocation(@Body nearestLocation: NearestLocation):Call<SelectLocation>
+    fun selectLocation(@Body selectLocation: SelectLocation):Call<SelectLocationResponse>
 
 //    @POST("/api/users-list")
 //    fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
+
 }

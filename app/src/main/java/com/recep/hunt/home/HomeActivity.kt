@@ -192,8 +192,42 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 response: Response<NearestLocationResponse>
             ) {
                 var result = response.body()?.data
-                setupNearByRestaurantsRecyclerViewByApi(result)
-                setupSortedListView(result)
+                if (result != null) {
+                    val nearbyItems = ArrayList<NearestLocationData>()
+                    val farItems = ArrayList<NearestLocationData>()
+                    for (i in 0 until result!!.size - 1) {
+                        //If it's near than 50m
+                        if (result[i].distance.toFloat() <= 50) {
+                            nearbyItems.add(result[i])
+                        }
+                        else {
+                            farItems.add(result[i])
+                        }
+                    }
+                    val markerOptions = MarkerOptions()
+                    for (i in 0 until result.size - 1) {
+                        val googlePlace = result[i]
+                        val mLat = googlePlace.lat
+                        val mLong = googlePlace.lang
+                        val placeName = googlePlace.name
+                        val latLong = LatLng(mLat, mLong)
+
+                        markerOptions.position(latLong)
+                        markerOptions.title(placeName).icon(null)
+
+                        markerOptions.snippet( i.toString())
+
+                        val marker = mMap.addMarker(markerOptions)
+                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
+                        marker.showInfoWindow()
+                    }
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
+                    mMap.setMaxZoomPreference(animateZoomTo)
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+                    setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
+                    setupSortedListView(nearbyItems, farItems)
+                }
             }
 
         })
@@ -208,7 +242,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
-    private fun setupSortedListView(items: ArrayList<NearestLocationData>?) {
+    private fun setupSortedListView(nearItems: ArrayList<NearestLocationData>?, farItems: ArrayList<NearestLocationData>?) {
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
         adapter.setOnItemClickListener { item, view ->
@@ -223,20 +257,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             dialog.show()
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-        for (i in 0 until 3) {
+        for (i in 0 until nearItems!!.size - 1) {
             adapter.add(
                 NearByRestaurantsVerticalAdapterByAPi(
                     this@HomeActivity,
-                    items
+                    nearItems
                 )
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-        for (i in 4 until 6) {
+        for (i in 0 until farItems!!.size - 1) {
             adapter.add(
                 FarAwayRestaurantsVerticalAdapterByApi(
                     this@HomeActivity,
-                    items
+                    farItems
                 )
             )
         }
@@ -265,7 +299,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
                 val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
                 completion(APIState.SUCCESS, results)
-//                setupSortedListRecyclerView(results)
+                setupSortedListRecyclerView(results)
             }
 
 
@@ -470,9 +504,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
                     if(callAPIOnlyOnceStatus == 1){
-                        val lat =  mLastLocation.latitude
-                        val long = mLastLocation.longitude
-//                        nearestPlaces(lat, long)
+//                        val lat =  mLastLocation.latitude
+//                        val long = mLastLocation.longitude
+                        val lat = 34.052235
+                        val long = -118.243683
+                        nearestPlaces(lat, long)
 //                        setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
                     }

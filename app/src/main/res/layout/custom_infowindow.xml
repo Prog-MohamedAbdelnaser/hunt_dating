@@ -102,7 +102,7 @@
             android:layout_below="@+id/clInfoId"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginStart="1dp"
+            android:layout_marginStart="8dp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="0dp"
             android:scaleType="fitXY"
