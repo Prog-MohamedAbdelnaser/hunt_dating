@@ -90,14 +90,14 @@ class WelcomeScreenActivity : AppCompatActivity() {
                 SharedPrefrenceManager.setUserCountryCode(this@WelcomeScreenActivity,numberCode)
                 SharedPrefrenceManager.setUserCountry(this@WelcomeScreenActivity,selectedCountry)
 
-                launchActivity<SocialLoginActivity> ()
-//                launchActivity<OtpVerificationActivity>{
-//                    putExtra(WelcomeScreenActivity.verificationIdKey,verificationId)
-//                    putExtra(WelcomeScreenActivity.otpKey,"")
-//                    putExtra(WelcomeScreenActivity.countryCodeKey, numberCode)
-//                    putExtra(WelcomeScreenActivity.numberKey,number)
-//                }
-//                finish()
+//                launchActivity<SocialLoginActivity> ()
+                launchActivity<OtpVerificationActivity>{
+                    putExtra(WelcomeScreenActivity.verificationIdKey,verificationId)
+                    putExtra(WelcomeScreenActivity.otpKey,"")
+                    putExtra(WelcomeScreenActivity.countryCodeKey, numberCode)
+                    putExtra(WelcomeScreenActivity.numberKey,number)
+                }
+                finish()
 
             }else{
                 Helpers.showErrorSnackBar(this@WelcomeScreenActivity,"Enter number","")
@@ -143,7 +143,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE
             )
             return

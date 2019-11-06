@@ -92,7 +92,7 @@ class ContinueAsSocialActivity : AppCompatActivity() {
 
             }
             Constants.socialGoogleType -> {      //google Icon with google bg
-                socialImage.image = resources.getDrawable(R.drawable.google_icon)
+                socialImage.image = resources.getDrawable(R.drawable.ic_search_google)
                 socialImage.background = resources.getDrawable(R.drawable.google_bg_color)
             }
 

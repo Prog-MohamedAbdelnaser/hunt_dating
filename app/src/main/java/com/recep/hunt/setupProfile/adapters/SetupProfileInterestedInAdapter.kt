@@ -59,7 +59,7 @@ class SetupProfileInterestedInAdapter(private var model: ArrayList<LookingForMod
                 viewHolder.itemView.dates_imageView.background = context.resources.getDrawable(R.drawable.selected_cirular_btn)
                 viewHolder.itemView.dates_imageView.image = context.resources.getDrawable(model[position].selectedImage)
 
-                lookingForListeners.getSelectedLookingFor(model[position].value.toString(),null)
+                lookingForListeners.getSelectedLookingFor(model[position].label.toString(),null)
                 viewHolder.itemView.title_tv.textColor = context.resources.getColor(R.color.app_text_black)
 
             }

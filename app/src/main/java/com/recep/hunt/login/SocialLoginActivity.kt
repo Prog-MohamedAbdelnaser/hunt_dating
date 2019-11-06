@@ -178,7 +178,11 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     //setupInstaAuth()
                     launchingInst()
 
-                R.id.social_login_skip_btn -> launchActivity<SetupProfileActivity>()
+                R.id.social_login_skip_btn ->{
+                    SharedPrefrenceManager.setIsFromSocial(this,false)
+
+                    launchActivity<SetupProfileActivity>()
+                }
             }
         }
     }
@@ -393,6 +397,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             SharedPrefrenceManager.setsocialType(this, "social")
             SharedPrefrenceManager.setGoogleLoginToken(this,user.uid)
             SharedPrefrenceManager.setGoogleId(this,user.uid)
+
             launchActivity<ContinueAsSocialActivity> {
                 putExtra(socialTypeKey, Constants.socialGoogleType)
                 putExtra(userSocialModel, json)
@@ -443,6 +448,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     e.printStackTrace()
                 }
                 SharedPrefrenceManager.setsocialType(this, "Facebook")
+                SharedPrefrenceManager.setIsFromSocial(this,true)
 
                 // SharedPrefrenceManager.setUserGender(this, gender)
                 fbUserImages(id)

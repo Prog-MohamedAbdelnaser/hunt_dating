@@ -1,9 +1,6 @@
 package com.recep.hunt.api
 
-import android.text.TextUtils
 import com.google.gson.GsonBuilder
-import com.recep.hunt.application.MyApplication
-import com.recep.hunt.utilis.SharedPrefrenceManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -13,15 +13,13 @@ import com.recep.hunt.model.login.User
 import com.recep.hunt.model.logout.LogoutReponse
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
+import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 
 interface ApiInterface {
@@ -38,17 +36,17 @@ interface ApiInterface {
     @POST("/api/is-user-online")
     fun makeUserOnline(@Body isUserOnline:MakeUserOnline):Call<MakeUserOnlineResponse>
 
-    @PUT("/api/update-user-profile")
+    @POST("/api/update-user-profile")
     fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
 
     @GET("api/logout")
-    fun  logoutUser():Call<LogoutReponse>
+    fun  logoutUser(@Header("Authorization")  authorization:String):Call<LogoutReponse>
 
     @POST("/api/report-user")
     fun reportUser(@Body reportUser:ReportUser):Call<ReportUserResponse>
 
     @GET("/api/user-profile")
-    fun getUserProfile() : Call<UserProfileResponse>
+    fun getUserProfile(@Header("Authorization")  authorization:String) : Call<UserProfileResponse>
 
     @POST("/api/user-swipe-data")
     fun userSwipes(@Body userSwipe: UserSwipe):Call<User>
@@ -83,4 +81,6 @@ interface ApiInterface {
 //    @POST("/api/users-list")
 //    fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
 
+    @GET("/api/notification")
+    fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>
 }
