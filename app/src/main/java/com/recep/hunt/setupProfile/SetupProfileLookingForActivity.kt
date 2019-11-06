@@ -27,6 +27,10 @@ class SetupProfileLookingForActivity : BaseActivity(),
                 selectedLookingForArray.add(lookingFor)
                 selectedLookingFor = selectedLookingForArray.joinToString(",")
                 Log.e(SetupProfileLookingForAdapter::class.java.simpleName,"selectedLookingFor : $selectedLookingFor")
+                SharedPrefrenceManager.setUserLookingFor(this@SetupProfileLookingForActivity,selectedLookingFor)
+                launchActivity<SetupProfileInterestedInActivity>{
+                    putStringArrayListExtra(selectedInterestKey,selectedLookingForArray)
+                }
             }
             else ->{
                 selectedLookingForArray.remove(lookingFor)

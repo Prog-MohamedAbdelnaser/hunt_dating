@@ -18,6 +18,9 @@ class InfoYouProvideActivity : AppCompatActivity() {
 
     private fun init(){
         setSupportActionBar(info_you_provide_toolbar)
+        full_name_next_btn.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

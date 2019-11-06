@@ -94,7 +94,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             val filePath = Environment.getExternalStorageDirectory().absolutePath
             val fileName = "abc.jpg"
 
-            if (SharedPrefrenceManager.getIsFromSocial(this)) {
+            if (!SharedPrefrenceManager.getIsFromSocial(this)) {
 
 
                 file = File(filePath, fileName)
@@ -254,7 +254,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     builder.addFormDataPart("gender", "Male")
                     builder.addFormDataPart("dob", "1993-11-11")
 //                    builder.addFormDataPart("profile_pic", "")
-                    builder.addFormDataPart("email", "aa@bj.f")
+                    builder.addFormDataPart("email", SharedPrefrenceManager.getUserEmail(this@SetupProfileReferralCodeActivity))
                     builder.addFormDataPart(
                         "country",
                         SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity)
@@ -292,10 +292,10 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             "country_code",
                             SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
                         )
-                        builder.addFormDataPart("gender", "Male")
+                        builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity))
                         builder.addFormDataPart("dob", "1993-11-11")
 //                    builder.addFormDataPart("profile_pic", "")
-                        builder.addFormDataPart("email", "aa@bbj.f")
+                        builder.addFormDataPart("email", SharedPrefrenceManager.getUserEmail(this@SetupProfileReferralCodeActivity))
                         builder.addFormDataPart(
                             "country",
                             SharedPrefrenceManager.getUserCountry(this@SetupProfileReferralCodeActivity)
@@ -415,13 +415,14 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     response.body()?.let{
                         token = it.data.token
                         if(!TextUtils.isEmpty(token)){
-                            //do token related code and also store user json
                             SharedPrefrenceManager.setUserToken(this@SetupProfileReferralCodeActivity,token)
                             SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity,edtReferelCode.text.toString())
                             launchActivity<SetupProfileCompletedActivity> {  }
-                        }
+                        }                            //do token related code and also store user json
+
                     }
-                }else{
+                }else
+                {
                     dialog.dismiss()
                     val data = response.errorBody()?.string()
                     val mJsonObject =  JSONObject(data)

@@ -61,11 +61,13 @@ class UserProfileActivity : AppCompatActivity() {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+        setupRecyclerView()
+
         getData()
     }
 
     fun getData(){
-        val call = ApiClient.getClient.getUserProfile()
+        val call = ApiClient.getClient.getUserProfile(SharedPrefrenceManager.getUserToken(this@UserProfileActivity))
 
         call.enqueue(object:Callback<UserProfileResponse>{
             override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
@@ -75,10 +77,12 @@ class UserProfileActivity : AppCompatActivity() {
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
             ) {
-                userInfo= response.body()!!.data
+                response.body()?.let {
+                    userInfo= it.data
+
+                }
 
                 setPrefData()
-                setupRecyclerView()
 
             }
 
@@ -86,23 +90,33 @@ class UserProfileActivity : AppCompatActivity() {
 
     }
 
+
     private fun setPrefData() {
-        SharedPrefrenceManager.setUserFirstName(this , userInfo.first_name)
-        SharedPrefrenceManager.setUserLastName(this , userInfo.last_name)
-        SharedPrefrenceManager.setUserMobileNumber(this , userInfo.mobile_no)
-        SharedPrefrenceManager.setUserCountry(this , userInfo.country)
-        SharedPrefrenceManager.setUserCountryCode(this , userInfo.country_code)
-        SharedPrefrenceManager.setUserGender(this , userInfo.gender)
-        SharedPrefrenceManager.setUserEmail(this , userInfo.email)
-        SharedPrefrenceManager.setUserLatitude(this , userInfo.lat)
-        SharedPrefrenceManager.setProfileImg(this , userInfo.profile_pic)
+
+        try{
+            userInfo?.let {
+                SharedPrefrenceManager.setUserFirstName(this , userInfo.first_name)
+                SharedPrefrenceManager.setUserLastName(this , userInfo.last_name)
+                SharedPrefrenceManager.setUserMobileNumber(this , userInfo.mobile_no)
+                SharedPrefrenceManager.setUserCountry(this , userInfo.country)
+                SharedPrefrenceManager.setUserCountryCode(this , userInfo.country_code)
+                SharedPrefrenceManager.setUserGender(this , userInfo.gender)
+                SharedPrefrenceManager.setUserEmail(this , userInfo.email)
+                SharedPrefrenceManager.setUserLatitude(this , userInfo.lat)
+                SharedPrefrenceManager.setProfileImg(this , userInfo.profile_pic)
+            }
+        }catch(e:Exception){
+
+        }
+
+
 
     }
 
     override fun onResume() {
         super.onResume()
         adapter.clear()
-//        setupRecyclerView()
+       setupRecyclerView()
         adapter.notifyDataSetChanged()
     }
 
