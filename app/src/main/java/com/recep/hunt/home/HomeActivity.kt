@@ -504,10 +504,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
                     if(callAPIOnlyOnceStatus == 1){
-//                        val lat =  mLastLocation.latitude
-//                        val long = mLastLocation.longitude
-                        val lat = 34.052235
-                        val long = -118.243683
+                        val lat =  mLastLocation.latitude
+                        val long = mLastLocation.longitude
                         nearestPlaces(lat, long)
 //                        setupAllNearByRestMarkers(lat, long)
                         callAPIOnlyOnceStatus = 0
