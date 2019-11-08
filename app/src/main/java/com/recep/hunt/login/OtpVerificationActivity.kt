@@ -62,7 +62,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         private const val STATE_SIGNIN_FAILED = 5
         private const val STATE_SIGNIN_SUCCESS = 6
     }
-    private var pStatus = 60
+    private var pStatus = 0
     private var pStatusVisible = 60
     private lateinit var cl_progressbar: ConstraintLayout
     private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -87,6 +87,7 @@ class OtpVerificationActivity : AppCompatActivity() {
 
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
                 signIn(p0)
+
                 verifyingDialog.dismiss()
             }
 
@@ -110,7 +111,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                 otpPinView.setPinBackgroundRes(R.drawable.otp_pin_bg)
                 try{
                     otpPinView.clearValue()
-
+                    we_will_send_you_otp_tv.visibility = View.GONE
+                    send_otp_again_btn.visibility = View.GONE
                     setupProgressTimer()
                 }
                 catch (e:Exception)
@@ -148,6 +150,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         cl_progressbar = find(R.id.cl_progress_bar)
         otpPinView = find(R.id.otp_pin_view)
         setupProgressTimer()
+        otpPinView.requestFocus()
 
         we_will_send_you_otp_tv.visibility = View.GONE
         send_otp_again_btn.visibility = View.GONE
@@ -158,10 +161,10 @@ class OtpVerificationActivity : AppCompatActivity() {
 
         otpPinView.setPinViewEventListener { pinview, fromUser ->
             authenticate(pinview.value)
-//            launchActivity<SocialLoginActivity>()
-//            Log.e("OTP","${pinview.value}")
-//            Log.e("OTP FROM FIRE","${otp}")
-//            authenticate(pinview.value)
+            launchActivity<SocialLoginActivity>()
+            Log.e("OTP","${pinview.value}")
+            Log.e("OTP FROM FIRE","${otp}")
+            authenticate(pinview.value)
 
         }
 
@@ -207,7 +210,15 @@ class OtpVerificationActivity : AppCompatActivity() {
         val sendOtpAgainBtn = find<Button>(R.id.send_otp_again_btn)
         sendOtpAgainBtn.setOnClickListener {
             //            dialog.dismiss()
+            progressBar.visibility = View.VISIBLE
+            otp_progrss_txt.visibility = View.VISIBLE
+            we_will_send_you_otp_tv.visibility = View.GONE
+
+            send_otp_again_btn.visibility = View.GONE
+            pStatus=0
+            pStatusVisible=60
             resendOtp()
+
         }
 //        dialog.show()
 
@@ -217,7 +228,6 @@ class OtpVerificationActivity : AppCompatActivity() {
     private fun setupProgressTimer() {
 //        val styledText = "We will send you six digit <br> OTP on <font color='red'>$countryCode $phoneNumber</font>."
 //        resend_otp_btn.text = Html.fromHtml(styledText)
-
         val res = resources
         val drawable = res.getDrawable(R.drawable.circular_progress_bg)
         progressBar.progressDrawable = drawable
@@ -225,9 +235,10 @@ class OtpVerificationActivity : AppCompatActivity() {
         progressBar.max = 60
 
 
+
         Thread(Runnable {
-            while (pStatus > 0) {
-                pStatus -= 1
+            while (pStatus < 60) {
+                pStatus += 1
                 pStatusVisible -= 1
 
                 handler.post {
@@ -256,8 +267,10 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun resendOtp() {
-        pStatus = 60
+        pStatus = 0
         pStatusVisible = 60
+        setupProgressTimer()
+
         verifyingDialog.show()
         verify(phoneNumber, countryCode)
 
@@ -268,7 +281,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         val phoneNumber = "$countryCode$number"
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber,
-            120,
+            60,
             TimeUnit.SECONDS,
             this,
             mCallbacks

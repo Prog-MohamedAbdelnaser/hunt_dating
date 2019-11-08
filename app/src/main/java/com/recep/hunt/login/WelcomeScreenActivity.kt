@@ -7,9 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.VideoView
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.PagerAdapter
@@ -67,6 +71,41 @@ class WelcomeScreenActivity : AppCompatActivity() {
         dialog = Helpers.showDialog(this@WelcomeScreenActivity,this@WelcomeScreenActivity,"Verifying")
         countryCodePicker = find(R.id.ccp)
 
+        user_number_edittext.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        user_number_edittext.setOnEditorActionListener(object:TextView.OnEditorActionListener{
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                val number = user_number_edittext.text.toString()
+                val numberCode = countryCodePicker.selectedCountryCodeWithPlus
+                val selectedCountry = countryCodePicker.selectedCountryName
+
+
+                if(number.isNotEmpty()){
+                    try{
+                        dialog.show()
+                    }catch(e:Exception)
+                    {}
+
+                    SharedPrefrenceManager.setUserCountryCode(this@WelcomeScreenActivity,numberCode)
+                    SharedPrefrenceManager.setUserCountry(this@WelcomeScreenActivity,selectedCountry)
+
+//                launchActivity<SocialLoginActivity> ()
+                    launchActivity<OtpVerificationActivity>{
+                        putExtra(WelcomeScreenActivity.verificationIdKey,verificationId)
+                        putExtra(WelcomeScreenActivity.otpKey,"")
+                        putExtra(WelcomeScreenActivity.countryCodeKey, numberCode)
+                        putExtra(WelcomeScreenActivity.numberKey,number)
+                    }
+                    finish()
+
+                }else{
+                    Helpers.showErrorSnackBar(this@WelcomeScreenActivity,"Enter number","")
+                }
+                return true
+            }
+
+        })
+
         videoView = find(R.id.video_view)
         viewPager = find(R.id.welcome_screen_viewPager)
         indicators = find(R.id.welcome_screen_indicator)
@@ -86,7 +125,11 @@ class WelcomeScreenActivity : AppCompatActivity() {
 
 
             if(number.isNotEmpty()){
-                dialog.show()
+                try{
+                    dialog.show()
+                }catch(e:Exception)
+                {}
+
                 SharedPrefrenceManager.setUserCountryCode(this@WelcomeScreenActivity,numberCode)
                 SharedPrefrenceManager.setUserCountry(this@WelcomeScreenActivity,selectedCountry)
 
