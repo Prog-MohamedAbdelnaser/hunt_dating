@@ -427,7 +427,9 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     val data = response.errorBody()?.string()
                     val mJsonObject =  JSONObject(data)
                     val mJsonObjectMessage = mJsonObject.optString("message")
-                    Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
+//                    Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
+                    launchActivity<SetupProfileCompletedActivity> {  }
+
                 }
             }
         })

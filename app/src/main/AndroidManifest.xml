@@ -54,7 +54,7 @@
         <activity android:name=".inviteFriend.MyInviteCreditActivity" />
         <activity android:name=".inviteFriend.InviteAFriendActivity" />
         <activity android:name=".userDetail.UserDetailActivity" />
-        <activity android:name=".login.WelcomeScreenActivity" />
+        <activity android:name=".login.WelcomeScreenActivity" android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity android:name=".payment.SelectPaymentMethodsActivity" />
         <activity android:name=".payment.AddPaymentMethod" />
         <activity android:name=".payment.PaymentMethodActivity" />
@@ -98,7 +98,9 @@
         <activity android:name=".setupProfile.SetupProfileActivity" />
         <activity android:name=".login.SocialLoginActivity" >
         </activity>
-        <activity android:name=".login.OtpVerificationActivity" />
+        <activity android:name=".login.OtpVerificationActivity" android:windowSoftInputMode="stateVisible|adjustResize"
+                >
+        </activity>
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".setupProfile.TurnOnGPSUpdateAcitivity" />
         <activity
