@@ -481,7 +481,7 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
 
 
 
-        val call = ApiClient.getClient.logoutUser()
+        val call = ApiClient.getClient.logoutUser(SharedPrefrenceManager.getUserToken(ctx))
 
         call.enqueue(object :Callback<LogoutReponse> {
             override fun onFailure(call: Call<LogoutReponse>, t: Throwable) {
