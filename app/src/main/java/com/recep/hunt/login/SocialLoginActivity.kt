@@ -179,7 +179,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     launchingInst()
 
                 R.id.social_login_skip_btn ->{
-                    SharedPrefrenceManager.setIsFromSocial(this,false)
+                    SharedPrefrenceManager.setIsFromSocial(this,true)
 
                     launchActivity<SetupProfileActivity>()
                 }

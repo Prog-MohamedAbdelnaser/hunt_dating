@@ -76,14 +76,12 @@ class UserProfileActivity : AppCompatActivity() {
             override fun onResponse(
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
-            ) {
+            )
+            {
                 response.body()?.let {
                     userInfo= it.data
-
                 }
-
                 setPrefData()
-
             }
 
         })
@@ -264,7 +262,6 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
         if (img != null) {
             var b = Base64.decode(img, Base64.DEFAULT);
             bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
-
         }
         return bitmap
     }

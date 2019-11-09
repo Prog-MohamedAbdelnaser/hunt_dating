@@ -160,12 +160,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         }
 
         otpPinView.setPinViewEventListener { pinview, fromUser ->
-            authenticate(pinview.value)
-            launchActivity<SocialLoginActivity>()
-            Log.e("OTP","${pinview.value}")
-            Log.e("OTP FROM FIRE","${otp}")
-            authenticate(pinview.value)
-
+            verify(phoneNumber, countryCode)
         }
 
         //Start Receiving SMS
@@ -350,15 +345,12 @@ class OtpVerificationActivity : AppCompatActivity() {
                         latitude = location?.latitude!!
                         longitude = location?.longitude
 
+                        var countryCode=SharedPrefrenceManager.getUserCountryCode(this).replace("+","")
                         val loginModel= LoginModel(
                             SharedPrefrenceManager.getUserMobileNumber(this),
-                            SharedPrefrenceManager.getUserCountryCode(this),
-                            true,
-                            latitude,
-                            longitude,
-                            SharedPrefrenceManager.getUserCountry(this),
-                            1,
-                            SharedPrefrenceManager.getDeviceToken(this)
+                            countryCode,
+                            1
+
                         )
 
                         val call = ApiClient.getClient.loginUser(loginModel)
@@ -383,6 +375,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                                 {
                                     var userInfo=response.body()!!.data.user
                                     SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity,userInfo.mobile_no)
+                                    SharedPrefrenceManager.setProfileImg(this@OtpVerificationActivity,userInfo.profile_pic)
                                     SharedPrefrenceManager.setUserCountry(this@OtpVerificationActivity,userInfo.country)
                                     SharedPrefrenceManager.setUserCountryCode(this@OtpVerificationActivity,userInfo.country_code)
                                     SharedPrefrenceManager.setUserFirstName(this@OtpVerificationActivity,userInfo.first_name)
