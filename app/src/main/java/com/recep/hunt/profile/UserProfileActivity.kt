@@ -67,7 +67,7 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     fun getData(){
-        val call = ApiClient.getClient.getUserProfile()
+        val call = ApiClient.getClient.getUserProfile(SharedPrefrenceManager.getUserToken(this@UserProfileActivity))
 
         call.enqueue(object:Callback<UserProfileResponse>{
             override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {

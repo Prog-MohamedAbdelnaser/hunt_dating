@@ -309,7 +309,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity)
                         )
 //                    builder.addFormDataPart("device_type", "android")
-//                    builder.addFormDataPart("device_id", SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity))
+                    builder.addFormDataPart("device_id", SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity))
                         builder.addFormDataPart(
                             "for_date",
                             SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity)

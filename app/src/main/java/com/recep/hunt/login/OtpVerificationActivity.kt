@@ -345,15 +345,12 @@ class OtpVerificationActivity : AppCompatActivity() {
                         latitude = location?.latitude!!
                         longitude = location?.longitude
 
+                        var countryCode=SharedPrefrenceManager.getUserCountryCode(this).replace("+","")
                         val loginModel= LoginModel(
                             SharedPrefrenceManager.getUserMobileNumber(this),
-                            SharedPrefrenceManager.getUserCountryCode(this),
-                            true,
-                            latitude,
-                            longitude,
-                            SharedPrefrenceManager.getUserCountry(this),
-                            1,
-                            SharedPrefrenceManager.getDeviceToken(this)
+                            countryCode,
+                            1
+
                         )
 
                         val call = ApiClient.getClient.loginUser(loginModel)
@@ -373,61 +370,36 @@ class OtpVerificationActivity : AppCompatActivity() {
                                 response: Response<LoginResponse>
                             )
                             {
-                                if(response.isSuccessful) {
-                                    var userInfo = response.body()!!.data.user
 
-                                    if (response.body()!!.status == 1) {
-                                        SharedPrefrenceManager.setUserMobileNumber(
-                                            this@OtpVerificationActivity,
-                                            userInfo.mobile_no
-                                        )
-                                        SharedPrefrenceManager.setUserCountry(
-                                            this@OtpVerificationActivity,
-                                            userInfo.country
-                                        )
-                                        SharedPrefrenceManager.setUserCountryCode(
-                                            this@OtpVerificationActivity,
-                                            userInfo.country_code
-                                        )
-                                        SharedPrefrenceManager.setUserFirstName(
-                                            this@OtpVerificationActivity,
-                                            userInfo.first_name
-                                        )
-                                        SharedPrefrenceManager.setUserLastName(
-                                            this@OtpVerificationActivity,
-                                            userInfo.last_name
-                                        )
-                                        SharedPrefrenceManager.setDeviceToken(
-                                            this@OtpVerificationActivity,
-                                            userInfo.device_token
-                                        )
-                                        SharedPrefrenceManager.setUserEmail(
-                                            this@OtpVerificationActivity,
-                                            userInfo.email
-                                        )
-                                        SharedPrefrenceManager.setUserDob(
-                                            this@OtpVerificationActivity,
-                                            userInfo.dob
-                                        )
-                                        SharedPrefrenceManager.setUserGender(
-                                            this@OtpVerificationActivity,
-                                            userInfo.gender
-                                        )
-                                        launchActivity<HomeActivity>()
-                                        finish()
-                                        dialog.run { dismiss() }
-                                    } else {
-
-                                        launchActivity<SocialLoginActivity>()
-                                        finish()
-                                        dialog.run { dismiss() }
-                                    }
-                                    SharedPrefrenceManager.setApiToken(this@OtpVerificationActivity,response.body()?.data?.token?:"")
-                                }else{
-                                    Toast.makeText(this@OtpVerificationActivity,"Something went wrong, please try after some time",Toast.LENGTH_LONG).show()
+                                if(response.body()!!.status==1)
+                                {
+                                    var userInfo=response.body()!!.data.user
+                                    SharedPrefrenceManager.setUserMobileNumber(this@OtpVerificationActivity,userInfo.mobile_no)
+                                    SharedPrefrenceManager.setProfileImg(this@OtpVerificationActivity,userInfo.profile_pic)
+                                    SharedPrefrenceManager.setUserCountry(this@OtpVerificationActivity,userInfo.country)
+                                    SharedPrefrenceManager.setUserCountryCode(this@OtpVerificationActivity,userInfo.country_code)
+                                    SharedPrefrenceManager.setUserFirstName(this@OtpVerificationActivity,userInfo.first_name)
+                                    SharedPrefrenceManager.setUserLastName(this@OtpVerificationActivity,userInfo.last_name)
+                                    SharedPrefrenceManager.setDeviceToken(this@OtpVerificationActivity,userInfo.device_token)
+                                    SharedPrefrenceManager.setUserEmail(this@OtpVerificationActivity,userInfo.email)
+                                    SharedPrefrenceManager.setUserDob(this@OtpVerificationActivity,userInfo.dob)
+                                    SharedPrefrenceManager.setUserGender(this@OtpVerificationActivity,userInfo.gender)
+                                    launchActivity<HomeActivity>()
+                                    finish()
                                     dialog.run { dismiss() }
                                 }
+                                else
+                                {
+
+                                    launchActivity<SocialLoginActivity>()
+                                    finish()
+                                    dialog.run { dismiss() }
+                                }
+
+
                             }
+
+
                         })
 
                     }

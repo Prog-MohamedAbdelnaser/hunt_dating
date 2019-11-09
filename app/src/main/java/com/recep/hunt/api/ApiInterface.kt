@@ -49,7 +49,7 @@ interface ApiInterface {
     fun reportUser(@Body reportUser:ReportUser):Call<ReportUserResponse>
 
     @GET("/api/user-profile")
-    fun getUserProfile() : Call<UserProfileResponse>
+    fun getUserProfile(@Header("Authorization")  authorization:String) : Call<UserProfileResponse>
 
     @POST("/api/user-swipe-data")
     fun userSwipes(@Body userSwipe: UserSwipe):Call<User>
