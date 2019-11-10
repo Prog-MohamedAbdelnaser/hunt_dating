@@ -1,29 +1,19 @@
 package com.recep.hunt.login
 
-import android.app.Dialog
-import android.content.IntentFilter
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.get
 import com.goodiebag.pinview.Pinview
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.iid.FirebaseInstanceId
@@ -35,12 +25,8 @@ import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.model.LoginModel
 import com.recep.hunt.model.login.LoginResponse
 import com.recep.hunt.utilis.*
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_otp_verification.*
-import org.aviran.cookiebar2.CookieBar.dismiss
-import org.jetbrains.anko.email
 import org.jetbrains.anko.find
-import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -384,6 +370,7 @@ class OtpVerificationActivity : AppCompatActivity() {
                                     SharedPrefrenceManager.setUserEmail(this@OtpVerificationActivity,userInfo.email)
                                     SharedPrefrenceManager.setUserDob(this@OtpVerificationActivity,userInfo.dob)
                                     SharedPrefrenceManager.setUserGender(this@OtpVerificationActivity,userInfo.gender)
+                                    SharedPrefrenceManager.setUserToken(this@OtpVerificationActivity,response.body()!!.data.token)
                                     launchActivity<HomeActivity>()
                                     finish()
                                     dialog.run { dismiss() }

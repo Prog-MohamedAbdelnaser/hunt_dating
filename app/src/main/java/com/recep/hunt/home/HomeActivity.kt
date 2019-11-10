@@ -112,7 +112,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         val makeUserOnline=MakeUserOnline(true)
 
-        val call = ApiClient.getClient.makeUserOnline(makeUserOnline)
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline,SharedPrefrenceManager.getUserToken(this))
 
         call.enqueue(object :Callback<MakeUserOnlineResponse> {
             override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {

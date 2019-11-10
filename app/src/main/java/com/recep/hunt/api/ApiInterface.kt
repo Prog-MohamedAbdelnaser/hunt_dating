@@ -3,13 +3,13 @@ package com.recep.hunt.api
 import com.recep.hunt.model.*
 import com.recep.hunt.model.GetRandomQuestions.GetRandomQuestionReponse
 import com.recep.hunt.model.RegistrationModule.RegistrationResponse
+import com.recep.hunt.model.RegistrationModule.User
 import com.recep.hunt.model.SubscriptinPlans.SubscriptionsPlansResponse
 import com.recep.hunt.model.TicketList.TicketListResponse
 import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
 import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.model.createTicket.CreateTicketResponse
 import com.recep.hunt.model.login.LoginResponse
-import com.recep.hunt.model.login.User
 import com.recep.hunt.model.logout.LogoutReponse
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
@@ -33,7 +33,7 @@ interface ApiInterface {
 //    fun createUser(@Body login: Registration): Call<RegistrationResponse>
 
     @POST("/api/is-user-online")
-    fun makeUserOnline(@Body isUserOnline:MakeUserOnline):Call<MakeUserOnlineResponse>
+    fun makeUserOnline(@Body isUserOnline:MakeUserOnline,@Header("Authorization")  authorization:String):Call<MakeUserOnlineResponse>
 
     @POST("/api/update-user-profile")
     fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
@@ -48,22 +48,22 @@ interface ApiInterface {
     fun getUserProfile(@Header("Authorization")  authorization:String) : Call<UserProfileResponse>
 
     @POST("/api/user-swipe-data")
-    fun userSwipes(@Body userSwipe: UserSwipe):Call<User>
+    fun userSwipes(@Body userSwipe: UserSwipe,@Header("Authorization")  authorization:String):Call<User>
 
     @POST("/api/create-ticket")
-    fun createTicket(@Body createTicket: CreateTicket):Call<CreateTicketResponse>
+    fun createTicket(@Body createTicket: CreateTicket,@Header("Authorization")  authorization:String):Call<CreateTicketResponse>
 
     @GET("/api/ticket-list")
-    fun getTickets():Call<TicketListResponse>
+    fun getTickets(@Header("Authorization")  authorization:String):Call<TicketListResponse>
 
     @POST("/api/view-ticket")
-    fun viewTicket(@Body viewTicket: ViewTicket):Call<ViewTicketResponse>
+    fun viewTicket(@Body viewTicket: ViewTicket,@Header("Authorization")  authorization:String):Call<ViewTicketResponse>
 
     @POST("/api/delete-user")
-    fun deleteUser(@Body deleteUser: DeleteUser):Call<ViewTicketResponse>
+    fun deleteUser(@Body deleteUser: DeleteUser,@Header("Authorization")  authorization:String):Call<ViewTicketResponse>
 
     @GET("/api/subscription-plan")
-    fun getSubscriptionPlan():Call<SubscriptionsPlansResponse>
+    fun getSubscriptionPlan(@Header("Authorization")  authorization:String):Call<SubscriptionsPlansResponse>
 
     @GET("/api/random-question")
     fun getRandomQuestion():Call<GetRandomQuestionReponse>
