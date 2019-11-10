@@ -171,12 +171,6 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             builder.addFormDataPart("zodiac", SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity))
             builder.addFormDataPart("religion", SharedPrefrenceManager.getReligion(this@UserProfileEditActivity))
             builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity))
-
-
-
-
-
-
             val firstImage = SharedPrefrenceManager.getFirstImg(this)
             val secondImage = SharedPrefrenceManager.getSecImg(this)
             val thirdImage = SharedPrefrenceManager.getThirdImg(this)
