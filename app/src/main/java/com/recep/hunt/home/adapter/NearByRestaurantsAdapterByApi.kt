@@ -1,6 +1,7 @@
 package com.recep.hunt.home.adapter
 
 import android.content.Context
+import android.graphics.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -62,7 +63,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
 //                    val photoRefrence = model.photos[0].photoReference
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
                     Log.e("Url","Image : $url")
-                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
+                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
                 else {
                     Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
@@ -100,4 +101,24 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
         }
 
     }
+}
+
+class RoundedTransformation(val radius : Int, val margin : Int) : com.squareup.picasso.Transformation {
+    override fun key(): String {
+        return "rounded(r=" + radius + ", m=" + margin + ")"
+    }
+
+    override fun transform(source: Bitmap?): Bitmap {
+        val paint = Paint()
+        paint.isAntiAlias = true
+        paint.setShader(BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP))
+        val output = Bitmap.createBitmap(source!!.width, source.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        canvas.drawRoundRect(RectF(margin.toFloat(), margin.toFloat(), (source.width - margin).toFloat(), (source.height - margin).toFloat()), radius.toFloat(), radius.toFloat(), paint)
+        if (source != output) {
+            source.recycle()
+        }
+        return output
+    }
+
 }

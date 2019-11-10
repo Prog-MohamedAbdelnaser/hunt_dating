@@ -34,7 +34,7 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
                 if(!model.image.isNullOrEmpty()){
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 //                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"
-                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image)).placeholder(R.drawable.ic_img_gallery).into(viewHolder.itemView.restaurant_vertical_list_image)
+                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.ic_img_gallery).into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 else {
                     Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image)).into(viewHolder.itemView.restaurant_vertical_list_image)

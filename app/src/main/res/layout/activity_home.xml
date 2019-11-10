@@ -182,13 +182,11 @@
 
     <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/horizontal_list_near_by_user"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/maps"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.32"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/maps">
 
     </com.yarolegovich.discretescrollview.DiscreteScrollView>
 

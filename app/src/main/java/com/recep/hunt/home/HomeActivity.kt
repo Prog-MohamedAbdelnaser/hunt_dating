@@ -4,12 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.Button
@@ -195,7 +197,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
                     val farItems = ArrayList<NearestLocationData>()
-                    for (i in 0 until result!!.size - 1) {
+                    for (i in 0 until result.size) {
                         //If it's near than 50m
                         if (result[i].distance.toFloat() <= 50) {
                             nearbyItems.add(result[i])
@@ -205,7 +207,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         }
                     }
                     val markerOptions = MarkerOptions()
-                    for (i in 0 until result.size - 1) {
+                    for (i in 0 until result.size) {
                         val googlePlace = result[i]
                         val mLat = googlePlace.lat
                         val mLong = googlePlace.lang
@@ -234,10 +236,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
     private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?) {
+        horizontal_list_near_by_user.x = -520.0f
+        val windowwidth = windowManager.defaultDisplay.width
+        horizontal_list_near_by_user.layoutParams.width = windowwidth  + windowwidth / 3 + 150
+//        horizontal_list_near_by_user.setOffscreenItems(items!!.size)
         horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
-        horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
-            .build())
+        horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder().setMaxScale(1.125f).setMinScale(0.98f).setPivotX(Pivot.X.CENTER).setPivotY(Pivot.Y.BOTTOM).build())
         horizontal_list_near_by_user.scrollToPosition(0)
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
@@ -257,7 +262,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             dialog.show()
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-        for (i in 0 until nearItems!!.size - 1) {
+
+        for (i in 0 until nearItems!!.size) {
             adapter.add(
                 NearByRestaurantsVerticalAdapterByAPi(
                     this@HomeActivity,
@@ -266,7 +272,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-        for (i in 0 until farItems!!.size - 1) {
+        for (i in 0 until farItems!!.size) {
             adapter.add(
                 FarAwayRestaurantsVerticalAdapterByApi(
                     this@HomeActivity,
