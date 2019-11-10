@@ -99,7 +99,6 @@ class OtpVerificationActivity : AppCompatActivity() {
                     otpPinView.clearValue()
                     we_will_send_you_otp_tv.visibility = View.GONE
                     send_otp_again_btn.visibility = View.GONE
-                    setupProgressTimer()
                 }
                 catch (e:Exception)
                 {}
