@@ -205,8 +205,6 @@ class CreatorActivity : AppCompatActivity() {
 
     private fun giveUsRate(){
         val submit : LinearLayout
-
-
         val ll =  LayoutInflater.from(this).inflate(R.layout.rate_us_dialog, null)
         val dialog = Dialog(this)
         dialog.setContentView(ll)

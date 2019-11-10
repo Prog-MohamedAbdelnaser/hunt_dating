@@ -456,6 +456,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginTop="16dp"/>
                 <TextView
+                        android:id="@+id/txtEmail"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/email_address_description"
