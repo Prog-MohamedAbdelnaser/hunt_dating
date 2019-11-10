@@ -37,6 +37,16 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         iterator.forEach {
             SharedPrefrenceManager.setUserInterestedIn(this@SetupProfileInterestedInActivity,lookingFor,it)
         }
+
+        val count = selectedInterests.size
+        if(count < 3){
+            showAddExtraChoiceDialog()
+        }else{
+//                    toast(selectedInterstedIn)
+//                    launchActivity<TurnOnGPSActivity>()
+//            launchActivity<TurnOnGPSUpdateAcitivity>()
+            launchActivity<SetupProfileReferralCodeActivity>()
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,10 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.MakeUserOnline
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
+import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.SimpleDividerItemDecoration
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -16,6 +22,9 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.notifications_adapter_item.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class NotificationsActivity : BaseActivity() {
 
@@ -35,6 +44,7 @@ class NotificationsActivity : BaseActivity() {
     private fun init(){
         noNotificationsLayout = find(R.id.no_notifications_layout)
         recyclerView = find(R.id.notifications_recyclerView)
+        getNotification()
         setupRecyclerView()
     }
     private fun setupRecyclerView(){
@@ -53,6 +63,27 @@ class NotificationsActivity : BaseActivity() {
     private fun clearAllNotifications(){
         recyclerView.visibility = View.GONE
         noNotificationsLayout.visibility = View.VISIBLE
+
+    }
+
+    private fun getNotification()
+    {
+
+        val call = ApiClient.getClient.getNotification(SharedPrefrenceManager.getUserToken(this@NotificationsActivity))
+
+        call.enqueue(object : Callback<NotificationResponse> {
+            override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<NotificationResponse>,
+                response: Response<NotificationResponse>
+            ) {
+                //get response here
+            }
+
+        })
 
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.recep.hunt.R
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import kotlinx.android.synthetic.main.activity_info_you_provide.*
 import org.jetbrains.anko.toast
 
@@ -18,6 +19,10 @@ class InfoYouProvideActivity : AppCompatActivity() {
 
     private fun init(){
         setSupportActionBar(info_you_provide_toolbar)
+        txtEmail.text=SharedPrefrenceManager.getUserEmail(this@InfoYouProvideActivity)
+        full_name_next_btn.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

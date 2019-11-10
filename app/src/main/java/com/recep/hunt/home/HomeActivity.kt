@@ -112,7 +112,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         val makeUserOnline=MakeUserOnline(true)
 
-        val call = ApiClient.getClient.makeUserOnline(makeUserOnline)
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline,SharedPrefrenceManager.getUserToken(this))
 
         call.enqueue(object :Callback<MakeUserOnlineResponse> {
             override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
@@ -123,7 +123,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-              Toast.makeText(this@HomeActivity,"Youe online",Toast.LENGTH_SHORT).show()
+              Toast.makeText(this@HomeActivity,"Your online",Toast.LENGTH_SHORT).show()
             }
 
         })

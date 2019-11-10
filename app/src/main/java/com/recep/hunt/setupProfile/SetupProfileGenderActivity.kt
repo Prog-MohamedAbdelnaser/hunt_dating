@@ -20,6 +20,8 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
 
     override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
         selectedGender = lookingFor
+        SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
+        launchActivity<SetupProfileLookingForActivity>()
     }
 
     private var selectedGender = ""
@@ -39,6 +41,7 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
 
         setup_gender_continue_btn.setOnClickListener {
             if(selectedGender.isNotEmpty()){
+
                 SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
                 launchActivity<SetupProfileLookingForActivity>()
             }else{

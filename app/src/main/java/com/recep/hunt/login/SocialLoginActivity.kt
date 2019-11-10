@@ -178,7 +178,11 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     //setupInstaAuth()
                     launchingInst()
 
-                R.id.social_login_skip_btn -> launchActivity<SetupProfileActivity>()
+                R.id.social_login_skip_btn ->{
+                    SharedPrefrenceManager.setIsFromSocial(this,true)
+
+                    launchActivity<SetupProfileActivity>()
+                }
             }
         }
     }
@@ -226,7 +230,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     Log.e("loginResult ", loginResult.toString())
-                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
+//                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
                     getUserDetails(loginResult)
                 }
 
@@ -353,7 +357,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     // Sign in success, update UI with the signed-in user's information
                     Log.e(TAG, "signInWithCredential:success")
                     val user = mAuth.currentUser
-                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
+//                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
                     updateGoogleUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
@@ -375,7 +379,6 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 user.email!!
             )
 
-
             //  var userInf  = user.providerData
 
             val json: String = gson.toJson(userDetailsModel)
@@ -393,6 +396,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             SharedPrefrenceManager.setsocialType(this, "social")
             SharedPrefrenceManager.setGoogleLoginToken(this,user.uid)
             SharedPrefrenceManager.setGoogleId(this,user.uid)
+
             launchActivity<ContinueAsSocialActivity> {
                 putExtra(socialTypeKey, Constants.socialGoogleType)
                 putExtra(userSocialModel, json)
@@ -418,7 +422,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 val social_email = json_object.optString("email", "")
                 val id = json_object.getString("id")
                 // val gender = json_object.getString("gender").
-                // userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
+                 userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
 
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val json: String = gson.toJson(userDetailsModel)
@@ -436,13 +440,11 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 SharedPrefrenceManager.setFacebookLoginToken(this@SocialLoginActivity,loginResult.accessToken.token.toString())
 
                 try {
-                    val  url =  URL(facebook_pic);
-                    val image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    SharedPrefrenceManager.setProfileImg(this,BitMapToString(image))
+                    SharedPrefrenceManager.setProfileImg(this,facebook_pic)
                 } catch(e: IOException) {
                     e.printStackTrace()
                 }
-                SharedPrefrenceManager.setsocialType(this, "Facebook")
+                SharedPrefrenceManager.setsocialType(this, "social")
 
                 // SharedPrefrenceManager.setUserGender(this, gender)
                 fbUserImages(id)
