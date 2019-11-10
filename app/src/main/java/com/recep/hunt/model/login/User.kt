@@ -1,6 +1,6 @@
 package com.recep.hunt.model.login
 
-public data class User(
+data class User(
     val country: String,
     val country_code: String,
     val created_at: String,

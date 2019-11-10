@@ -36,6 +36,8 @@ import com.goodiebag.pinview.Pinview
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.createTicket.CreateTicketResponse
 import com.recep.hunt.profile.model.IceBreakerModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
@@ -47,6 +49,12 @@ import kotlinx.android.synthetic.main.activity_otp_verification.*
 import kotlinx.android.synthetic.main.activity_user_profile_edit.*
 import kotlinx.android.synthetic.main.add_new_ice_breaker_question_dialog.*
 import kotlinx.android.synthetic.main.ask_question_dailog.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -62,6 +70,7 @@ class CreatorActivity : AppCompatActivity() {
     private lateinit var cl_progressbar: ConstraintLayout
     private var pStatus = 4
     private var pStatusVisible = 5
+     var imageFileTobeUploaded=MutableLiveData<File>()
 
     private lateinit var otpPinView: Pinview
 
@@ -165,6 +174,7 @@ class CreatorActivity : AppCompatActivity() {
         val option2Et  : EditText
         val option3Et  : EditText
 
+        val optionText:EditText
         val ll =  LayoutInflater.from(this).inflate(R.layout.ask_question_dailog, null)
 
 
@@ -176,7 +186,7 @@ class CreatorActivity : AppCompatActivity() {
         askButton= dialog.find(R.id.ic_breaker_add_btn)
         uploadImage=dialog.find(R.id.camera_layout)
         image=dialog.find(R.id.ivImage)
-
+        optionText=dialog.find(R.id.add_ice_breaker_question_et)
         uploadImage.setOnClickListener{
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
@@ -196,7 +206,47 @@ class CreatorActivity : AppCompatActivity() {
             giveUsRate()
             launchActivity<TicketGenrated> {  }
 
-                dialog.dismiss()
+
+            val builder = MultipartBody.Builder()
+            builder.setType(MultipartBody.FORM)
+            builder.addFormDataPart(
+                "message",
+                optionText.text.toString()
+            )
+
+            val imageFile=imageFileTobeUploaded.value
+            if (imageFile != null && imageFile.exists()) {
+                builder.addFormDataPart(
+                    "image",
+                    imageFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), imageFile)
+                )
+                builder.addFormDataPart(
+                    "audio",
+                    imageFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), imageFile)
+                )
+            }
+            val call = ApiClient.getClient.createTicket(builder.build(),SharedPrefrenceManager.getUserToken(this@CreatorActivity))
+
+            call.enqueue(object: Callback<CreateTicketResponse> {
+                override fun onFailure(call: Call<CreateTicketResponse>, t: Throwable) {
+                    Toast.makeText(this@CreatorActivity,"Please try again",Toast.LENGTH_SHORT)
+                }
+
+                override fun onResponse(
+                    call: Call<CreateTicketResponse>,
+                    response: Response<CreateTicketResponse>
+                ) {
+                    dialog.dismiss()
+
+                }
+
+            })
+
+
+
+
             }
 
 
@@ -205,14 +255,13 @@ class CreatorActivity : AppCompatActivity() {
 
     private fun giveUsRate(){
         val submit : LinearLayout
-
-
         val ll =  LayoutInflater.from(this).inflate(R.layout.rate_us_dialog, null)
         val dialog = Dialog(this)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         submit = dialog.find(R.id.lytGiveRate)
+
 
 
         submit.setOnClickListener {
@@ -244,6 +293,7 @@ class CreatorActivity : AppCompatActivity() {
             val result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
                 val resultUri = result.uri
+                imageFileTobeUploaded.value=File(resultUri.path)
                 var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                 imgLivedate.value=bitmap
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

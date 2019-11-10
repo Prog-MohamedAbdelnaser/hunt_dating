@@ -133,7 +133,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             )
                             builder.addFormDataPart(
                                 "country_code",
-                                SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
+                                SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity).replace("+","")
                             )
                             builder.addFormDataPart(
                                 "gender",
@@ -249,7 +249,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     )
                     builder.addFormDataPart(
                         "country_code",
-                        SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
+                        SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity).replace("+","")
                     )
                     builder.addFormDataPart("gender", "Male")
                     builder.addFormDataPart("dob", "1993-11-11")
@@ -309,7 +309,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             SharedPrefrenceManager.getUserLongitude(this@SetupProfileReferralCodeActivity)
                         )
 //                    builder.addFormDataPart("device_type", "android")
-//                    builder.addFormDataPart("device_id", SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity))
+                    builder.addFormDataPart("device_id", SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity))
                         builder.addFormDataPart(
                             "for_date",
                             SharedPrefrenceManager.getLookingForDate(this@SetupProfileReferralCodeActivity)
