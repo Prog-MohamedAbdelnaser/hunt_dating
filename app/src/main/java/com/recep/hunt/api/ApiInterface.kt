@@ -55,7 +55,7 @@ interface ApiInterface {
     fun userSwipes(@Body userSwipe: UserSwipe,@Header("Authorization")  authorization:String):Call<User>
 
     @POST("/api/create-ticket")
-    fun createTicket(@Body createTicket: CreateTicket,@Header("Authorization")  authorization:String):Call<CreateTicketResponse>
+    fun createTicket(@Body file : RequestBody,@Header("Authorization")  authorization:String):Call<CreateTicketResponse>
 
     @GET("/api/ticket-list")
     fun getTickets(@Header("Authorization")  authorization:String):Call<TicketListResponse>
