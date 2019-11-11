@@ -94,7 +94,6 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
             if (!SharedPrefrenceManager.getIsFromSocial(this)) {
 
-
                 file = File(filePath, fileName)
 
 
@@ -127,7 +126,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             )
                             builder.addFormDataPart(
                                 "mobile_no",
-                                SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity)
+                                SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity).replace("+","")
                             )
                             builder.addFormDataPart(
                                 "country_code",
@@ -463,7 +462,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     val mJsonObject = JSONObject(data)
                     val mJsonObjectMessage = mJsonObject.optString("message")
                     Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
-//                    launchActivity<SetupProfileCompletedActivity> { }
+                    launchActivity<SetupProfileCompletedActivity> { }
 
                 }
             }

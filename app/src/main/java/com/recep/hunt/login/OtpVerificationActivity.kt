@@ -437,6 +437,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                                 }
                                 if (response.body()?.status == 1) {
                                     launchActivity<HomeActivity>()
+                                    SharedPrefrenceManager.setIsLoggedIn(this@OtpVerificationActivity, true)
+                                    SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, true)
                                 } else {
                                     launchActivity<SocialLoginActivity>()
                                 }
