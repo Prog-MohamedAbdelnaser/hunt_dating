@@ -109,15 +109,15 @@ class OtpVerificationActivity : AppCompatActivity() {
                     otpPinView.clearValue()
                     we_will_send_you_otp_tv.visibility = View.GONE
                     send_otp_again_btn.visibility = View.GONE
-                } catch (e: Exception) {
+                } catch (e: Exception)
+                {
+
                 }
 
 
             }
         }
         try {
-            //11.10.2019
-            verificationId = intent.getStringExtra(WelcomeScreenActivity.verificationIdKey)
             otp = intent.getStringExtra(WelcomeScreenActivity.otpKey)
             countryCode = intent.getStringExtra(WelcomeScreenActivity.countryCodeKey)
             phoneNumber = intent.getStringExtra(WelcomeScreenActivity.numberKey)
@@ -153,7 +153,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         }
 
         otpPinView.setPinViewEventListener { pinview, fromUser ->
-            verify(phoneNumber, countryCode)
+            authenticate(pinview.value)
         }
 
         //Start Receiving SMS
@@ -267,7 +267,6 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun verify(number: String, countryCode: String) {
-        verificationCallbacks(number, countryCode)
         val phoneNumber = "$countryCode$number"
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber,
@@ -278,9 +277,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         )
     }
 
-    private fun verificationCallbacks(number: String, countryCode: String) {
 
-    }
 
 
     private fun authenticate(number: String) {
