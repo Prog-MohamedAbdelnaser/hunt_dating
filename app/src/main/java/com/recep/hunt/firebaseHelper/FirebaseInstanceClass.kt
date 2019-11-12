@@ -62,7 +62,7 @@ class FirebaseInstanceClass : FirebaseMessagingService() {
         manager.notify(0, builder.build())
     }
 
-    private val TAGO = FirebaseInstanceClass::class.java.simpleName
+    private val TAG = FirebaseInstanceClass::class.java.simpleName
     private fun showLog(message:String){
         Log.e(TAG,message)
     }
