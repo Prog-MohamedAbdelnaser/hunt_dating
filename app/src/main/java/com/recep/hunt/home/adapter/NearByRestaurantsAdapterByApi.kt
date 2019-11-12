@@ -15,9 +15,12 @@ import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.SelectLocation
+import com.recep.hunt.model.UsersListFilter
 import com.recep.hunt.model.nearestLocation.NearestLocationData
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
+import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
+import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.launchActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,12 +76,15 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                 userNumbers.text = model.users.toString()
                 goToSwipeView.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
-                    context.launchActivity<SwipeMainActivity> {  }
                 }
             }
         }
 
         fun selectLocationAndGetUsersList(location_id : String, location_name : String) {
+            val age = "20,30"
+            val date = "both"
+            val business = "male"
+            val friendship = "both"
             val location = SelectLocation(location_id, location_name)
             val call = ApiClient.getClient.selectLocation(location)
 
@@ -93,10 +99,40 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                 ) {
                     var result = response.body()?.data
                     if (result != null) {
-
+                        getUsersList(location_id, age, date, business, friendship)
+//                        context.launchActivity<SwipeMainActivity> {  }
                     }
                 }
 
+            })
+        }
+
+        fun getUsersList(location_id: String, age: String, date : String, business : String, friendship : String) {
+            val filter = UsersListFilter(location_id, age, date, business, friendship)
+            val call = ApiClient.getClient.usersList(filter)
+
+            call.enqueue(object : Callback<UsersListResponse> {
+                override fun onFailure(call: Call<UsersListResponse>, t: Throwable) {
+                    Log.d("Api call failure -> " , "" + call)
+                }
+
+                override fun onResponse(
+                    call: Call<UsersListResponse>,
+                    response: Response<UsersListResponse>
+                ) {
+                    var result = response.body()?.data
+                    var swipeUserArray = ArrayList<SwipeUserModel>()
+                    if (result != null) {
+                        for (i in 0 until result.size) {
+                            val images = ArrayList<String>()
+                            for (j in 0 until result[i].user_profile_image.size) {
+                                images.add(result[i].user_profile_image[j].image)
+                            }
+                            swipeUserArray.add(SwipeUserModel(result[i].basicInfo.job_title, result[i].basicInfo.about, images))
+                        }
+                        context.launchActivity<SwipeMainActivity> { putParcelableArrayListExtra("swipeUsers", swipeUserArray) }
+                    }
+                }
             })
         }
 

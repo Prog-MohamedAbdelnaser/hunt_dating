@@ -37,7 +37,7 @@ object ApiClient {
 //                requestBuilder.addHeader(ApiConstant.HEADER_NEWS_API_KEY, ApiConstant.NEWS_KEY)
                 MyApplication.instance?.let {
                     val token = SharedPrefrenceManager.getApiToken(it)
-//                    val token = "eyJpdiI6Ijcydm1kR1kwSHpvczRLTnZEUFdQanc9PSIsInZhbHVlIjoiR0JOR3I0ZG56S2lOY09ESXdWUWdpUT09IiwibWFjIjoiYTI3Y2Y5NDc3ZDhkMDVmOTJkMjMwZWE0ZDQyYzg5OWNiMDExYzUzYWNmNTg4NWJhNTc2ODBkNjQ1MGI0YTAwZiJ9"
+//                    val token = "eyJpdiI6IkRSWVd0Y0hXQkRSbldTcXVJajdpNUE9PSIsInZhbHVlIjoiRTFBYURQeTNvNk5UdHZHUngrT3dEZz09IiwibWFjIjoiMmQxZTBkY2JmZTM3OTQwNjFmZDA1MmQ4MzM0NGRjM2RkN2RlMjg4MjdiNjNiODlmYmI2YTY4ZTJlZDUwOGZjYSJ9"
                     if (!TextUtils.isEmpty(token)) {
                         requestBuilder.addHeader("Authorization", token)
                     }

@@ -14,15 +14,15 @@ data class UsersListFilter(
     val age: String,
 
     @Expose
-    @SerializedName("for_date")
+    @SerializedName("date")
     val for_date: String,
 
     @Expose
-    @SerializedName("for_business")
+    @SerializedName("bussiness")
     val for_business: String,
 
     @Expose
-    @SerializedName("for_friendship")
+    @SerializedName("friendship")
     val for_friendship: String
 
 )

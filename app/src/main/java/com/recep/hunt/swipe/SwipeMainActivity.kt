@@ -63,13 +63,14 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         windowwidth = windowManager.defaultDisplay.width
         screenCenter = windowwidth / 2
         items = dummyUsersdata()
+//        items = intent.getParcelableArrayListExtra("swipeUsers")
         addNearbyUsersToSwipe()
     }
 
     private fun addNearbyUsersToSwipe() {
 
-        var size = items.size - 1
-        for (i in 0..size) {
+        var last = items.size - 1
+        for (i in 0..last) {
 
             var containerView = LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
             //match status progress bar
@@ -91,17 +92,17 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             containerView.tag = i
             storyProgressViews.add(containerView.findViewById(R.id.stories))
             storyImageView.add(containerView.findViewById(R.id.story_image_userdetail))
-            val count = 5
             counter.add(0)
             currentUser = i
-            storyProgressViews[i].setStoriesCount(count)
+            storyProgressViews[i].setStoriesCount(items[i].images!!.size)
             storyProgressViews[i].setStoryDuration(3500L)
 
-            Picasso.get().load(dummyImages[0]).fit().centerCrop().into(storyImageView[i], object:
+            Picasso.get().load(items[i].images!![0]).fit().centerCrop().into(storyImageView[i], object:
                 Callback {
                 override fun onSuccess() {
-                    if (i == size)
-                        storyProgressViews[i].startStories()
+                    if (i == last)
+                        Log.d("Started ->", "started")
+//                        storyProgressViews[i].startStories()
                 }
 
                 override fun onError(e: Exception?) {
@@ -206,10 +207,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
                             if (x >= screenCenter) {
-                                storyProgressViews[currentUser].skip()
+                                onNext()
+//                                storyProgressViews[currentUser].skip()
                             }
                             else {
-                                storyProgressViews[currentUser].reverse()
+                                onPrev()
+//                                storyProgressViews[currentUser].reverse()
                             }
                             v.parent.requestDisallowInterceptTouchEvent(true)
                         }
@@ -231,7 +234,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 Log.e("Event_Status :->", "Unlike")
                                 parentView.removeView(containerView)
                                 if (currentUser > 0) {
-                                    storyProgressViews[currentUser - 1].startStories()
+//                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
                                  }
@@ -240,7 +243,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 Log.e("Event_Status :->", "Like")
                                 parentView.removeView(containerView)
                                 if (currentUser > 0) {
-                                    storyProgressViews[currentUser - 1].startStories()
+//                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
                                 }
@@ -258,35 +261,46 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     //Dummy Users Data
     private fun dummyUsersdata():ArrayList<SwipeUserModel>{
         val data = ArrayList<SwipeUserModel>()
+        val images = ArrayList<String>()
+        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573485502.jfif")
+        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573546803.jpg")
+        val images1 = ArrayList<String>()
+        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574714.jpg")
+        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574732.jfif")
         if(data.size == 0){
             data.add(
                 SwipeUserModel(
                     "Valentina, 28",
-                    "Actor at Max Studio"
+                    "Actor at Max Studio",
+                    images
                 )
             )
             data.add(
                 SwipeUserModel(
                     "Stella, 28",
-                    "Model at Fashion Club"
+                    "Model at Fashion Club",
+                    images1
                 )
             )
             data.add(
                 SwipeUserModel(
                     "Serena, 23",
-                    "Digital Artist at Blue Tea Productions"
+                    "Digital Artist at Blue Tea Productions",
+                    images
                 )
             )
             data.add(
                 SwipeUserModel(
                     "Jasmin, 25",
-                    "Technical Producer"
+                    "Technical Producer",
+                    images
                 )
             )
             data.add(
                 SwipeUserModel(
                     "Allena, 26",
-                    "Pop Singer"
+                    "Pop Singer",
+                    images
                 )
             )
         }
@@ -301,21 +315,21 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     override fun onComplete() {
-        counter[currentUser] = 4
+        counter[currentUser] = items[currentUser].images!!.size
 
     }
 
     override fun onPrev() {
         if ( counter[currentUser] > 0) {
             counter[currentUser] --
-            Picasso.get().load(dummyImages[counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
+            Picasso.get().load(items[currentUser].images!![counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
         }
     }
 
     override fun onNext() {
-        if ( counter[currentUser] < 4) {
+        if ( counter[currentUser] < items[currentUser].images!!.size - 1) {
             counter[currentUser] ++
-            Picasso.get().load(dummyImages[counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
+            Picasso.get().load(items[currentUser].images!![counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
         }
     }
 }

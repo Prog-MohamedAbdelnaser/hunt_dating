@@ -16,6 +16,7 @@ import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
+import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -78,8 +79,8 @@ interface ApiInterface {
     @POST("/api/select-loation")
     fun selectLocation(@Body selectLocation: SelectLocation):Call<SelectLocationResponse>
 
-//    @POST("/api/users-list")
-//    fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
+    @POST("/api/users-list")
+    fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
 
     @GET("/api/notification")
     fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>
