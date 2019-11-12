@@ -117,8 +117,7 @@ constructor(url: URL) {
             // checks server's status code first
             val status = httpConnection.responseCode
             if (status == HttpURLConnection.HTTP_OK) {
-                val reader = BufferedReader(InputStreamReader(httpConnection
-                    .inputStream))
+                val reader = BufferedReader(InputStreamReader(httpConnection.inputStream))
                 val response = reader.use(BufferedReader::readText)
                 httpConnection.disconnect()
                 onFileUploadedListener?.onFileUploadingSuccess(response)
