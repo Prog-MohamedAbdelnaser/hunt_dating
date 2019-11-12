@@ -52,6 +52,7 @@ import kotlinx.android.synthetic.main.ask_question_dailog.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -187,6 +188,49 @@ class CreatorActivity : AppCompatActivity() {
         uploadImage=dialog.find(R.id.camera_layout)
         image=dialog.find(R.id.ivImage)
         optionText=dialog.find(R.id.add_ice_breaker_question_et)
+
+        dialog.startRecordingCard.onClick {
+            dialog.tvSerach.visibility=View.GONE
+            dialog.remaningSeconds.textSize=32F
+            progressBar.progress = 0
+            progressBar.max = 60
+
+            var progrssCount=60
+            var pStatus=0
+            dialog.remaningSeconds.text="60 sec Remaning"
+
+
+            Thread(Runnable {
+                while (pStatus < 60) {
+                    pStatus += 1
+                    progrssCount -= 1
+
+                    handler.post {
+                        dialog.remaningSeconds.text=pStatusVisible.toString()+" sec Remaning"
+
+                        if (pStatusVisible == 0) {
+                            runOnUiThread {
+
+                                dialog.tvSerach.text="Recorded(Press againg to record)"
+                                dialog.remaningSeconds.visibility=View.GONE
+                                dialog.tvSerach.visibility=View.VISIBLE
+
+                            }
+                        }
+                    }
+                    try {
+                        Thread.sleep(1000)
+
+                    } catch (e: InterruptedException) {
+                        e.printStackTrace()
+                    }
+
+                }
+
+
+            }).start()
+
+        }
         uploadImage.setOnClickListener{
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
@@ -303,6 +347,8 @@ class CreatorActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
     }
+
+
 
 
 

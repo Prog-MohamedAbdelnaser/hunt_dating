@@ -18,6 +18,7 @@ import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -37,8 +38,11 @@ interface ApiInterface {
     @POST("/api/is-user-online")
     fun makeUserOnline(@Body isUserOnline:MakeUserOnline,@Header("Authorization")  authorization:String):Call<MakeUserOnlineResponse>
 
+//    @POST("/api/update-user-profile")
+//    fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
+
     @POST("/api/update-user-profile")
-    fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
+    fun saveUserDetails(@Body file: RequestBody):Call<UpdateUserInfoResponseModel>
 
     @GET("api/logout")
     fun  logoutUser(@Header("Authorization")  authorization:String):Call<LogoutReponse>

@@ -18,7 +18,7 @@ import javax.security.cert.CertificateException
 
 object ApiClient {
 
-    var BASE_URL:String="http://165.22.18.129"
+    var BASE_URL:String="http://165.22.18.129S"
     val getClient: ApiInterface
         get() {
 

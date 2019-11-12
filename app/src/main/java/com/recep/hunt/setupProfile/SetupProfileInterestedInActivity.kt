@@ -44,7 +44,8 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         }else{
 //                    toast(selectedInterstedIn)
 //                    launchActivity<TurnOnGPSActivity>()
-            launchActivity<TurnOnGPSUpdateAcitivity>()
+//            launchActivity<TurnOnGPSUpdateAcitivity>()
+            launchActivity<SetupProfileReferralCodeActivity>()
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -52,6 +52,7 @@ class ContinueAsSocialActivity : AppCompatActivity() {
             socialImage = find(R.id.continue_as_social_image)
             continueUserNameTv = find(R.id.continue_as_username_txtView)
             userImageView = find(R.id.continue_as_user_imageView)
+            SharedPrefrenceManager.setIsFromSocial(this,false)
 
             userName = userDetailModel.userName
 

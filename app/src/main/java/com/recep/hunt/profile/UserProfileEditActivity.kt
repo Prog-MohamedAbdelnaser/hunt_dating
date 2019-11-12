@@ -11,6 +11,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,6 @@ import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.model.UpdateUserInfoModel
 import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
@@ -51,6 +51,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 
 class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
@@ -133,57 +134,65 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             updateSchool()
             updateGenderPrefrence()
 
-            val userModel = UpdateUserInfoModel(
-                SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getSomke(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getPets(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getKids(this@UserProfileEditActivity),
-                SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity),
-                "",
-                SharedPrefrenceManager.getReligion(this@UserProfileEditActivity),
-                "",
-                SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity)
-            )
+//            val userModel = UpdateUserInfoModel(
+//                SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getSomke(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getPets(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getKids(this@UserProfileEditActivity),
+//                SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity),
+//                "",
+//                SharedPrefrenceManager.getReligion(this@UserProfileEditActivity),
+//                "",
+//                SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity)
+//            )
 
-//            val builder = MultipartBody.Builder()
-//            builder.setType(MultipartBody.FORM)
-//            builder.addFormDataPart("about", SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity))
-//            builder.addFormDataPart("job_title", SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity))
-//            builder.addFormDataPart("company", SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity))
-//            builder.addFormDataPart("hometown", SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity))
-//            builder.addFormDataPart("school", SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity))
-//            builder.addFormDataPart("height", SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity))
-//            builder.addFormDataPart("gym", SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity))
-//            builder.addFormDataPart("education_level", SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity))
-//            builder.addFormDataPart("drink", SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity))
-//            builder.addFormDataPart("smoke", SharedPrefrenceManager.getSomke(this@UserProfileEditActivity))
-//            builder.addFormDataPart("pets", SharedPrefrenceManager.getPets(this@UserProfileEditActivity))
-//            builder.addFormDataPart("kids", SharedPrefrenceManager.getKids(this@UserProfileEditActivity))
-//            builder.addFormDataPart("zodiac", SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity))
-//            builder.addFormDataPart("religion", SharedPrefrenceManager.getReligion(this@UserProfileEditActivity))
-//            builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity))
-////
-////            if (file != null && file.exists()) {
-////                builder.addFormDataPart(
-////                    "profile_pic",
-////                    file.name,
-////                    RequestBody.create(MediaType.parse("multipart/form-data"), file)
-////                )
-////            }
+            val builder = MultipartBody.Builder()
+            builder.setType(MultipartBody.FORM)
+            builder.addFormDataPart("about", SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity))
+            builder.addFormDataPart("job_title", SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity))
+            builder.addFormDataPart("company", SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity))
+            builder.addFormDataPart("hometown", SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity))
+            builder.addFormDataPart("school", SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity))
+            builder.addFormDataPart("height", SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity))
+            builder.addFormDataPart("gym", SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity))
+            builder.addFormDataPart("education_level", SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity))
+            builder.addFormDataPart("drink", SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity))
+            builder.addFormDataPart("smoke", SharedPrefrenceManager.getSomke(this@UserProfileEditActivity))
+            builder.addFormDataPart("pets", SharedPrefrenceManager.getPets(this@UserProfileEditActivity))
+            builder.addFormDataPart("kids", SharedPrefrenceManager.getKids(this@UserProfileEditActivity))
+            builder.addFormDataPart("zodiac", SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity))
+            builder.addFormDataPart("religion", SharedPrefrenceManager.getReligion(this@UserProfileEditActivity))
+            builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity))
+            val firstImage = SharedPrefrenceManager.getFirstImg(this)
+            val secondImage = SharedPrefrenceManager.getSecImg(this)
+            val thirdImage = SharedPrefrenceManager.getThirdImg(this)
+            val fourthImage = SharedPrefrenceManager.getFourthImg(this)
+            val fifthImage = SharedPrefrenceManager.getFiveImg(this)
+            val sixthImage = SharedPrefrenceManager.getSixImg(this)
+            if(!TextUtils.isEmpty(firstImage)) {
+                val firstFile = getFiles(firstImage,1)
+                if (firstFile.exists()) {
+                    builder.addFormDataPart(
+                        "user_profile[]",
+                        firstFile.name,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    )
+                }
+            }
 
 
 
 
 
-            val call = ApiClient.getClient.saveUserDetails(userModel)
+            val call = ApiClient.getClient.saveUserDetails(builder.build())
             call.enqueue(object :
                 Callback<UpdateUserInfoResponseModel> {
                 override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
@@ -224,6 +233,26 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
 
+    }
+
+
+    private fun getFiles(strImage : String,position: Int) : File{
+        val mFile = File(cacheDir, "image_$position.jpeg")
+        mFile.createNewFile()
+
+//Convert bitmap to byte array
+        val bitmap = StringToBitmap(strImage)
+        val bos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 60, bos)
+        val bitmapData = bos.toByteArray()
+
+//write the bytes in file
+        val fos = FileOutputStream(mFile)
+        fos.write(bitmapData)
+        fos.flush()
+        fos.close()
+
+        return mFile
     }
 
     private fun updateGenderPrefrence() {

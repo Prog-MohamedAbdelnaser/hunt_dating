@@ -108,6 +108,7 @@
                 app:cardCornerRadius="6dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/startRecordingCard"
                     android:layout_width="match_parent"
                     android:padding="12dp"
                     android:layout_height="match_parent">
@@ -136,6 +137,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                        android:id="@+id/remaningSeconds"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12dp"

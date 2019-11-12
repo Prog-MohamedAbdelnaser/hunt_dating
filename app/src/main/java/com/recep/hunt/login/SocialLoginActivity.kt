@@ -230,7 +230,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     Log.e("loginResult ", loginResult.toString())
-                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
+//                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
                     getUserDetails(loginResult)
                 }
 
@@ -357,7 +357,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     // Sign in success, update UI with the signed-in user's information
                     Log.e(TAG, "signInWithCredential:success")
                     val user = mAuth.currentUser
-                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
+//                    SharedPrefrenceManager.clearAllSharePreference(this@SocialLoginActivity)
                     updateGoogleUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
