@@ -16,6 +16,7 @@ import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
+import com.recep.hunt.model.swipeUser.SwipeUserResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.MultipartBody
@@ -53,9 +54,6 @@ interface ApiInterface {
     @GET("/api/user-profile")
     fun getUserProfile(@Header("Authorization")  authorization:String) : Call<UserProfileResponse>
 
-    @POST("/api/user-swipe-data")
-    fun userSwipes(@Body userSwipe: UserSwipe,@Header("Authorization")  authorization:String):Call<User>
-
     @POST("/api/create-ticket")
     fun createTicket(@Body file : RequestBody,@Header("Authorization")  authorization:String):Call<CreateTicketResponse>
 
@@ -85,6 +83,9 @@ interface ApiInterface {
 
     @POST("/api/users-list")
     fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
+
+    @POST("/api/user-swipe-data")
+    fun swipeUser(@Body userSwipe: UserSwipe):Call<SwipeUserResponse>
 
     @GET("/api/notification")
     fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>

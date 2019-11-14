@@ -270,6 +270,7 @@
         </com.google.android.material.tabs.TabLayout>
 
         <Button
+                android:id="@+id/filter_appyly_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginStart="32dp"

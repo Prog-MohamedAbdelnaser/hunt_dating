@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.textView_user_numbers
 import org.jetbrains.anko.find
 import java.lang.Exception
+import kotlin.math.roundToInt
 
 
 /**
@@ -26,7 +27,7 @@ import java.lang.Exception
  * Email : rishabh1450@gmail.com
  */
 
-class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:ArrayList<NearestLocationData>?): Item<ViewHolder>() {
+class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:ArrayList<NearestLocationData>?, val nearItemCount : Int): Item<ViewHolder>() {
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
 
@@ -35,7 +36,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if(item != null){
             try{
-                val model = item[position]
+                val model = item[position - nearItemCount - 2]
                 if(!model.image.isNullOrEmpty()){
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 //                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"
@@ -47,7 +48,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
-                val distance = model.distance.toFloat() * 1000
+                val distance = model.distance.roundToInt()
                 viewHolder.itemView.textView_distance_numbers.text = distance.toString() + " M"
 
             }catch (e:Exception){

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.recep.hunt.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.widget.ImageButton
@@ -19,6 +20,7 @@ import com.recep.hunt.filters.adapter.FilterAdapter
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.filters.model.LookingForMainModel
 import com.recep.hunt.utilis.NonSwipeableViewPager
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import kotlinx.android.synthetic.main.filter_bottom_sheet_layout.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
@@ -47,8 +49,14 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
     private lateinit var maleImageView: ImageView
     private lateinit var feMaleImageView: ImageView
     private lateinit var bothImageView: ImageView
+    private lateinit var applyButton: Button
+    private var interestedIn: String = ""
+    private var leftAge : Int = 18
+    private var rightAge : Int = 50
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
 
         val v = inflater.inflate(R.layout.filter_bottom_sheet_layout, container, false)
         viewPager = v.find(R.id.filter_viewPager)
@@ -60,6 +68,7 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         maleImageView = v.find(R.id.filter_male_imageView)
         feMaleImageView = v.find(R.id.filter_female_imageView)
         bothImageView = v.find(R.id.filter_both_imageView)
+        applyButton = v.find(R.id.filter_appyly_button)
 
         lookingForModel = LookingForMainModel.getInstance()
         val adapter = FilterAdapter(ctx, lookingForModel.getData())
@@ -67,10 +76,17 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         filterTabLayout.setupWithViewPager(viewPager)
         viewPager.setPageTransformer(false,FadePageTransformer())
 
-        filterAgeTextView.text =
-            ctx.resources.getString(R.string.fromYears_toYears,"18","50")
+        val leftAgeTemp = SharedPrefrenceManager.getUserInterestedAgeFrom(v.context)
+        val rightAgeTemp = SharedPrefrenceManager.getUserInterestedAgeTo(v.context)
+        if (leftAgeTemp.isNotEmpty())
+            leftAge = leftAgeTemp.toInt()
+        if (rightAgeTemp.isNotEmpty())
+            rightAge = rightAgeTemp.toInt()
 
-        ageRangeSeekBar.setProgress(18f,50f)
+        filterAgeTextView.text =
+            ctx.resources.getString(R.string.fromYears_toYears, leftAge.toString(), rightAge.toString())
+
+        ageRangeSeekBar.setProgress(leftAge.toFloat(),rightAge.toFloat())
         v.filter_dismiss_btn.setOnClickListener {
             dismiss()
         }
@@ -101,12 +117,15 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
 
         }
         maleImageView.setOnClickListener {
+            interestedIn = "Male"
             changeGenderBackgrounds(Constants.MALE)
         }
         feMaleImageView.setOnClickListener {
+            interestedIn = "Female"
             changeGenderBackgrounds(Constants.FEMALE)
         }
         bothImageView.setOnClickListener {
+            interestedIn = "Both"
             changeGenderBackgrounds(Constants.BOTH)
         }
 
@@ -116,6 +135,8 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
             override fun onRangeChanged(rangeSeekBar: RangeSeekBar, leftValue: Float, rightValue: Float, isFromUser: Boolean) {
                 filterAgeTextView.text =
                     ctx.resources.getString(R.string.fromYears_toYears,leftValue.toInt().toString(),rightValue.toInt().toString())
+                leftAge = leftValue.toInt()
+                rightAge = rightValue.toInt()
             }
 
             override fun onStartTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
@@ -127,6 +148,27 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
             }
 
         })
+
+        applyButton.setOnClickListener {
+            var selectedLookingFor = ""
+            when (viewPager.currentItem) {
+               0 -> {
+                   selectedLookingFor = "Date"
+               }
+               1 -> {
+                   selectedLookingFor = "FriendShip"
+               }
+               2 -> {
+                   selectedLookingFor = "Business"
+               }
+            }
+
+            SharedPrefrenceManager.setUserLookingFor(v.context, selectedLookingFor)
+            SharedPrefrenceManager.setUserInterestedIn(v.context, selectedLookingFor, interestedIn)
+            SharedPrefrenceManager.setUserInterestedAge(v.context, leftAge.toString(), rightAge.toString())
+            dismiss()
+
+        }
 
         return v
     }

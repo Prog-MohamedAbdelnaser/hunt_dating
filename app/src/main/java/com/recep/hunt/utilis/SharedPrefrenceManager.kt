@@ -57,7 +57,9 @@ enum class PersistenceKeys {
     UserAge,
     socialType,
     refernceCode,
-    apiToken
+    apiToken,
+    UserInterestedAgeFrom,
+    UserInterestedAgeTo
 }
 
 class SharedPrefrenceManager {
@@ -527,6 +529,29 @@ class SharedPrefrenceManager {
             return ""
         }
 
+        fun setUserInterestedAge(context: Context, from : String, to : String) {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val editor = sharedPreferences.edit()
+            editor.putString(PersistenceKeys.UserInterestedAgeFrom.toString(), from)
+            editor.putString(PersistenceKeys.UserInterestedAgeTo.toString(), to)
+            editor.apply()
+        }
+
+        fun getUserInterestedAgeFrom(context: Context):String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            sharedPreferences.getString(PersistenceKeys.UserInterestedAgeFrom.toString(), "")?.let {
+                return it
+            }
+            return ""
+        }
+
+        fun getUserInterestedAgeTo(context: Context):String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            sharedPreferences.getString(PersistenceKeys.UserInterestedAgeTo.toString(), "")?.let {
+                return it
+            }
+            return ""
+        }
 
     }
 }

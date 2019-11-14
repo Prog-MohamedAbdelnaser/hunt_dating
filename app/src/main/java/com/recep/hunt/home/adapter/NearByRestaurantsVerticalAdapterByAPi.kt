@@ -2,6 +2,9 @@ package com.recep.hunt.home.adapter
 
 import android.content.Context
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.model.nearestLocation.NearestLocationData
@@ -30,7 +33,7 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if(item != null){
             try{
-                val model = item[position]
+                val model = item[position - 1]
                 if(!model.image.isNullOrEmpty()){
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 //                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"

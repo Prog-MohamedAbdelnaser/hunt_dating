@@ -2,7 +2,7 @@ package com.recep.hunt.model.usersList
 
 import java.sql.Timestamp
 
-data class Data (
+data class Data(
     val id : Int,
     val first_name: String,
     val last_name: String,
@@ -19,11 +19,11 @@ data class Data (
     val device_type : String,
     val device_id : String,
     val device_token : String,
-    val start_date : Timestamp,
+    val start_date : String,
     val is_online : String,
     val status : String,
-    val lat : Double,
-    val lang : Double,
+    val lat : String,
+    val lang : String,
     val for_date : String,
     val for_business : String,
     val for_friendship : String,

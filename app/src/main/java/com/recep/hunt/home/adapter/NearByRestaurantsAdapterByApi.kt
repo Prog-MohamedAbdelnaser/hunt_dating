@@ -21,6 +21,7 @@ import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,10 +67,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
 //                    val photoRefrence = model.photos[0].photoReference
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
                     Log.e("Url","Image : $url")
-                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
-                }
-                else {
-                    Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
+                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
@@ -81,7 +79,13 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
         }
 
         fun selectLocationAndGetUsersList(location_id : String, location_name : String) {
-            val age = "20,30"
+            var leftAge = SharedPrefrenceManager.getUserInterestedAgeFrom(context)
+            if (leftAge.isEmpty())
+                leftAge = "18"
+            var rightAge = SharedPrefrenceManager.getUserInterestedAgeTo(context)
+            if (rightAge.isEmpty())
+                rightAge = "50"
+            val age = leftAge + "," + rightAge
             val date = "both"
             val business = "male"
             val friendship = "both"
@@ -109,6 +113,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
 
         fun getUsersList(location_id: String, age: String, date : String, business : String, friendship : String) {
             val filter = UsersListFilter(location_id, age, date, business, friendship)
+//            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
             val call = ApiClient.getClient.usersList(filter)
 
             call.enqueue(object : Callback<UsersListResponse> {
@@ -125,10 +130,16 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                     if (result != null) {
                         for (i in 0 until result.size) {
                             val images = ArrayList<String>()
-                            for (j in 0 until result[i].user_profile_image.size) {
-                                images.add(result[i].user_profile_image[j].image)
+                            if ( result[i].user_profile_image.size != 0) {
+                                for (j in 0 until result[i].user_profile_image.size) {
+                                    images.add(result[i].user_profile_image[j].image)
+                                }
                             }
-                            swipeUserArray.add(SwipeUserModel(result[i].basicInfo.job_title, result[i].basicInfo.about, images))
+                            else {
+                                val baseUrl = "https://hunt.nyc3.digitaloceanspaces.com/User/"
+                                images.add(baseUrl + result[i].profile_pic)
+                            }
+                            swipeUserArray.add(SwipeUserModel(result[i].id, result[i].location_name, result[i].first_name, result[i].age, result[i].basicInfo.job_title, result[i].basicInfo.about, images))
                         }
                         context.launchActivity<SwipeMainActivity> { putParcelableArrayListExtra("swipeUsers", swipeUserArray) }
                     }

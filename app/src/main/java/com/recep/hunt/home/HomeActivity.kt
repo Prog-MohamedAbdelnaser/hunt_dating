@@ -47,6 +47,7 @@ import com.recep.hunt.utilis.*
 import com.recep.hunt.volleyHelper.APIController
 import com.recep.hunt.volleyHelper.APIState
 import com.recep.hunt.volleyHelper.ServiceVolley
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.OnItemClickListener
@@ -57,10 +58,12 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_turn_on_gps.*
 import kotlinx.android.synthetic.main.custom_infowindow.view.*
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
 import org.jetbrains.anko.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.roundToInt
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
 
@@ -87,10 +90,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private lateinit var showSortedListCardView: CardView
     private lateinit var showMyLocationCardView: CardView
     private lateinit var sortedListRecyclerView: RecyclerView
+    private lateinit var locationButton: ImageView
     private var isListshowing = true
     private var adapter = GroupAdapter<ViewHolder>()
     private var callAPIOnlyOnceStatus = 1
-    private lateinit var locationButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +107,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         val mapFrag = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFrag.getMapAsync(this)
         val mapFragView = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
-        mapFragView.alpha = 0.7f
+        mapFragView.alpha = 0.95f
         locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
             .findViewById(Integer.parseInt("2"))
 
@@ -199,7 +202,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                     val farItems = ArrayList<NearestLocationData>()
                     for (i in 0 until result.size) {
                         //If it's near than 50m
-                        if (result[i].distance.toFloat() <= 50) {
+                        if (result[i].distance.toFloat() <= 5000) {
                             nearbyItems.add(result[i])
                         }
                         else {
@@ -215,15 +218,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                         val latLong = LatLng(mLat, mLong)
 
                         markerOptions.position(latLong)
-                        markerOptions.title(placeName).icon(null)
+                        markerOptions.title(placeName)
 
                         markerOptions.snippet( i.toString())
 
                         val marker = mMap.addMarker(markerOptions)
                         marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
-                        marker.showInfoWindow()
+                        marker.tag = result[i]
                     }
-
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
                     mMap.setMaxZoomPreference(animateZoomTo)
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
@@ -272,11 +274,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             )
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
+
         for (i in 0 until farItems!!.size) {
             adapter.add(
                 FarAwayRestaurantsVerticalAdapterByApi(
                     this@HomeActivity,
-                    farItems
+                    farItems,
+                    nearItems.size
                 )
             )
         }
@@ -481,7 +485,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 latitude = mLastLocation.latitude
                 longitude = mLastLocation.longitude
 
-
                 val latLng = LatLng(latitude, longitude)
                 val markerOptions = MarkerOptions()
                     .position(latLng)
@@ -489,21 +492,22 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
 
                 mMarker = mMap.addMarker(markerOptions)
-//                mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
+                mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
 
-//                mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude, mLastLocation.longitude), this@HomeActivity)
-//
-//                mapRipple.withNumberOfRipples(4)
-//                mapRipple.withStrokeColor(resources.getColor(R.color.map_ripple_color))
-//                mapRipple.withStrokewidth(1)
-//                mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
-//                mapRipple.withDistance(100.toDouble())      // 2000 metres radius
-//                mapRipple.withRippleDuration(10000)    //12000ms
-//                mapRipple.withTransparency(0.4f)
-//                mapRipple.startRippleMapAnimation()
+//                val mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude, mLastLocation.longitude), this@HomeActivity)
+                val mapRipple = MapRipple(mMap, LatLng(latitude, longitude), this@HomeActivity)
+
+                mapRipple.withNumberOfRipples(4)
+                mapRipple.withStrokeColor(resources.getColor(R.color.map_ripple_color))
+                mapRipple.withStrokewidth(1)
+                mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
+                mapRipple.withDistance(100.toDouble())      // 2000 metres radius
+                mapRipple.withRippleDuration(10000)    //12000ms
+                mapRipple.withTransparency(0.4f)
+                mapRipple.startRippleMapAnimation()
 
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
                 SharedPrefrenceManager.setUserLongitude(this@HomeActivity, mLastLocation.longitude.toString())
@@ -608,10 +612,22 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 }
 
 class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
+
+    private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
+
     override fun getInfoWindow(marker: Marker?): View {
         val view = context.layoutInflater.inflate(R.layout.custom_infowindow, null)
+        view.alpha = 1.0f
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
+            val locationInfo = marker.tag as NearestLocationData
+            view.textView30.text = locationInfo.users.toString()
+            view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
+
+            if (!locationInfo.image.isEmpty()) {
+                val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+                Picasso.get().load(url).error(R.drawable.demo_restaurant_1).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.demo_restaurant_1).into(view.info_window_rest_image)
+            }
         }
         return view
     }

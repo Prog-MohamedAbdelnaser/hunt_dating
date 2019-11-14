@@ -9,21 +9,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityOptionsCompat
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
+import com.recep.hunt.model.UserSwipe
+import com.recep.hunt.model.swipeUser.SwipeUserResponse
 import com.recep.hunt.swipe.model.SwipeUserModel
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.Exception
-import java.sql.Time
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
@@ -62,8 +63,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         parentView = find(R.id.main_layoutView)
         windowwidth = windowManager.defaultDisplay.width
         screenCenter = windowwidth / 2
-        items = dummyUsersdata()
-//        items = intent.getParcelableArrayListExtra("swipeUsers")
+//        items = dummyUsersdata()
+        items = intent.getParcelableArrayListExtra("swipeUsers")
         addNearbyUsersToSwipe()
     }
 
@@ -97,21 +98,15 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             storyProgressViews[i].setStoriesCount(items[i].images!!.size)
             storyProgressViews[i].setStoryDuration(3500L)
 
-            Picasso.get().load(items[i].images!![0]).fit().centerCrop().into(storyImageView[i], object:
-                Callback {
-                override fun onSuccess() {
-                    if (i == last)
-                        Log.d("Started ->", "started")
-//                        storyProgressViews[i].startStories()
-                }
+            if (items[i].images!!.size > 0)
+                Picasso.get().load(items[i].images!![0]).fit().centerCrop().into(storyImageView[i])
 
-                override fun onError(e: Exception?) {
-
-                }
-            })
-
-            val titleView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
-            val detailView = containerView.findViewById<TextView>(R.id.user_detail_job_title)
+            val nameView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
+            val placeView = containerView.findViewById<TextView>(R.id.user_detail_place_txtView)
+            val titleView = containerView.findViewById<TextView>(R.id.user_detail_job_title)
+            val detailView = containerView.findViewById<TextView>(R.id.user_detail_about_you)
+            nameView.text = items[i].firstName + ", " + items[i].age.toString()
+            placeView.text = items[i].locationName
             titleView.text = items[i].title
             detailView.text = items[i].detail
 
@@ -233,6 +228,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             } else if (Likes == 1) {
                                 Log.e("Event_Status :->", "Unlike")
                                 parentView.removeView(containerView)
+                                callSwipeUserApi(items[currentUser].id, Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
@@ -242,6 +238,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             } else if (Likes == 2) {
                                 Log.e("Event_Status :->", "Like")
                                 parentView.removeView(containerView)
+                                callSwipeUserApi(items[currentUser].id, Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
@@ -258,7 +255,36 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         }
     }
 
+    private fun callSwipeUserApi(id:Int, like : Int) {
+        var likes : String = ""
+        if (like == 1) //Dislike this user
+        {
+            likes = "dislike"
+        }
+        if (like == 2) //Like this user
+        {
+            likes = "like"
+        }
+
+        val swipe = UserSwipe(id, likes)
+        val call = ApiClient.getClient.swipeUser(swipe)
+        call.enqueue(object : Callback<SwipeUserResponse>{
+            override fun onFailure(call: Call<SwipeUserResponse>, t: Throwable) {
+                Log.d("Api call failure -> " , "" + call)
+            }
+
+            override fun onResponse(
+                call: Call<SwipeUserResponse>,
+                response: Response<SwipeUserResponse>
+            ) {
+                val status = response.body()?.status
+            }
+
+        })
+    }
+
     //Dummy Users Data
+    /*
     private fun dummyUsersdata():ArrayList<SwipeUserModel>{
         val data = ArrayList<SwipeUserModel>()
         val images = ArrayList<String>()
@@ -270,6 +296,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         if(data.size == 0){
             data.add(
                 SwipeUserModel(
+                    "Hookah Loungh",
                     "Valentina, 28",
                     "Actor at Max Studio",
                     images
@@ -277,6 +304,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             )
             data.add(
                 SwipeUserModel(
+                    "Hookah Loungh",
                     "Stella, 28",
                     "Model at Fashion Club",
                     images1
@@ -284,6 +312,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             )
             data.add(
                 SwipeUserModel(
+                    "Hookah Loungh",
                     "Serena, 23",
                     "Digital Artist at Blue Tea Productions",
                     images
@@ -291,6 +320,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             )
             data.add(
                 SwipeUserModel(
+                    "Hookah Loungh",
                     "Jasmin, 25",
                     "Technical Producer",
                     images
@@ -298,6 +328,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             )
             data.add(
                 SwipeUserModel(
+                    "Hookah Loungh",
                     "Allena, 26",
                     "Pop Singer",
                     images
@@ -306,6 +337,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         }
         return data
     }
+     */
 
     fun isAClick(dragTime : Long, downTime : Long): Boolean {
         if (dragTime - downTime < CLICK_ACTION_THRESHOLD)
