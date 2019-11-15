@@ -13,10 +13,15 @@ import com.google.gson.GsonBuilder;
 
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
+import com.recep.hunt.api.ApiClient;
 import com.recep.hunt.constants.Constants;
 import com.recep.hunt.login.ContinueAsSocialActivity;
 import com.recep.hunt.login.model.UserSocialModel;
+import com.recep.hunt.model.CheckUserEmail;
+import com.recep.hunt.model.isEmailRegister.isEmailRegisterResponse;
 import com.recep.hunt.utilis.FileUtils;
 import com.recep.hunt.utilis.SharedPrefrenceManager;
 import org.json.JSONArray;
@@ -32,6 +37,10 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.recep.hunt.login.SocialLoginActivity.socialTypeKey;
@@ -243,20 +252,28 @@ public class InstagramApp {
 
 
 
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    json = gson.toJson(userDetailsModel);
-                    editor.putString("UserModel", String.valueOf(json)); // Storing string
-                    editor.putString("UserFirstName", firstName); // Storing string
-                    editor.putString("UserLastName", lastName); // Storing string
-                    editor.putString("UserEmail", data_obj.getString(TAG_USERNAME));// Storing string
-                    editor.putString("ProfileImg", getBitmapFromURL(data_obj.getString(TAG_PROFILE_PICTURE)));
-                    editor.putString("InstagramToken",TAG_ID);
-                    editor.putString("InstagramId",TAG_ID);
+                    if(!checkIfUserLogin(data_obj.getString(TAG_USERNAME)))
+                    {
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                        json = gson.toJson(userDetailsModel);
+                        editor.putString("UserModel", String.valueOf(json)); // Storing string
+                        editor.putString("UserFirstName", firstName); // Storing string
+                        editor.putString("UserLastName", lastName); // Storing string
+                        editor.putString("UserEmail", data_obj.getString(TAG_USERNAME));// Storing string
+                        editor.putString("ProfileImg", getBitmapFromURL(data_obj.getString(TAG_PROFILE_PICTURE)));
+                        editor.putString("InstagramToken",TAG_ID);
+                        editor.putString("InstagramId",TAG_ID);
+                        editor.putString("socialType", "social"); //
+                        editor.commit();
+                        mProgress.dismiss();
+                        getAllMediaImages();
+                    }
 
 
 
-                    editor.putString("socialType", "social"); //
-                    editor.commit(); // commit changes
+
+
+
 
                 } catch (Exception ex) {
                     what = WHAT_ERROR;
@@ -268,8 +285,7 @@ public class InstagramApp {
             }
         }.start();
 
-        mProgress.dismiss();
-        getAllMediaImages();
+
 
     }
 
@@ -361,6 +377,7 @@ public class InstagramApp {
     }
 
     public void getAllMediaImages() {
+
         mProgress = ProgressDialog.show(mCtx, "", "Loading images...");
         mProgress.show();
         new Thread(new Runnable() {
@@ -442,6 +459,41 @@ public class InstagramApp {
         byte[] barray=dst.array();
         String ans=Base64.encodeToString(barray,Base64.DEFAULT);
         return ans;
+    }
+    Boolean result=false;
+
+
+    Boolean checkIfUserLogin(String email)
+    {
+
+
+        CheckUserEmail emailModel=new CheckUserEmail(email)
+
+        Call<isEmailRegisterResponse> call = ApiClient.INSTANCE.getGetClient().checkIsEmailRegister(SharedPrefrenceManager.Companion.getUserToken(getApplicationContext()),emailModel);
+
+
+        call.enqueue(new Callback<isEmailRegisterResponse>(){
+
+            @Override
+            public void onResponse(Call<isEmailRegisterResponse> call, Response<isEmailRegisterResponse> response) {
+                if(!response.body().getStatus())
+                {
+                    Toast.makeText(getApplicationContext(),response.body().getMessage(),Toast.LENGTH_LONG).show();
+
+                }
+                 result=response.body().getStatus();
+            }
+
+            @Override
+            public void onFailure(Call<isEmailRegisterResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Something want wrong",Toast.LENGTH_LONG).show();
+
+                result=false;
+
+
+            }
+        });
+        return result;
     }
 
 }

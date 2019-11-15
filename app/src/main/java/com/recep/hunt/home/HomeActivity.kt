@@ -156,6 +156,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             val gotItBtn: Button = dialog.find(R.id.got_it_btn)
             gotItBtn.setOnClickListener {
                 home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
+                makeUserOfline()
                 dialog.dismiss()
             }
             dialog.show()
@@ -500,6 +501,29 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             }
         }
     }
+
+    fun makeUserOfline()
+    {
+        val makeUserOnline=MakeUserOnline(false)
+
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline,SharedPrefrenceManager.getUserToken(this))
+
+        call.enqueue(object :Callback<MakeUserOnlineResponse> {
+            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<MakeUserOnlineResponse>,
+                response: Response<MakeUserOnlineResponse>
+            ) {
+                Toast.makeText(this@HomeActivity,"Your online",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+    }
+
 }
 
 class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
