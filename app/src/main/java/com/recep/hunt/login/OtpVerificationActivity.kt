@@ -356,9 +356,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                             SharedPrefrenceManager.getUserCountryCode(this).replace("+", "")
                         val loginModel = LoginModel(
                             SharedPrefrenceManager.getUserMobileNumber(this),
-                            SharedPrefrenceManager.getUserCountryCode(this).replace("+", ""),
+                            SharedPrefrenceManager.getUserCountryCode(this),
                             1
-
                         )
 
                         val call = ApiClient.getClient.loginUser(loginModel)
