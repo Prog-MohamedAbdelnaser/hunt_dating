@@ -11,23 +11,38 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsy.maps_library.MapRipple
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.gson.Gson
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -63,10 +78,17 @@ import org.jetbrains.anko.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
-class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
+class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener,
+    PlacesAutoCompleteAdapter.ClickListener {
 
+    //PlacesAutoCompleteAdater override
+    override fun click(place: Place) {
+        toast(place.address.toString())
+    }
 
     override fun onOptionClick(text: String) {
     }
@@ -78,6 +100,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         private const val animateZoomTo = 17.0f
     }
 
+    private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -91,8 +114,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private lateinit var showMyLocationCardView: CardView
     private lateinit var sortedListRecyclerView: RecyclerView
     private lateinit var locationButton: ImageView
+    private lateinit var searchTextView : TextView
+    private lateinit var placesRecyclerView: RecyclerView
     private var isListshowing = true
     private var adapter = GroupAdapter<ViewHolder>()
+    private lateinit var autoCompleteAdapter : PlacesAutoCompleteAdapter
     private var callAPIOnlyOnceStatus = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,9 +137,23 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
             .findViewById(Integer.parseInt("2"))
 
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, GOOGLE_API_KEY_FOR_IMAGE)
+        }
+
+        autoCompleteAdapter = PlacesAutoCompleteAdapter(this)
+
+        searchTextView = find(R.id.textView6)
         showSortedListCardView = find(R.id.sorted_near_by_restaurants_list_card)
         showMyLocationCardView = find(R.id.my_location_crd)
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
+        placesRecyclerView = find(R.id.places_recylcer_view)
+        placesRecyclerView.layoutManager = LinearLayoutManager(this)
+        placesRecyclerView.addItemDecoration(DividerItemDecoration(placesRecyclerView.context, DividerItemDecoration.VERTICAL))
+        autoCompleteAdapter.setClickListener(this)
+        placesRecyclerView.adapter = autoCompleteAdapter
+        autoCompleteAdapter.notifyDataSetChanged()
+
 
         val makeUserOnline=MakeUserOnline(true)
 
@@ -146,11 +186,29 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
 
-        search_bar_layout.setOnClickListener {
-            toast("Search")
-        }
+        searchTextView.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.toString().equals("")) {
+                    if (placesRecyclerView.visibility == View.GONE) {
+                        placesRecyclerView.visibility = View.VISIBLE
+                    }
+                    autoCompleteAdapter.filter.filter(s.toString())
+                }
+                else {
+                    placesRecyclerView.visibility = View.GONE
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        })
 
     }
+
+
+
     private fun showIncognitoBtn() {
         val isIncognito = SharedPrefrenceManager.getisIncognito(this)
         if(isIncognito){
