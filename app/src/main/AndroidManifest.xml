@@ -24,14 +24,16 @@
             android:name="android.hardware.camera"
             android:required="true" />
 
+    <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/hunt"/>
+
     <application
             android:name=".application.MyApplication"
             android:allowBackup="true"
             android:hardwareAccelerated="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/hunt"
             android:label="@string/app_name"
             android:largeHeap="true"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@drawable/hunt"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"

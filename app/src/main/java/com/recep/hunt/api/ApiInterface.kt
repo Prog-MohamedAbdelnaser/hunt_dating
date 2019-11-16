@@ -9,6 +9,7 @@ import com.recep.hunt.model.TicketList.TicketListResponse
 import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
 import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.model.createTicket.CreateTicketResponse
+import com.recep.hunt.model.isEmailRegister.isEmailRegisterResponse
 import com.recep.hunt.model.login.LoginResponse
 import com.recep.hunt.model.logout.LogoutReponse
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
@@ -89,4 +90,8 @@ interface ApiInterface {
 
     @GET("/api/notification")
     fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>
+
+
+    @GET("/api/email-check")
+    fun checkIsEmailRegister(@Header("Authorization")  authorization:String,@Body email:CheckUserEmail):Call<isEmailRegisterResponse>
 }

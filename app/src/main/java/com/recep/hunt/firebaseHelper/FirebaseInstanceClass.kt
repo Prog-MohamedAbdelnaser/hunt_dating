@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.recep.hunt.R
+import com.recep.hunt.profile.UserProfileSettingsActivity
 
 
 /**
@@ -31,7 +32,10 @@ class FirebaseInstanceClass : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(p0: RemoteMessage) {
+
         super.onMessageReceived(p0)
+        val intent = Intent(this,UserProfileSettingsActivity::class.java)
+        pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
         val notification = p0.notification
         val channelId = "Default"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

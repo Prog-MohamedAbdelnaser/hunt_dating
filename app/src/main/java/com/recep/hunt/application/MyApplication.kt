@@ -8,9 +8,16 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.MakeUserOnline
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import org.acra.ACRA
 import org.acra.ReportingInteractionMode
 import org.acra.annotation.ReportsCrashes
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Created by RishabhShukla on 11/02/19.
@@ -28,6 +35,7 @@ class MyApplication : MultiDexApplication() {
         @get:Synchronized var instance: MyApplication? = null
             private set
     }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -60,6 +68,33 @@ class MyApplication : MultiDexApplication() {
         }
     }
 
+
+    override fun onTerminate() {
+        super.onTerminate()
+        makeUserOfline()
+
+    }
+
+    fun makeUserOfline()
+    {
+        val makeUserOnline= MakeUserOnline(false)
+
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline, SharedPrefrenceManager.getUserToken(this))
+
+        call.enqueue(object : Callback<MakeUserOnlineResponse> {
+            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<MakeUserOnlineResponse>,
+                response: Response<MakeUserOnlineResponse>
+            ) {
+            }
+
+        })
+
+    }
 
 
 }

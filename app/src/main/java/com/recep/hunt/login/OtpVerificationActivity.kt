@@ -282,8 +282,7 @@ class OtpVerificationActivity : AppCompatActivity() {
 
     private fun authenticate(number: String) {
         try {
-            val credential: PhoneAuthCredential =
-                PhoneAuthProvider.getCredential(verificationId, number)
+            val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(verificationId, number)
             signIn(credential)
 
         } catch (e: Exception) {
@@ -357,9 +356,8 @@ class OtpVerificationActivity : AppCompatActivity() {
                             SharedPrefrenceManager.getUserCountryCode(this).replace("+", "")
                         val loginModel = LoginModel(
                             SharedPrefrenceManager.getUserMobileNumber(this),
-                            countryCode,
+                            SharedPrefrenceManager.getUserCountryCode(this),
                             1
-
                         )
 
                         val call = ApiClient.getClient.loginUser(loginModel)
@@ -367,13 +365,12 @@ class OtpVerificationActivity : AppCompatActivity() {
 
                         call.enqueue(object : Callback<LoginResponse> {
                             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                                launchActivity<SocialLoginActivity>()
-                                finish()
+
                                 dialog.run { dismiss() }
 
                                 Toast.makeText(
                                     this@OtpVerificationActivity,
-                                    "Added",
+                                    "Something want wrong",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }

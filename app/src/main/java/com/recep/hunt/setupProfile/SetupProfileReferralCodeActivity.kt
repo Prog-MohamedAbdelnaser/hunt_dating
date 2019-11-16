@@ -130,10 +130,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             )
                             builder.addFormDataPart(
                                 "country_code",
-                                SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity).replace(
-                                    "+",
-                                    ""
-                                )
+                                SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
                             )
                             builder.addFormDataPart(
                                 "gender",
@@ -296,10 +293,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                         builder.addFormDataPart("mobile_no", SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity))
                         builder.addFormDataPart(
                             "country_code",
-                            SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity).replace(
-                                "+",
-                                ""
-                            )
+                            SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
                         )
                         builder.addFormDataPart(
                             "gender",
@@ -462,7 +456,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     val mJsonObject = JSONObject(data)
                     val mJsonObjectMessage = mJsonObject.optString("message")
                     Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
-                    launchActivity<SetupProfileCompletedActivity> { }
+//                    launchActivity<SetupProfileCompletedActivity> { }
 
                 }
             }
