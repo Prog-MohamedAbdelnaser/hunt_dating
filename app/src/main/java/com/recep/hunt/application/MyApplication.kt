@@ -3,6 +3,7 @@ package com.recep.hunt.application
 
 import android.app.Application
 import android.text.TextUtils
+import android.widget.Toast
 import androidx.multidex.MultiDexApplication
 import com.android.volley.Request
 import com.android.volley.RequestQueue

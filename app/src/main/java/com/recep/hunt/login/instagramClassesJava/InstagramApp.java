@@ -452,7 +452,6 @@ public class InstagramApp {
 
     String convertString(Bitmap bitmap)
     {
-
         final int lnth=bitmap.getByteCount();
         ByteBuffer dst= ByteBuffer.allocate(lnth);
         bitmap.copyPixelsToBuffer( dst);
@@ -467,7 +466,7 @@ public class InstagramApp {
     {
 
 
-        CheckUserEmail emailModel=new CheckUserEmail(email)
+        CheckUserEmail emailModel=new CheckUserEmail(email);
 
         Call<isEmailRegisterResponse> call = ApiClient.INSTANCE.getGetClient().checkIsEmailRegister(SharedPrefrenceManager.Companion.getUserToken(getApplicationContext()),emailModel);
 
@@ -476,7 +475,7 @@ public class InstagramApp {
 
             @Override
             public void onResponse(Call<isEmailRegisterResponse> call, Response<isEmailRegisterResponse> response) {
-                if(!response.body().getStatus())
+                if(response.body().getStatus())
                 {
                     Toast.makeText(getApplicationContext(),response.body().getMessage(),Toast.LENGTH_LONG).show();
 

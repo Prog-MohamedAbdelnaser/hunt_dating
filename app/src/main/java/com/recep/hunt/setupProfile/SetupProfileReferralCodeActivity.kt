@@ -440,7 +440,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                         if (!TextUtils.isEmpty(token)) {
                             SharedPrefrenceManager.setUserToken(
                                 this@SetupProfileReferralCodeActivity,
-                                token
+                                             token
                             )
                             SharedPrefrenceManager.setRefrencecode(
                                 this@SetupProfileReferralCodeActivity,
