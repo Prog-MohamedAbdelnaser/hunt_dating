@@ -71,7 +71,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                 }
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
-                userNumbers.text = model.users.toString()
+                userNumbers.text = (model.users - 1).toString()
                 goToSwipeView.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
                 }

@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -194,6 +195,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 containerView.findViewById<ImageView>(R.id.story_image_userdetail).colorFilter = null
                                 Likes = 0
                             }
+
                         }
                     }
                     MotionEvent.ACTION_UP -> {
@@ -218,23 +220,21 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             y_cord = event.rawY.toInt()
 
                             if (Likes == 0) {
-                                if (currentUser > 0) {
-                                    parentView.getChildAt(currentUser - 1).scaleX = 1f
-                                    parentView.getChildAt(currentUser - 1).scaleY = 1f
-                                }
-
                                 containerView.animate().x(0f).y(0f).rotation(0f).setDuration(300)
-//
-                                storyProgressViews[currentUser].resume()
+//                                storyProgressViews[currentUser].resume()
                             } else if (Likes == 1) {
-                                Log.e("Event_Status :->", "Unlike")
+                                Log.e("Event_Status :->", "Dislike")
                                 parentView.removeView(containerView)
                                 callSwipeUserApi(items[currentUser].id, Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
+                                    Likes = 0
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
                                  }
+                                else {
+                                    finish()
+                                }
 
                             } else if (Likes == 2) {
                                 Log.e("Event_Status :->", "Like")
@@ -243,7 +243,11 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser --
+                                    Likes = 0
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
+                                }
+                                else {
+                                    finish()
                                 }
                             }
                         }

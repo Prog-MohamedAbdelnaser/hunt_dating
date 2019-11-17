@@ -6,15 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
+import com.recep.hunt.model.SelectLocation
+import com.recep.hunt.model.UsersListFilter
 import com.recep.hunt.model.nearestLocation.NearestLocationData
+import com.recep.hunt.model.selectLocation.SelectLocationResponse
+import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
+import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.Exception
 
 
@@ -44,21 +54,89 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
                 }
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
-                viewHolder.itemView.textView_user_numbers.text = model.users.toString()
+                viewHolder.itemView.textView_user_numbers.text = ( model.users - 1 ).toString()
+
+                viewHolder.itemView.imageView9.setOnClickListener {
+                    selectLocationAndGetUsersList(model.place_id, model.name)
+                }
+
 
             }catch (e:Exception){
                 Log.e("Execpetion","$e")
             }
 
-            viewHolder.itemView.imageView9.setOnClickListener {
-                context.launchActivity<SwipeMainActivity> {  }
-            }
 
         }
 
+    }
 
+    fun selectLocationAndGetUsersList(location_id : String, location_name : String) {
+        var leftAge = SharedPrefrenceManager.getUserInterestedAgeFrom(context)
+        if (leftAge.isEmpty())
+            leftAge = "18"
+        var rightAge = SharedPrefrenceManager.getUserInterestedAgeTo(context)
+        if (rightAge.isEmpty())
+            rightAge = "50"
+        val age = leftAge + "," + rightAge
+        val date = SharedPrefrenceManager.getUserInterestedIn(context)
+        val business = SharedPrefrenceManager.getUserInterestedIn(context)
+        val friendship = SharedPrefrenceManager.getUserInterestedIn(context)
+        val location = SelectLocation(location_id, location_name)
+        val call = ApiClient.getClient.selectLocation(location, SharedPrefrenceManager.getUserToken(context))
 
+        call.enqueue(object : Callback<SelectLocationResponse> {
+            override fun onFailure(call: Call<SelectLocationResponse>, t: Throwable) {
+                Log.d("Api call failure -> " , "" + call)
+            }
 
+            override fun onResponse(
+                call: Call<SelectLocationResponse>,
+                response: Response<SelectLocationResponse>
+            ) {
+                var result = response.body()?.data
+                if (result != null) {
+                    getUsersList(location_id, age, date, business, friendship)
+//                        context.launchActivity<SwipeMainActivity> {  }
+                }
+            }
+
+        })
+    }
+
+    fun getUsersList(location_id: String, age: String, date : String, business : String, friendship : String) {
+        val filter = UsersListFilter(location_id, age, date, business, friendship)
+//            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
+        val call = ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(context))
+
+        call.enqueue(object : Callback<UsersListResponse> {
+            override fun onFailure(call: Call<UsersListResponse>, t: Throwable) {
+                Log.d("Api call failure -> " , "" + call)
+            }
+
+            override fun onResponse(
+                call: Call<UsersListResponse>,
+                response: Response<UsersListResponse>
+            ) {
+                var result = response.body()?.data
+                var swipeUserArray = ArrayList<SwipeUserModel>()
+                if (result != null) {
+                    for (i in 0 until result.size) {
+                        val images = ArrayList<String>()
+                        if ( result[i].user_profile_image.size != 0) {
+                            for (j in 0 until result[i].user_profile_image.size) {
+                                images.add(result[i].user_profile_image[j].image)
+                            }
+                        }
+                        else {
+                            val baseUrl = "https://hunt.nyc3.digitaloceanspaces.com/User/"
+                            images.add(baseUrl + result[i].profile_pic)
+                        }
+                        swipeUserArray.add(SwipeUserModel(result[i].id, result[i].location_name, result[i].first_name, result[i].age, result[i].basicInfo.job_title, result[i].basicInfo.about, images))
+                    }
+                    context.launchActivity<SwipeMainActivity> { putParcelableArrayListExtra("swipeUsers", swipeUserArray) }
+                }
+            }
+        })
     }
 
 

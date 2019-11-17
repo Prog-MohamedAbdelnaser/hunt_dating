@@ -3,6 +3,7 @@ package com.recep.hunt.home
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -149,11 +150,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         mapFragView.alpha = 0.95f
         locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
             .findViewById(Integer.parseInt("2"))
-
+        toast("starting")
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, GOOGLE_API_KEY_FOR_IMAGE)
         }
-
+        toast("started")
         autoCompleteAdapter = PlacesAutoCompleteAdapter(this)
 
         searchTextView = find(R.id.textView6)
@@ -162,7 +163,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
         placesRecyclerView = find(R.id.places_recylcer_view)
         placesRecyclerView.layoutManager = LinearLayoutManager(this)
-        placesRecyclerView.addItemDecoration(DividerItemDecoration(placesRecyclerView.context, DividerItemDecoration.VERTICAL))
+        placesRecyclerView.addItemDecoration(ListPaddingDecoration(placesRecyclerView.context, 70, 60))
         autoCompleteAdapter.setClickListener(this)
         placesRecyclerView.adapter = autoCompleteAdapter
         autoCompleteAdapter.notifyDataSetChanged()
@@ -233,12 +234,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             val gotItBtn: Button = dialog.find(R.id.got_it_btn)
             gotItBtn.setOnClickListener {
                 home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
-                makeUserOfline()
+                makeUserOnOffline(false)
                 dialog.dismiss()
             }
             dialog.show()
         }else{
             home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost)
+            makeUserOnOffline(true)
             SharedPrefrenceManager.setisIncognito(this,true)
         }
 
@@ -262,12 +264,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         call.enqueue(object :Callback<NearestLocationResponse> {
             override fun onFailure(call: Call<NearestLocationResponse>, t: Throwable) {
                 Log.d("Api call failure -> " , "" + call)
+                toast(call.toString())
             }
 
             override fun onResponse(
                 call: Call<NearestLocationResponse>,
                 response: Response<NearestLocationResponse>
             ) {
+                toast(response.toString())
                 var result = response.body()?.data
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
@@ -688,9 +692,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-    fun makeUserOfline()
+    fun makeUserOnOffline(is_online : Boolean)
     {
-        val makeUserOnline=MakeUserOnline(false)
+        val makeUserOnline=MakeUserOnline(is_online)
 
         val call = ApiClient.getClient.makeUserOnline(makeUserOnline,SharedPrefrenceManager.getUserToken(this))
 
@@ -703,7 +707,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-                Toast.makeText(this@HomeActivity,"Your online",Toast.LENGTH_SHORT).show()
+                if (is_online == false)
+                    Toast.makeText(this@HomeActivity,"You're offline",Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(this@HomeActivity,"You're online",Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -736,4 +743,30 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
     //getInfoWindow
     override fun getInfoContents(p0: Marker?) = null
 
+}
+
+class ListPaddingDecoration(context: Context, val paddingLeft : Int, val paddingRight : Int) : RecyclerView.ItemDecoration() {
+    private var mDivider : Drawable? = null
+
+    init {
+        mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)
+    }
+
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        val left = parent.paddingLeft + paddingLeft
+        val right = parent.width - parent.paddingRight - paddingRight
+
+        val childCount = parent.childCount
+        for (i in 0 until childCount) {
+            val child = parent.getChildAt(i)
+            val params = child.layoutParams as RecyclerView.LayoutParams
+            val top = child.bottom + params.bottomMargin
+            val bottom = top + (mDivider?.intrinsicHeight ?: 0)
+
+            mDivider?.let {
+                it.setBounds(left, top, right, bottom)
+                it.draw(c)
+            }
+        }
+    }
 }
