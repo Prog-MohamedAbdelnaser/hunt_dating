@@ -1,6 +1,7 @@
 package com.recep.hunt.api
 
 import android.text.TextUtils
+import android.util.Log
 import com.google.gson.GsonBuilder
 import com.recep.hunt.application.MyApplication
 import com.recep.hunt.utilis.SharedPrefrenceManager
@@ -37,6 +38,7 @@ object ApiClient {
 //                requestBuilder.addHeader(ApiConstant.HEADER_NEWS_API_KEY, ApiConstant.NEWS_KEY)
                 MyApplication.instance?.let {
                     val token = SharedPrefrenceManager.getApiToken(it)
+                    Log.d("Creator" ,"Token : " + token)
                     if (!TextUtils.isEmpty(token)) {
                         requestBuilder.addHeader("Authorization", token)
                     }

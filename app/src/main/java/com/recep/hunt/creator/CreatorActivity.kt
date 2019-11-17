@@ -22,11 +22,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.MediaRecorder
 import android.media.MediaScannerConnection
+import android.os.CountDownTimer
+import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
 import android.text.Html
 import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -63,15 +67,20 @@ import kotlin.collections.ArrayList
 
 class CreatorActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
-    private lateinit var remanigTime:TextView
-    private  lateinit var btnHaveAnIde: Button
-    private var imgLivedate=MutableLiveData<Bitmap>()
+    private lateinit var remanigTime: TextView
+    private lateinit var btnHaveAnIde: Button
+    private var imgLivedate = MutableLiveData<Bitmap>()
     private lateinit var progressBar: ProgressBar
     private val handler = Handler()
     private lateinit var cl_progressbar: ConstraintLayout
     private var pStatus = 4
     private var pStatusVisible = 5
-     var imageFileTobeUploaded=MutableLiveData<File>()
+    var imageFileTobeUploaded = MutableLiveData<File>()
+
+    private lateinit var mediaRecorder: MediaRecorder
+    private lateinit var dialog: Dialog
+    private lateinit var timer: CountDownTimer
+    private lateinit var voiceFile :String
 
     private lateinit var otpPinView: Pinview
 
@@ -85,15 +94,18 @@ class CreatorActivity : AppCompatActivity() {
     private fun init() {
         recyclerView = find(R.id.question_recyclerView)
 
-        btnHaveAnIde=find(R.id.btnDontHaveAnIdea)
+        btnHaveAnIde = find(R.id.btnDontHaveAnIdea)
 
         btnHaveAnIde.setOnClickListener {
             askQuestion()
         }
 
+//        login_nxt_btn.setOnClickListener {
+//            askQuestion()
+//        }
+
         progressBar = find(R.id.otp_progressBar)
         cl_progressbar = find(R.id.cl_progress_bar)
-
 
 
         val res = resources
@@ -114,9 +126,9 @@ class CreatorActivity : AppCompatActivity() {
 
                     if (pStatusVisible == 0) {
                         runOnUiThread {
-                            progressBar.visibility= View.GONE
-                            remanigTime.visibility=View.GONE
-                            btnHaveAnIde.visibility=View.VISIBLE
+                            progressBar.visibility = View.GONE
+                            remanigTime.visibility = View.GONE
+                            btnHaveAnIde.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -137,9 +149,10 @@ class CreatorActivity : AppCompatActivity() {
         setupRecyclerView()
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
         recyclerView.adapter = CreatorQuestionAdapter(this, getQustion())
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
 
         val pagerSnapHelper = PagerSnapHelper()
@@ -149,107 +162,75 @@ class CreatorActivity : AppCompatActivity() {
 
     private fun getQustion(): ArrayList<CreatorQustion>? {
 
-        val list=ArrayList<CreatorQustion>()
-        val option=ArrayList<OptionModel>()
+        val list = ArrayList<CreatorQustion>()
+        val option = ArrayList<OptionModel>()
 
-        option.add(OptionModel(1,"More People"))
+        option.add(OptionModel(1, "More People"))
 
-        option.add(OptionModel(2,"Better Performance "))
+        option.add(OptionModel(2, "Better Performance "))
 
-        option.add(OptionModel(3,"New Features"))
+        option.add(OptionModel(3, "New Features"))
 
 
-        list.add(CreatorQustion(1,"Be a creator of this app!\n" +
-                "Tell us your suggestions!",R.drawable.ic_claps,option))
+        list.add(
+            CreatorQustion(
+                1, "Be a creator of this app!\n" +
+                        "Tell us your suggestions!", R.drawable.ic_claps, option
+            )
+        )
 
 
         return list
 
     }
 
-    private fun askQuestion(){
-        val cancelButton : Button
-        val askButton : Button
-        val  uploadImage : ConstraintLayout
-        val image : ImageView
-        val option2Et  : EditText
-        val option3Et  : EditText
+    private fun askQuestion() {
+        val cancelButton: Button
+        val askButton: Button
+        val uploadImage: ConstraintLayout
+        val image: ImageView
+        val option2Et: EditText
+        val option3Et: EditText
 
-        val optionText:EditText
-        val ll =  LayoutInflater.from(this).inflate(R.layout.ask_question_dailog, null)
+        val optionText: EditText
+        val ll = LayoutInflater.from(this).inflate(R.layout.ask_question_dailog, null)
 
 
-        val dialog = Dialog(this)
+        dialog = Dialog(this)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         cancelButton = dialog.find(R.id.ic_breaker_cancel_btn)
-        askButton= dialog.find(R.id.ic_breaker_add_btn)
-        uploadImage=dialog.find(R.id.camera_layout)
-        image=dialog.find(R.id.ivImage)
-        optionText=dialog.find(R.id.add_ice_breaker_question_et)
+        askButton = dialog.find(R.id.ic_breaker_add_btn)
+        uploadImage = dialog.find(R.id.camera_layout)
+        image = dialog.find(R.id.ivImage)
+        optionText = dialog.find(R.id.add_ice_breaker_question_et)
+        var stopRecord : ImageView=dialog.find(R.id.stopRecord)
 
-        dialog.startRecordingCard.onClick {
-            dialog.tvSerach.visibility=View.GONE
-            dialog.remaningSeconds.textSize=32F
-            progressBar.progress = 0
-            progressBar.max = 60
-
-            var progrssCount=60
-            var pStatus=0
-            dialog.remaningSeconds.text="60 sec Remaning"
-
-
-            Thread(Runnable {
-                while (pStatus < 60) {
-                    pStatus += 1
-                    progrssCount -= 1
-
-                    handler.post {
-                        dialog.remaningSeconds.text=pStatusVisible.toString()+" sec Remaning"
-
-                        if (pStatusVisible == 0) {
-                            runOnUiThread {
-
-                                dialog.tvSerach.text="Recorded(Press againg to record)"
-                                dialog.remaningSeconds.visibility=View.GONE
-                                dialog.tvSerach.visibility=View.VISIBLE
-
-                            }
-                        }
-                    }
-                    try {
-                        Thread.sleep(1000)
-
-                    } catch (e: InterruptedException) {
-                        e.printStackTrace()
-                    }
-
-                }
-
-
-            }).start()
-
+        stopRecord.onClick {
+            stopAudio()
         }
-        uploadImage.setOnClickListener{
+        dialog.startRecordingCard.onClick {
+            recordAudio()
+        }
+        uploadImage.setOnClickListener {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
 
 
-        imgLivedate.observe(this,androidx.lifecycle.Observer {
-            image.visibility=View.VISIBLE
+        imgLivedate.observe(this, androidx.lifecycle.Observer {
+            image.visibility = View.VISIBLE
             image.setImageBitmap(it)
         })
 
         cancelButton.setOnClickListener {
-            launchActivity<TicketGenrated> {  }
+            launchActivity<TicketGenrated> { }
 
             dialog.dismiss()
         }
         askButton.setOnClickListener {
             giveUsRate()
-            launchActivity<TicketGenrated> {  }
-
+            launchActivity<TicketGenrated> { }
 
             val builder = MultipartBody.Builder()
             builder.setType(MultipartBody.FORM)
@@ -258,7 +239,7 @@ class CreatorActivity : AppCompatActivity() {
                 optionText.text.toString()
             )
 
-            val imageFile=imageFileTobeUploaded.value
+            val imageFile = imageFileTobeUploaded.value
             if (imageFile != null && imageFile.exists()) {
                 builder.addFormDataPart(
                     "image",
@@ -267,39 +248,95 @@ class CreatorActivity : AppCompatActivity() {
                 )
                 builder.addFormDataPart(
                     "audio",
-                    imageFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), imageFile)
+                    File(voiceFile).name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), File(voiceFile))
                 )
             }
-            val call = ApiClient.getClient.createTicket(builder.build(),SharedPrefrenceManager.getUserToken(this@CreatorActivity))
+            val call = ApiClient.getClient.createTicket(
+                builder.build(),
+                SharedPrefrenceManager.getUserToken(this@CreatorActivity)
+            )
 
-            call.enqueue(object: Callback<CreateTicketResponse> {
+            call.enqueue(object : Callback<CreateTicketResponse> {
                 override fun onFailure(call: Call<CreateTicketResponse>, t: Throwable) {
-                    Toast.makeText(this@CreatorActivity,"Please try again",Toast.LENGTH_SHORT)
+                    Log.d("Creator" , "Faliure" + t.message.toString())
+                    Toast.makeText(this@CreatorActivity, "Please try again", Toast.LENGTH_SHORT)
                 }
 
                 override fun onResponse(
                     call: Call<CreateTicketResponse>,
                     response: Response<CreateTicketResponse>
                 ) {
+                    Log.d("Creator" , "Success" + response.code())
+//                    Log.d("Creator" , "Success" + response.body()!!.data.ticket_id)
+
                     dialog.dismiss()
 
                 }
-
             })
-
-
-
-
-            }
-
-
+        }
         dialog.show()
     }
 
-    private fun giveUsRate(){
-        val submit : LinearLayout
-        val ll =  LayoutInflater.from(this).inflate(R.layout.rate_us_dialog, null)
+    private fun stopAudio() {
+        mediaRecorder.stop()
+        timer.cancel()
+
+      showAudioRecordedView()
+    }
+
+    private fun recordAudio() {
+        mediaRecorder = MediaRecorder()
+
+        var path = "/hunt"
+        var f = File(Environment.getExternalStorageDirectory().toString(), path)
+        f.mkdir()
+
+        voiceFile = f.absolutePath +"/audio.mp3"
+
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mediaRecorder.setOutputFile(voiceFile);
+        mediaRecorder.prepare();
+        mediaRecorder.start();
+
+       var startRecordingCard =  dialog.find<ConstraintLayout>(R.id.startRecordingCard)
+        startRecordingCard.visibility = View.GONE
+        var recordingStarted =  dialog.find<ConstraintLayout>(R.id.recordingStarted)
+        recordingStarted.visibility = View.VISIBLE
+
+        startTimer()
+    }
+
+    private fun showAudioRecordedView(){
+        var recordingStarted =  dialog.find<ConstraintLayout>(R.id.recordingStarted)
+        recordingStarted.visibility = View.GONE
+        var recordingDone =  dialog.find<ConstraintLayout>(R.id.recordingDone)
+        recordingDone.visibility = View.VISIBLE
+    }
+
+    private fun startTimer() {
+        timer = object: CountDownTimer(60000 , 1000){
+            override fun onFinish() {
+                Log.d("CreatorA " , "record donw" )
+
+                mediaRecorder.stop();
+                mediaRecorder.release();
+                showAudioRecordedView()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                dialog.find<TextView>(R.id.recordTimer).setText((millisUntilFinished/1000).toString()+" sec remaining")
+            }
+        }
+
+        timer.start()
+    }
+
+    private fun giveUsRate() {
+        val submit: LinearLayout
+        val ll = LayoutInflater.from(this).inflate(R.layout.rate_us_dialog, null)
         val dialog = Dialog(this)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -309,7 +346,7 @@ class CreatorActivity : AppCompatActivity() {
 
 
         submit.setOnClickListener {
-            launchActivity<TicketGenrated> {  }
+            launchActivity<TicketGenrated> { }
 
             dialog.dismiss()
         }
@@ -337,9 +374,10 @@ class CreatorActivity : AppCompatActivity() {
             val result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
                 val resultUri = result.uri
-                imageFileTobeUploaded.value=File(resultUri.path)
-                var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                imgLivedate.value=bitmap
+                imageFileTobeUploaded.value = File(resultUri.path)
+                var bitmap =
+                    MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                imgLivedate.value = bitmap
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
             }
@@ -347,10 +385,6 @@ class CreatorActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
     }
-
-
-
-
 
 
 }

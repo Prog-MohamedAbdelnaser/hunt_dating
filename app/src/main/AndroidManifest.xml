@@ -19,6 +19,9 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <uses-feature
             android:name="android.hardware.camera"
@@ -109,7 +112,9 @@
         <activity
                 android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
                 android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".creator.CreatorActivity" />
+        <activity android:name=".creator.CreatorActivity" >
+
+        </activity>
 
         <service
                 android:name=".firebaseHelper.FirebaseInstanceClass"
