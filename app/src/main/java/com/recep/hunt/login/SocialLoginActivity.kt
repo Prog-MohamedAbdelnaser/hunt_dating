@@ -579,7 +579,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 response: Response<isEmailRegisterResponse>
             ) {
                 response.body()?.let {
-                    if(!it.status)
+                    if(it.status)
                     { Toast.makeText(this@SocialLoginActivity,it.message,Toast.LENGTH_SHORT).show()
                     }
                     isEmailAlreadyUse=it.status

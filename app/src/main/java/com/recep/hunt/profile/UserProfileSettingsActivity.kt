@@ -539,7 +539,7 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
             reportUser( dialog.reason1_btn.text.toString())
 
             dialog.dismiss()
-
+        }
         dialog.reason5_btn.setOnClickListener {
             reportUser( dialog.reason1_btn.text.toString())
 

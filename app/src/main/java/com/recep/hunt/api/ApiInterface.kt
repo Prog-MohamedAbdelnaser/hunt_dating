@@ -92,6 +92,6 @@ interface ApiInterface {
     fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>
 
 
-    @GET("/api/email-check")
+    @POST("/api/email-check")
     fun checkIsEmailRegister(@Header("Authorization")  authorization:String,@Body email:CheckUserEmail):Call<isEmailRegisterResponse>
 }
