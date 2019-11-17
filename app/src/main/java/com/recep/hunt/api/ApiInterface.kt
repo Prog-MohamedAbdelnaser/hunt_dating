@@ -77,16 +77,16 @@ interface ApiInterface {
     fun answerRandomQuestion(@Body answerRandomQuestions: AnswerRandomQuestions):Call<AnswerRandomQuestions>
 
     @POST("/api/nearest-place")
-    fun getNearestPlace(@Body nearestLocation: NearestLocation):Call<NearestLocationResponse>
+    fun getNearestPlace(@Body nearestLocation: NearestLocation,@Header("Authorization")  authorization:String):Call<NearestLocationResponse>
 
     @POST("/api/select-loation")
-    fun selectLocation(@Body selectLocation: SelectLocation):Call<SelectLocationResponse>
+    fun selectLocation(@Body selectLocation: SelectLocation,@Header("Authorization")  authorization:String):Call<SelectLocationResponse>
 
     @POST("/api/users-list")
-    fun usersList(@Body usersListFilter: UsersListFilter):Call<UsersListResponse>
+    fun usersList(@Body usersListFilter: UsersListFilter,@Header("Authorization")  authorization:String):Call<UsersListResponse>
 
     @POST("/api/user-swipe-data")
-    fun swipeUser(@Body userSwipe: UserSwipe):Call<SwipeUserResponse>
+    fun swipeUser(@Body userSwipe: UserSwipe,@Header("Authorization")  authorization:String):Call<SwipeUserResponse>
 
     @GET("/api/notification")
     fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>

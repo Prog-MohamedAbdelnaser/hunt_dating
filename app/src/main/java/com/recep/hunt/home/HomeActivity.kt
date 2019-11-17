@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -85,9 +86,20 @@ import kotlin.math.roundToInt
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener,
     PlacesAutoCompleteAdapter.ClickListener {
 
-    //PlacesAutoCompleteAdater override
+    //PlacesAutoCompleteAdapter override
     override fun click(place: Place) {
-        toast(place.address.toString())
+        val markerOptions = MarkerOptions()
+            .position(place.latLng!!)
+            .icon(null)
+
+        mMarker = mMap.addMarker(markerOptions)
+        mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
+        adapter.clear()
+        nearestPlaces (place.latLng!!.latitude, place.latLng!!.longitude)
+        searchTextView.text = ""
     }
 
     override fun onOptionClick(text: String) {
@@ -101,6 +113,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
+    private var NEAREST_DISTANCE = 50
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -168,7 +181,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-              Toast.makeText(this@HomeActivity,"Youe online",Toast.LENGTH_SHORT).show()
+              Toast.makeText(this@HomeActivity,"You're online",Toast.LENGTH_SHORT).show()
                 
             }
 
@@ -244,7 +257,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     //integration of nearest-place api
     private fun nearestPlaces(lat : Double, long: Double) {
         val nearestLocation = NearestLocation(lat, long)
-        val call = ApiClient.getClient.getNearestPlace(nearestLocation)
+        val call = ApiClient.getClient.getNearestPlace(nearestLocation, SharedPrefrenceManager.getUserToken(this))
 
         call.enqueue(object :Callback<NearestLocationResponse> {
             override fun onFailure(call: Call<NearestLocationResponse>, t: Throwable) {
@@ -261,30 +274,15 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                     val farItems = ArrayList<NearestLocationData>()
                     for (i in 0 until result.size) {
                         //If it's near than 50m
-                        if (result[i].distance.toFloat() <= 5000) {
+                        if (result[i].distance.toFloat() <= NEAREST_DISTANCE) {
                             nearbyItems.add(result[i])
                         }
                         else {
                             farItems.add(result[i])
                         }
                     }
-                    val markerOptions = MarkerOptions()
-                    for (i in 0 until result.size) {
-                        val googlePlace = result[i]
-                        val mLat = googlePlace.lat
-                        val mLong = googlePlace.lang
-                        val placeName = googlePlace.name
-                        val latLong = LatLng(mLat, mLong)
-
-                        markerOptions.position(latLong)
-                        markerOptions.title(placeName)
-
-                        markerOptions.snippet( i.toString())
-
-                        val marker = mMap.addMarker(markerOptions)
-                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
-                        marker.tag = result[i]
-                    }
+                    setPlacesMarker(nearbyItems, R.drawable.close_rest_marker)
+                    setPlacesMarker(farItems, R.drawable.far_rest_markers)
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
                     mMap.setMaxZoomPreference(animateZoomTo)
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
@@ -294,6 +292,27 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             }
 
         })
+    }
+
+    private fun setPlacesMarker(items : ArrayList<NearestLocationData>, resource: Int) {
+        val markerOptions = MarkerOptions()
+        for (i in 0 until items.size) {
+            val googlePlace = items[i]
+            val mLat = googlePlace.lat
+            val mLong = googlePlace.lang
+            val placeName = googlePlace.name
+            val latLong = LatLng(mLat, mLong)
+
+            markerOptions.position(latLong)
+            markerOptions.title(placeName)
+
+            markerOptions.snippet( i.toString())
+
+            val marker = mMap.addMarker(markerOptions)
+            marker?.setIcon(BitmapDescriptorFactory.fromResource(resource))
+            marker.tag = items[i]
+        }
+
     }
 
     private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?) {

@@ -17,6 +17,7 @@ import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
 import com.recep.hunt.model.UserSwipe
 import com.recep.hunt.model.swipeUser.SwipeUserResponse
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import org.jetbrains.anko.find
@@ -267,7 +268,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         }
 
         val swipe = UserSwipe(id, likes)
-        val call = ApiClient.getClient.swipeUser(swipe)
+        val call = ApiClient.getClient.swipeUser(swipe, SharedPrefrenceManager.getUserToken(this))
         call.enqueue(object : Callback<SwipeUserResponse>{
             override fun onFailure(call: Call<SwipeUserResponse>, t: Throwable) {
                 Log.d("Api call failure -> " , "" + call)

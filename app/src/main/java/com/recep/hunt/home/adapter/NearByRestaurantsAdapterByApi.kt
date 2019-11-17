@@ -90,7 +90,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
             val business = "male"
             val friendship = "both"
             val location = SelectLocation(location_id, location_name)
-            val call = ApiClient.getClient.selectLocation(location)
+            val call = ApiClient.getClient.selectLocation(location, SharedPrefrenceManager.getUserToken(context))
 
             call.enqueue(object : Callback<SelectLocationResponse> {
                 override fun onFailure(call: Call<SelectLocationResponse>, t: Throwable) {
@@ -114,7 +114,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
         fun getUsersList(location_id: String, age: String, date : String, business : String, friendship : String) {
             val filter = UsersListFilter(location_id, age, date, business, friendship)
 //            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
-            val call = ApiClient.getClient.usersList(filter)
+            val call = ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(context))
 
             call.enqueue(object : Callback<UsersListResponse> {
                 override fun onFailure(call: Call<UsersListResponse>, t: Throwable) {

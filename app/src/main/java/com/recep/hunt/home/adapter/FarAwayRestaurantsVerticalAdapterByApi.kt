@@ -30,13 +30,18 @@ import kotlin.math.roundToInt
 class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:ArrayList<NearestLocationData>?, val nearItemCount : Int): Item<ViewHolder>() {
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
+    private var nearItemsCount = 0
+
+    init {
+        nearItemsCount = nearItemCount
+    }
 
     override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if(item != null){
             try{
-                val model = item[position - nearItemCount - 2]
+                val model = item[position - nearItemsCount - 2]
                 if(!model.image.isNullOrEmpty()){
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 //                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"

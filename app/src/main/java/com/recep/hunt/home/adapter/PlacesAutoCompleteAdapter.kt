@@ -120,8 +120,12 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
     inner class PredictionHolder(view : View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         var address : TextView = view.find(R.id.place_detail_textView)
         var mRow : ConstraintLayout = view.find(R.id.place_item_constraintLayout)
+
+        init {
+            view.setOnClickListener(this)
+        }
         override fun onClick(v: View?) {
-            val item = mResultList.get(adapterPosition)
+            val item = mResultList[adapterPosition]
             if (v?.id == R.id.place_item_constraintLayout) {
                 val placeId = item.placeId.toString()
 
