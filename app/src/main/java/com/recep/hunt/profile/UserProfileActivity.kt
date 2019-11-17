@@ -66,7 +66,7 @@ class UserProfileActivity : AppCompatActivity() {
         getData()
     }
 
-    fun getData(){
+    private fun getData(){
         val call = ApiClient.getClient.getUserProfile(SharedPrefrenceManager.getUserToken(this@UserProfileActivity))
 
         call.enqueue(object:Callback<UserProfileResponse>{
