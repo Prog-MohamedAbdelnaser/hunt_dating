@@ -41,7 +41,10 @@ interface ApiInterface {
 //    fun saveUserDetails(@Body userDetails:UpdateUserInfoModel):Call<UpdateUserInfoResponseModel>
 
     @POST("/api/update-user-profile")
-    fun saveUserDetails(@Body file: RequestBody):Call<UpdateUserInfoResponseModel>
+    fun saveUserDetails(@Body file: RequestBody,@Header("Authorization")  authorization:String):Call<UpdateUserInfoResponseModel>
+
+    @POST("/api/update-user-profile-images")
+    fun saveImages(@Body file: RequestBody,@Header("Authorization")  authorization:String):Call<UpdateUserInfoResponseModel>
 
     @GET("api/logout")
     fun  logoutUser(@Header("Authorization")  authorization:String):Call<LogoutReponse>

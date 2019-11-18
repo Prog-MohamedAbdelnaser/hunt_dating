@@ -32,7 +32,10 @@ import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
-import com.recep.hunt.utilis.*
+import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -156,49 +159,77 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
             val builder = MultipartBody.Builder()
             builder.setType(MultipartBody.FORM)
-            builder.addFormDataPart("about", SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity))
-            builder.addFormDataPart("job_title", SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity))
-            builder.addFormDataPart("company", SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity))
-            builder.addFormDataPart("hometown", SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity))
-            builder.addFormDataPart("school", SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity))
-            builder.addFormDataPart("height", SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity))
-            builder.addFormDataPart("gym", SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity))
-            builder.addFormDataPart("education_level", SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity))
-            builder.addFormDataPart("drink", SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity))
-            builder.addFormDataPart("smoke", SharedPrefrenceManager.getSomke(this@UserProfileEditActivity))
-            builder.addFormDataPart("pets", SharedPrefrenceManager.getPets(this@UserProfileEditActivity))
-            builder.addFormDataPart("kids", SharedPrefrenceManager.getKids(this@UserProfileEditActivity))
-            builder.addFormDataPart("zodiac", SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity))
-            builder.addFormDataPart("religion", SharedPrefrenceManager.getReligion(this@UserProfileEditActivity))
-            builder.addFormDataPart("gender", SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity))
-            val firstImage = SharedPrefrenceManager.getFirstImg(this)
-            val secondImage = SharedPrefrenceManager.getSecImg(this)
-            val thirdImage = SharedPrefrenceManager.getThirdImg(this)
-            val fourthImage = SharedPrefrenceManager.getFourthImg(this)
-            val fifthImage = SharedPrefrenceManager.getFiveImg(this)
-            val sixthImage = SharedPrefrenceManager.getSixImg(this)
-            if(!TextUtils.isEmpty(firstImage)) {
-                val firstFile = getFiles(firstImage,1)
-                if (firstFile.exists()) {
-                    builder.addFormDataPart(
-                        "user_profile[]",
-                        firstFile.name,
-                        RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
-                    )
-                }
-            }
+            builder.addFormDataPart(
+                "about",
+                SharedPrefrenceManager.getAboutYou(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "job_title",
+                SharedPrefrenceManager.getJobTitle(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "company",
+                SharedPrefrenceManager.getCompanyName(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "hometown",
+                SharedPrefrenceManager.getHomeTown(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "school",
+                SharedPrefrenceManager.getSchoolUniversity(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "height",
+                SharedPrefrenceManager.getUserHeight(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "gym",
+                SharedPrefrenceManager.getUserGym(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "education_level",
+                SharedPrefrenceManager.getUserEducationLevel(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "drink",
+                SharedPrefrenceManager.getUserDrink(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "smoke",
+                SharedPrefrenceManager.getSomke(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "pets",
+                SharedPrefrenceManager.getPets(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "kids",
+                SharedPrefrenceManager.getKids(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "zodiac",
+                SharedPrefrenceManager.getZodiac(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "religion",
+                SharedPrefrenceManager.getReligion(this@UserProfileEditActivity)
+            )
+            builder.addFormDataPart(
+                "gender",
+                SharedPrefrenceManager.getUserGender(this@UserProfileEditActivity)
+            )
 
-
-
-
-
-            val call = ApiClient.getClient.saveUserDetails(builder.build())
+            val call = ApiClient.getClient.saveUserDetails(
+                builder.build(),
+                SharedPrefrenceManager.getUserToken(this)
+            )
             call.enqueue(object :
                 Callback<UpdateUserInfoResponseModel> {
                 override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
                     Toast.makeText(
                         this@UserProfileEditActivity,
-                        "Somthing want wrong,Please Try ageain",
+                        "Something want wrong,Please Try again",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -207,16 +238,18 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     call: Call<UpdateUserInfoResponseModel>,
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
+                    if (response.isSuccessful) {
+                        saveImages()
+                    }
                     dialog.dismiss()
-                    finish()
                 }
             })
 
-            Run.after(2000) {
-                dialog.dismiss()
-                finish()
-
-            }
+//            Run.after(2000) {
+//                dialog.dismiss()
+//                finish()
+//
+//            }
 
         }
 
@@ -236,14 +269,133 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     }
 
 
-    private fun getFiles(strImage : String,position: Int) : File{
+    private fun saveImages() {
+        val profileImage = SharedPrefrenceManager.getProfileImg(this)
+        val firstImage = SharedPrefrenceManager.getFirstImg(this)
+        val secondImage = SharedPrefrenceManager.getSecImg(this)
+        val thirdImage = SharedPrefrenceManager.getThirdImg(this)
+        val fourthImage = SharedPrefrenceManager.getFourthImg(this)
+        val fifthImage = SharedPrefrenceManager.getFiveImg(this)
+        val sixthImage = SharedPrefrenceManager.getSixImg(this)
+        val dialog = Helpers.showDialog(this, this, "Updating Images")
+        val builder = MultipartBody.Builder()
+        builder.setType(MultipartBody.FORM)
+
+        if (!TextUtils.isEmpty(profileImage)) {
+            val firstFile = getFiles(profileImage, 0)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        if (!TextUtils.isEmpty(firstImage)) {
+            val firstFile = getFiles(firstImage, 1)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        if (!TextUtils.isEmpty(secondImage)) {
+            val firstFile = getFiles(secondImage, 2)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        if (!TextUtils.isEmpty(thirdImage)) {
+            val firstFile = getFiles(thirdImage, 3)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        if (!TextUtils.isEmpty(fourthImage)) {
+            val firstFile = getFiles(fourthImage, 4)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        if (!TextUtils.isEmpty(fifthImage)) {
+            val firstFile = getFiles(fifthImage, 5)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        if (!TextUtils.isEmpty(sixthImage)) {
+            val firstFile = getFiles(sixthImage, 6)
+            if (firstFile.exists()) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+            }
+        }
+
+        val call = ApiClient.getClient.saveImages(
+            builder.build(),
+            SharedPrefrenceManager.getUserToken(this)
+        )
+        call.enqueue(object :
+            Callback<UpdateUserInfoResponseModel> {
+            override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
+                Toast.makeText(
+                    this@UserProfileEditActivity,
+                    "Something want wrong,Please Try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onResponse(
+                call: Call<UpdateUserInfoResponseModel>,
+                response: Response<UpdateUserInfoResponseModel>
+            ) {
+                dialog.dismiss()
+                if (response.isSuccessful) {
+                    finish()
+                }
+//                    dialog.dismiss()
+//                    finish()
+            }
+        })
+
+    }
+
+
+    private fun getFiles(strImage: String, position: Int): File {
         val mFile = File(cacheDir, "image_$position.jpeg")
         mFile.createNewFile()
 
 //Convert bitmap to byte array
         val bitmap = StringToBitmap(strImage)
         val bos = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 60, bos)
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, bos)
         val bitmapData = bos.toByteArray()
 
 //write the bytes in file
