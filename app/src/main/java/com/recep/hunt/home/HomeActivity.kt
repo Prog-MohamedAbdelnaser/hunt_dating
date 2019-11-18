@@ -123,7 +123,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
     lateinit var locationCallback: LocationCallback
-    private lateinit var allNearByRestaurantsModel: NearByRestaurantsModel
+//    private lateinit var allNearByRestaurantsModel: NearByRestaurantsModel
     private lateinit var showSortedListCardView: CardView
     private lateinit var showMyLocationCardView: CardView
     private lateinit var sortedListRecyclerView: RecyclerView
@@ -247,14 +247,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
 
-    private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
-        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
-        horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
-        horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
-                .build())
-        horizontal_list_near_by_user.scrollToPosition(0)
-        horizontal_list_near_by_user.setSlideOnFling(true)
-    }
+//    private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
+//        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
+//        horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
+//        horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
+//                .build())
+//        horizontal_list_near_by_user.scrollToPosition(0)
+//        horizontal_list_near_by_user.setSlideOnFling(true)
+//    }
 
     //integration of nearest-place api
     private fun nearestPlaces(lat : Double, long: Double) {
@@ -368,106 +368,106 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-    private fun nearByRestaurants(
-        lat: Double,
-        long: Double,
-        radius: String,
-        completion: (APIState, ArrayList<NearByRestaurantsModelResults>?) -> Unit
-    ) {
-        val path = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-        Log.e("Lat long", "$lat,$long")
-        val params =
-            "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
-        val serviceVolley = ServiceVolley()
-        val apiController = APIController(serviceVolley)
-        val url = "$path?$params"
-        Log.e("URL", "$url")
-        val dialog = Helpers.showDialog(this, this, "Getting near by restaurants").show()
-        apiController.get(path, params) { response ->
-            if (dialog != null) {
-                dialog.dismiss()
-            }
-            if(response != null){
-                allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
-                val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
-                completion(APIState.SUCCESS, results)
-                setupSortedListRecyclerView(results)
-            }
+//    private fun nearByRestaurants(
+//        lat: Double,
+//        long: Double,
+//        radius: String,
+//        completion: (APIState, ArrayList<NearByRestaurantsModelResults>?) -> Unit
+//    ) {
+//        val path = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+//        Log.e("Lat long", "$lat,$long")
+//        val params =
+//            "location=$lat,$long&radius=$radius&type=restaurant&key=${resources.getString(R.string.browser_key)}"
+//        val serviceVolley = ServiceVolley()
+//        val apiController = APIController(serviceVolley)
+//        val url = "$path?$params"
+//        Log.e("URL", "$url")
+//        val dialog = Helpers.showDialog(this, this, "Getting near by restaurants").show()
+//        apiController.get(path, params) { response ->
+//            if (dialog != null) {
+//                dialog.dismiss()
+//            }
+//            if(response != null){
+//                allNearByRestaurantsModel = Gson().fromJson(response, NearByRestaurantsModel::class.java)
+//                val results = allNearByRestaurantsModel.nearByRestaurantsModelResults
+//                completion(APIState.SUCCESS, results)
+//                setupSortedListRecyclerView(results)
+//            }
+//
+//
+//        }
+//
+//    }
 
-
-        }
-
-    }
-
-    private fun setupAllNearByRestMarkers(lat: Double, long: Double) {
-        nearByRestaurants(lat, long, "1000") { response, results ->
-            if (response == APIState.SUCCESS) {
-                val markerOptions = MarkerOptions()
-                if (results != null) {
-                    for (i in 0 until results.size - 1) {
-                        val googlePlace = results[i]
-                        val mLat = googlePlace.geometry.location.lat
-                        val mLong = googlePlace.geometry.location.lng
-                        val placeName = googlePlace.name
-                        val latLong = LatLng(mLat, mLong)
-
-                        markerOptions.position(latLong)
-                        markerOptions.title(placeName).icon(null)
-
-                        markerOptions.snippet( i.toString())
-
-                        val marker = mMap.addMarker(markerOptions)
-                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
-                        marker.showInfoWindow()
-                    }
-                    setupNearByRestaurantsRecyclerView(results)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
-                    mMap.setMaxZoomPreference(animateZoomTo)
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-                }
-            }
-
-        }
-
-        runOnUiThread{
-
-        }
-        Run.after(1000) {
-            setupNearByResUnder600M(lat, long)
-        }
-
-    }
-
-    private fun setupNearByResUnder600M(lat: Double, long: Double) {
-        nearByRestaurants(lat, long, "600") { response, results ->
-            if (response == APIState.SUCCESS) {
-                val markerOptions = MarkerOptions()
-                if (results != null) {
-                    for (i in 0 until results.size - 1) {
-                        val googlePlace = results[i]
-                        val mLat = googlePlace.geometry.location.lat
-                        val mLong = googlePlace.geometry.location.lng
-                        val placeName = googlePlace.name
-                        val latLong = LatLng(mLat, mLong)
-
-                        markerOptions.position(latLong)
-                        markerOptions.title(placeName).icon(null)
-
-                        markerOptions.snippet(i.toString())
-
-                        val marker = mMap.addMarker(markerOptions)
-                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.close_rest_marker))
-
-
-                    }
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-                }
-            }
-
-        }
-
-    }
+//    private fun setupAllNearByRestMarkers(lat: Double, long: Double) {
+//        nearByRestaurants(lat, long, "1000") { response, results ->
+//            if (response == APIState.SUCCESS) {
+//                val markerOptions = MarkerOptions()
+//                if (results != null) {
+//                    for (i in 0 until results.size - 1) {
+//                        val googlePlace = results[i]
+//                        val mLat = googlePlace.geometry.location.lat
+//                        val mLong = googlePlace.geometry.location.lng
+//                        val placeName = googlePlace.name
+//                        val latLong = LatLng(mLat, mLong)
+//
+//                        markerOptions.position(latLong)
+//                        markerOptions.title(placeName).icon(null)
+//
+//                        markerOptions.snippet( i.toString())
+//
+//                        val marker = mMap.addMarker(markerOptions)
+//                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.far_rest_markers))
+//                        marker.showInfoWindow()
+//                    }
+//                    setupNearByRestaurantsRecyclerView(results)
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
+//                    mMap.setMaxZoomPreference(animateZoomTo)
+//                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+//                }
+//            }
+//
+//        }
+//
+//        runOnUiThread{
+//
+//        }
+//        Run.after(1000) {
+//            setupNearByResUnder600M(lat, long)
+//        }
+//
+//    }
+//
+//    private fun setupNearByResUnder600M(lat: Double, long: Double) {
+//        nearByRestaurants(lat, long, "600") { response, results ->
+//            if (response == APIState.SUCCESS) {
+//                val markerOptions = MarkerOptions()
+//                if (results != null) {
+//                    for (i in 0 until results.size - 1) {
+//                        val googlePlace = results[i]
+//                        val mLat = googlePlace.geometry.location.lat
+//                        val mLong = googlePlace.geometry.location.lng
+//                        val placeName = googlePlace.name
+//                        val latLong = LatLng(mLat, mLong)
+//
+//                        markerOptions.position(latLong)
+//                        markerOptions.title(placeName).icon(null)
+//
+//                        markerOptions.snippet(i.toString())
+//
+//                        val marker = mMap.addMarker(markerOptions)
+//                        marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.close_rest_marker))
+//
+//
+//                    }
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
+//                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+//                }
+//            }
+//
+//        }
+//
+//    }
 
     private fun setupCardClicks() {
         showMyLocationCardView.setOnClickListener {
@@ -494,7 +494,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 sortedListRecyclerView.visibility = View.INVISIBLE
                 horizontal_list_near_by_user.visibility = View.VISIBLE
                 val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
-                mapFrag.alpha = 0.7f
+                mapFrag.alpha = 0.95f
                 list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
 
             }
@@ -503,39 +503,31 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-    private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
-        sortedListRecyclerView.adapter = adapter
-        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-        adapter.setOnItemClickListener { item, view ->
-            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-            val dialog = Dialog(this)
-            dialog.setContentView(ll)
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-            gotItBtn.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
-        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-        for (i in 0 until 3) {
-            adapter.add(
-                NearByRestaurantsVerticalAdapter(
-                    this@HomeActivity,
-                    items
-                )
-            )
-        }
-        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-        for (i in 4 until 6) {
-            adapter.add(
-                FarAwayRestaurantsVerticalAdapter(
-                    this@HomeActivity,
-                    items
-                )
-            )
-        }
-//        for (i in 4 until items.size) {
+//    private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
+//        sortedListRecyclerView.adapter = adapter
+//        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
+//        adapter.setOnItemClickListener { item, view ->
+//            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+//            val dialog = Dialog(this)
+//            dialog.setContentView(ll)
+//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
+//            gotItBtn.setOnClickListener {
+//                dialog.dismiss()
+//            }
+//            dialog.show()
+//        }
+//        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
+//        for (i in 0 until 3) {
+//            adapter.add(
+//                NearByRestaurantsVerticalAdapter(
+//                    this@HomeActivity,
+//                    items
+//                )
+//            )
+//        }
+//        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
+//        for (i in 4 until 6) {
 //            adapter.add(
 //                FarAwayRestaurantsVerticalAdapter(
 //                    this@HomeActivity,
@@ -543,8 +535,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 //                )
 //            )
 //        }
-
-    }
+////        for (i in 4 until items.size) {
+////            adapter.add(
+////                FarAwayRestaurantsVerticalAdapter(
+////                    this@HomeActivity,
+////                    items
+////                )
+////            )
+////        }
+//
+//    }
 
     private fun buildLocationRequest() {
 
@@ -692,7 +692,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
-    fun makeUserOnOffline(is_online : Boolean)
+    private fun makeUserOnOffline(is_online : Boolean)
     {
         val makeUserOnline=MakeUserOnline(is_online)
 
