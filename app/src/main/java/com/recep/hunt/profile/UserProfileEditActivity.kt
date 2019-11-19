@@ -281,109 +281,121 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
 
+        var isImageAvailable = false
+
         if (!TextUtils.isEmpty(profileImage)) {
+
             val firstFile = getFiles(profileImage, 0)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
         if (!TextUtils.isEmpty(firstImage)) {
             val firstFile = getFiles(firstImage, 1)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
         if (!TextUtils.isEmpty(secondImage)) {
             val firstFile = getFiles(secondImage, 2)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
         if (!TextUtils.isEmpty(thirdImage)) {
             val firstFile = getFiles(thirdImage, 3)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
         if (!TextUtils.isEmpty(fourthImage)) {
             val firstFile = getFiles(fourthImage, 4)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
         if (!TextUtils.isEmpty(fifthImage)) {
             val firstFile = getFiles(fifthImage, 5)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
         if (!TextUtils.isEmpty(sixthImage)) {
             val firstFile = getFiles(sixthImage, 6)
-            if (firstFile.exists()) {
+            if (firstFile.exists() && firstFile.length() > 0) {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
                     RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
                 )
+                isImageAvailable = true
             }
         }
 
-        val call = ApiClient.getClient.saveImages(
-            builder.build(),
-            SharedPrefrenceManager.getUserToken(this)
-        )
-        call.enqueue(object :
-            Callback<UpdateUserInfoResponseModel> {
-            override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
-                Toast.makeText(
-                    this@UserProfileEditActivity,
-                    "Something want wrong,Please Try again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            override fun onResponse(
-                call: Call<UpdateUserInfoResponseModel>,
-                response: Response<UpdateUserInfoResponseModel>
-            ) {
-                dialog.dismiss()
-                if (response.isSuccessful) {
-                    finish()
+        if (isImageAvailable) {
+            val call = ApiClient.getClient.saveImages(
+                builder.build(),
+                SharedPrefrenceManager.getUserToken(this)
+            )
+            call.enqueue(object :
+                Callback<UpdateUserInfoResponseModel> {
+                override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
+                    Toast.makeText(
+                        this@UserProfileEditActivity,
+                        "Something want wrong,Please Try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
+                override fun onResponse(
+                    call: Call<UpdateUserInfoResponseModel>,
+                    response: Response<UpdateUserInfoResponseModel>
+                ) {
+                    dialog.dismiss()
+                    if (response.isSuccessful) {
+                        finish()
+                    }
 //                    dialog.dismiss()
 //                    finish()
-            }
-        })
+                }
+            })
+        }
 
     }
 
@@ -519,23 +531,22 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     private fun setupChangeGenderBtn() {
 
         maleGenderBtn.setOnClickListener {
-            if (Helpers.isGenderChangedAllowed(this)) {
-                showGenderOnlyChangedOnceDialog(Constants.MALE)
-
-            }
+            //            if (Helpers.isGenderChangedAllowed(this)) {
+            showGenderOnlyChangedOnceDialog(Constants.MALE.toLowerCase())
+//            }
         }
 
         femaleGenderBtn.setOnClickListener {
-            if (Helpers.isGenderChangedAllowed(this)) {
-                showGenderOnlyChangedOnceDialog(Constants.FEMALE)
+            //            if (Helpers.isGenderChangedAllowed(this)) {
+            showGenderOnlyChangedOnceDialog(Constants.FEMALE.toLowerCase())
 
-            }
+//            }
         }
         otherGenderBtn.setOnClickListener {
-            if (Helpers.isGenderChangedAllowed(this)) {
-                showGenderOnlyChangedOnceDialog(Constants.OTHERS)
+            //            if (Helpers.isGenderChangedAllowed(this)) {
+            showGenderOnlyChangedOnceDialog(Constants.OTHERS.toLowerCase())
 
-            }
+//            }
         }
 
     }
@@ -574,7 +585,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     private fun setupSelectedGender(selectedgender: String) {
         when (selectedgender) {
-            Constants.MALE -> {
+            Constants.MALE.toLowerCase() -> {
                 maleGenderBtn.background =
                     resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 maleGenderBtn.textColor = resources.getColor(R.color.white)
@@ -587,7 +598,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherGenderBtn.textColor = resources.getColor(R.color.app_light_text_color)
             }
-            Constants.FEMALE -> {
+            Constants.FEMALE.toLowerCase() -> {
                 femaleGenderBtn.background =
                     resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 femaleGenderBtn.textColor = resources.getColor(R.color.white)
