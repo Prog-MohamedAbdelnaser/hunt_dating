@@ -14,10 +14,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
+import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.model.UserSwipe
 import com.recep.hunt.model.swipeUser.SwipeUserResponse
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import org.jetbrains.anko.find

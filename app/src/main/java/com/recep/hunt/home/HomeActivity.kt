@@ -98,6 +98,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
+
+        setPlaceRipple (place.latLng!!)
+
         adapter.clear()
         nearestPlaces (place.latLng!!.latitude, place.latLng!!.longitude)
         searchTextView.text = ""
@@ -110,7 +113,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val animateZoomTo = 17.0f
+        private const val animateZoomTo = 18.5f
     }
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
@@ -143,6 +146,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
 
     private fun init() {
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         MapsInitializer.initialize(this)
         val mapFrag = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFrag.getMapAsync(this)
@@ -150,11 +154,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         mapFragView.alpha = 0.95f
         locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
             .findViewById(Integer.parseInt("2"))
-        toast("starting")
+
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, GOOGLE_API_KEY_FOR_IMAGE)
         }
-        toast("started")
+
         autoCompleteAdapter = PlacesAutoCompleteAdapter(this)
 
         searchTextView = find(R.id.textView6)
@@ -264,14 +268,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         call.enqueue(object :Callback<NearestLocationResponse> {
             override fun onFailure(call: Call<NearestLocationResponse>, t: Throwable) {
                 Log.d("Api call failure -> " , "" + call)
-                toast(call.toString())
+
             }
 
             override fun onResponse(
                 call: Call<NearestLocationResponse>,
                 response: Response<NearestLocationResponse>
             ) {
-                toast(response.toString())
+
                 var result = response.body()?.data
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
@@ -298,6 +302,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         })
     }
 
+    private fun setPlaceRipple(latLng : LatLng) {
+//        val mapRipple = MapRipple(mMap, latLng, this@HomeActivity)
+//
+//        mapRipple.withNumberOfRipples(4)
+//        mapRipple.withStrokeColor(resources.getColor(R.color.map_ripple_color))
+//        mapRipple.withStrokewidth(1)
+//        mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
+//        mapRipple.withDistance(100.toDouble())      // 2000 metres radius
+//        mapRipple.withRippleDuration(10000)    //12000ms
+//        mapRipple.withTransparency(0.4f)
+//        mapRipple.startRippleMapAnimation()
+    }
+
     private fun setPlacesMarker(items : ArrayList<NearestLocationData>, resource: Int) {
         val markerOptions = MarkerOptions()
         for (i in 0 until items.size) {
@@ -320,8 +337,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
     private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?) {
-        horizontal_list_near_by_user.x = -520.0f
         val windowwidth = windowManager.defaultDisplay.width
+        horizontal_list_near_by_user.x = (0 -  windowwidth.toFloat() / 2.07 ).toFloat()
         horizontal_list_near_by_user.layoutParams.width = windowwidth  + windowwidth / 3 + 150
 //        horizontal_list_near_by_user.setOffscreenItems(items!!.size)
         horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
@@ -579,17 +596,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
 
-//                val mapRipple = MapRipple(mMap, LatLng(mLastLocation.latitude, mLastLocation.longitude), this@HomeActivity)
-                val mapRipple = MapRipple(mMap, LatLng(latitude, longitude), this@HomeActivity)
-
-                mapRipple.withNumberOfRipples(4)
-                mapRipple.withStrokeColor(resources.getColor(R.color.map_ripple_color))
-                mapRipple.withStrokewidth(1)
-                mapRipple.withFillColor(resources.getColor(R.color.map_ripple_color))
-                mapRipple.withDistance(100.toDouble())      // 2000 metres radius
-                mapRipple.withRippleDuration(10000)    //12000ms
-                mapRipple.withTransparency(0.4f)
-                mapRipple.startRippleMapAnimation()
+                setPlaceRipple(LatLng(latitude, longitude))
 
                 SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
                 SharedPrefrenceManager.setUserLongitude(this@HomeActivity, mLastLocation.longitude.toString())
@@ -729,7 +736,7 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
             val locationInfo = marker.tag as NearestLocationData
-            view.textView30.text = locationInfo.users.toString()
+            view.textView30.text = (locationInfo.users - 1).toString()
             view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
 
             if (!locationInfo.image.isEmpty()) {

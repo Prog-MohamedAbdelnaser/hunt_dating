@@ -78,9 +78,12 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
         if (rightAge.isEmpty())
             rightAge = "50"
         val age = leftAge + "," + rightAge
-        val date = SharedPrefrenceManager.getUserInterestedIn(context)
-        val business = SharedPrefrenceManager.getUserInterestedIn(context)
-        val friendship = SharedPrefrenceManager.getUserInterestedIn(context)
+        var date = SharedPrefrenceManager.getUserLookingFor(context, "Date")
+        var business = SharedPrefrenceManager.getUserLookingFor(context, "Business")
+        var friendship = SharedPrefrenceManager.getUserLookingFor(context, "Friendship")
+        date = date.toLowerCase()
+        business = business.toLowerCase()
+        friendship = friendship.toLowerCase()
         val location = SelectLocation(location_id, location_name)
         val call = ApiClient.getClient.selectLocation(location, SharedPrefrenceManager.getUserToken(context))
 

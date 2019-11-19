@@ -86,9 +86,12 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
             if (rightAge.isEmpty())
                 rightAge = "50"
             val age = leftAge + "," + rightAge
-            val date = "both"
-            val business = "male"
-            val friendship = "both"
+            var date = SharedPrefrenceManager.getUserLookingFor(context, "Date")
+            var business = SharedPrefrenceManager.getUserLookingFor(context, "Business")
+            var friendship = SharedPrefrenceManager.getUserLookingFor(context, "Friendship")
+            date = date.toLowerCase()
+            business = business.toLowerCase()
+            friendship = friendship.toLowerCase()
             val location = SelectLocation(location_id, location_name)
             val call = ApiClient.getClient.selectLocation(location, SharedPrefrenceManager.getUserToken(context))
 

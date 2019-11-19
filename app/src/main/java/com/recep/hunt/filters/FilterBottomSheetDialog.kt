@@ -6,12 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.*
 import com.recep.hunt.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.jaygoo.widget.OnRangeChangedListener
@@ -24,6 +21,7 @@ import com.recep.hunt.utilis.SharedPrefrenceManager
 import kotlinx.android.synthetic.main.filter_bottom_sheet_layout.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
+import org.jetbrains.anko.support.v4.toast
 import kotlin.math.abs
 
 
@@ -50,6 +48,9 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
     private lateinit var feMaleImageView: ImageView
     private lateinit var bothImageView: ImageView
     private lateinit var applyButton: Button
+    private lateinit var lookingForDate : String
+    private lateinit var lookingForBusiness : String
+    private lateinit var lookingForFriendship : String
     private var interestedIn: String = ""
     private var leftAge : Int = 18
     private var rightAge : Int = 50
@@ -70,18 +71,22 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         bothImageView = v.find(R.id.filter_both_imageView)
         applyButton = v.find(R.id.filter_appyly_button)
 
-        lookingForModel = LookingForMainModel.getInstance()
-        val adapter = FilterAdapter(ctx, lookingForModel.getData())
-        viewPager.adapter = adapter
-        filterTabLayout.setupWithViewPager(viewPager)
-        viewPager.setPageTransformer(false,FadePageTransformer())
-
         val leftAgeTemp = SharedPrefrenceManager.getUserInterestedAgeFrom(v.context)
         val rightAgeTemp = SharedPrefrenceManager.getUserInterestedAgeTo(v.context)
         if (leftAgeTemp.isNotEmpty())
             leftAge = leftAgeTemp.toInt()
         if (rightAgeTemp.isNotEmpty())
             rightAge = rightAgeTemp.toInt()
+
+        lookingForDate = SharedPrefrenceManager.getUserLookingFor(v.context, "Date")
+        lookingForBusiness = SharedPrefrenceManager.getUserLookingFor(v.context, "Business")
+        lookingForFriendship = SharedPrefrenceManager.getUserLookingFor(v.context, "Friendship")
+
+        lookingForModel = LookingForMainModel.getInstance()
+        val adapter = FilterAdapter(ctx, lookingForModel.getData(lookingForDate, lookingForFriendship, lookingForBusiness))
+        viewPager.adapter = adapter
+        filterTabLayout.setupWithViewPager(viewPager)
+        viewPager.setPageTransformer(false,FadePageTransformer())
 
         filterAgeTextView.text =
             ctx.resources.getString(R.string.fromYears_toYears, leftAge.toString(), rightAge.toString())
@@ -119,14 +124,51 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         maleImageView.setOnClickListener {
             interestedIn = "Male"
             changeGenderBackgrounds(Constants.MALE)
+
+            when (viewPager.currentItem) {
+                0 -> {
+                    lookingForDate = Constants.MALE
+                }
+
+                1 -> {
+                    lookingForFriendship = Constants.MALE
+                }
+                2 -> {
+                    lookingForBusiness = Constants.MALE
+                }
+            }
         }
         feMaleImageView.setOnClickListener {
             interestedIn = "Female"
             changeGenderBackgrounds(Constants.FEMALE)
+            when (viewPager.currentItem) {
+                0 -> {
+                    lookingForDate = Constants.FEMALE
+                }
+
+                1 -> {
+                    lookingForFriendship = Constants.FEMALE
+                }
+                2 -> {
+                    lookingForBusiness = Constants.FEMALE
+                }
+            }
         }
         bothImageView.setOnClickListener {
             interestedIn = "Both"
             changeGenderBackgrounds(Constants.BOTH)
+            when (viewPager.currentItem) {
+                0 -> {
+                    lookingForDate = Constants.BOTH
+                }
+
+                1 -> {
+                    lookingForFriendship = Constants.BOTH
+                }
+                2 -> {
+                    lookingForBusiness = Constants.BOTH
+                }
+            }
         }
 
 
@@ -151,20 +193,10 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
 
         applyButton.setOnClickListener {
             var selectedLookingFor = ""
-            when (viewPager.currentItem) {
-               0 -> {
-                   selectedLookingFor = "Date"
-               }
-               1 -> {
-                   selectedLookingFor = "FriendShip"
-               }
-               2 -> {
-                   selectedLookingFor = "Business"
-               }
-            }
 
-            SharedPrefrenceManager.setUserLookingFor(v.context, selectedLookingFor)
-            SharedPrefrenceManager.setUserInterestedIn(v.context, selectedLookingFor, interestedIn)
+            SharedPrefrenceManager.setUserInterestedIn(v.context, lookingForDate, "Date")
+            SharedPrefrenceManager.setUserInterestedIn(v.context, lookingForFriendship, "Friendship")
+            SharedPrefrenceManager.setUserInterestedIn(v.context, lookingForBusiness, "Business")
             SharedPrefrenceManager.setUserInterestedAge(v.context, leftAge.toString(), rightAge.toString())
             dismiss()
 
@@ -174,39 +206,50 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
     }
 
     private fun setupInterstedInSelecters(position:Int){
-        val data = lookingForModel.getData()
+        val data = lookingForModel.getData(lookingForDate, lookingForFriendship, lookingForBusiness)
         val interstedIn = data[position].interestedIn
         changeGenderBackgrounds(interstedIn.toString())
     }
     private fun changeGenderBackgrounds(interstedIn:String){
-        when(interstedIn){
-            Constants.MALE ->{
-                maleImageView.image = resources.getDrawable(R.drawable.ic_man_white)
-                feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
-                bothImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
+        if (interstedIn.isEmpty()) {
+            maleImageView.image = resources.getDrawable(R.drawable.ic_man)
+            feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
+            bothImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
+            maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+            feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+            bothImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+        }
+        else {
+            when(interstedIn){
+                Constants.MALE ->{
+                    maleImageView.image = resources.getDrawable(R.drawable.ic_man_white)
+                    feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
+                    bothImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
 
-                maleImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-                feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-                bothImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-            }
-            Constants.FEMALE->{
-                maleImageView.image = resources.getDrawable(R.drawable.ic_man)
-                feMaleImageView.image = resources.getDrawable(R.drawable.ic_female_white)
-                bothImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
+                    maleImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
+                    feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+                    bothImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+                }
+                Constants.FEMALE->{
+                    maleImageView.image = resources.getDrawable(R.drawable.ic_man)
+                    feMaleImageView.image = resources.getDrawable(R.drawable.ic_female_white)
+                    bothImageView.image = resources.getDrawable(R.drawable.ic_others_gender)
 
-                maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-                feMaleImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-                bothImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-            }
-            Constants.BOTH->{
-                maleImageView.image = resources.getDrawable(R.drawable.ic_man)
-                feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
-                bothImageView.image = resources.getDrawable(R.drawable.ic_other_white)
-                maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-                feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
-                bothImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
+                    maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+                    feMaleImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
+                    bothImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+                }
+                Constants.BOTH->{
+                    maleImageView.image = resources.getDrawable(R.drawable.ic_man)
+                    feMaleImageView.image = resources.getDrawable(R.drawable.ic_female)
+                    bothImageView.image = resources.getDrawable(R.drawable.ic_other_white)
+                    maleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+                    feMaleImageView.background = resources.getDrawable(R.drawable.unselected_circular_btn)
+                    bothImageView.background = resources.getDrawable(R.drawable.selected_cirular_btn)
+                }
             }
         }
+
     }
 
     private fun getItem(i: Int): Int {
