@@ -82,6 +82,13 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         lookingForBusiness = SharedPrefrenceManager.getUserLookingFor(v.context, "Business")
         lookingForFriendship = SharedPrefrenceManager.getUserLookingFor(v.context, "Friendship")
 
+        if (lookingForDate == "null")
+            lookingForDate = ""
+        if (lookingForBusiness == "null")
+            lookingForBusiness = ""
+        if (lookingForFriendship == "null")
+            lookingForFriendship = ""
+
         lookingForModel = LookingForMainModel.getInstance()
         val adapter = FilterAdapter(ctx, lookingForModel.getData(lookingForDate, lookingForFriendship, lookingForBusiness))
         viewPager.adapter = adapter
