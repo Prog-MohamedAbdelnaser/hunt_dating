@@ -104,7 +104,7 @@ class UserProfileActivity : AppCompatActivity() {
                 SharedPrefrenceManager.setProfileImg(this , userInfo.profile_pic)
             }
         }catch(e:Exception){
-
+            e.printStackTrace()
         }
 
 
