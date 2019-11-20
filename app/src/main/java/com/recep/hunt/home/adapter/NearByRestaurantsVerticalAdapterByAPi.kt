@@ -122,7 +122,7 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
             ) {
                 var result = response.body()?.data
                 var swipeUserArray = ArrayList<SwipeUserModel>()
-                if (result != null) {
+                if (result != null && result.size > 0) {
                     for (i in 0 until result.size) {
                         val images = ArrayList<String>()
                         if ( result[i].user_profile_image.size != 0) {

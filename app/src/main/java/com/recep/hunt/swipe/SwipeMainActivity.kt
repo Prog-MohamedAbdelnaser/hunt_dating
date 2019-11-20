@@ -235,6 +235,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
                                  }
                                 else {
+                                    context.launchActivity<HomeActivity> {}
                                     finish()
                                 }
 
@@ -249,6 +250,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
                                 }
                                 else {
+                                    context.launchActivity<HomeActivity> {}
                                     finish()
                                 }
                             }

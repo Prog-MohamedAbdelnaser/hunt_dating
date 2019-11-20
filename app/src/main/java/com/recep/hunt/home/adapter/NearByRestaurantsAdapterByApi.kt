@@ -1,5 +1,6 @@
 package com.recep.hunt.home.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.util.Log
@@ -23,6 +24,7 @@ import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
+import org.jetbrains.anko.activityManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -130,7 +132,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                 ) {
                     var result = response.body()?.data
                     var swipeUserArray = ArrayList<SwipeUserModel>()
-                    if (result != null) {
+                    if (result != null && result.size > 0) {
                         for (i in 0 until result.size) {
                             val images = ArrayList<String>()
                             if ( result[i].user_profile_image.size != 0) {
@@ -145,6 +147,8 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                             swipeUserArray.add(SwipeUserModel(result[i].id, result[i].location_name, result[i].first_name, result[i].age, result[i].basicInfo.job_title, result[i].basicInfo.about, images))
                         }
                         context.launchActivity<SwipeMainActivity> { putParcelableArrayListExtra("swipeUsers", swipeUserArray) }
+                        val parent = context as Activity
+                        parent.finish()
                     }
                 }
             })

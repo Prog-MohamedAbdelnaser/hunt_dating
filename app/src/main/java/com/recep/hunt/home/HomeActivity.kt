@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -80,6 +81,7 @@ import org.jetbrains.anko.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
@@ -92,6 +94,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         val markerOptions = MarkerOptions()
             .position(place.latLng!!)
             .icon(null)
+
+        latitude = place.latLng!!.latitude
+        longitude = place.latLng!!.longitude
 
         mMarker = mMap.addMarker(markerOptions)
         mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
@@ -113,15 +118,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val animateZoomTo = 18.5f
+        private const val animateZoomTo = 18.2f
     }
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-    private var NEAREST_DISTANCE = 50
+    private var NEAREST_DISTANCE = 25
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
     private var mMarker: Marker? = null
+    private lateinit var geoCoder : Geocoder
     //Location
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
@@ -154,6 +160,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         mapFragView.alpha = 0.95f
         locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
             .findViewById(Integer.parseInt("2"))
+
+        geoCoder = Geocoder(this, Locale.getDefault())
 
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, GOOGLE_API_KEY_FOR_IMAGE)
@@ -567,7 +575,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 5000
+        locationRequest.interval = 3000
         locationRequest.smallestDisplacement = 10f
 //        locationRequest.numUpdates = 1
 
@@ -583,10 +591,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 }
                 latitude = mLastLocation.latitude
                 longitude = mLastLocation.longitude
-
+                var title = "Your Location"
+                try {
+                    val listAddresses = geoCoder.getFromLocation(latitude, longitude, 1)
+                    if (listAddresses != null && listAddresses.size > 0) {
+                        title = listAddresses.get(0).getAddressLine(0)
+                    }
+                } catch (e : IOException) {
+                    e.printStackTrace()
+                }
                 val latLng = LatLng(latitude, longitude)
                 val markerOptions = MarkerOptions()
                     .position(latLng)
+                    .title(title)
                      .icon(null)
 
 
@@ -595,6 +612,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo),3000,null)
+                mMap.setOnMarkerClickListener (object : GoogleMap.OnMarkerClickListener{
+                    override fun onMarkerClick(p0: Marker?): Boolean {
+                        if (p0?.position?.latitude != latitude && p0?.position?.longitude != longitude) {
+                            p0?.showInfoWindow()
+                        }
+                        return true
+                    }
+                })
 
                 setPlaceRipple(LatLng(latitude, longitude))
 
@@ -630,6 +655,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             return
         }
     }
+
 
     override fun onMapReady(p0: GoogleMap?) {
         if (p0 != null) {
@@ -735,13 +761,22 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
         view.alpha = 1.0f
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
-            val locationInfo = marker.tag as NearestLocationData
-            view.textView30.text = (locationInfo.users - 1).toString()
-            view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
+            if (marker.tag != null) {
+                val locationInfo = marker.tag as NearestLocationData
+                view.textView30.text = (locationInfo.users - 1).toString()
+                view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
 
-            if (!locationInfo.image.isEmpty()) {
-                val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
-                Picasso.get().load(url).error(R.drawable.demo_restaurant_1).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.demo_restaurant_1).into(view.info_window_rest_image)
+                if (!locationInfo.image.isEmpty()) {
+                    val url =
+                        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+                    Picasso.get().load(url).error(R.drawable.demo_restaurant_1)
+                        .transform(RoundedTransformation(20, 0))
+                        .placeholder(R.drawable.demo_restaurant_1).into(view.info_window_rest_image)
+                }
+            }
+            else {
+                view.textView30.text = 0.toString()
+                view.textView31.text = "0 M"
             }
         }
         return view
