@@ -62,4 +62,8 @@ abstract class BaseActivity : AppCompatActivity() {
             progressDialog.dismiss()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 }

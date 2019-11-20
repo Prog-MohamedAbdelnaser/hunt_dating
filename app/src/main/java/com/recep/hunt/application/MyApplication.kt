@@ -91,6 +91,7 @@ class MyApplication : MultiDexApplication() {
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
+
             }
 
         })

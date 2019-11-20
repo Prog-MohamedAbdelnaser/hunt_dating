@@ -134,7 +134,8 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             )
                             builder.addFormDataPart(
                                 "gender",
-                                SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
+                                "male"
+//                                SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
                             )
                             builder.addFormDataPart("dob", "1993-11-11")
 //                    builder.addFormDataPart("profile_pic", "")
@@ -297,7 +298,8 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                         )
                         builder.addFormDataPart(
                             "gender",
-                            SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
+                            "male"
+//                            SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
                         )
                         builder.addFormDataPart("dob", "1993-11-11")
 //                    builder.addFormDataPart("profile_pic", "")

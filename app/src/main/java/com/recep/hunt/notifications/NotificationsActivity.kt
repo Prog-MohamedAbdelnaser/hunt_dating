@@ -1,17 +1,13 @@
 package com.recep.hunt.notifications
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
-import com.recep.hunt.model.MakeUserOnline
-import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
@@ -54,7 +50,7 @@ class NotificationsActivity : BaseActivity() {
         noNotificationsLayout.visibility = View.GONE
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val notificationsViewModel = NotificationsViewModel.getNotifications()
+        val notificationsViewModel = NotificationsViewModel.getNotifications(this@NotificationsActivity)
         for(notification in notificationsViewModel){
             adapter.add(NotificationsAdapterItem(this,notification))
         }
@@ -69,21 +65,7 @@ class NotificationsActivity : BaseActivity() {
     private fun getNotification()
     {
 
-        val call = ApiClient.getClient.getNotification(SharedPrefrenceManager.getUserToken(this@NotificationsActivity))
 
-        call.enqueue(object : Callback<NotificationResponse> {
-            override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-
-            }
-
-            override fun onResponse(
-                call: Call<NotificationResponse>,
-                response: Response<NotificationResponse>
-            ) {
-                //get response here
-            }
-
-        })
 
     }
 }

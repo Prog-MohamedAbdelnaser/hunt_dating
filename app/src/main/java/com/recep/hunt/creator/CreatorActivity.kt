@@ -100,9 +100,9 @@ class CreatorActivity : AppCompatActivity() {
             askQuestion()
         }
 
-//        login_nxt_btn.setOnClickListener {
-//            askQuestion()
-//        }
+        login_nxt_btn.setOnClickListener {
+            askQuestion()
+        }
 
         progressBar = find(R.id.otp_progressBar)
         cl_progressbar = find(R.id.cl_progress_bar)
@@ -240,18 +240,18 @@ class CreatorActivity : AppCompatActivity() {
             )
 
             val imageFile = imageFileTobeUploaded.value
-            if (imageFile != null && imageFile.exists()) {
-                builder.addFormDataPart(
-                    "image",
-                    imageFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), imageFile)
-                )
-                builder.addFormDataPart(
-                    "audio",
-                    File(voiceFile).name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), File(voiceFile))
-                )
-            }
+//            if (imageFile != null && imageFile.exists()) {
+//                builder.addFormDataPart(
+//                    "image",
+//                    imageFile.name,
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), imageFile)
+//                )
+//                builder.addFormDataPart(
+//                    "audio",
+//                    File(voiceFile).name,
+//                    RequestBody.create(MediaType.parse("multipart/form-data"), File(voiceFile))
+//                )
+//            }
             val call = ApiClient.getClient.createTicket(
                 builder.build(),
                 SharedPrefrenceManager.getUserToken(this@CreatorActivity)
