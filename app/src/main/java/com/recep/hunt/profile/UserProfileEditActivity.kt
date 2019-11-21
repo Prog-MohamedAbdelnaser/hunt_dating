@@ -239,6 +239,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
                     if (response.isSuccessful) {
+                        saveUserProfile()
                         saveImages()
                     }
                     dialog.dismiss()
@@ -269,8 +270,58 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     }
 
 
-    private fun saveImages() {
+    private fun saveUserProfile() {
         val profileImage = SharedPrefrenceManager.getProfileImg(this)
+        val dialog = Helpers.showDialog(this, this, "Updating Images")
+        val builder = MultipartBody.Builder()
+        builder.setType(MultipartBody.FORM)
+        var isImageAvailable = false
+        if (!TextUtils.isEmpty(profileImage)) {
+            val firstFile = getFiles(profileImage, 0)
+            if (firstFile.exists() && firstFile.length() > 0) {
+                builder.addFormDataPart(
+                    "user_profile",
+                    firstFile.name,
+                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                )
+                isImageAvailable = true
+            }
+        }
+
+        if (isImageAvailable) {
+            val call = ApiClient.getClient.saveImages(
+                builder.build(),
+                SharedPrefrenceManager.getUserToken(this)
+            )
+            call.enqueue(object :
+                Callback<UpdateUserInfoResponseModel> {
+                override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
+                    Toast.makeText(
+                        this@UserProfileEditActivity,
+                        "Something want wrong,Please Try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onResponse(
+                    call: Call<UpdateUserInfoResponseModel>,
+                    response: Response<UpdateUserInfoResponseModel>
+                ) {
+                    dialog.dismiss()
+                    if (response.isSuccessful) {
+                        finish()
+                    }
+//                    dialog.dismiss()
+//                    finish()
+                }
+            })
+        }
+
+    }
+
+
+    private fun saveImages() {
+
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
@@ -283,18 +334,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         var isImageAvailable = false
 
-        if (!TextUtils.isEmpty(profileImage)) {
 
-            val firstFile = getFiles(profileImage, 0)
-            if (firstFile.exists() && firstFile.length() > 0) {
-                builder.addFormDataPart(
-                    "user_profile",
-                    firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
-                )
-                isImageAvailable = true
-            }
-        }
 
         if (!TextUtils.isEmpty(firstImage)) {
             val firstFile = getFiles(firstImage, 1)
@@ -369,7 +409,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         }
 
         if (isImageAvailable) {
-            val call = ApiClient.getClient.saveImages(
+            val call = ApiClient.getClient.addImageInAlbum(
                 builder.build(),
                 SharedPrefrenceManager.getUserToken(this)
             )
@@ -475,21 +515,89 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             Picasso.get().load(Uri.parse(SharedPrefrenceManager.getProfileImg(this)))
                 .placeholder(R.drawable.account_icon).into(ivEditProfielId)
         } else {
-            ivEditProfielId.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getProfileImg(this)))
+            val profile = SharedPrefrenceManager.getProfileImg(this)
+            if (profile.contains("http")) {
+                Picasso.get().load(profile)
+                    .placeholder(R.drawable.account_icon).into(ivEditProfielId)
+            } else {
+                ivEditProfielId.setImageBitmap(StringToBitmap(profile))
+            }
+
         }
 
-        if (firstImage != Constants.NULL)
-            user_image_1.setImageBitmap(StringToBitmap(firstImage))
-        if (secondImage != Constants.NULL)
-            user_image_2.setImageBitmap(StringToBitmap(secondImage))
-        if (thirdImage != Constants.NULL)
-            user_image_3.setImageBitmap(StringToBitmap(thirdImage))
-        if (fourthImage != Constants.NULL)
-            user_image_4.setImageBitmap(StringToBitmap(fourthImage))
-        if (fifthImage != Constants.NULL)
-            user_image_5.setImageBitmap(StringToBitmap(fifthImage))
-        if (sixthImage != Constants.NULL)
-            user_image_6.setImageBitmap(StringToBitmap(sixthImage))
+        if (firstImage != Constants.NULL) {
+            if (firstImage.contains("http")) {
+                Picasso.get().load(firstImage)
+                    .placeholder(R.drawable.add_image).into(user_image_1)
+            } else {
+                user_image_1.setImageBitmap(
+                    StringToBitmap(
+                        firstImage
+                    )
+                )
+            }
+        }
+        if (secondImage != Constants.NULL) {
+            if (secondImage.contains("http")) {
+                Picasso.get().load(secondImage)
+                    .placeholder(R.drawable.add_image).into(user_image_2)
+            } else {
+                user_image_2.setImageBitmap(
+                    StringToBitmap(
+                        secondImage
+                    )
+                )
+            }
+        }
+
+        if (thirdImage != Constants.NULL) {
+            if (thirdImage.contains("http")) {
+                Picasso.get().load(thirdImage)
+                    .placeholder(R.drawable.add_image).into(user_image_3)
+            } else {
+                user_image_3.setImageBitmap(
+                    StringToBitmap(
+                        thirdImage
+                    )
+                )
+            }
+
+        }
+
+        if (fourthImage != Constants.NULL) {
+            if (fourthImage.contains("http")) {
+                Picasso.get().load(fourthImage)
+                    .placeholder(R.drawable.add_image).into(user_image_4)
+            } else {
+                user_image_4.setImageBitmap(StringToBitmap(fourthImage))
+            }
+        }
+
+        if (fifthImage != Constants.NULL) {
+            if (fifthImage.contains("http")) {
+                Picasso.get().load(fifthImage)
+                    .placeholder(R.drawable.add_image).into(user_image_5)
+            } else {
+                user_image_5.setImageBitmap(
+                    StringToBitmap(
+                        fifthImage
+                    )
+                )
+            }
+        }
+
+        if (sixthImage != Constants.NULL) {
+            if (sixthImage.contains("http")) {
+                Picasso.get().load(sixthImage)
+                    .placeholder(R.drawable.add_image).into(user_image_6)
+            } else {
+                user_image_6.setImageBitmap(
+                    StringToBitmap(
+                        sixthImage
+                    )
+                )
+            }
+        }
 
     }
 
