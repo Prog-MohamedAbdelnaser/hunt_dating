@@ -1,8 +1,10 @@
 package com.recep.hunt.swipe
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,15 +16,23 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
+import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.UserSwipe
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.swipeUser.SwipeUserResponse
+import com.recep.hunt.notifications.NotificationsActivity
+import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.swipe_screen_item.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.image
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.toast
 import retrofit2.Call
@@ -372,5 +382,72 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             counter[currentUser] ++
             Picasso.get().load(items[currentUser].images!![counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
         }
+    }
+
+    private fun setupToolbarClicks() {
+        user_detail_filter_btn.setOnClickListener {
+            val bottomSheet = FilterBottomSheetDialog(this)
+            bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
+        }
+
+        user_detail_incoginoti_btn.setOnClickListener {
+            showIncognitoBtn()
+        }
+
+        user_detail_notification_btn.setOnClickListener {
+            launchActivity<NotificationsActivity>()
+        }
+
+        user_detail_profile_btn.setOnClickListener {
+            launchActivity<UserProfileActivity>()
+        }
+    }
+
+    private fun showIncognitoBtn() {
+        val isIncognito = SharedPrefrenceManager.getisIncognito(this)
+        if(isIncognito){
+            SharedPrefrenceManager.setisIncognito(this,false)
+            val ll = LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
+            val dialog = Dialog(this)
+            dialog.setContentView(ll)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val gotItBtn: Button = dialog.find(R.id.got_it_btn)
+            gotItBtn.setOnClickListener {
+                home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost_on)
+                makeUserOnOffline(false)
+                dialog.dismiss()
+            }
+            dialog.show()
+        }else{
+            home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost)
+            makeUserOnOffline(true)
+            SharedPrefrenceManager.setisIncognito(this,true)
+        }
+
+    }
+
+    private fun makeUserOnOffline(is_online : Boolean)
+    {
+        val makeUserOnline= MakeUserOnline(is_online)
+
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline,SharedPrefrenceManager.getUserToken(this))
+
+        call.enqueue(object :Callback<MakeUserOnlineResponse> {
+            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<MakeUserOnlineResponse>,
+                response: Response<MakeUserOnlineResponse>
+            ) {
+                if (is_online == false)
+                    Toast.makeText(this@SwipeMainActivity,"You're offline",Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(this@SwipeMainActivity,"You're online",Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
     }
 }

@@ -59,7 +59,8 @@ enum class PersistenceKeys {
     refernceCode,
     apiToken,
     UserInterestedAgeFrom,
-    UserInterestedAgeTo
+    UserInterestedAgeTo,
+    SwipeCount
 }
 
 class SharedPrefrenceManager {
@@ -533,6 +534,21 @@ class SharedPrefrenceManager {
         fun getUserInterestedAgeTo(context: Context):String {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
             sharedPreferences.getString(PersistenceKeys.UserInterestedAgeTo.toString(), "")?.let {
+                return it
+            }
+            return ""
+        }
+
+        fun setSwipeCount(context: Context, value : String) {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val editor = sharedPreferences.edit()
+            editor.putString(PersistenceKeys.SwipeCount.toString(), value)
+            editor.apply()
+        }
+
+        fun getSwipeCount(context: Context) : String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            sharedPreferences.getString(PersistenceKeys.SwipeCount.toString(), "")?.let {
                 return it
             }
             return ""

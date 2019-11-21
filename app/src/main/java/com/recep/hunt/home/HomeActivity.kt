@@ -575,8 +575,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 3000
-        locationRequest.smallestDisplacement = 10f
+        locationRequest.interval = 5000
+        locationRequest.fastestInterval = 3000
+        locationRequest.smallestDisplacement = 0.1f
 //        locationRequest.numUpdates = 1
 
     }
@@ -591,7 +592,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                 }
                 latitude = mLastLocation.latitude
                 longitude = mLastLocation.longitude
-                var title = "Your Location"
+                var title = "Your Place"
                 try {
                     val listAddresses = geoCoder.getFromLocation(latitude, longitude, 1)
                     if (listAddresses != null && listAddresses.size > 0) {
