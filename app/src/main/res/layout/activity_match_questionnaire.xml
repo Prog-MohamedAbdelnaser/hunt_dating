@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
@@ -164,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
@@ -233,7 +233,6 @@
                 android:id="@+id/cl_progress_bar_two"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -241,14 +240,11 @@
 
 
             <ProgressBar
-                    android:id="@+id/two_progressBar"
+                    android:id="@+id/otp_progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:indeterminate="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:padding="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:indeterminate="false" />
 
             <TextView
                     android:layout_margin="16dp"
@@ -261,10 +257,10 @@
                     android:text="15"
                     android:textColor="@color/colorProgressbar"
                     android:textSize="22sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/two_progressBar"
-                    app:layout_constraintEnd_toEndOf="@+id/two_progressBar"
-                    app:layout_constraintStart_toStartOf="@+id/two_progressBar"
-                    app:layout_constraintTop_toTopOf="@+id/two_progressBar" />
+                    app:layout_constraintBottom_toBottomOf="@+id/otp_progressBar"
+                    app:layout_constraintEnd_toEndOf="@+id/otp_progressBar"
+                    app:layout_constraintStart_toStartOf="@+id/otp_progressBar"
+                    app:layout_constraintTop_toTopOf="@+id/otp_progressBar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

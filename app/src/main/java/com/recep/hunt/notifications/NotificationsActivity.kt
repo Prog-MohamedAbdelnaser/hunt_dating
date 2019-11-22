@@ -7,20 +7,15 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
-import com.recep.hunt.api.ApiClient
-import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.utilis.BaseActivity
-import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.SimpleDividerItemDecoration
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.notifications_adapter_item.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class NotificationsActivity : BaseActivity() {
 
@@ -73,7 +68,8 @@ class NotificationsAdapterItem(private val context:Context,private val model:Not
 
     override fun getLayout() = R.layout.notifications_adapter_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.notifi_userImage.image = context.resources.getDrawable(model.userImage)
+
+        Picasso.get().load(model.userImage).into(viewHolder.itemView.notifi_userImage)
         viewHolder.itemView.notifi_userName.text = model.userName
         viewHolder.itemView.notification_time.text = model.notificationTime
         viewHolder.itemView.notifi_userNotification.text = model.notification

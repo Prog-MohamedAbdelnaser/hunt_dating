@@ -18,7 +18,7 @@ import retrofit2.Response
 
 data class NotificationsModel(val notification:String,
                               val userName:String,
-                              val userImage:Int,
+                              val userImage:String,
                               val notificationTime:String)
 
 object NotificationsViewModel {
@@ -38,8 +38,11 @@ object NotificationsViewModel {
             ) {
                 var responseData=response.body()?.data
                 responseData?.forEach {
-                    var model=NotificationsModel(it.message,"Recap",R.drawable.boy_casual_eyes,it.created_at)
-                    data.add(model)
+                    it.forEach{
+                        var model=NotificationsModel(it.message,it.user.first_name,it.user.profile_pic,it.created_at)
+                        data.add(model)
+                    }
+
                 }
             }
 

@@ -25,7 +25,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_questionnaire)
-        progressBar = find(R.id.two_progressBar)
+        progressBar = find(R.id.otp_progressBar)
         cl_progressbar = find(R.id.cl_progress_bar_two)
 
 
@@ -88,8 +88,9 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         progressBar.max = 15
 
 
+
         Thread(Runnable {
-            while (pStatus > 0) {
+            while (pStatus >= 0 ) {
                 pStatus -= 1
                 pStatusVisible -= 1
 
@@ -99,8 +100,10 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
                     if (pStatusVisible == 0) {
                         runOnUiThread {
-                            setpThree.visibility=View.VISIBLE
-                            setpThree.visibility=View.GONE
+                            runOnUiThread {
+                                setpThree.visibility=View.VISIBLE
+                                setpThree.visibility=View.GONE
+                            }
                         }
                     }
                 }
