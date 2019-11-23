@@ -3,14 +3,21 @@ package com.recep.hunt.matchs
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.recep.hunt.R
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
-import kotlinx.android.synthetic.main.activity_otp_verification.*
 import org.jetbrains.anko.find
+import java.util.concurrent.TimeUnit
+
+
+
+
+
+
 
 class MatchQuestionnaireActivity : AppCompatActivity() {
 
@@ -19,7 +26,14 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     private lateinit var cl_progressbar: ConstraintLayout
     private lateinit var progressBar: ProgressBar
     private val handler = Handler()
+    private var currentTime=0L
 
+    private lateinit var cl_timer_progrss:ConstraintLayout
+    private lateinit var progressBarTimer:ProgressBar
+    private val timerHandler=Handler()
+
+    lateinit var countDownTimer:CountDownTimer
+    private var timerPstatus=360
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +63,8 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         btn.setOnClickListener {
             stepFive.visibility=View.GONE
             stepSix.visibility=View.VISIBLE
+            setTimer(6*60*1000)
+
 
         }
 
@@ -58,10 +74,15 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
             startActivity(mIntent)
 
         }
+        id_add_time.setOnClickListener {
+            setTimerAgain(5)
+        }
 
 
 
     }
+
+
 
     fun goTonext(view: View)
     {
@@ -82,7 +103,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 //        resend_otp_btn.text = Html.fromHtml(styledText)
 
         val res = resources
-        val drawable = res.getDrawable(R.drawable.circular_progress_bg)
+        val drawable = res.getDrawable(com.recep.hunt.R.drawable.circular_progress_bg)
         progressBar.progressDrawable = drawable
         progressBar.progress = 0
         progressBar.max = 15
@@ -118,8 +139,68 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
 
         }).start()
+    }
+
+
+    private fun setupTimerProgress(){
+
+    }
+
+
+
+
+    private fun startTimer(noOfMinutes:Long) {
+
+         countDownTimer =( object: CountDownTimer(noOfMinutes,1000){
+            override fun onFinish() {
+
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                //Convert milliseconds into hour,minute and seconds
+                currentTime=millisUntilFinished
+                val hms = String.format(
+                    "%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(
+                        millisUntilFinished
+                    ),
+                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+                        TimeUnit.MILLISECONDS.toHours(
+                            millisUntilFinished
+                        )
+                    ),
+                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                        TimeUnit.MILLISECONDS.toMinutes(
+                            millisUntilFinished
+                        )
+                    )
+                )
+                tvRemaningTime.setText(hms)//set text
+            }
+
+        }).start()
+
 
 
     }
+
+    fun setTimer(min:Long)
+    {
+
+        startTimer(min);
+    }
+
+    fun setTimerAgain(min:Long)
+    {
+        countDownTimer.cancel()
+        var nowTime=currentTime
+        nowTime=min*60*1000+currentTime
+        setTimer(nowTime)
+
+
+    }
+
+
+
 
 }
