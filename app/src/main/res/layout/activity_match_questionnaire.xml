@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
@@ -164,13 +164,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
 
         <TextView
-                android:id="@+id/textView49"
+                android:id="@+id/ranQuestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
@@ -184,7 +184,7 @@
 
 
         <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnOption1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="34dp"
@@ -196,10 +196,10 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+                app:layout_constraintTop_toBottomOf="@+id/ranQuestion" />
 
         <Button
-                android:id="@+id/button6"
+                android:id="@+id/btnOption2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="34dp"
@@ -212,10 +212,10 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button5" />
+                app:layout_constraintTop_toBottomOf="@+id/btnOption1" />
 
         <Button
-                android:id="@+id/button5"
+                android:id="@+id/btnOption3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/partially_transparent"
@@ -227,7 +227,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button3" />
+                app:layout_constraintTop_toBottomOf="@+id/btnOption2" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_progress_bar_two"
@@ -236,7 +236,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button6">
+                app:layout_constraintTop_toBottomOf="@+id/btnOption3">
 
 
             <ProgressBar

@@ -7,10 +7,18 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
+import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
 import org.jetbrains.anko.find
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 
@@ -46,7 +54,27 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         check_code_btn.setOnClickListener {
             setpTwo.visibility=View.VISIBLE
             setpOne.visibility=View.GONE
-            setProgressStart()
+
+            val call = ApiClient.getClient.getRandomQuestion(SharedPrefrenceManager.getUserToken(this))
+
+            call.enqueue(object : Callback<RandomQuestionResponse> {
+                override fun onFailure(call: Call<RandomQuestionResponse>, t: Throwable) {
+
+                }
+
+                override fun onResponse(
+                    call: Call<RandomQuestionResponse>,
+                    response: Response<RandomQuestionResponse>
+                ) {
+                    setpTwo.visibility=View.VISIBLE
+                    setpOne.visibility=View.GONE
+                    setProgressStart()
+
+
+                }
+
+            })
+
         }
 
         btn_yes.setOnClickListener {

@@ -15,6 +15,7 @@ import com.recep.hunt.model.logout.LogoutReponse
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.notification.NotificationResponse
+import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
@@ -116,6 +117,11 @@ interface ApiInterface {
 
     @GET("/api/notification")
     fun getNotification(@Header("Authorization")  authorization:String):Call<NotificationResponse>
+
+
+
+    @GET("/api/random-question")
+    fun getRandomQuestion(@Header("Authorization")  authorization:String):Call<RandomQuestionResponse>
 
 
     @POST("/api/email-check")
