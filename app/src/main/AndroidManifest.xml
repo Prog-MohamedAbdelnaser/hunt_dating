@@ -42,16 +42,17 @@
             android:usesCleartextTraffic="true"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".matchs.MatchQuestionnaireActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".matchs.LetsMeetActivity" />
         <activity android:name=".payment.TrasactionDone"></activity>
         <activity android:name=".faq.FaqDashboard" />
         <activity android:name=".creator.TicketGenrated" />
         <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity android:name=".swipe.SwipeActivity" />
@@ -103,8 +104,7 @@
         <activity android:name=".setupProfile.SetupProfileDobActivity" />
         <activity android:name=".setupProfile.SetupProfileActivity" android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".login.SocialLoginActivity" >
-
-        </activity>
+                   </activity>
         <activity android:name=".login.OtpVerificationActivity" android:windowSoftInputMode="stateVisible|adjustResize"
                 >
         </activity>
