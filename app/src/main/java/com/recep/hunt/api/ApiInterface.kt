@@ -48,6 +48,8 @@ interface ApiInterface {
     @POST("/api/update-user-profile-images")
     fun saveImages(@Body file: RequestBody,@Header("Authorization")  authorization:String):Call<UpdateUserInfoResponseModel>
 
+    @POST("/api/add-more-images")
+    fun addImageInAlbum(@Body file: RequestBody,@Header("Authorization")  authorization:String):Call<UpdateUserInfoResponseModel>
 
     @GET("api/logout")
     fun  logoutUser(@Header("Authorization")  authorization:String):Call<LogoutReponse>

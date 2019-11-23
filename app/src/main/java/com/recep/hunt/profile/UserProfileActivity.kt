@@ -1,10 +1,9 @@
 package com.recep.hunt.profile
 
+/*import com.facebook.share.Share*/
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -12,21 +11,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import androidx.constraintlayout.solver.widgets.Helper
-import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-/*import com.facebook.share.Share*/
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.model.UserProfile.Data
-import com.recep.hunt.model.UserProfile.UserInfoModel
 import com.recep.hunt.model.UserProfile.UserProfileResponse
-import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
-import com.recep.hunt.profile.model.UserProfileModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.userDetail.UserDetailActivity
 import com.recep.hunt.utilis.Helpers
@@ -42,14 +36,17 @@ import kotlinx.android.synthetic.main.profile_header_layout_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_header_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_title_item.view.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.find
+import org.jetbrains.anko.image
+import org.jetbrains.anko.textColor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    lateinit var userInfo : Data
+    lateinit var userInfo: Data
     private var adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,27 +58,33 @@ class UserProfileActivity : AppCompatActivity() {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        setupRecyclerView()
-
         getData()
     }
 
-    private fun getData(){
-        val call = ApiClient.getClient.getUserProfile(SharedPrefrenceManager.getUserToken(this@UserProfileActivity))
-
-        call.enqueue(object:Callback<UserProfileResponse>{
+    private fun getData() {
+        val progressDialog = Helpers.showDialog(this,this,"Getting UserProfile")
+        val call =
+            ApiClient.getClient.getUserProfile(SharedPrefrenceManager.getUserToken(this@UserProfileActivity))
+        progressDialog.show()
+        call.enqueue(object : Callback<UserProfileResponse> {
             override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                Log.e("TAG", "onFailure")
+                setupRecyclerView()
+                progressDialog.dismiss()
             }
 
             override fun onResponse(
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
-            )
-            {
-                response.body()?.let {
-                    userInfo= it.data
+            ) {
+                if(response.isSuccessful) {
+                    response.body()?.let {
+                        userInfo = it.data
+                    }
+                    setPrefData()
+                    setupRecyclerView()
+                    progressDialog.dismiss()
                 }
-                setPrefData()
             }
 
         })
@@ -91,22 +94,60 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun setPrefData() {
 
-        try{
-            userInfo?.let {
-                SharedPrefrenceManager.setUserFirstName(this , userInfo.first_name)
-                SharedPrefrenceManager.setUserLastName(this , userInfo.last_name)
-                SharedPrefrenceManager.setUserMobileNumber(this , userInfo.mobile_no)
-                SharedPrefrenceManager.setUserCountry(this , userInfo.country)
-                SharedPrefrenceManager.setUserCountryCode(this , userInfo.country_code)
-                SharedPrefrenceManager.setUserGender(this , userInfo.gender)
-                SharedPrefrenceManager.setUserEmail(this , userInfo.email)
-                SharedPrefrenceManager.setUserLatitude(this , userInfo.lat)
-                SharedPrefrenceManager.setProfileImg(this , userInfo.profile_pic)
+        try {
+            userInfo.let {
+                SharedPrefrenceManager.setUserFirstName(this, userInfo.first_name)
+                SharedPrefrenceManager.setUserLastName(this, userInfo.last_name)
+                SharedPrefrenceManager.setUserMobileNumber(this, userInfo.mobile_no)
+                SharedPrefrenceManager.setUserCountry(this, userInfo.country)
+                SharedPrefrenceManager.setUserCountryCode(this, userInfo.country_code)
+                SharedPrefrenceManager.setUserGender(this, userInfo.gender)
+                SharedPrefrenceManager.setUserEmail(this, userInfo.email)
+                SharedPrefrenceManager.setUserLatitude(this, userInfo.lat)
+                SharedPrefrenceManager.setProfileImg(this, userInfo.profile_pic)
+                for ((index, it1) in userInfo.user_profile_image.withIndex()) {
+                    when (index) {
+                        0 -> {
+                            SharedPrefrenceManager.setFirstImg(this, it1.image)
+                        }
+                        1 -> {
+                            SharedPrefrenceManager.setSecImg(this, it1.image)
+                        }
+                        2 -> {
+                            SharedPrefrenceManager.setThirdImg(this, it1.image)
+                        }
+                        3 -> {
+                            SharedPrefrenceManager.setFourthImg(this, it1.image)
+                        }
+                        4 -> {
+                            SharedPrefrenceManager.setFiveImg(this, it1.image)
+                        }
+                        5 -> {
+                            SharedPrefrenceManager.setSixImg(this, it1.image)
+                        }
+                    }
+                }
+
+                SharedPrefrenceManager.setAboutYou(this,userInfo.user_info.about)
+                SharedPrefrenceManager.setJobTitle(this,userInfo.user_info.job_title)
+                SharedPrefrenceManager.setCompanyName(this,userInfo.user_info.company)
+                SharedPrefrenceManager.setHomeTown(this,userInfo.user_info.hometown)
+                SharedPrefrenceManager.setSchoolUniversity(this,userInfo.user_info.school)
+                SharedPrefrenceManager.setUserHeight(this,userInfo.user_info.height)
+                SharedPrefrenceManager.setUserGym(this,userInfo.user_info.gym)
+                SharedPrefrenceManager.setUserEducationLevel(this,userInfo.user_info.education_level)
+                SharedPrefrenceManager.setUserDrink(this,userInfo.user_info.drink)
+                SharedPrefrenceManager.setSmoke(this,userInfo.user_info.smoke)
+                SharedPrefrenceManager.setPets(this,userInfo.user_info.pets)
+                SharedPrefrenceManager.setKids(this,userInfo.user_info.kids)
+                SharedPrefrenceManager.setZodiac(this,userInfo.user_info.zodiac)
+                SharedPrefrenceManager.setReligion(this,userInfo.user_info.religion)
+
+
             }
-        }catch(e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-
 
 
     }
@@ -114,11 +155,12 @@ class UserProfileActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.clear()
-       setupRecyclerView()
+        setupRecyclerView()
         adapter.notifyDataSetChanged()
     }
 
     private fun setupRecyclerView() {
+        adapter = GroupAdapter<ViewHolder>()
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this@UserProfileActivity)
 
@@ -237,8 +279,8 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
 
     fun StringToBitmap(img: String): Bitmap? {
         if (img != null) {
-            var b = Base64.decode(img, Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
+            var b = Base64.decode(img, Base64.DEFAULT)
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
 
         }
         return bitmap
@@ -250,18 +292,100 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
     var bitmap: Bitmap? = null
     override fun getLayout() = R.layout.six_photos_item_layout
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.user_image_1.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getFirstImg(context)))
-        viewHolder.itemView.user_image_2.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getSecImg(context)))
-        viewHolder.itemView.user_image_3.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getThirdImg(context)))
-        viewHolder.itemView.user_image_4.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getFourthImg(context)))
-        viewHolder.itemView.user_image_5.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getFiveImg(context)))
-        viewHolder.itemView.user_image_6.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getSixImg(context)))
+        val firstImage = SharedPrefrenceManager.getFirstImg(context)
+        if (firstImage.contains("http")) {
+            Picasso.get().load(firstImage)
+                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_1)
+        } else {
+            viewHolder.itemView.user_image_1.setImageBitmap(
+                StringToBitmap(
+                    SharedPrefrenceManager.getFirstImg(
+                        context
+                    )
+                )
+            )
+        }
+
+        val secondImage = SharedPrefrenceManager.getSecImg(context)
+        if (secondImage.contains("http")) {
+            Picasso.get().load(secondImage)
+                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_2)
+        } else {
+            viewHolder.itemView.user_image_2.setImageBitmap(
+                StringToBitmap(
+                    SharedPrefrenceManager.getSecImg(
+                        context
+                    )
+                )
+            )
+        }
+
+        val thirdImage = SharedPrefrenceManager.getThirdImg(context)
+        if (thirdImage.contains("http")) {
+            Picasso.get().load(thirdImage)
+                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_3)
+        } else {
+            viewHolder.itemView.user_image_3.setImageBitmap(
+                StringToBitmap(
+                    SharedPrefrenceManager.getThirdImg(
+                        context
+                    )
+                )
+            )
+        }
+
+
+        val fourthImage = SharedPrefrenceManager.getFourthImg(context)
+        if (fourthImage.contains("http")) {
+            Picasso.get().load(fourthImage)
+                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_4)
+        } else {
+            viewHolder.itemView.user_image_4.setImageBitmap(
+                StringToBitmap(
+                    SharedPrefrenceManager.getFourthImg(
+                        context
+                    )
+                )
+            )
+        }
+
+
+        val fiveImage = SharedPrefrenceManager.getFiveImg(context)
+        if (fiveImage.contains("http")) {
+            Picasso.get().load(fiveImage)
+                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_5)
+        } else {
+            viewHolder.itemView.user_image_5.setImageBitmap(
+                StringToBitmap(
+                    SharedPrefrenceManager.getFiveImg(
+                        context
+                    )
+                )
+            )
+        }
+
+
+        val sixImage = SharedPrefrenceManager.getSixImg(context)
+        if (sixImage.contains("http")) {
+            Picasso.get().load(sixImage)
+                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_6)
+        } else {
+            viewHolder.itemView.user_image_6.setImageBitmap(
+                StringToBitmap(
+                    SharedPrefrenceManager.getSixImg(
+                        context
+                    )
+                )
+            )
+        }
+
+
     }
 
     fun StringToBitmap(img: String): Bitmap? {
         if (img != null) {
-            var b = Base64.decode(img, Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size);
+            var b = Base64.decode(img, Base64.DEFAULT)
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
         }
         return bitmap
     }
@@ -285,7 +409,11 @@ class ProfileSimpleItem(private val detail: String) : Item<ViewHolder>() {
 }
 
 //PRofile Gender View
-class ProfileGenderItemView(private val context: Context, private val gender: String, private val isEditMode: Boolean) :
+class ProfileGenderItemView(
+    private val context: Context,
+    private val gender: String,
+    private val isEditMode: Boolean
+) :
     Item<ViewHolder>() {
     private lateinit var maleBtn: Button
     private lateinit var femaleBtn: Button
@@ -326,33 +454,42 @@ class ProfileGenderItemView(private val context: Context, private val gender: St
     private fun setupSelectedGender(selectedgender: String) {
         when (selectedgender.toLowerCase()) {
             Constants.MALE.toLowerCase() -> {
-                maleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
+                maleBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 maleBtn.textColor = context.resources.getColor(R.color.white)
 
-                femaleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                femaleBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 femaleBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
 
-                otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                otherBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
             Constants.FEMALE.toLowerCase() -> {
-                femaleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
+                femaleBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 femaleBtn.textColor = context.resources.getColor(R.color.white)
 
-                maleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                maleBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 maleBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
 
-                otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                otherBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
             else -> {
-                otherBtn.background = context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
+                otherBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_selected_btn)
                 otherBtn.textColor = context.resources.getColor(R.color.white)
 
-                maleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                maleBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 maleBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
 
-                femaleBtn.background = context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
+                femaleBtn.background =
+                    context.resources.getDrawable(R.drawable.profile_gender_unselected_btn)
                 femaleBtn.textColor = context.resources.getColor(R.color.app_light_text_color)
             }
         }
