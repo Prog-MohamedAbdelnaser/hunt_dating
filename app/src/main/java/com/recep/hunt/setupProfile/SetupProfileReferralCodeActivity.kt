@@ -66,7 +66,6 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         }
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         check_code_btn.setOnClickListener {
-
             if (edtReferelCode.text.toString().equals("huntwelcome")) {
                 SharedPrefrenceManager.setRefrencecode(
                     this@SetupProfileReferralCodeActivity,
@@ -76,8 +75,6 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             } else {
                 showTryAgainAlert()
             }
-
-
         }
     }
 
@@ -138,7 +135,8 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 //                                SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
                             )
                             builder.addFormDataPart("dob",
-                                SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity)
+                                "1991-11-02"
+//                                SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity)
                             )
 //                    builder.addFormDataPart("profile_pic", "")
                             builder.addFormDataPart(
