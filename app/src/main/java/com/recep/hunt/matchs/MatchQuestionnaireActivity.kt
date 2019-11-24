@@ -106,6 +106,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                     setTimerAgain(addTime)
                     addTime = 5
                     id_add_time.text = "+ 5 Min"
+                    id_add_time.setBackgroundResource(R.drawable.magento_corner_card)
                 }
                 5L -> {
                     setTimerAgain(addTime)
@@ -148,7 +149,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         val drawable = res.getDrawable(com.recep.hunt.R.drawable.circular_progress_bg)
         progressBar.progressDrawable = drawable
         progressBar.progress = 0
-        progressBar.max = 15
+//        progressBar.max = 15
 
 
 
