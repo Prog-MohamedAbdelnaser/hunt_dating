@@ -79,6 +79,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         btn_yes.setOnClickListener {
             setpThree.visibility = View.GONE
             stepFour.visibility = View.VISIBLE
+            tvTitle.text = "Let the Hunt begin!"
 
         }
         btn_goto_next_five.setOnClickListener {
@@ -91,6 +92,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
             stepFive.visibility = View.GONE
             stepSix.visibility = View.VISIBLE
             setTimer(6 * 60 * 1000)
+            tvTitle.text = "Time to Hunt!"
 
         }
 
