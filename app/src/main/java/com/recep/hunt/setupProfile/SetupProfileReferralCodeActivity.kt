@@ -137,7 +137,9 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                                 "male"
 //                                SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
                             )
-                            builder.addFormDataPart("dob", "1993-11-11")
+                            builder.addFormDataPart("dob",
+                                SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity)
+                            )
 //                    builder.addFormDataPart("profile_pic", "")
                             builder.addFormDataPart(
                                 "email",

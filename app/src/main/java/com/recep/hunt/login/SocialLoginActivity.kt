@@ -1,5 +1,6 @@
 package com.recep.hunt.login
 
+import android.accounts.Account
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -40,6 +41,10 @@ import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.plus.People
 import com.google.android.gms.plus.Plus
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.services.people.v1.PeopleService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -67,6 +72,10 @@ import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
 import org.json.JSONException
@@ -122,6 +131,9 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         }
         false
     })
+
+    private lateinit var account :GoogleSignInAccount
+
 
     private val adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -197,15 +209,20 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
 
     private fun setupGoogleAuth() {
+//                var scope = Scope("https://www.googleapis.com/auth/user.birthday.read");
+
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestScopes(Scope(Scopes.PLUS_LOGIN))
             .requestEmail()
             .requestProfile()
-            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE))
+//            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE) , scope)
+            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE) )
+
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
 
         mGoogleApiClient = GoogleApiClient.Builder(this)
             .enableAutoManage(this, this)
@@ -213,6 +230,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             .addApi(Plus.API)
             .addScope(Scope(Scopes.PLUS_ME))
             .addScope(Scope(Scopes.PROFILE))
+//            .addScope(scope)
             .build()
     }
 
@@ -250,7 +268,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     Log.e("loginResult ", "error  $exception")
                 }
             })
-        6
+
     }
 
     private fun setupRecyclerView() {
@@ -335,18 +353,41 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 if (account != null)
                     firebaseAuthWithGoogle(account)
 
-
-
                 Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 val person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
-                Log.i(TAG, "--------------------------------")
-                Log.i(TAG, "Display Name: " + person.displayName)
-                Log.i(TAG, "Gender: " + person.gender)
-                Log.i(TAG, "AboutMe: " + person.aboutMe)
-                Log.i(TAG, "Birthday: " + person.birthday)
-                Log.i(TAG, "Current Location: " + person.currentLocation)
-                Log.i(TAG, "Language: " + person.language)
 
+                CoroutineScope(Dispatchers.IO).launch{
+                    withContext(Dispatchers.IO) {
+                        val HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
+                        val JSON_FACTORY  = JacksonFactory.getDefaultInstance();
+
+
+                        val cred = GoogleAccountCredential.usingOAuth2(applicationContext ,Collections.singleton(Scopes.PROFILE))
+                        cred.setSelectedAccount(Account(acct!!.email ,"com.google"));
+
+                        val service = PeopleService.Builder(
+                            HTTP_TRANSPORT ,
+                            JSON_FACTORY,
+                            cred)
+                            .setApplicationName(getString(R.string.app_name)).build()
+
+                        try{
+                            var meProfile = service.people().get("people/me")
+                                .setPersonFields("birthdays")
+                                .execute();
+
+                            var d =meProfile.birthdays[0].date
+                           val birthday =  d.month.toString() +"/" +d.day.toString()+"/"+d.year.toString()
+                            SharedPrefrenceManager.setUserDob(applicationContext, birthday)
+
+
+                        }
+                        catch (e :java.lang.Exception){
+
+                        }
+                    }
+                    // do UI stuff here, e.g. show some message, set text to TextView etc.
+                }
 
             } catch (e: Exception) {
                 // Google Sign In failed, update UI appropriately

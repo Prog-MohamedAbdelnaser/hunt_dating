@@ -11,8 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
 import org.jetbrains.anko.find
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class MatchQuestionnaireActivity : AppCompatActivity() {
@@ -46,7 +52,28 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         check_code_btn.setOnClickListener {
             setpTwo.visibility = View.VISIBLE
             setpOne.visibility = View.GONE
-            setProgressStart()
+
+            val call =
+                ApiClient.getClient.getRandomQuestion(SharedPrefrenceManager.getUserToken(this))
+
+            call.enqueue(object : Callback<RandomQuestionResponse> {
+                override fun onFailure(call: Call<RandomQuestionResponse>, t: Throwable) {
+
+                }
+
+                override fun onResponse(
+                    call: Call<RandomQuestionResponse>,
+                    response: Response<RandomQuestionResponse>
+                ) {
+                    setpTwo.visibility = View.VISIBLE
+                    setpOne.visibility = View.GONE
+                    setProgressStart()
+
+
+                }
+
+            })
+
         }
 
         btn_yes.setOnClickListener {
@@ -84,7 +111,11 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                     setTimerAgain(addTime)
                     addTime = 0
                 }
-                else -> Toast.makeText(this,"Now you could not add more time.",Toast.LENGTH_LONG).show()
+                else -> Toast.makeText(
+                    this,
+                    "Now you could not add more time.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -153,6 +184,11 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     }
 
 
+    private fun setupTimerProgress() {
+
+    }
+
+
     private fun startTimer(noOfMinutes: Long) {
 
         countDownTimer = (object : CountDownTimer(noOfMinutes, 1000) {
@@ -191,7 +227,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     private fun setTimer(min: Long) {
         pbMatchTime.visibility = View.VISIBLE
         pStatus = 15
-        val drawable = ContextCompat.getDrawable(this,R.drawable.circular_progress_bg)
+        val drawable = ContextCompat.getDrawable(this, R.drawable.circular_progress_bg)
         pbMatchTime.progressDrawable = drawable
         pbMatchTime.progress = 0
         pbMatchTime.max = min.toInt()

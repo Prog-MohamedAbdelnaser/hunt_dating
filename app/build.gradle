@@ -64,11 +64,19 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:17.0.0"
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-
-    /*implementation 'com.google.api-client:google-api-client:1.22.0'
-     implementation 'com.google.api-client:google-api-client-android:1.22.0'
-     implementation 'com.google.apis:google-api-services-people:v1-rev4-1.22.0'
- */
+//
+//    implementation 'com.google.api-client:google-api-client:1.23.0'
+//     implementation 'com.google.api-client:google-api-client-android:1.23.0'
+//     implementation 'com.google.apis:google-api-services-people:v1-rev4-1.22.0'
+    compile ('com.google.api-client:google-api-client:1.23.0'){
+        exclude module: 'httpcore' exclude module: 'httpclient'
+    }
+    compile ('com.google.api-client:google-api-client-android:1.23.0'){
+        exclude module: 'httpcore' exclude module: 'httpclient'
+    }
+    compile ('com.google.apis:google-api-services-people:v1-rev277-1.23.0'){
+        exclude module: 'httpcore' exclude module: 'httpclient'
+    }
 
     //Third party libs
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:3.0.3'
