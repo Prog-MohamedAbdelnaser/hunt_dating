@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP"
+            tools:ignore="ProtectedPermissions"></uses-permission>
 
 
     <uses-feature
@@ -104,7 +106,7 @@
         <activity android:name=".setupProfile.SetupProfileDobActivity" />
         <activity android:name=".setupProfile.SetupProfileActivity" android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".login.SocialLoginActivity" >
-                   </activity>
+        </activity>
         <activity android:name=".login.OtpVerificationActivity" android:windowSoftInputMode="stateVisible|adjustResize"
                 >
         </activity>

@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
@@ -164,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:gravity="center"
-                android:text="What you expect from relationship?"
+                android:text="Do you plans on having children?"
                 android:textColor="@color/white"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -191,8 +191,9 @@
                 android:layout_marginTop="34dp"
                 android:layout_marginRight="34dp"
                 android:onClick="goTonext"
+                android:textAllCaps="false"
                 android:background="@drawable/partially_transparent"
-                android:text="Option 1"
+                android:text="Want someday"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -204,11 +205,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="34dp"
                 android:layout_marginTop="18dp"
+                android:textAllCaps="false"
                 android:layout_marginRight="34dp"
                 android:onClick="goTonext"
 
                 android:background="@drawable/partially_transparent"
-                android:text="Option 1"
+                android:text="Don't want"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -219,15 +221,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/partially_transparent"
-                android:text="Option 1"
+                android:text="Have &amp; Want more"
                 android:onClick="goTonext"
                 android:layout_marginLeft="34dp"
                 android:layout_marginTop="18dp"
+                android:textAllCaps="false"
                 android:layout_marginRight="34dp"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnOption2" />
+   <Button
+                android:id="@+id/btnOption4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/partially_transparent"
+                android:text="Have &amp; Don't want more"
+                android:onClick="goTonext"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="18dp"
+                android:textAllCaps="false"
+                android:layout_marginRight="34dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOption3" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_progress_bar_two"
@@ -236,13 +254,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnOption3">
+                app:layout_constraintTop_toBottomOf="@+id/btnOption4">
 
 
             <ProgressBar
                     android:id="@+id/otp_progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
+                    android:max="15"
                     android:layout_height="match_parent"
                     android:indeterminate="false" />
 
@@ -283,7 +302,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:gravity="center"
-                android:text="What you expect from relationship?"
+                android:text="Do you plans on having children?"
                 android:textColor="@color/white"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -298,8 +317,9 @@
                 android:layout_marginLeft="34dp"
                 android:layout_marginTop="34dp"
                 android:layout_marginRight="34dp"
+                android:textAllCaps="false"
                 android:background="@drawable/partially_transparent"
-                android:text="Option 1"
+                android:text="Have &amp; Want more"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -498,7 +518,7 @@
                 android:layout_marginTop="18dp"
                 android:background="@drawable/transprent_button"
                 android:gravity="center"
-                android:text="No"
+                android:text="Yes"
                 android:textColor="@color/white"
                 app:cornerRadius="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -544,9 +564,9 @@
                 android:layout_width="162dp"
                 android:layout_height="58dp"
                 android:layout_margin="26dp"
-                android:background="@drawable/magento_corner_card"
+                android:background="@drawable/marine_corner_card"
                 android:fontFamily="@font/montserrat"
-                android:text="+ 5 Min"
+                android:text="+ 1 Min"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="18sp"
@@ -554,31 +574,64 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/icEnterance" />
 
-
-        <ProgressBar
-                android:id="@+id/progrssbar_select"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:indeterminate="false"
+        <FrameLayout
+                android:id="@+id/fl"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 app:layout_constraintBottom_toTopOf="@+id/tvRemaningTime"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icEnterance" />
+                app:layout_constraintTop_toBottomOf="@+id/icEnterance">
 
-        <TextView
-                android:id="@+id/otp_progrss"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ProgressBar
+                    android:id="@+id/pbTimer"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:indeterminate="false" />
 
-                android:fontFamily="@font/montserrat"
-                android:text="15"
-                android:textColor="@color/colorProgressbar"
-                android:textSize="22sp"
-                app:layout_constraintBottom_toBottomOf="@+id/progrssbar_select"
-                app:layout_constraintEnd_toEndOf="@+id/progrssbar_select"
-                app:layout_constraintStart_toStartOf="@+id/progrssbar_select"
-                app:layout_constraintTop_toTopOf="@+id/progrssbar_select" />
+            <ImageView
+                    android:layout_margin="16dp"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@null"
+                    android:fontFamily="@font/montserrat"
+                    android:background="@drawable/white_radius"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_cancel"
+                    android:textColor="@color/colorProgressbar"
+                    android:textSize="22sp"
+                    />
+
+        </FrameLayout>
+<!--        <ProgressBar-->
+<!--                android:id="@+id/progrssbar_select"-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="108dp"-->
+<!--                android:layout_height="108dp"-->
+<!--                android:indeterminate="false"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/tvRemaningTime"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                android:visibility="gone"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/icEnterance" />-->
+
+<!--        <TextView-->
+<!--                android:id="@+id/otp_progrss"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+
+<!--                android:fontFamily="@font/montserrat"-->
+<!--                android:visibility="gone"-->
+<!--                android:text="15"-->
+<!--                android:textColor="@color/colorProgressbar"-->
+<!--                android:textSize="22sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/progrssbar_select"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/progrssbar_select"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/progrssbar_select"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/progrssbar_select" />-->
         <TextView
                 android:id="@+id/tvRemaningTime"
                 android:layout_width="wrap_content"

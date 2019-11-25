@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -154,6 +155,21 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     }
 
     private fun init() {
+        try {
+            val info = packageManager.getPackageInfo(
+                "com.recep.hunt",
+                PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+
+        } catch (e: NoSuchAlgorithmException) {
+
+        }
+
         recyclerView = find(R.id.social_login_recyclerView)
         messageEditText = find(R.id.type_msg_et)
         setupRecyclerView()
@@ -251,7 +267,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
         LoginManager.getInstance()
-            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos"))
+            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos","user_birthday","user_gender"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
