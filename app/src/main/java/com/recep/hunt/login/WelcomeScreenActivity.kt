@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -45,6 +46,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         const val otpKey = "otpKey"
         const val verificationIdKey = "verificationId"
         const val countryCodeKey = "countryCodeKey"
+         val observeEditText=MutableLiveData<Boolean>()
     }
     private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var mAuth: FirebaseAuth
@@ -64,6 +66,9 @@ class WelcomeScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome_screen)
         mAuth = FirebaseAuth.getInstance()
+        observeEditText.observe(this,androidx.lifecycle.Observer {
+            user_number_edittext.requestFocus()
+        })
         init()
     }
 
@@ -72,6 +77,8 @@ class WelcomeScreenActivity : AppCompatActivity() {
         countryCodePicker = find(R.id.ccp)
 
         user_number_edittext.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        user_number_edittext.requestFocus()
 
         user_number_edittext.setOnEditorActionListener(object:TextView.OnEditorActionListener{
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -158,6 +165,8 @@ class WelcomeScreenActivity : AppCompatActivity() {
     private fun setupViewPager() {
         val titleArray = arrayListOf(R.string.wanna_go_hunting, R.string.wanna_go_hunting1, R.string.wanna_go_hunting2)
         val subtitleArray = arrayListOf(R.string.be_part_of_hunt, R.string.be_part_of_hunt1, R.string.be_part_of_hunt2)
+        user_number_edittext.requestFocus()
+
         viewPager.adapter = WelcomePagerAdapter(this,subtitleArray)
         indicators.setupWithViewPager(viewPager)
 
@@ -207,6 +216,7 @@ class WelcomePagerAdapter(private val context: Context,private val subtitle:Arra
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val item = LayoutInflater.from(container.context).inflate(R.layout.on_board_adapter, container, false)
         item.on_board_adapter_subtitle_view.text = context.getString(subtitle[position])
+        WelcomeScreenActivity.observeEditText.value=true
         container.addView(item)
         return item
     }
