@@ -68,6 +68,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         observeEditText.observe(this,androidx.lifecycle.Observer {
             user_number_edittext.requestFocus()
+
         })
         init()
     }
