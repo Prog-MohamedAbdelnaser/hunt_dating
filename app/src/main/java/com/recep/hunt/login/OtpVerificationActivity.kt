@@ -349,8 +349,6 @@ class OtpVerificationActivity : AppCompatActivity() {
                 SharedPrefrenceManager.setDeviceToken(this@OtpVerificationActivity, token)
                 fusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
-                        latitude = location?.latitude!!
-                        longitude = location.longitude
 
                         var countryCode =
                             SharedPrefrenceManager.getUserCountryCode(this).replace("+", "")

@@ -66,8 +66,22 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                     call: Call<RandomQuestionResponse>,
                     response: Response<RandomQuestionResponse>
                 ) {
+
+                    response.body()?.let {
+                        tvQuestiom.text=it.data.question
+
+                        btnOption1.text=it.data.answer[0]
+                        btnOption2.text=it.data.answer[1]
+                        btnOption3.text=it.data.answer[2]
+
+
+                    }
+                    ranQuestion.text=response.body()?.data?.question
+
+
                     setpTwo.visibility=View.VISIBLE
                     setpOne.visibility=View.GONE
+
                     setProgressStart()
 
 
@@ -224,8 +238,6 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         var nowTime=currentTime
         nowTime=min*60*1000+currentTime
         setTimer(nowTime)
-
-
     }
 
 

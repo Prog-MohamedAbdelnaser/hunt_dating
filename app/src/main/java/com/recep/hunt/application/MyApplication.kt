@@ -70,6 +70,9 @@ class MyApplication : MultiDexApplication() {
     }
 
 
+
+
+
     override fun onTerminate() {
         super.onTerminate()
         makeUserOfline()
