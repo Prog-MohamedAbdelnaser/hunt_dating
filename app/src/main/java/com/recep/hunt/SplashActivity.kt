@@ -23,8 +23,6 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        //TODO
-        Helpers.setupBasicSharedPrefrences(this)
 
         Glide.with(this).asGif().load(R.drawable.splashanimation)
             .listener(object : RequestListener<GifDrawable> {
