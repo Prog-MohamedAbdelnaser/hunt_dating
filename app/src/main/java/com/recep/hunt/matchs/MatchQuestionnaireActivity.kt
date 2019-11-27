@@ -12,6 +12,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.MakeUserOnline
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
@@ -124,6 +126,34 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
 
     }
+
+
+    override fun onPause() {
+        super.onPause()
+        makeUserOfline()
+    }
+    fun makeUserOfline()
+    {
+        val makeUserOnline= MakeUserOnline(false)
+
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline, SharedPrefrenceManager.getUserToken(this))
+
+        call.enqueue(object : Callback<MakeUserOnlineResponse> {
+            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<MakeUserOnlineResponse>,
+                response: Response<MakeUserOnlineResponse>
+            ) {
+
+            }
+
+        })
+
+    }
+
 
 
     fun goTonext(view: View) {

@@ -1,5 +1,6 @@
 package com.recep.hunt.setupProfile
 
+import android.Manifest
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -17,6 +18,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -45,6 +48,7 @@ import java.io.FileOutputStream
 class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
     private lateinit var dialog: KProgressHUD
+    private val REQUEST_CODE_ASK_PERMISSIONS=101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +56,39 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         AndroidNetworking.initialize(applicationContext)
         dialog = Helpers.showDialog(this, this, "Processing")
 
-        init()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED )
+        {
+            ActivityCompat
+                .requestPermissions(this,  arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_ASK_PERMISSIONS);
+        }
+        else{
+            init()
+
+        }
+
     }
 
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+
+        when(requestCode){
+            REQUEST_CODE_ASK_PERMISSIONS->{
+                if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                {
+                    init()
+                }
+                else{
+                    Helpers.showErrorSnackBar(this, "Please allow location access!", "Please allow for location")
+
+                }
+            }
+        }
+
+    }
     private fun init() {
 
         tvSkip.setOnClickListener {

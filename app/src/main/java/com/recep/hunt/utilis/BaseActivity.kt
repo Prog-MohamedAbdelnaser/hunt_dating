@@ -6,7 +6,13 @@ import android.os.Bundle
 import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.recep.hunt.R
+import com.recep.hunt.api.ApiClient
+import com.recep.hunt.model.MakeUserOnline
+import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import org.jetbrains.anko.find
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -65,5 +71,32 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        makeUserOfline()
+
+    }
+    fun makeUserOfline()
+    {
+        val makeUserOnline= MakeUserOnline(false)
+
+        val call = ApiClient.getClient.makeUserOnline(makeUserOnline, SharedPrefrenceManager.getUserToken(this))
+
+        call.enqueue(object : Callback<MakeUserOnlineResponse> {
+            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<MakeUserOnlineResponse>,
+                response: Response<MakeUserOnlineResponse>
+            ) {
+
+            }
+
+        })
+
     }
 }

@@ -44,6 +44,9 @@ class MyApplication : MultiDexApplication() {
 //        ACRA.init(this);
     }
 
+
+
+
     private val requestQueue: RequestQueue? = null
         get() {
             if (field == null) {
@@ -75,31 +78,9 @@ class MyApplication : MultiDexApplication() {
 
     override fun onTerminate() {
         super.onTerminate()
-        makeUserOfline()
 
     }
 
-    fun makeUserOfline()
-    {
-        val makeUserOnline= MakeUserOnline(false)
-
-        val call = ApiClient.getClient.makeUserOnline(makeUserOnline, SharedPrefrenceManager.getUserToken(this))
-
-        call.enqueue(object : Callback<MakeUserOnlineResponse> {
-            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
-
-            }
-
-            override fun onResponse(
-                call: Call<MakeUserOnlineResponse>,
-                response: Response<MakeUserOnlineResponse>
-            ) {
-
-            }
-
-        })
-
-    }
 
 
 }

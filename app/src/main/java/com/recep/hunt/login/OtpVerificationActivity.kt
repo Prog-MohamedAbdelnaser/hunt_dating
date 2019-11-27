@@ -452,4 +452,12 @@ class OtpVerificationActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        verifyingDialog.dismiss()
+
+
+
+    }
+
 }

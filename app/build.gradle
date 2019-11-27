@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+
 androidExtensions {
     experimental = true
 }
@@ -155,9 +157,9 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
 
-
-
     implementation 'com.github.squti:Android-Wave-Recorder:1.2.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+
 
 
 
