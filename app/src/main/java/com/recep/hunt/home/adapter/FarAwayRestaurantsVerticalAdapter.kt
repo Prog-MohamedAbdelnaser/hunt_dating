@@ -9,6 +9,7 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import java.lang.Exception
 
 
@@ -18,7 +19,11 @@ import java.lang.Exception
  * Email : rishabh1450@gmail.com
  */
 
-class FarAwayRestaurantsVerticalAdapter(val context: Context, val item:ArrayList<NearByRestaurantsModelResults>?): Item<ViewHolder>() {
+class FarAwayRestaurantsVerticalAdapter(val context: Context,
+                                        val item:ArrayList<NearByRestaurantsModelResults>?,
+                                        val farAwayRestaurantsVerticalAdapterListener: FarAwayRestaurantsVerticalAdapterListener
+                                        ): Item<ViewHolder>() {
+
     override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -32,6 +37,10 @@ class FarAwayRestaurantsVerticalAdapter(val context: Context, val item:ArrayList
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.vicinity
 
+                viewHolder.itemView.onClick {
+                    farAwayRestaurantsVerticalAdapterListener.onFarAwayRestaurantClick(position)
+                }
+
             }catch (e:Exception){
                 Log.e("Execpetion","$e")
             }
@@ -39,7 +48,10 @@ class FarAwayRestaurantsVerticalAdapter(val context: Context, val item:ArrayList
 
 
         }
+    }
 
+    interface FarAwayRestaurantsVerticalAdapterListener{
+        fun onFarAwayRestaurantClick( position : Int)
 
     }
 }

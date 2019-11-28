@@ -28,6 +28,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.home.adapter.NearByRestaurantsAdapter
@@ -42,6 +43,7 @@ import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
+import com.recep.hunt.swipe.SwipeActivity
 import com.recep.hunt.utilis.*
 import com.recep.hunt.volleyHelper.APIController
 import com.recep.hunt.volleyHelper.APIState
@@ -61,7 +63,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetDialog.FilterBottomSheetListener {
+class HomeActivity : AppCompatActivity(),
+    OnMapReadyCallback,
+    FilterBottomSheetDialog.FilterBottomSheetListener,
+    NearByRestaurantsAdapter.NearByRestaurantsAdapterListener,
+    FarAwayRestaurantsVerticalAdapter.FarAwayRestaurantsVerticalAdapterListener
+{
 
 
     override fun onOptionClick(text: String) {
@@ -182,8 +189,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
 
+    override fun onNearByRestaurantsClicked(position: Int) {
+        Logger.d("nearby restaurant $position")
+        launchActivity<SwipeActivity> {  }
+    }
+
     private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
-        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this, items)
+        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapter(this,
+            items,
+            this)
+
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(ScaleTransformer.Builder()
                 .build())
@@ -328,15 +343,15 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
         adapter.setOnItemClickListener { item, view ->
-            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-            val dialog = Dialog(this)
-            dialog.setContentView(ll)
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-            gotItBtn.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.show()
+//            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+//            val dialog = Dialog(this)
+//            dialog.setContentView(ll)
+//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
+//            gotItBtn.setOnClickListener {
+//                dialog.dismiss()
+//            }
+//            dialog.show()
         }
 
         adapter.clear()
@@ -356,7 +371,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             adapter.add(
                 FarAwayRestaurantsVerticalAdapter(
                     this@HomeActivity,
-                    items
+                    items,
+                    this
                 )
             )
         }
@@ -369,6 +385,26 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 //            )
 //        }
 
+    }
+
+    override fun onFarAwayRestaurantClick(position: Int) {
+        farLocationErrorPrompt()
+    }
+
+    //todo create seperate class for this or convert to lazy load
+    private fun farLocationErrorPrompt(){
+            val locationFarErrorDialog = Dialog(this)
+
+            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+            locationFarErrorDialog.setContentView(ll)
+            locationFarErrorDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val gotItBtn: Button = locationFarErrorDialog.find(R.id.far_away_ok_btn)
+            gotItBtn.setOnClickListener {
+                locationFarErrorDialog.dismiss()
+            }
+
+            locationFarErrorDialog.show()
     }
 
     private fun buildLocationRequest() {

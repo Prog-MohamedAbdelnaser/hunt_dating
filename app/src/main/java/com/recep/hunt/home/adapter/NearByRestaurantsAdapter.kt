@@ -16,6 +16,7 @@ import org.jetbrains.anko.find
 import android.view.animation.AnimationUtils.loadAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 
 /**
@@ -24,7 +25,10 @@ import android.view.animation.AnimationUtils
  * Email : rishabh1450@gmail.com
  */
 
-class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRestaurantsModelResults>?):RecyclerView.Adapter<NearByRestaurantsAdapter.NearByRestViewHolder>() {
+class NearByRestaurantsAdapter(val context: Context,
+                               val item:ArrayList<NearByRestaurantsModelResults>?,
+                               val nearByRestaurantsAdapterListener : NearByRestaurantsAdapterListener)
+    :RecyclerView.Adapter<NearByRestaurantsAdapter.NearByRestViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NearByRestViewHolder {
         return NearByRestViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.near_by_rest_card,parent,false))
@@ -44,6 +48,11 @@ class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRes
         var restaurantName : TextView =  view.find(R.id.restaurant_name)
         var restaurantDetail : TextView = view.find(R.id.restaurant_detail)
 
+        init {
+            view.onClick {
+                nearByRestaurantsAdapterListener.onNearByRestaurantsClicked(adapterPosition)
+            }
+        }
 
         fun setupViews(model:NearByRestaurantsModelResults?){
 
@@ -64,4 +73,10 @@ class NearByRestaurantsAdapter(val context: Context,val item:ArrayList<NearByRes
 
         }
     }
+
+    interface NearByRestaurantsAdapterListener{
+        fun onNearByRestaurantsClicked(position: Int)
+    }
+
+
 }
