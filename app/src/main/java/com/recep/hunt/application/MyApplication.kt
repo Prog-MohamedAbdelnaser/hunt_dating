@@ -8,10 +8,13 @@ import androidx.multidex.MultiDexApplication
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
+import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import org.acra.ACRA
 import org.acra.ReportingInteractionMode
@@ -41,6 +44,12 @@ class MyApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        /** logger initialization **/
+        Logger.addLogAdapter(AndroidLogAdapter())
+
+        /** setup basic shared pref **/
+        Helpers.setupBasicSharedPrefrences(this)
 //        ACRA.init(this);
     }
 

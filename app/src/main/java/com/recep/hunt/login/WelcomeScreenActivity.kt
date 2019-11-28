@@ -140,8 +140,6 @@ class WelcomeScreenActivity : AppCompatActivity() {
         videoView.setVideoURI(uri)
         videoView.start()
         videoView.setOnCompletionListener { videoView.start() }
-        //TODO
-        Helpers.setupBasicSharedPrefrences(this)
 
         login_nxt_btn.setOnClickListener {
             //            launchActivity<SocialLoginActivity>()
