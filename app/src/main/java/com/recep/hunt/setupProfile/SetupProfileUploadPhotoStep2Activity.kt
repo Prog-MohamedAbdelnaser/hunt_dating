@@ -168,6 +168,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             if (imgFlag == null) {
                 if (images != null) {
                     val imageString = images.toString()
+                    //todo convert saving of image to path
                     SharedPrefrenceManager.setProfileImg(this, BitMapToString(imagesBtm))
                     launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
                 }

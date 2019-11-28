@@ -43,6 +43,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "UserProfileActivity"
+
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -68,7 +70,7 @@ class UserProfileActivity : AppCompatActivity() {
         progressDialog.show()
         call.enqueue(object : Callback<UserProfileResponse> {
             override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
-                Log.e("TAG", "onFailure")
+                Log.e(TAG, "onFailure")
                 setupRecyclerView()
                 progressDialog.dismiss()
             }
@@ -79,12 +81,17 @@ class UserProfileActivity : AppCompatActivity() {
             ) {
                 if(response.isSuccessful) {
                     response.body()?.let {
+                        Log.d(TAG, "response body = $it")
                         userInfo = it.data
                     }
                     setPrefData()
-                    setupRecyclerView()
-                    progressDialog.dismiss()
                 }
+                else {
+                    Log.e(TAG, "else ${response.errorBody().toString()}")
+                }
+
+                setupRecyclerView()
+                progressDialog.dismiss()
             }
 
         })
@@ -105,6 +112,7 @@ class UserProfileActivity : AppCompatActivity() {
                 SharedPrefrenceManager.setUserEmail(this, userInfo.email)
                 SharedPrefrenceManager.setUserLatitude(this, userInfo.lat)
                 SharedPrefrenceManager.setProfileImg(this, userInfo.profile_pic)
+
                 for ((index, it1) in userInfo.user_profile_image.withIndex()) {
                     when (index) {
                         0 -> {
