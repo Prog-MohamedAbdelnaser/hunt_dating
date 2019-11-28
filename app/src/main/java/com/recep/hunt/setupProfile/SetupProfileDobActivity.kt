@@ -87,18 +87,31 @@ class SetupProfileDobActivity : BaseActivity() {
                 //dd/M/yyyy parsed date format
 
                 val parsedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
-                val formatedDate = getFormattedDate(parsedDate)
-                apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
+
                 val age = getAge(parsedDate)
-                dobTextView.text = formatedDate
-                dobTextView.textColor = resources.getColor(R.color.app_text_black)
-                years_old_textView.text = resources.getString(R.string.years_old, age.toString())
-                SharedPrefrenceManager.setUserage(this@SetupProfileDobActivity,age.toString())
-                dob = formatedDate
-                dob_layout.clearFocus()
-                it.dismiss()
-                it.cancel()
-                hideKeyboard()
+
+                if(age<18)
+                {
+                    Helpers.showErrorSnackBar(
+                        this@SetupProfileDobActivity,
+                        resources.getString(R.string.complete_form),
+                         "Age must be grater than 18"
+                    )
+                }
+                else{
+                    val formatedDate = getFormattedDate(parsedDate)
+                    apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
+                    dobTextView.text = formatedDate
+                    dobTextView.textColor = resources.getColor(R.color.app_text_black)
+                    years_old_textView.text = resources.getString(R.string.years_old, age.toString())
+                    SharedPrefrenceManager.setUserage(this@SetupProfileDobActivity,age.toString())
+                    dob = formatedDate
+                    dob_layout.clearFocus()
+                    it.dismiss()
+                    it.cancel()
+                    hideKeyboard()
+                }
+
             }
 
             noButton { }
@@ -185,6 +198,14 @@ class SetupProfileDobActivity : BaseActivity() {
         dob = formatedDate
         apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
         val age = getAge(parsedDate)
+        if(age<18)
+        {
+            Helpers.showErrorSnackBar(
+                this@SetupProfileDobActivity,
+                resources.getString(R.string.complete_form),
+                "Age must be grater than 18"
+            )
+        }
         dobTextView.text = formatedDate
         dobTextView.textColor = resources.getColor(R.color.app_text_black)
         years_old_textView.text = resources.getString(R.string.years_old, age.toString())

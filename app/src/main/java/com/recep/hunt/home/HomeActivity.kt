@@ -1,5 +1,6 @@
 package com.recep.hunt.home
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -89,11 +90,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private var adapter = GroupAdapter<ViewHolder>()
     private var callAPIOnlyOnceStatus = 1
     private lateinit var locationButton: ImageView
+    private val REQUEST_CODE_ASK_PERMISSIONS=101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        init()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )
+        {
+            ActivityCompat
+                .requestPermissions(this,  arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_ASK_PERMISSIONS);
+        }
+        else{
+            init()
+
+        }
     }
 
 
@@ -434,6 +444,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
         }
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        makeUserOfline()
+    }
+
+
     override fun onMapReady(p0: GoogleMap?) {
         if (p0 != null) {
 
@@ -499,6 +516,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
                     Helpers.showErrorSnackBar(this, "Turn on Location!", "Please allow for location")
                 }
             }
+            REQUEST_CODE_ASK_PERMISSIONS->{
+                if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                {
+                    init()
+                }
+                else{
+                    Helpers.showErrorSnackBar(this, "Please allow location access!", "Please allow for location")
+
+                }
+
+            }
+
+
         }
     }
 

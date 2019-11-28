@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SimpleDividerItemDecoration
@@ -69,7 +70,7 @@ class NotificationsAdapterItem(private val context:Context,private val model:Not
     override fun getLayout() = R.layout.notifications_adapter_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        Picasso.get().load(model.userImage).into(viewHolder.itemView.notifi_userImage)
+        Glide.with(context).load(model.userImage).into(viewHolder.itemView.notifi_userImage)
         viewHolder.itemView.notifi_userName.text = model.userName
         viewHolder.itemView.notification_time.text = model.notificationTime
         viewHolder.itemView.notifi_userNotification.text = model.notification
