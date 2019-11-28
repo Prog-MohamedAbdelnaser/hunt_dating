@@ -53,9 +53,6 @@ class MyApplication : MultiDexApplication() {
 //        ACRA.init(this);
     }
 
-
-
-
     private val requestQueue: RequestQueue? = null
         get() {
             if (field == null) {

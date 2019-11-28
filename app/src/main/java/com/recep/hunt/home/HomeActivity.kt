@@ -118,7 +118,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
         showSortedListCardView = find(R.id.sorted_near_by_restaurants_list_card)
         showMyLocationCardView = find(R.id.my_location_crd)
+
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
+
+        sortedListRecyclerView.adapter = adapter
+        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
 
         val makeUserOnline=MakeUserOnline(true)
 
@@ -323,8 +327,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     }
 
     private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
-        sortedListRecyclerView.adapter = adapter
-        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
         adapter.setOnItemClickListener { item, view ->
             val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
             val dialog = Dialog(this)
@@ -336,7 +338,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
             }
             dialog.show()
         }
+
+        adapter.clear()
+
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
+        //todo confirm if there is really a limit
         for (i in 0 until 3) {
             adapter.add(
                 NearByRestaurantsVerticalAdapter(
