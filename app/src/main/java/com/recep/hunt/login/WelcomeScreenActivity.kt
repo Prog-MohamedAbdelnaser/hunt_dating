@@ -159,7 +159,6 @@ class WelcomeScreenActivity : AppCompatActivity() {
                 SharedPrefrenceManager.setUserCountryCode(this@WelcomeScreenActivity, numberCode)
                 SharedPrefrenceManager.setUserCountry(this@WelcomeScreenActivity, selectedCountry)
 
-                dialog.dismiss()
 //                launchActivity<SocialLoginActivity> ()
                 launchActivity<OtpVerificationActivity> {
                     putExtra(WelcomeScreenActivity.verificationIdKey, verificationId)
@@ -181,6 +180,13 @@ class WelcomeScreenActivity : AppCompatActivity() {
         user_number_edittext.requestFocus()
 
         videoView.start()
+    }
+
+    override fun finish() {
+        if (dialog.isShowing){
+            dialog.dismiss()
+        }
+        super.finish()
     }
 
     private fun setupViewPager() {
