@@ -1,5 +1,6 @@
 package com.recep.hunt.login
 
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -427,18 +428,24 @@ class OtpVerificationActivity : AppCompatActivity() {
                                         it1
                                     )
                                 }
-                                if (response.body()?.status == 1) {
-                                    launchActivity<HomeActivity>()
-                                    SharedPrefrenceManager.setIsLoggedIn(this@OtpVerificationActivity, true)
-                                    Log.d("by","by")
 
-                                    SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, true)
-                                } else {
-                                    launchActivity<SocialLoginActivity>()
-                                }
                                 dialog.run { dismiss() }
-                                finish()
 
+                                var intent : Intent =
+                                if (response.body()?.status == 1) {
+                                    SharedPrefrenceManager.setIsLoggedIn(this@OtpVerificationActivity, true)
+                                    SharedPrefrenceManager.setIsOtpVerified(this@OtpVerificationActivity, true)
+
+                                    Intent(this@OtpVerificationActivity, HomeActivity::class.java)
+
+                                } else {
+                                    Intent(this@OtpVerificationActivity, SocialLoginActivity::class.java)
+                                }
+
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                                startActivity(intent)
 
                             }
 
