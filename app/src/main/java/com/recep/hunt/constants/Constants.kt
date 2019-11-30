@@ -73,6 +73,9 @@ class Constants {
         const val ZODIAC = 9
         const val RELIGION = 10
 
+        //Mouse click duration
+        const val CLICK_ACTION_THRESHOLD = 200
+
 
 //        val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
 

@@ -5,7 +5,7 @@
         android:id="@+id/near_by_cards"
         android:layout_width="143dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="18dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
@@ -38,7 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:fontFamily="@font/montserrat"
+                android:fontFamily="@font/montserrat_regular"
                 android:maxLines="1"
                 android:lines="1"
                 android:text="TextView"
@@ -59,8 +59,8 @@
 
                 <ImageView
                         android:id="@+id/snear_rest_user_image"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentBottom="true"
@@ -71,8 +71,8 @@
 
                 <ImageView
                         android:id="@+id/imageView9"
-                        android:layout_width="45dp"
-                        android:layout_height="35dp"
+                        android:layout_width="36dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentBottom="true"
@@ -86,7 +86,7 @@
                         android:src="@drawable/ic_arrow_back_white" />
 
                 <TextView
-                        android:id="@+id/textView13"
+                        android:id="@+id/textView_user_numbers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/snear_rest_user_image"
@@ -94,7 +94,7 @@
                         android:layout_marginLeft="4dp"
                         android:textColor="#F64C1F"
                         android:fontFamily="@font/montserrat"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:layout_toEndOf="@+id/snear_rest_user_image"
                         android:layout_toRightOf="@+id/snear_rest_user_image"
                         android:text="20" />
@@ -110,6 +110,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:scaleType="fitXY"
+                android:src="@drawable/demo_restaurant_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

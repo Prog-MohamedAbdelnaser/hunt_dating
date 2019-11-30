@@ -57,7 +57,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".swipe.SwipeActivity" />
+        <activity android:name=".swipe.SwipeMainActivity" />
         <activity android:name=".payment.PaymentFaqActivity" />
         <activity android:name=".inviteFriend.InviteFriendContactActivity" />
         <activity android:name=".inviteFriend.MyInviteCreditActivity" />

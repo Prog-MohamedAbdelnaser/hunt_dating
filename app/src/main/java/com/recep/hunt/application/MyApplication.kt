@@ -22,6 +22,14 @@ import org.acra.annotation.ReportsCrashes
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger.addLogAdapter
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+import com.orhanobut.logger.Logger
+import com.recep.hunt.utilis.Helpers
+
 
 /**
  * Created by RishabhShukla on 11/02/19.
@@ -31,7 +39,7 @@ import retrofit2.Response
 @ReportsCrashes(
     mailTo = "rudraksh.shukla98@gmail.com",
     mode = ReportingInteractionMode.TOAST,
-    resToastText =R.string.add_job_title)
+    resToastText = R.string.add_job_title)
 class MyApplication : MultiDexApplication() {
 
     companion object {
@@ -66,27 +74,16 @@ class MyApplication : MultiDexApplication() {
         requestQueue?.add(request)
     }
 
-    fun <T> addToRequestQueue(request: Request<T>) {
-        request.tag = TAG
-        requestQueue?.add(request)
-    }
-
-
-    fun cancelPendingRequests(tag: Any) {
-        if (requestQueue != null) {
-            requestQueue!!.cancelAll(tag)
-        }
-    }
-
-
-
-
-
-    override fun onTerminate() {
-        super.onTerminate()
-
-    }
-
-
+//    fun <T> addToRequestQueue(request: Request<T>) {
+//        request.tag = TAG
+//        requestQueue?.add(request)
+//    }
+//
+//
+//    fun cancelPendingRequests(tag: Any) {
+//        if (requestQueue != null) {
+//            requestQueue!!.cancelAll(tag)
+//        }
+//    }
 
 }

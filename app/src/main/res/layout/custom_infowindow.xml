@@ -12,14 +12,15 @@
             android:layout_height="wrap_content"
             android:background="@drawable/info_window_box"
             android:paddingLeft="2sp"
+            android:layout_marginLeft="152sp"
             android:paddingTop="5sp"
             android:paddingRight="2sp"
-            android:paddingBottom="5sp">
+            android:paddingBottom="10sp">
 
         <ImageView
                 android:id="@+id/info_window_rest_image"
-                android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_marginLeft="3sp"
                 android:scaleType="fitXY"
                 android:src="@drawable/demo_restaurant_1"
@@ -27,7 +28,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
 
         <TextView
                 android:id="@+id/info_window_rest_name"
@@ -38,7 +39,7 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:text="TextView"
                 android:textColor="@color/app_text_black"
-                android:textSize="13sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/info_window_rest_image"
                 app:layout_constraintTop_toTopOf="@+id/info_window_rest_image"/>
@@ -47,7 +48,7 @@
                 android:id="@+id/imageView19"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_info_window_user"
                 app:layout_constraintStart_toStartOf="@+id/info_window_rest_name"
                 app:layout_constraintTop_toBottomOf="@+id/info_window_rest_name"/>
@@ -70,9 +71,9 @@
                 android:id="@+id/imageView20"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_info_window_loccation"
                 app:layout_constraintStart_toEndOf="@+id/textView30"
                 app:layout_constraintTop_toBottomOf="@+id/info_window_rest_name" />
@@ -102,8 +103,8 @@
             android:layout_below="@+id/clInfoId"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginStart="1dp"
-            android:layout_marginLeft="1dp"
+            android:layout_marginStart="159dp"
+            android:layout_marginLeft="159dp"
             android:layout_marginTop="0dp"
             android:scaleType="fitXY"
             android:src="@drawable/tooltip" />

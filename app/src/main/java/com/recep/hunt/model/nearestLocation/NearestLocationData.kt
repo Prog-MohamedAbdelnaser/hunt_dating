@@ -1,8 +1,8 @@
 package com.recep.hunt.model.nearestLocation
 
-data class Data(
-    val address: String,
+data class NearestLocationData(
     val name: String,
+    val address: String,
     val place_id:String ,
     val lat : Double ,
     val lang : Double,

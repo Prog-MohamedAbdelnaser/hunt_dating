@@ -1,0 +1,42 @@
+package com.recep.hunt.model.usersList
+
+import java.sql.Timestamp
+
+data class Data(
+    val id : Int,
+    val first_name: String,
+    val last_name: String,
+    val email : String,
+    val email_verified_at : String,
+    val mobile_no : String,
+    val country_code : String,
+    val gender : String,
+    val dob : String,
+    val profile_pic : String,
+    val referal_code : String,
+    val reference_code : String,
+    val country : String,
+    val device_type : String,
+    val device_id : String,
+    val device_token : String,
+    val start_date : String,
+    val is_online : String,
+    val status : String,
+    val lat : String,
+    val lang : String,
+    val for_date : String,
+    val for_business : String,
+    val for_friendship : String,
+    val created_at : String,
+    val updated_at :String,
+    val is_notification_email : String,
+    val is_notification_push : String,
+    val location_id : String,
+    val location_name : String,
+    val age : Int,
+    val basicInfo : BasicInfo,
+    val socialInfo : SocialInfo,
+    val user_profile_image : ArrayList<ProfileImage>,
+    val totalMatching : Int,
+    val totalMeeting : Int
+)

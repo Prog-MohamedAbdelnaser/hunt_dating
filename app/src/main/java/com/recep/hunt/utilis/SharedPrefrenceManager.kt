@@ -57,7 +57,10 @@ enum class PersistenceKeys {
     UserAge,
     socialType,
     refernceCode,
-    apiToken
+    apiToken,
+    UserInterestedAgeFrom,
+    UserInterestedAgeTo,
+    SwipeCount
 }
 
 class SharedPrefrenceManager {
@@ -511,5 +514,45 @@ class SharedPrefrenceManager {
         fun clearAllSharePreference(context: Context) {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0).edit().clear().commit()
         }
+
+        fun setUserInterestedAge(context: Context, from : String, to : String) {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val editor = sharedPreferences.edit()
+            editor.putString(PersistenceKeys.UserInterestedAgeFrom.toString(), from)
+            editor.putString(PersistenceKeys.UserInterestedAgeTo.toString(), to)
+            editor.apply()
+        }
+
+        fun getUserInterestedAgeFrom(context: Context):String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            sharedPreferences.getString(PersistenceKeys.UserInterestedAgeFrom.toString(), "")?.let {
+                return it
+            }
+            return ""
+        }
+
+        fun getUserInterestedAgeTo(context: Context):String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            sharedPreferences.getString(PersistenceKeys.UserInterestedAgeTo.toString(), "")?.let {
+                return it
+            }
+            return ""
+        }
+
+        fun setSwipeCount(context: Context, value : String) {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val editor = sharedPreferences.edit()
+            editor.putString(PersistenceKeys.SwipeCount.toString(), value)
+            editor.apply()
+        }
+
+        fun getSwipeCount(context: Context) : String {
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            sharedPreferences.getString(PersistenceKeys.SwipeCount.toString(), "")?.let {
+                return it
+            }
+            return ""
+        }
+
     }
 }

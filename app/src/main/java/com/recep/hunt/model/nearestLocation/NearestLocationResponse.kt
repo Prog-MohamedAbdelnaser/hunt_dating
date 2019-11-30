@@ -1,8 +1,7 @@
 package com.recep.hunt.model.nearestLocation
 
-
 data class NearestLocationResponse(
-    val data: Data,
+    val status: Int,
     val message: String,
-    val status: Int
+    val data: ArrayList<NearestLocationData>
 )

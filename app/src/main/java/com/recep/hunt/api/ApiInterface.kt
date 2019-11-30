@@ -17,6 +17,9 @@ import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.model.reportUser.ReportUserResponse
+import com.recep.hunt.model.selectLocation.SelectLocationResponse
+import com.recep.hunt.model.swipeUser.SwipeUserResponse
+import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -63,12 +66,8 @@ interface ApiInterface {
     @GET("/api/user-profile")
     fun getUserProfile(@Header("Authorization")  authorization:String) : Call<UserProfileResponse>
 
-
-
     @POST("/api/user-swipe-data")
     fun userSwipes(@Body userSwipe: UserSwipe,@Header("Authorization")  authorization:String):Call<User>
-
-
 
     @POST("/api/create-ticket")
     fun createTicket(@Body file : RequestBody,@Header("Authorization")  authorization:String):Call<CreateTicketResponse>
@@ -106,12 +105,18 @@ interface ApiInterface {
 
 
     @POST("/api/nearest-place")
-    fun getNearestPlace(@Body nearestLocation: NearestLocation):Call<NearestLocationResponse>
+    fun getNearestPlace(@Body nearestLocation: NearestLocation,@Header("Authorization")  authorization:String):Call<NearestLocationResponse>
 
 
 
     @POST("/api/select-loation")
-    fun selectLocation(@Body nearestLocation: NearestLocation):Call<SelectLocation>
+    fun selectLocation(@Body selectLocation: SelectLocation,@Header("Authorization")  authorization:String):Call<SelectLocationResponse>
+
+    @POST("/api/users-list")
+    fun usersList(@Body usersListFilter: UsersListFilter,@Header("Authorization")  authorization:String):Call<UsersListResponse>
+
+    @POST("/api/user-swipe-data")
+    fun swipeUser(@Body userSwipe: UserSwipe,@Header("Authorization")  authorization:String):Call<SwipeUserResponse>
 
 
 

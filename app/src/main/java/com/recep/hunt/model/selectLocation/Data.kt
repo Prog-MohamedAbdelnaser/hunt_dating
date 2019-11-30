@@ -7,7 +7,7 @@ data class Data (
     val location_name: String,
     val user_id : Int,
     val status :String,
-    val created_at : Timestamp,
-    val updated_at :Timestamp ,
+    val created_at : String,
+    val updated_at :String ,
     val id : Int
 )

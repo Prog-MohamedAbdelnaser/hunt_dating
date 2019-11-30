@@ -482,6 +482,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                                 this@SetupProfileReferralCodeActivity,
                                 edtReferelCode.text.toString()
                             )
+                            SharedPrefrenceManager.setSwipeCount(this@SetupProfileReferralCodeActivity, 0.toString())
                             launchActivity<SetupProfileCompletedActivity> { }
                         }                            //do token related code and also store user json
 
