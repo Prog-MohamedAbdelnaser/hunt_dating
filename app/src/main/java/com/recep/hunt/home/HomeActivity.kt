@@ -65,21 +65,14 @@ import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.SwipeActivity
 import com.recep.hunt.utilis.*
-import com.recep.hunt.volleyHelper.APIController
-import com.recep.hunt.volleyHelper.APIState
-import com.recep.hunt.volleyHelper.ServiceVolley
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_turn_on_gps.*
 import kotlinx.android.synthetic.main.custom_infowindow.view.*
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
 import org.jetbrains.anko.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -148,7 +141,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
     private var adapter = GroupAdapter<ViewHolder>()
     private lateinit var autoCompleteAdapter : PlacesAutoCompleteAdapter
     private var callAPIOnlyOnceStatus = 1
-    private lateinit var locationButton: ImageView
+
     private val REQUEST_CODE_ASK_PERMISSIONS=101
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -707,7 +700,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     override fun onPause() {
         super.onPause()
-        makeUserOfline()
+        makeUserOnOffline(false)
     }
 
 

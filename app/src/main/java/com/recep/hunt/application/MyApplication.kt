@@ -11,24 +11,9 @@ import com.android.volley.toolbox.Volley
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
-import com.recep.hunt.api.ApiClient
-import com.recep.hunt.model.MakeUserOnline
-import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import org.acra.ACRA
 import org.acra.ReportingInteractionMode
 import org.acra.annotation.ReportsCrashes
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger.addLogAdapter
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-import com.orhanobut.logger.Logger
-import com.recep.hunt.utilis.Helpers
 
 
 /**
