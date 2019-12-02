@@ -63,7 +63,8 @@ import com.recep.hunt.model.nearestLocation.NearestLocationData
 import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
-import com.recep.hunt.swipe.SwipeActivity
+import com.recep.hunt.swipe.SwipeMainActivity
+
 import com.recep.hunt.utilis.*
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
@@ -273,7 +274,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback, FilterBottomSheetD
 
     override fun onNearByRestaurantsClicked(position: Int) {
         Logger.d("nearby restaurant $position")
-        launchActivity<SwipeActivity> {  }
+        launchActivity<SwipeMainActivity> {  }
     }
 
 //    private fun setupNearByRestaurantsRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
