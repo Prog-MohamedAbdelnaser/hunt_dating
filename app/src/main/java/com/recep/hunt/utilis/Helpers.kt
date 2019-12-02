@@ -31,7 +31,6 @@ import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
-import com.squareup.picasso.Transformation
 import kotlinx.android.synthetic.main.activity_home.*
 import org.aviran.cookiebar2.CookieBar
 import org.jetbrains.anko.doAsync
@@ -140,32 +139,33 @@ class Helpers {
             recyclerView.scheduleLayoutAnimation()
         }
 
-        fun getPicassoTransformation(imageView: View): Transformation {
-            val transformation = object : com.squareup.picasso.Transformation {
-                override fun transform(source: Bitmap): Bitmap {
-                    var targetWidth =imageView.getWidth()
-
-                    if (targetWidth <= 0) {
-                        targetWidth = Constants.defaultWidth
-                    } else {
-                        Constants.defaultWidth = targetWidth
-                    }
-
-                    val aspectRatio = source.height.toDouble() / source.width.toDouble()
-                    val targetHeight = (targetWidth * aspectRatio).toInt()
-                    val result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false)
-                    if (result != source) {
-                        source.recycle()
-                    }
-                    return result
-                }
-
-                override fun key(): String {
-                    return "transformation" + " desiredWidth"
-                }
-            }
-            return transformation
-        }
+        //todo convert to glide
+//        fun getPicassoTransformation(imageView: View): Transformation {
+//            val transformation = object : com.squareup.picasso.Transformation {
+//                override fun transform(source: Bitmap): Bitmap {
+//                    var targetWidth =imageView.getWidth()
+//
+//                    if (targetWidth <= 0) {
+//                        targetWidth = Constants.defaultWidth
+//                    } else {
+//                        Constants.defaultWidth = targetWidth
+//                    }
+//
+//                    val aspectRatio = source.height.toDouble() / source.width.toDouble()
+//                    val targetHeight = (targetWidth * aspectRatio).toInt()
+//                    val result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false)
+//                    if (result != source) {
+//                        source.recycle()
+//                    }
+//                    return result
+//                }
+//
+//                override fun key(): String {
+//                    return "transformation" + " desiredWidth"
+//                }
+//            }
+//            return transformation
+//        }
 
 
         fun isGenderChangedAllowed(ctx:Context):Boolean{

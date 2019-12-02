@@ -12,7 +12,6 @@ import com.recep.hunt.home.adapter.NearByRestaurantsAdapter
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.payment.model.FaqPayments
 import com.recep.hunt.utilis.Helpers
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 
 class FaqPaymentAdapter(val context: Context,val item:ArrayList<FaqPayments>?):RecyclerView.Adapter<FaqPaymentAdapter.FaqPaymentViewholder>() {

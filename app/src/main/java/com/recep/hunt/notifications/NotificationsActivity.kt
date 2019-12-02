@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SimpleDividerItemDecoration
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder

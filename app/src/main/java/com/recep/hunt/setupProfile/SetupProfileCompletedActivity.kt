@@ -14,13 +14,13 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.profile.viewmodel.UserViewModel
 import com.recep.hunt.utilis.*
-import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_setup_profile_completed.*
 import org.apache.http.HttpResponse
@@ -83,7 +83,10 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         val userImageString = SharedPrefrenceManager.getProfileImg(this)
         val socialType = SharedPrefrenceManager.getsocialType(this)
         if (socialType.equals("social")) {
-            Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
+            Glide.with(this)
+                .load(Uri.parse(userImageString))
+                .placeholder(R.drawable.account_icon)
+                .into(userImage)
         } else {
             userImage.setImageBitmap(StringToBitmap(userImageString))
         }
