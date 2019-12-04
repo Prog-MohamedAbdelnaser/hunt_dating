@@ -468,7 +468,10 @@ public class InstagramApp {
 
         CheckUserEmail emailModel=new CheckUserEmail(email);
 
-        Call<isEmailRegisterResponse> call = ApiClient.INSTANCE.getGetClient().checkIsEmailRegister(SharedPrefrenceManager.Companion.getUserToken(getApplicationContext()),emailModel);
+        Call<isEmailRegisterResponse> call = ApiClient
+                .INSTANCE
+                .getGetClient()
+                .checkIsEmailRegister(SharedPrefrenceManager.getUserToken(getApplicationContext()), emailModel);
 
 
         call.enqueue(new Callback<isEmailRegisterResponse>(){

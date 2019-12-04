@@ -1,6 +1,7 @@
 package com.recep.hunt.utilis
 
 import android.content.Context
+import com.facebook.FacebookSdk.getApplicationContext
 import com.recep.hunt.constants.Constants
 
 
@@ -63,8 +64,8 @@ enum class PersistenceKeys {
     SwipeCount
 }
 
-class SharedPrefrenceManager {
-    companion object {
+object SharedPrefrenceManager {
+//    companion object {
         //ISOTpVerified
         fun setIsOtpVerified(context: Context, value: Boolean) {
             val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
@@ -151,8 +152,8 @@ class SharedPrefrenceManager {
         {
             setSharedPrefs(context, "currentToken",token)
         }
-
-        fun getUserToken(context: Context)= getSharePrefs(context,"currentToken")
+        @JvmStatic
+        fun getUserToken(context: Context) = getSharePrefs(context,"currentToken")
 
         //IsFromSocial
         fun setIsFromSocial(context: Context, value: Boolean) {
@@ -554,5 +555,5 @@ class SharedPrefrenceManager {
             return ""
         }
 
-    }
+//    }
 }
