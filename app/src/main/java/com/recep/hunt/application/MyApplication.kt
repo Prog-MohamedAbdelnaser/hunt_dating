@@ -12,6 +12,7 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.SharedPrefrenceManager
 import org.acra.ReportingInteractionMode
 import org.acra.annotation.ReportsCrashes
 
@@ -41,6 +42,8 @@ class MyApplication : MultiDexApplication() {
         /** logger initialization **/
         Logger.addLogAdapter(AndroidLogAdapter())
 
+        /** initialize sharedPreferenceManager **/
+        SharedPrefrenceManager.init(this)
         /** setup basic shared pref **/
         Helpers.setupBasicSharedPrefrences(this)
 //        ACRA.init(this);

@@ -1,6 +1,7 @@
 package com.recep.hunt.utilis
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.facebook.FacebookSdk.getApplicationContext
 import com.recep.hunt.constants.Constants
 
@@ -35,6 +36,7 @@ enum class PersistenceKeys {
     CompanyName,
     HomeTown,
     SchoolUniversity,
+    AvatarFilePath,
     ProfileFirstImg,
     ProfileSecImg,
     ProfileThirdImg,
@@ -65,10 +67,16 @@ enum class PersistenceKeys {
 }
 
 object SharedPrefrenceManager {
+        lateinit var sharedPreference : SharedPreferences
+
+        fun init(context : Context){
+            sharedPreference = context.getSharedPreferences(Constants.prefsName, Context.MODE_PRIVATE)
+        }
+
 //    companion object {
         //ISOTpVerified
         fun setIsOtpVerified(context: Context, value: Boolean) {
-            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, 0)
+            val sharedPreferences = context.getSharedPreferences(Constants.prefsName, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putBoolean(PersistenceKeys.IsOtpVerified.toString(), value)
             editor.apply()
@@ -554,6 +562,15 @@ object SharedPrefrenceManager {
             }
             return ""
         }
+
+        var avatarFilePath : String?
+            get() = sharedPreference.getString(PersistenceKeys.AvatarFilePath.toString(),"")
+            set(value) {
+                sharedPreference.edit()
+                    .putString(PersistenceKeys.AvatarFilePath.toString(), value)
+                    .apply()
+
+            }
 
 //    }
 }
