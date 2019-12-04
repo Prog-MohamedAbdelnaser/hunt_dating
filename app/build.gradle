@@ -47,27 +47,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
-
-    //firebase
-    implementation 'com.google.firebase:firebase-auth:19.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.google.android.gms:play-services-plus:17.0.0'
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
-
-    //facebook
-    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
-    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
-    implementation 'ch.acra:acra:4.9.0'
-
-
-    //google-map / location
-    implementation "com.google.android.gms:play-services-location:17.0.0"
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.google.android.libraries.places:places:2.0.0'
-
 //
 //    implementation 'com.google.api-client:google-api-client:1.23.0'
 //     implementation 'com.google.api-client:google-api-client-android:1.23.0'
@@ -94,7 +73,6 @@ dependencies {
     implementation 'com.airbnb.android:lottie:2.8.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.kaopiz:kprogresshud:1.2.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.aviran.cookiebar2:cookiebar2:1.1.0'
     implementation 'com.hbb20:ccp:2.3.1'
     implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
@@ -104,11 +82,9 @@ dependencies {
     implementation 'com.github.shts:StoriesProgressView:3.0.0'
     implementation 'com.brucetoo.pickview:library:1.2.3'
     implementation 'com.github.vipulasri:timelineview:1.1.0'
+    implementation 'com.github.squti:Android-Wave-Recorder:1.2.0'
 
     implementation 'me.relex:circleindicator:2.1.4'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-
 
     // Room components
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
@@ -152,20 +128,37 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
 
     //Okhttp3
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
-    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
-
-    implementation 'com.github.squti:Android-Wave-Recorder:1.2.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
-
     //logger
     implementation 'com.orhanobut:logger:2.2.0'
 
+    //glide image loader
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
+    //firebase
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.android.gms:play-services-plus:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
+    //facebook
+    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+    implementation 'ch.acra:acra:4.9.0'
+
+    //google-map / location
+    implementation "com.google.android.gms:play-services-location:17.0.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.0.0'
 
 }

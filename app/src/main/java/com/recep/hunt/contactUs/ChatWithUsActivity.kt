@@ -7,12 +7,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.contactUs.model.ChatwithusModel
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -55,7 +55,7 @@ class ChatWithUsActivity : BaseActivity(),ChatWithUsListeners {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         for(item in getData()){
-            adapter.add(ChatWithUsAdapterItem(this,item))
+            adapter.add(ChatWithUsAdapterItem(this,this,item))
         }
     }
     private fun getData():ArrayList<ChatwithusModel>{
@@ -69,11 +69,14 @@ class ChatWithUsActivity : BaseActivity(),ChatWithUsListeners {
         return data
     }
 }
-class ChatWithUsAdapterItem(private val listeners:ChatWithUsListeners,private val model:ChatwithusModel):Item<ViewHolder>(){
+class ChatWithUsAdapterItem(val context : Context, private val listeners:ChatWithUsListeners,private val model:ChatwithusModel):Item<ViewHolder>(){
     override fun getLayout() = R.layout.chat_with_us_adapter_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        Glide.with(context)
+            .load(model.userImage)
+            .into(viewHolder.itemView.chat_with_us_item_userImage)
+
         viewHolder.itemView.chat_with_us_item_msg_time.text = "${model.messageTime} ago"
-        Picasso.get().load(model.userImage).into(viewHolder.itemView.chat_with_us_item_userImage)
         viewHolder.itemView.chat_with_us_item_userName.text = model.userName
         viewHolder.itemView.chat_with_us_item_userMessage.text = model.userMessage
         viewHolder.itemView.setOnClickListener {

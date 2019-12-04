@@ -33,6 +33,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arsy.maps_library.MapRipple
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
@@ -66,7 +68,6 @@ import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.SwipeMainActivity
 
 import com.recep.hunt.utilis.*
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
@@ -830,9 +831,14 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 if (!locationInfo.image.isEmpty()) {
                     val url =
                         "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
-                    Picasso.get().load(url).error(R.drawable.demo_restaurant_1)
-                        .transform(RoundedTransformation(20, 0))
-                        .placeholder(R.drawable.demo_restaurant_1).into(view.info_window_rest_image)
+
+                    //todo test converted to glide
+                    Glide.with(context)
+                        .load(url)
+                        .error(R.drawable.demo_restaurant_1)
+                        .placeholder(R.drawable.demo_restaurant_1)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(view.info_window_rest_image)
                 }
             }
             else {

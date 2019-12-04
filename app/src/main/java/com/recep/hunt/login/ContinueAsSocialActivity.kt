@@ -8,6 +8,7 @@ import android.util.Base64
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.recep.hunt.R
@@ -16,7 +17,6 @@ import com.recep.hunt.login.model.UserSocialModel
 import com.recep.hunt.setupProfile.SetupProfileGenderActivity
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_continue_as_social.*
 import org.jetbrains.anko.find
@@ -58,7 +58,9 @@ class ContinueAsSocialActivity : AppCompatActivity() {
 
             var img: String = userDetailModel.userImage
             // Picasso.get().load(userDetailModel.userImage.replace("s96-c", "s384-c", true)).into(userImageView)
-            Picasso.get().load(userDetailModel.userImage).into(userImageView)
+            Glide.with(this)
+                .load(userDetailModel.userImage)
+                .into(userImageView)
             backButton.setOnClickListener {
                 finish(
                 )

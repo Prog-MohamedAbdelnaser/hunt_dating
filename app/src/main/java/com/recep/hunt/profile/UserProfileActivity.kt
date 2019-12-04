@@ -14,6 +14,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
@@ -26,7 +27,6 @@ import com.recep.hunt.userDetail.UserDetailActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -265,10 +265,14 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
 //            Picasso.get().load(userImage)
 //                .transform(Helpers.getPicassoTransformation(viewHolder.itemView.profile_header_user_image))
 //                .into(viewHolder.itemView.profile_header_user_image)
-            Picasso.get().load(userImage).placeholder(R.drawable.account_icon)
+            Glide.with(context)
+                .load(userImage)
+                .placeholder(R.drawable.account_icon)
                 .into(viewHolder.itemView.profile_header_user_image)
         } else {
-            Picasso.get().load(userImage).placeholder(R.drawable.account_icon)
+            Glide.with(context)
+                .load(userImage)
+                .placeholder(R.drawable.account_icon)
                 .into(viewHolder.itemView.profile_header_user_image)
 //            viewHolder.itemView.profile_header_user_image.setImageBitmap(StringToBitmap(userImage))
         }
@@ -302,8 +306,10 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         val firstImage = SharedPrefrenceManager.getFirstImg(context)
         if (firstImage.contains("http")) {
-            Picasso.get().load(firstImage)
-                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_1)
+            Glide.with(context)
+                .load(firstImage)
+                .placeholder(R.drawable.add_image)
+                .into(viewHolder.itemView.user_image_1)
         } else {
             viewHolder.itemView.user_image_1.setImageBitmap(
                 StringToBitmap(
@@ -316,8 +322,10 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
 
         val secondImage = SharedPrefrenceManager.getSecImg(context)
         if (secondImage.contains("http")) {
-            Picasso.get().load(secondImage)
-                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_2)
+            Glide.with(context)
+                .load(secondImage)
+                .placeholder(R.drawable.add_image)
+                .into(viewHolder.itemView.user_image_2)
         } else {
             viewHolder.itemView.user_image_2.setImageBitmap(
                 StringToBitmap(
@@ -330,8 +338,10 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
 
         val thirdImage = SharedPrefrenceManager.getThirdImg(context)
         if (thirdImage.contains("http")) {
-            Picasso.get().load(thirdImage)
-                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_3)
+            Glide.with(context)
+                .load(thirdImage)
+                .placeholder(R.drawable.add_image)
+                .into(viewHolder.itemView.user_image_3)
         } else {
             viewHolder.itemView.user_image_3.setImageBitmap(
                 StringToBitmap(
@@ -345,8 +355,10 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
 
         val fourthImage = SharedPrefrenceManager.getFourthImg(context)
         if (fourthImage.contains("http")) {
-            Picasso.get().load(fourthImage)
-                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_4)
+            Glide.with(context)
+                .load(fourthImage)
+                .placeholder(R.drawable.add_image)
+                .into(viewHolder.itemView.user_image_4)
         } else {
             viewHolder.itemView.user_image_4.setImageBitmap(
                 StringToBitmap(
@@ -360,8 +372,10 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
 
         val fiveImage = SharedPrefrenceManager.getFiveImg(context)
         if (fiveImage.contains("http")) {
-            Picasso.get().load(fiveImage)
-                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_5)
+            Glide.with(context)
+                .load(fiveImage)
+                .placeholder(R.drawable.add_image)
+                .into(viewHolder.itemView.user_image_5)
         } else {
             viewHolder.itemView.user_image_5.setImageBitmap(
                 StringToBitmap(
@@ -375,8 +389,10 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
 
         val sixImage = SharedPrefrenceManager.getSixImg(context)
         if (sixImage.contains("http")) {
-            Picasso.get().load(sixImage)
-                .placeholder(R.drawable.add_image).into(viewHolder.itemView.user_image_6)
+            Glide.with(context)
+                .load(sixImage)
+                .placeholder(R.drawable.add_image)
+                .into(viewHolder.itemView.user_image_6)
         } else {
             viewHolder.itemView.user_image_6.setImageBitmap(
                 StringToBitmap(

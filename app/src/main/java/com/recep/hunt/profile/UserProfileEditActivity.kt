@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
@@ -36,7 +37,6 @@ import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
@@ -512,13 +512,16 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         val socialTypeStr = SharedPrefrenceManager.getsocialType(this)
 
         if (socialTypeStr.equals("social")) {
-            Picasso.get().load(Uri.parse(SharedPrefrenceManager.getProfileImg(this)))
+            Glide.with(this)
+                .load(Uri.parse(SharedPrefrenceManager.getProfileImg(this)))
                 .placeholder(R.drawable.account_icon).into(ivEditProfielId)
         } else {
             val profile = SharedPrefrenceManager.getProfileImg(this)
             if (profile.contains("http")) {
-                Picasso.get().load(profile)
-                    .placeholder(R.drawable.account_icon).into(ivEditProfielId)
+                Glide.with(this)
+                    .load(profile)
+                    .placeholder(R.drawable.account_icon)
+                    .into(ivEditProfielId)
             } else {
                 ivEditProfielId.setImageBitmap(StringToBitmap(profile))
             }
@@ -527,8 +530,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         if (firstImage != Constants.NULL) {
             if (firstImage.contains("http")) {
-                Picasso.get().load(firstImage)
-                    .placeholder(R.drawable.add_image).into(user_image_1)
+                Glide.with(this)
+                    .load(firstImage)
+                    .placeholder(R.drawable.add_image)
+                    .into(user_image_1)
             } else {
                 user_image_1.setImageBitmap(
                     StringToBitmap(
@@ -539,8 +544,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         }
         if (secondImage != Constants.NULL) {
             if (secondImage.contains("http")) {
-                Picasso.get().load(secondImage)
-                    .placeholder(R.drawable.add_image).into(user_image_2)
+                Glide.with(this)
+                    .load(secondImage)
+                    .placeholder(R.drawable.add_image)
+                    .into(user_image_2)
             } else {
                 user_image_2.setImageBitmap(
                     StringToBitmap(
@@ -552,8 +559,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         if (thirdImage != Constants.NULL) {
             if (thirdImage.contains("http")) {
-                Picasso.get().load(thirdImage)
-                    .placeholder(R.drawable.add_image).into(user_image_3)
+                Glide.with(this)
+                    .load(thirdImage)
+                    .placeholder(R.drawable.add_image)
+                    .into(user_image_3)
             } else {
                 user_image_3.setImageBitmap(
                     StringToBitmap(
@@ -566,8 +575,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         if (fourthImage != Constants.NULL) {
             if (fourthImage.contains("http")) {
-                Picasso.get().load(fourthImage)
-                    .placeholder(R.drawable.add_image).into(user_image_4)
+                Glide.with(this)
+                    .load(fourthImage)
+                    .placeholder(R.drawable.add_image)
+                    .into(user_image_4)
             } else {
                 user_image_4.setImageBitmap(StringToBitmap(fourthImage))
             }
@@ -575,8 +586,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         if (fifthImage != Constants.NULL) {
             if (fifthImage.contains("http")) {
-                Picasso.get().load(fifthImage)
-                    .placeholder(R.drawable.add_image).into(user_image_5)
+                Glide.with(this)
+                    .load(fifthImage)
+                    .placeholder(R.drawable.add_image)
+                    .into(user_image_5)
             } else {
                 user_image_5.setImageBitmap(
                     StringToBitmap(
@@ -588,8 +601,10 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         if (sixthImage != Constants.NULL) {
             if (sixthImage.contains("http")) {
-                Picasso.get().load(sixthImage)
-                    .placeholder(R.drawable.add_image).into(user_image_6)
+                Glide.with(this)
+                    .load(sixthImage)
+                    .placeholder(R.drawable.add_image)
+                    .into(user_image_6)
             } else {
                 user_image_6.setImageBitmap(
                     StringToBitmap(

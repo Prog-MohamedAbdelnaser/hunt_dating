@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.recep.hunt.R
 import com.recep.hunt.utilis.Helpers
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.SelectLocation
@@ -69,7 +70,20 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
 //                    val photoRefrence = model.photos[0].photoReference
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
                     Log.e("Url","Image : $url")
-                    Picasso.get().load(url).error(R.drawable.ic_img_gallery).transform(RoundedTransformation(20, 0)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
+//                    Picasso.get()
+//                        .load(url)
+//                        .error(R.drawable.ic_img_gallery)
+//                        .transform(RoundedTransformation(20, 0))
+//                        .placeholder(R.drawable.ic_img_gallery)
+//                        .into(restaurantImage)
+
+                    //todo test converted from glide
+                    Glide.with(context)
+                        .load(url)
+                        .error(R.drawable.ic_img_gallery)
+                        .apply(RequestOptions.circleCropTransform())
+                        .placeholder(R.drawable.ic_img_gallery)
+                        .into(restaurantImage)
                 }
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
@@ -157,6 +171,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
     }
 }
 
+/** TODO convert to glide
 class RoundedTransformation(val radius : Int, val margin : Int) : com.squareup.picasso.Transformation {
     override fun key(): String {
         return "rounded(r=" + radius + ", m=" + margin + ")"
@@ -176,3 +191,4 @@ class RoundedTransformation(val radius : Int, val margin : Int) : com.squareup.p
     }
 
 }
+ */

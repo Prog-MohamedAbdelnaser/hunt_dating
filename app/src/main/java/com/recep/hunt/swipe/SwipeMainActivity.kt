@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
@@ -27,7 +28,6 @@ import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.swipe_screen_item.*
@@ -82,6 +82,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         addNearbyUsersToSwipe()
     }
 
+    //todo implement viewpager
     private fun addNearbyUsersToSwipe() {
 
         var last = items.size - 1
@@ -113,7 +114,9 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             storyProgressViews[i].setStoryDuration(3500L)
 
             if (items[i].images!!.size > 0)
-                Picasso.get().load(items[i].images!![0]).fit().centerCrop().into(storyImageView[i])
+                Glide.with(this)
+                    .load(items[i].images!![0])
+                    .into(storyImageView[i])
 
             val nameView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
             val placeView = containerView.findViewById<TextView>(R.id.user_detail_place_txtView)
@@ -373,14 +376,18 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     override fun onPrev() {
         if ( counter[currentUser] > 0) {
             counter[currentUser] --
-            Picasso.get().load(items[currentUser].images!![counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
+            Glide.with(this)
+                .load(items[currentUser].images!![counter[currentUser]])
+                .into(storyImageView[currentUser])
         }
     }
 
     override fun onNext() {
         if ( counter[currentUser] < items[currentUser].images!!.size - 1) {
             counter[currentUser] ++
-            Picasso.get().load(items[currentUser].images!![counter[currentUser]]).fit().centerCrop().into(storyImageView[currentUser])
+            Glide.with(this)
+                .load(items[currentUser].images!![counter[currentUser]])
+                .into(storyImageView[currentUser])
         }
     }
 

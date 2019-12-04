@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.recep.hunt.R
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.utilis.Helpers
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
-import android.view.animation.AnimationUtils.loadAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 
@@ -64,7 +62,13 @@ class NearByRestaurantsAdapter(val context: Context,
 //                    Log.e("Url","Image : $url")
 //                    Picasso.get().load(url).noFade().fit().centerCrop().error(R.drawable.ic_img_gallery).transform(Helpers.getPicassoTransformation(restaurantImage)).placeholder(R.drawable.ic_img_gallery).into(restaurantImage)
                 }
-                Picasso.get().load(R.drawable.demo_restaurant_1).transform(Helpers.getPicassoTransformation(restaurantImage)).into(restaurantImage)
+
+                //
+                Glide.with(context)
+                    .load(R.drawable.demo_restaurant_1)
+                    //.transform(Helpers.getPicassoTransformation(restaurantImage))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(restaurantImage)
                 restaurantName.text = model.name
                 restaurantDetail.text = model.vicinity
             }
