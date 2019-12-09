@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.setupProfile.adapters.AddRemoveMode
 import com.recep.hunt.setupProfile.adapters.LookingForListeners
 import com.recep.hunt.setupProfile.adapters.SetupProfileLookingForAdapter
@@ -21,25 +22,7 @@ import kotlinx.android.synthetic.main.activity_setup_profile_looking_for.*
 class SetupProfileLookingForActivity : BaseActivity(),
     LookingForListeners {
 
-    override fun getSelectedLookingFor(lookingFor: String,state: AddRemoveMode?) {
-        when(state){
-            AddRemoveMode.Added ->  {
-                selectedLookingForArray.add(lookingFor)
-                selectedLookingFor = selectedLookingForArray.joinToString(",")
-                Log.e(SetupProfileLookingForAdapter::class.java.simpleName,"selectedLookingFor : $selectedLookingFor")
-                SharedPrefrenceManager.setUserLookingFor(this@SetupProfileLookingForActivity,selectedLookingFor)
-                launchActivity<SetupProfileInterestedInActivity>{
-                    putStringArrayListExtra(selectedInterestKey,selectedLookingForArray)
-                }
-            }
-            else ->{
-                selectedLookingForArray.remove(lookingFor)
-                selectedLookingFor = selectedLookingForArray.joinToString(",")
-                Log.e(SetupProfileLookingForAdapter::class.java.simpleName,"selectedLookingFor : $selectedLookingFor")
-            }
-        }
-
-    }
+    var avatarFilePath = ""
 
     companion object{
         const val selectedInterestKey = "selectedInterestKey"
@@ -58,11 +41,12 @@ class SetupProfileLookingForActivity : BaseActivity(),
         init()
     }
     private fun init(){
-
+        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
         setup_looking_for_continue_btn.setOnClickListener {
             if(selectedLookingForArray.size != 0){
                 SharedPrefrenceManager.setUserLookingFor(this@SetupProfileLookingForActivity,selectedLookingFor)
                 launchActivity<SetupProfileInterestedInActivity>{
+                    putExtra(Constants.IMGURI, avatarFilePath)
                     putStringArrayListExtra(selectedInterestKey,selectedLookingForArray)
                 }
             }else{
@@ -90,6 +74,28 @@ class SetupProfileLookingForActivity : BaseActivity(),
 
 
     }
+
+    override fun getSelectedLookingFor(lookingFor: String,state: AddRemoveMode?) {
+        when(state){
+            AddRemoveMode.Added ->  {
+                selectedLookingForArray.add(lookingFor)
+                selectedLookingFor = selectedLookingForArray.joinToString(",")
+                Log.e(SetupProfileLookingForAdapter::class.java.simpleName,"selectedLookingFor : $selectedLookingFor")
+                SharedPrefrenceManager.setUserLookingFor(this@SetupProfileLookingForActivity,selectedLookingFor)
+                launchActivity<SetupProfileInterestedInActivity>{
+                    putExtra(Constants.IMGURI, avatarFilePath)
+                    putStringArrayListExtra(selectedInterestKey,selectedLookingForArray)
+                }
+            }
+            else ->{
+                selectedLookingForArray.remove(lookingFor)
+                selectedLookingFor = selectedLookingForArray.joinToString(",")
+                Log.e(SetupProfileLookingForAdapter::class.java.simpleName,"selectedLookingFor : $selectedLookingFor")
+            }
+        }
+
+    }
+
     private fun dummyImageData():ArrayList<LookingForModel>{
         val data = ArrayList<LookingForModel>()
         if(data.size == 0){

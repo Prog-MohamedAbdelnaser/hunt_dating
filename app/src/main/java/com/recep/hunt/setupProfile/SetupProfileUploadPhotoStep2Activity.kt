@@ -24,14 +24,17 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.nguyenhoanglam.imagepicker.helper.ImageHelper.createImageFile
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.profile.UserProfileEditActivity
@@ -78,11 +81,14 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(this,
+        val permissionWrite = ContextCompat.checkSelfPermission(this,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+        val permissionRead = ContextCompat.checkSelfPermission(this,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
+        if (permissionWrite != PackageManager.PERMISSION_GRANTED ||
+                permissionRead != PackageManager.PERMISSION_GRANTED) {
             makeRequest()
         }
         else{
@@ -92,16 +98,22 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
     private fun makeRequest() {
         ActivityCompat.requestPermissions(this,
-            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE),
             WRITE_EXTERNAL_STORAGE_CODE)
     }
 
     private fun selectImageInAlbum() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
-        }
+//        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        if (intent.resolveActivity(packageManager) != null) {
+//            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
+//        }
+
+        ImagePicker.with(this)
+            .setShowCamera(false)
+            .setMultipleMode(false)
+            .start()
     }
 
     private var currentPhotoPath = ""
@@ -164,13 +176,11 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         }
             if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
-            val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images);
+            val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images)
             if (imgFlag == null) {
                 if (images != null) {
-                    val imageString = images.toString()
-                    //todo convert saving of image to path
                     SharedPrefrenceManager.setProfileImg(this, BitMapToString(imagesBtm))
-                    launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
+                    launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, images.toString()) }
                 }
             } else {
                 setImage(imagesBtm)
@@ -185,15 +195,32 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             } else {
                 setImage(images)
             }
-//            if (!imgFlag.equals("0")) {
-//                setImage(images)
-//            } else {
-//                launchActivity<SetupProfileAddedPhotoActivity>
-//                {
-//                    putExtra(IMGURI, imageString)
-//                }
-//            }
         }
+
+        /** image picker and cropper **/
+        val imageFile: File
+        if (requestCode === Config.RC_PICK_IMAGES && resultCode === Activity.RESULT_OK && data != null) {
+            val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
+            if (images.size == 1) {
+                imageFile = File(images[0].path)
+                MediaScannerConnection.scanFile(
+                    this, arrayOf(imageFile.getAbsolutePath()), null
+                ) { path, uri ->
+                    CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).start(this)
+                    Logger.d("path = $path")
+                }
+
+            }
+        }
+        if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode === Activity.RESULT_OK) {
+                launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, result.uri.toString()) }
+            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+            }
+        }
+
         super.onActivityResult(requestCode, resultCode, data)
     }
 
