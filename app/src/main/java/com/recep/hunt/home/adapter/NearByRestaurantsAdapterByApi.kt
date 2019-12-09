@@ -37,7 +37,8 @@ import retrofit2.Response
  * Email : rishabh1450@gmail.com
  */
 
-class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<NearestLocationData>?):RecyclerView.Adapter<NearByRestaurantsAdapterByApi.NearByRestViewHolder>() {
+class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<NearestLocationData>?)
+    :RecyclerView.Adapter<NearByRestaurantsAdapterByApi.NearByRestViewHolder>() {
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
 
@@ -81,7 +82,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                     Glide.with(context)
                         .load(url)
                         .error(R.drawable.ic_img_gallery)
-                        .apply(RequestOptions.circleCropTransform())
+//                        .apply(RequestOptions.circleCropTransform())
                         .placeholder(R.drawable.ic_img_gallery)
                         .into(restaurantImage)
                 }
@@ -162,7 +163,7 @@ class NearByRestaurantsAdapterByApi(val context: Context, val item:ArrayList<Nea
                         }
                         context.launchActivity<SwipeMainActivity> { putParcelableArrayListExtra("swipeUsers", swipeUserArray) }
                         val parent = context as Activity
-                        parent.finish()
+//                        parent.finish()
                     }
                 }
             })

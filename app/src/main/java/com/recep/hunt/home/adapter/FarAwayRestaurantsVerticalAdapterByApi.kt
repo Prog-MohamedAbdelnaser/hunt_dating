@@ -52,7 +52,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                         .with(context)
                         .load(url)
                         .error(R.drawable.ic_img_gallery)
-                        .apply(RequestOptions.circleCropTransform())
+//                        .apply(RequestOptions.circleCropTransform())
 //                        .transform(RoundedTransformation(20, 0))
                         .placeholder(R.drawable.ic_img_gallery)
                         .into(viewHolder.itemView.restaurant_vertical_list_image)

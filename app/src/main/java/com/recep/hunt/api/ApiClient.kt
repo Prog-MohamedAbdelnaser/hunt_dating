@@ -1,30 +1,18 @@
 package com.recep.hunt.api
 
-import android.text.TextUtils
-import android.util.Log
 import com.google.gson.GsonBuilder
-import com.recep.hunt.application.MyApplication
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLSession
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.X509TrustManager
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.security.cert.CertificateException
 
 
 object ApiClient {
 
-    var BASE_URL:String="http://165.22.18.129"
+    var BASE_URL: String = "http://165.22.18.129"
 
-    val builder : OkHttpClient by lazy {
+    val builder: OkHttpClient by lazy {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -34,7 +22,7 @@ object ApiClient {
             .build()
     }
 
-    val retrofit : Retrofit by lazy {
+    val retrofit: Retrofit by lazy {
         val gson = GsonBuilder()
             .setLenient()
             .create()
@@ -46,11 +34,10 @@ object ApiClient {
             .build()
     }
 
-    val getClient: ApiInterface by  lazy {
+    val getClient: ApiInterface by lazy {
         retrofit.create(ApiInterface::class.java)
     }
 //        get() {
-
 
 
 //            builder.addInterceptor { chain ->

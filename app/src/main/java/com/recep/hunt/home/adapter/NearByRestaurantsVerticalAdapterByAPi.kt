@@ -53,8 +53,8 @@ class NearByRestaurantsVerticalAdapterByAPi(val context: Context, val item:Array
                     Glide.with(context)
                         .load(url)
                         .error(R.drawable.ic_img_gallery)
-                        //.transform(RoundedTransformation(20, 0))
-                        .apply(RequestOptions.circleCropTransform())
+//                        .transform(RoundedTransformation(20, 0))
+//                        .apply(RequestOptions.circleCropTransform())
                         .placeholder(R.drawable.ic_img_gallery)
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
