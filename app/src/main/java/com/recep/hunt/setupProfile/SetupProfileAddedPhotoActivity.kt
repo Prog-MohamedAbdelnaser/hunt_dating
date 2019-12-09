@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.MenuItem
@@ -14,9 +15,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.utilis.BaseActivity
@@ -36,6 +39,8 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
 
     lateinit var uri: Uri
     var bitmap: Bitmap? = null
+    var avatarFilePath = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_added_photo)
@@ -47,18 +52,18 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
     }
 
     private fun init() {
-        val uriString: String = intent.getStringExtra(IMGURI)
+        avatarFilePath = intent.getStringExtra(IMGURI)
         var profileImg = SharedPrefrenceManager.getProfileImg(this@SetupProfileAddedPhotoActivity)
         SharedPrefrenceManager.setUserImage(this@SetupProfileAddedPhotoActivity, profileImg)
-        // uri = Uri.parse(uriString)
-        // profile_image.setImageURI(uri)
-        profile_image.setImageBitmap(StringToBitmap(profileImg))
+        Glide.with(this)
+            .load(avatarFilePath)
+            .into(profile_image)
 
         change_pic_tv.setOnClickListener {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
         setup_profile_upload_pic_next_btn.setOnClickListener {
-            launchActivity<SetupProfileGenderActivity>()
+            launchActivity<SetupProfileGenderActivity>{ putExtra(IMGURI, avatarFilePath)}
         }
     }
 
@@ -84,6 +89,7 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
+                avatarFilePath = result.uri.toString()
                 val resultUri = result.uri
                 var bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                 SharedPrefrenceManager.setProfileImg(this@SetupProfileAddedPhotoActivity, bitMapToString(bitmap))

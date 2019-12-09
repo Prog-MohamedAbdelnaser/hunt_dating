@@ -27,6 +27,7 @@ class SetupProfileInterestedInActivity : BaseActivity(),
 
     private var selectedInterstedIn = ""
     private var selectedInterests = ArrayList<String>()
+    private var avatarFilePath = ""
 
     override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
         selectedInterstedIn = lookingFor
@@ -59,6 +60,7 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         init()
     }
     private fun init(){
+        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
         selectedInterests = intent.getStringArrayListExtra(SetupProfileLookingForActivity.selectedInterestKey)
 
         setupRecyclerView()
@@ -108,7 +110,9 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         }
         noButton.setOnClickListener {
             dialog.dismiss()
-            launchActivity<SetupProfileReferralCodeActivity>()
+            launchActivity<SetupProfileReferralCodeActivity>{
+                putExtra(Constants.IMGURI, avatarFilePath)
+            }
         }
         dialog.show()
 

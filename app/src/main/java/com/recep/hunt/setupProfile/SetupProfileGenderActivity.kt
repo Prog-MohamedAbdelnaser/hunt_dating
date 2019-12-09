@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.setupProfile.adapters.AddRemoveMode
 import com.recep.hunt.setupProfile.adapters.LookingForListeners
 import com.recep.hunt.setupProfile.adapters.SetupProfileInterestedInAdapter
@@ -17,12 +18,7 @@ import kotlinx.android.synthetic.main.activity_setup_profile_gender.*
 import org.jetbrains.anko.find
 
 class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
-
-    override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
-        selectedGender = lookingFor
-        SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
-        launchActivity<SetupProfileLookingForActivity>()
-    }
+    var avatarFilePath = ""
 
     private var selectedGender = ""
     private lateinit var genderRecyclerView: RecyclerView
@@ -37,13 +33,16 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
         init()
     }
     private fun init(){
+        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
         genderRecyclerView = find(R.id.gender_recyclerView)
 
         setup_gender_continue_btn.setOnClickListener {
             if(selectedGender.isNotEmpty()){
 
                 SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
-                launchActivity<SetupProfileLookingForActivity>()
+                launchActivity<SetupProfileLookingForActivity>{
+                    putExtra(IMGURI, avatarFilePath)
+                }
             }else{
                 Helpers.showErrorSnackBar(this,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
             }
@@ -64,6 +63,15 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
             )
 
     }
+
+    override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
+        selectedGender = lookingFor
+        SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
+        launchActivity<SetupProfileLookingForActivity>{
+            putExtra(IMGURI, avatarFilePath)
+        }
+    }
+
     private fun dummyImageData():ArrayList<LookingForModel>{
         val data = ArrayList<LookingForModel>()
         if(data.size == 0){
