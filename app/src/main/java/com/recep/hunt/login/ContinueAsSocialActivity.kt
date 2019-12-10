@@ -72,7 +72,9 @@ class ContinueAsSocialActivity : AppCompatActivity() {
             setupSocialLoginImage()
 
             continue_as_social_nextBtn.setOnClickListener {
-                launchActivity<SetupProfileGenderActivity>()
+                launchActivity<SetupProfileGenderActivity>{
+                    putExtra(Constants.IMGURI, "")
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
