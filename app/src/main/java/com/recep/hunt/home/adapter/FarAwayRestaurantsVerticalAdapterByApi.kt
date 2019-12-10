@@ -1,7 +1,12 @@
 package com.recep.hunt.home.adapter
 
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -69,9 +74,24 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                 val distance = model.distance.roundToInt()
                 viewHolder.itemView.textView_distance_numbers.text = distance.toString() + " M"
 
+                viewHolder.itemView.setOnClickListener {
+                    val ll = LayoutInflater.from(context).inflate(R.layout.far_away_dialog_layout, null)
+                    val dialog = Dialog(context)
+                    dialog.setContentView(ll)
+                    dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
+                    gotItBtn.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                }
+
             }catch (e:Exception){
                 Log.e("Execpetion","$e")
             }
+
+
+
 
 
 

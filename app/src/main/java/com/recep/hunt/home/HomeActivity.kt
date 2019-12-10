@@ -59,6 +59,7 @@ import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.utilis.AlertDialogUtils
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
@@ -408,17 +409,17 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     ) {
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-        adapter.setOnItemClickListener { item, view ->
-            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-            val dialog = Dialog(this)
-            dialog.setContentView(ll)
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-            gotItBtn.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
+//        adapter.setOnItemClickListener { item, view ->
+//                val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+//            val dialog = Dialog(this)
+//            dialog.setContentView(ll)
+//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
+//            gotItBtn.setOnClickListener {
+//                dialog.dismiss()
+//            }
+//            dialog.show()
+//        }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
 
         for (i in 0 until nearItems!!.size) {
@@ -867,7 +868,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         business: String,
         friendship: String
     ) {
-        val filter = UsersListFilter(location_id, age, date, business, friendship)
+
+        val lat = SharedPrefrenceManager.getUserLatitude(this)
+        val lang = SharedPrefrenceManager.getUserLongitude(this)
+        val filter = UsersListFilter(location_id, age, date, business, friendship,lat,lang)
 //            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
         val call =
             ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(this))
@@ -912,6 +916,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                             swipeUserArray
                         )
                     }
+                }else{
+                    AlertDialogUtils.showErrorDialog(this@HomeActivity,getString(R.string.no_user_found))
                 }
             }
         })

@@ -94,6 +94,10 @@ abstract class BaseActivity : AppCompatActivity() {
                 response: Response<MakeUserOnlineResponse>
             ) {
 
+                if(response.isSuccessful){
+
+                }
+
             }
 
         })

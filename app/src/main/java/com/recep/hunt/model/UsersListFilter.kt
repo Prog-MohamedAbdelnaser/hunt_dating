@@ -23,6 +23,14 @@ data class UsersListFilter(
 
     @Expose
     @SerializedName("friendship")
-    val for_friendship: String
+    val for_friendship: String,
+
+    @Expose
+    @SerializedName("lat")
+    val lat: String,
+
+    @Expose
+    @SerializedName("long")
+    val long: String
 
 )
