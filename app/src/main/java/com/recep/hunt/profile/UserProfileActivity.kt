@@ -26,6 +26,7 @@ import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.userDetail.UserDetailActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -79,6 +80,15 @@ class UserProfileActivity : AppCompatActivity() {
                 call: Call<UserProfileResponse>,
                 response: Response<UserProfileResponse>
             ) {
+
+                progressDialog.dismiss()
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@UserProfileActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
                 if(response.isSuccessful) {
                     response.body()?.let {
                         Log.d(TAG, "response body = $it")
@@ -91,7 +101,7 @@ class UserProfileActivity : AppCompatActivity() {
                 }
 
                 setupRecyclerView()
-                progressDialog.dismiss()
+
             }
 
         })

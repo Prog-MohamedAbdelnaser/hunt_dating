@@ -1,31 +1,45 @@
 package com.recep.hunt.utilis
 
 import android.app.Activity
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AlertDialog
-import com.recep.hunt.R
 import com.recep.hunt.login.WelcomeScreenActivity
+import org.json.JSONObject
+
+
+interface OkListener {
+    fun ok()
+}
+
 
 object Utils {
 
-
-    fun isSessionExpire(activity: Activity?, status: String, message: String) : Boolean{
-        activity?.let {
-            if(status == "9"){
-                val builder = AlertDialog.Builder(it)
-                builder.setTitle(it.getString(R.string.app_name))
-                builder.setMessage(message)
-                builder.setCancelable(false)
-
-                builder.setPositiveButton("Ok"
-                ) { dialog, which ->
-                    activity.startActivity(Intent(activity, WelcomeScreenActivity::class.java))
-                    activity.finishAffinity()
+    fun isSessionExpire(context: Context?, errorJsonString: String?): Boolean {
+        errorJsonString?.let { it1 ->
+            if (it1.isNotEmpty()) {
+                context?.let {
+                    val mJsonObject = JSONObject(errorJsonString)
+                    val status = mJsonObject.optString("status")
+                    val message = mJsonObject.optString("message")
+                    if (status == "9") {
+                        AlertDialogUtils.showErrorDialog(context, message, object : OkListener {
+                            override fun ok() {
+                                SharedPrefrenceManager.clearAllSharePreference(context)
+                                context.startActivity(
+                                    Intent(
+                                        context,
+                                        WelcomeScreenActivity::class.java
+                                    )
+                                )
+                                (context as Activity).finishAffinity()
+                            }
+                        })
+                        return true
+                    }
                 }
-                return true
             }
         }
+
         return false
     }
 

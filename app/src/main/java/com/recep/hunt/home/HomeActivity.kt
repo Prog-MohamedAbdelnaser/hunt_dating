@@ -59,10 +59,7 @@ import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
-import com.recep.hunt.utilis.AlertDialogUtils
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
@@ -221,7 +218,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-                Toast.makeText(this@HomeActivity, "You're online", Toast.LENGTH_SHORT).show()
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                        return
+                    }
+                } else {
+                    Toast.makeText(this@HomeActivity, "You're online", Toast.LENGTH_SHORT).show()
+                }
 
             }
 
@@ -323,6 +327,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 call: Call<NearestLocationResponse>,
                 response: Response<NearestLocationResponse>
             ) {
+
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
 
                 var result = response.body()?.data
                 if (result != null) {
@@ -850,6 +862,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
+
                 if (is_online == false)
                     Toast.makeText(this@HomeActivity, "You're offline", Toast.LENGTH_SHORT).show()
                 else
@@ -871,7 +891,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val lat = SharedPrefrenceManager.getUserLatitude(this)
         val lang = SharedPrefrenceManager.getUserLongitude(this)
-        val filter = UsersListFilter(location_id, age, date, business, friendship,lat,lang)
+        val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
 //            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
         val call =
             ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(this))
@@ -916,8 +936,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                             swipeUserArray
                         )
                     }
-                }else{
-                    AlertDialogUtils.showErrorDialog(this@HomeActivity,getString(R.string.no_user_found))
+                } else {
+                    AlertDialogUtils.showErrorDialog(
+                        this@HomeActivity,
+                        getString(R.string.no_user_found)
+                    )
                 }
             }
         })
@@ -950,6 +973,15 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 call: Call<SelectLocationResponse>,
                 response: Response<SelectLocationResponse>
             ) {
+
+
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
                 var result = response.body()?.data
                 if (result != null) {
                     getUsersList(location_id, age, date, business, friendship)

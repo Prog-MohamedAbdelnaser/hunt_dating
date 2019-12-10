@@ -39,10 +39,7 @@ import com.recep.hunt.premium.MyCardsActivity
 import com.recep.hunt.profile.listeners.UserProfileSettingListeners
 import com.recep.hunt.profile.viewmodel.IcebreakerViewModel
 import com.recep.hunt.profile.viewmodel.UserViewModel
-import com.recep.hunt.utilis.BaseActivity
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
-import com.recep.hunt.utilis.setMargins
+import com.recep.hunt.utilis.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -492,7 +489,6 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
                 call: Call<LogoutReponse>,
                 response: Response<LogoutReponse>
             ) {
-
                 SharedPrefrenceManager.clearAllSharePreference(ctx)
                 val intent = Intent(ctx, WelcomeScreenActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -614,6 +610,14 @@ class DeleteAccountAndLogoutItem(private val ctx: Context) : Item<ViewHolder>() 
                 call: Call<ReportUserResponse>,
                 response: Response<ReportUserResponse>
             ) {
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(ctx, strErrorJson)) {
+                        return
+                    }
+                }
+
+
                 deleteAccountSuccessDialog()
             }
 

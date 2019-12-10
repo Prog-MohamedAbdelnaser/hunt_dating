@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.recep.hunt.R
-import com.recep.hunt.utilis.Helpers
 import org.jetbrains.anko.find
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.SelectLocation
@@ -23,9 +22,7 @@ import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
-import com.recep.hunt.utilis.AlertDialogUtils
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import org.jetbrains.anko.activityManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -168,6 +165,14 @@ class NearByRestaurantsAdapterByApi(
                     call: Call<UsersListResponse>,
                     response: Response<UsersListResponse>
                 ) {
+
+
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(context, strErrorJson)) {
+                            return
+                        }
+                    }
                     var result = response.body()?.data
                     var swipeUserArray = ArrayList<SwipeUserModel>()
                     if (result != null && result.size > 0) {

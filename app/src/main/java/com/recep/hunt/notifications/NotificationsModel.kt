@@ -5,6 +5,7 @@ import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.notification.NotificationResponse
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +37,14 @@ object NotificationsViewModel {
                 call: Call<NotificationResponse>,
                 response: Response<NotificationResponse>
             ) {
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(context, strErrorJson)) {
+                        return
+                    }
+                }
+
+
                 var responseData=response.body()?.data
                 responseData?.forEach {
                     it.forEach{

@@ -15,24 +15,31 @@ object AlertDialogUtils {
 
     private var alertDialog: AlertDialog? = null
 
-    fun showErrorDialog(context: Context, message: String) {
+    fun showErrorDialog(context: Context, message: String,okListener: OkListener? = null) {
         if (alertDialog != null && alertDialog!!.isShowing)
             return
         val builder = AlertDialog.Builder(context)
         builder.setTitle(context.resources.getString(R.string.app_name))
         builder.setMessage(message)
-        builder.setPositiveButton("OK") { dialogInterface, _ -> dialogInterface.dismiss() }
+        builder.setCancelable(false)
+        builder.setPositiveButton("OK") { dialogInterface, _ ->
+//            dialogInterface.dismiss()
+            dismiss()
+            okListener?.ok()
+
+
+        }
 
         alertDialog = builder.create()
         alertDialog!!.show()
-        alertDialog!!.setCanceledOnTouchOutside(false)
+//        alertDialog!!.setCanceledOnTouchOutside(false)
     }
 
     val isShowing: Boolean
         get() = alertDialog != null && alertDialog!!.isShowing
 
     fun dismiss() {
-        if (alertDialog != null && alertDialog!!.isShowing) {
+        if (isShowing) {
             alertDialog!!.dismiss()
             alertDialog = null
         }
