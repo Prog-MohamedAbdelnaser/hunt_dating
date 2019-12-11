@@ -106,6 +106,7 @@ class SetupProfileDobActivity : BaseActivity() {
                     years_old_textView.text = resources.getString(R.string.years_old, age.toString())
                     SharedPrefrenceManager.setUserage(this@SetupProfileDobActivity,age.toString())
                     dob = formatedDate
+                    SharedPrefrenceManager.setUserDob(this@SetupProfileDobActivity, dob)
                     dob_layout.clearFocus()
                     it.dismiss()
                     it.cancel()

@@ -5,6 +5,11 @@ import androidx.appcompat.app.AlertDialog
 import com.recep.hunt.R
 
 
+/**
+ * Created by Solution Analysts
+ *
+ *
+ */
 
 object AlertDialogUtils {
 
