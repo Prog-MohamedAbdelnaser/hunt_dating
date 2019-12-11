@@ -95,7 +95,7 @@ class NearByRestaurantsAdapterByApi(
                 }
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
-                userNumbers.text = (model.users - 1).toString()
+                userNumbers.text = model.users.toString()
                 goToSwipeView.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
                 }
@@ -207,7 +207,7 @@ class NearByRestaurantsAdapterByApi(
                         val parent = context as Activity
 //                        parent.finish()
                     } else {
-                        AlertDialogUtils.showErrorDialog(
+                        AlertDialogUtils.displayDialog(
                             context,
                             context.getString(R.string.no_user_found)
                         )

@@ -235,6 +235,8 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     call: Call<UpdateUserInfoResponseModel>,
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
+
+                    dialog.dismiss()
                     if (!response.isSuccessful && !isFinishing) {
                         val strErrorJson = response.errorBody()?.string()
                         if (Utils.isSessionExpire(this@UserProfileEditActivity, strErrorJson)) {
@@ -247,7 +249,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                         saveUserProfile()
                         saveImages()
                     }
-                    dialog.dismiss()
+
                 }
             })
 
@@ -312,7 +314,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     call: Call<UpdateUserInfoResponseModel>,
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
-
+                    dialog.dismiss()
                     if (!response.isSuccessful && !isFinishing) {
                         val strErrorJson = response.errorBody()?.string()
                         if (Utils.isSessionExpire(this@UserProfileEditActivity, strErrorJson)) {
@@ -320,7 +322,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                         }
                     }
 
-                    dialog.dismiss()
+
                     if (response.isSuccessful) {
                         finish()
                     }

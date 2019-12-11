@@ -14,6 +14,8 @@ interface OkListener {
 
 object Utils {
 
+    private var isDisplay = true
+
     fun isSessionExpire(context: Context?, errorJsonString: String?): Boolean {
         errorJsonString?.let { it1 ->
             if (it1.isNotEmpty()) {
@@ -22,18 +24,22 @@ object Utils {
                     val status = mJsonObject.optString("status")
                     val message = mJsonObject.optString("message")
                     if (status == "9") {
-                        AlertDialogUtils.showErrorDialog(context, message, object : OkListener {
-                            override fun ok() {
-                                SharedPrefrenceManager.clearAllSharePreference(context)
-                                context.startActivity(
-                                    Intent(
-                                        context,
-                                        WelcomeScreenActivity::class.java
+                        if (isDisplay) {
+                            isDisplay = false
+                            AlertDialogUtils.displayDialog(context, message, object : OkListener {
+                                override fun ok() {
+                                    isDisplay = true
+                                    SharedPrefrenceManager.clearAllSharePreference(context)
+                                    context.startActivity(
+                                        Intent(
+                                            context,
+                                            WelcomeScreenActivity::class.java
+                                        )
                                     )
-                                )
-                                (context as Activity).finishAffinity()
-                            }
-                        })
+                                    (context as Activity).finishAffinity()
+                                }
+                            })
+                        }
                         return true
                     }
                 }

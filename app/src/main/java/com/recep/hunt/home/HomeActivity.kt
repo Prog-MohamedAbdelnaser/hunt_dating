@@ -905,6 +905,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 call: Call<UsersListResponse>,
                 response: Response<UsersListResponse>
             ) {
+
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
+
+
                 var result = response.body()?.data
                 var swipeUserArray = ArrayList<SwipeUserModel>()
                 if (result != null && result.size > 0) {
@@ -937,7 +947,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         )
                     }
                 } else {
-                    AlertDialogUtils.showErrorDialog(
+                    AlertDialogUtils.displayDialog(
                         this@HomeActivity,
                         getString(R.string.no_user_found)
                     )

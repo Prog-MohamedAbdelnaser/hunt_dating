@@ -64,7 +64,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
                 }
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
-                viewHolder.itemView.textView_user_numbers.text = (model.users - 1).toString()
+                viewHolder.itemView.textView_user_numbers.text = model.users.toString()
 
                 viewHolder.itemView.imageView9.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
@@ -174,7 +174,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
                         )
                     }
                 } else {
-                    AlertDialogUtils.showErrorDialog(
+                    AlertDialogUtils.displayDialog(
                         context,
                         context.getString(R.string.no_user_found)
                     )
