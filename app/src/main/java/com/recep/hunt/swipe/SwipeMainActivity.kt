@@ -117,6 +117,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             if (items[i].images!!.size > 0)
                 Glide.with(this)
                     .load(items[i].images!![0])
+                    .centerCrop()
                     .into(storyImageView[i])
 
             val nameView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
@@ -388,6 +389,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             counter[currentUser] --
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
+                .centerCrop()
                 .into(storyImageView[currentUser])
         }
     }
@@ -397,6 +399,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             counter[currentUser] ++
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
+                .centerCrop()
                 .into(storyImageView[currentUser])
         }
     }

@@ -444,7 +444,7 @@
     <string name="delete_account">Delete Account</string>
 
     <string name="cant_find_the_answer">Can\'t find the answer? </string>
-    <string name="no_user_found">No User Found</string>
+    <string name="no_user_found">No user available for Hunt</string>
 
 
 </resources>

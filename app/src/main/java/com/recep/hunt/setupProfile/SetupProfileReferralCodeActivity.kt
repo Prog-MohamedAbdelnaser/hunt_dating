@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
@@ -46,12 +45,12 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.*
+import java.io.File
 
 class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
     private lateinit var dialog: KProgressHUD
-    private val REQUEST_CODE_ASK_PERMISSIONS=101
+    private val REQUEST_CODE_ASK_PERMISSIONS = 101
     private var avatarFilePath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,12 +59,18 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         AndroidNetworking.initialize(applicationContext)
         dialog = Helpers.showDialog(this, this, "Processing")
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED )
-        {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat
-                .requestPermissions(this,  arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_ASK_PERMISSIONS);
-        }
-        else{
+                .requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_CODE_ASK_PERMISSIONS
+                )
+        } else {
             init()
 
         }
@@ -79,20 +84,23 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
 
-        when(requestCode){
-            REQUEST_CODE_ASK_PERMISSIONS->{
-                if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
-                {
+        when (requestCode) {
+            REQUEST_CODE_ASK_PERMISSIONS -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     init()
-                }
-                else{
-                    Helpers.showErrorSnackBar(this, "Please allow location access!", "Please allow for location")
+                } else {
+                    Helpers.showErrorSnackBar(
+                        this,
+                        "Please allow location access!",
+                        "Please allow for location"
+                    )
 
                 }
             }
         }
 
     }
+
     private fun init() {
         avatarFilePath = intent.getStringExtra(Constants.IMGURI)
 
@@ -134,24 +142,25 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                 AndroidNetworking.download(
                     SharedPrefrenceManager.getProfileImg(this),
                     filePath,
-                    fileName)
-                        .setTag("downloadTest")
-                        .setPriority(Priority.MEDIUM)
-                        .build().setDownloadProgressListener(object : DownloadProgressListener {
-                            override fun onProgress(bytesDownloaded: Long, totalBytes: Long) {
-                            }
-                        }).startDownload(object : DownloadListener {
-                            override fun onDownloadComplete() {
-                                val builder = createMultiPartBuilder(file)
-                                makeApiCall(builder.build())
-                            }
+                    fileName
+                )
+                    .setTag("downloadTest")
+                    .setPriority(Priority.MEDIUM)
+                    .build().setDownloadProgressListener(object : DownloadProgressListener {
+                        override fun onProgress(bytesDownloaded: Long, totalBytes: Long) {
+                        }
+                    }).startDownload(object : DownloadListener {
+                        override fun onDownloadComplete() {
+                            val builder = createMultiPartBuilder(file)
+                            makeApiCall(builder.build())
+                        }
 
-                            override fun onError(anError: ANError?) {
-                                Log.d("error", anError?.message)
-                            }
+                        override fun onError(anError: ANError?) {
+                            Log.d("error", anError?.message)
+                        }
 
 
-                        })
+                    })
 
             } else {
                 val fileData =
@@ -177,7 +186,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         }
     }
 
-    private fun createMultiPartBuilder(file : File) : MultipartBody.Builder{
+    private fun createMultiPartBuilder(file: File): MultipartBody.Builder {
 
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
@@ -191,7 +200,11 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         )
         builder.addFormDataPart(
             "mobile_no",
-            SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity).replace("+",""))
+            SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity).replace(
+                "+",
+                ""
+            )
+        )
         builder.addFormDataPart(
             "country_code",
             SharedPrefrenceManager.getUserCountryCode(this@SetupProfileReferralCodeActivity)
@@ -200,9 +213,10 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             "gender",
             SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
         )
+
+        val dob = SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity)
         builder.addFormDataPart(
-            "dob",
-            SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity)
+            "dob", if (dob != "null") dob else "1993-11-11"
         )
         builder.addFormDataPart(
             "country",
@@ -266,8 +280,10 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             builder.addFormDataPart(
                 "profile_pic",
                 file.name,
-                RequestBody.create(MediaType.parse("multipart/form-data"),
-                    file)
+                RequestBody.create(
+                    MediaType.parse("multipart/form-data"),
+                    file
+                )
             )
         }
 
@@ -322,13 +338,16 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                         if (!TextUtils.isEmpty(token)) {
                             SharedPrefrenceManager.setUserToken(
                                 this@SetupProfileReferralCodeActivity,
-                                             token
+                                token
                             )
                             SharedPrefrenceManager.setRefrencecode(
                                 this@SetupProfileReferralCodeActivity,
                                 edtReferelCode.text.toString()
                             )
-                            SharedPrefrenceManager.setSwipeCount(this@SetupProfileReferralCodeActivity, 0.toString())
+                            SharedPrefrenceManager.setSwipeCount(
+                                this@SetupProfileReferralCodeActivity,
+                                0.toString()
+                            )
                             launchActivity<SetupProfileCompletedActivity> { }
                         }                            //do token related code and also store user json
 
@@ -338,7 +357,11 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     val data = response.errorBody()?.string()
                     val mJsonObject = JSONObject(data)
                     val mJsonObjectMessage = mJsonObject.optString("message")
-                    Toast.makeText(this@SetupProfileReferralCodeActivity,mJsonObjectMessage,Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@SetupProfileReferralCodeActivity,
+                        mJsonObjectMessage,
+                        Toast.LENGTH_LONG
+                    ).show()
 //                    launchActivity<SetupProfileCompletedActivity> { }
 
                 }

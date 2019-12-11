@@ -77,32 +77,35 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
-    fun makeUserOfline() {
-        val makeUserOnline = MakeUserOnline(false)
+    private fun makeUserOfline() {
+        val token = SharedPrefrenceManager.getUserToken(this)
+        if(token.isNotEmpty() && token != "null") {
+            val makeUserOnline = MakeUserOnline(false)
 
-        val call = ApiClient.getClient.makeUserOnline(
-            makeUserOnline,
-            SharedPrefrenceManager.getUserToken(this)
-        )
+            val call = ApiClient.getClient.makeUserOnline(
+                makeUserOnline,
+                token
+            )
 
-        call.enqueue(object : Callback<MakeUserOnlineResponse> {
-            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+            call.enqueue(object : Callback<MakeUserOnlineResponse> {
+                override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
 
-            }
+                }
 
-            override fun onResponse(
-                call: Call<MakeUserOnlineResponse>,
-                response: Response<MakeUserOnlineResponse>
-            ) {
-                if (!response.isSuccessful && !isFinishing) {
-                    val strErrorJson = response.errorBody()?.string()
-                    if (Utils.isSessionExpire(this@BaseActivity, strErrorJson)) {
-                        return
+                override fun onResponse(
+                    call: Call<MakeUserOnlineResponse>,
+                    response: Response<MakeUserOnlineResponse>
+                ) {
+                    if (!response.isSuccessful && !isFinishing) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@BaseActivity, strErrorJson)) {
+                            return
+                        }
                     }
                 }
-            }
 
-        })
+            })
+        }
 
     }
 
