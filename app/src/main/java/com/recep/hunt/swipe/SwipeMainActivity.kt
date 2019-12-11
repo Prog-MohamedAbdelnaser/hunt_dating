@@ -27,6 +27,7 @@ import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import kotlinx.android.synthetic.main.activity_home.*
@@ -299,6 +300,15 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 call: Call<SwipeUserResponse>,
                 response: Response<SwipeUserResponse>
             ) {
+
+
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@SwipeMainActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
                 val status = response.body()?.status
             }
 
@@ -448,6 +458,13 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
+                if (!response.isSuccessful && !isFinishing) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@SwipeMainActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
                 if (is_online == false)
                     Toast.makeText(this@SwipeMainActivity,"You're offline",Toast.LENGTH_SHORT).show()
                 else

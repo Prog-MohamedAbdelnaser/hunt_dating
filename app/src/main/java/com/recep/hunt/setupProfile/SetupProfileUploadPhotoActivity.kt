@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.recep.hunt.R
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_upload_photo.*
@@ -24,7 +25,9 @@ class SetupProfileUploadPhotoActivity : BaseActivity() {
             launchActivity<SetupProfileUploadPhotoStep2Activity>()
         }
         setup_profile_upload_pic_next_btn.setOnClickListener {
-            launchActivity<SetupProfileGenderActivity>()
+            launchActivity<SetupProfileGenderActivity>{
+                putExtra(Constants.IMGURI, " ")
+            }
         }
     }
 

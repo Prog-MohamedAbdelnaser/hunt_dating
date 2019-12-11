@@ -1,15 +1,15 @@
 package com.recep.hunt.utilis
 
 import android.app.Dialog
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.content.Context
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
-import org.jetbrains.anko.find
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,10 +19,11 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var mTextViewScreenTitle: TextView
     lateinit var mImageButtonBack: ImageButton
     lateinit var progressDialog: Dialog
-    lateinit var fakeToolbar : RelativeLayout
-    lateinit var cancelBtn : Button
+    lateinit var fakeToolbar: RelativeLayout
+    lateinit var cancelBtn: Button
     override fun setContentView(layoutResID: Int) {
-        val coordinatorLayout: CoordinatorLayout = layoutInflater.inflate(R.layout.activity_base, null) as CoordinatorLayout
+        val coordinatorLayout: CoordinatorLayout =
+            layoutInflater.inflate(R.layout.activity_base, null) as CoordinatorLayout
         val activityContainer: FrameLayout = coordinatorLayout.findViewById(R.id.layout_container)
         mTextViewScreenTitle = coordinatorLayout.findViewById(R.id.text_screen_title) as TextView
         mImageButtonBack = coordinatorLayout.findViewById(R.id.image_back_button)
@@ -41,36 +42,33 @@ abstract class BaseActivity : AppCompatActivity() {
     fun setScreenTitle(title: String) {
         mTextViewScreenTitle.text = title
     }
-    fun getScreenTitle():TextView{
+
+    fun getScreenTitle(): TextView {
         return mTextViewScreenTitle
     }
 
     fun getBackButton(): ImageButton {
-        return mImageButtonBack;
+        return mImageButtonBack
     }
 
-    fun getToolbar():RelativeLayout{
+    fun getToolbar(): RelativeLayout {
         return fakeToolbar
     }
 
-    fun getBaseCancelBtn():Button{
+    fun getBaseCancelBtn(): Button {
         return cancelBtn
     }
 
     fun showProgressDialog() {
-        if(!progressDialog.isShowing){
+        if (!progressDialog.isShowing) {
             progressDialog.show()
         }
     }
 
     fun dismissProgressDialog() {
-        if(progressDialog.isShowing){
+        if (progressDialog.isShowing) {
             progressDialog.dismiss()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onPause() {
@@ -78,11 +76,14 @@ abstract class BaseActivity : AppCompatActivity() {
         makeUserOfline()
 
     }
-    fun makeUserOfline()
-    {
-        val makeUserOnline= MakeUserOnline(false)
 
-        val call = ApiClient.getClient.makeUserOnline(makeUserOnline, SharedPrefrenceManager.getUserToken(this))
+    fun makeUserOfline() {
+        val makeUserOnline = MakeUserOnline(false)
+
+        val call = ApiClient.getClient.makeUserOnline(
+            makeUserOnline,
+            SharedPrefrenceManager.getUserToken(this)
+        )
 
         call.enqueue(object : Callback<MakeUserOnlineResponse> {
             override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
@@ -93,10 +94,20 @@ abstract class BaseActivity : AppCompatActivity() {
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-
+                if (!response.isSuccessful && !isFinishing) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@BaseActivity, strErrorJson)) {
+                        return
+                    }
+                }
             }
 
         })
 
     }
+
+
+
+
+
 }

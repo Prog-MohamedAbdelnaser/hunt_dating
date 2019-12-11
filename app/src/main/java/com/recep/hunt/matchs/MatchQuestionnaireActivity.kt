@@ -16,6 +16,7 @@ import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
 import org.jetbrains.anko.find
 import retrofit2.Call
@@ -67,6 +68,14 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                     call: Call<RandomQuestionResponse>,
                     response: Response<RandomQuestionResponse>
                 ) {
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
+                            return
+                        }
+                    }
+
+
                     setpTwo.visibility = View.VISIBLE
                     setpOne.visibility = View.GONE
                     setProgressStart()
@@ -147,7 +156,12 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-
+                if (!response.isSuccessful && !isFinishing) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
+                        return
+                    }
+                }
             }
 
         })

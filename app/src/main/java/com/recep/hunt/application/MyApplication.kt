@@ -1,7 +1,11 @@
 package com.recep.hunt.application
 
 
-import android.app.Application
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.multidex.MultiDexApplication
@@ -11,7 +15,10 @@ import com.android.volley.toolbox.Volley
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
+import com.recep.hunt.login.WelcomeScreenActivity
+import com.recep.hunt.utilis.AlertDialogUtils
 import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.OkListener
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import org.acra.ReportingInteractionMode
 import org.acra.annotation.ReportsCrashes
@@ -25,12 +32,14 @@ import org.acra.annotation.ReportsCrashes
 @ReportsCrashes(
     mailTo = "rudraksh.shukla98@gmail.com",
     mode = ReportingInteractionMode.TOAST,
-    resToastText = R.string.add_job_title)
+    resToastText = R.string.add_job_title
+)
 class MyApplication : MultiDexApplication() {
 
     companion object {
         private val TAG = MyApplication::class.java.simpleName
-        @get:Synchronized var instance: MyApplication? = null
+        @get:Synchronized
+        var instance: MyApplication? = null
             private set
     }
 
@@ -47,6 +56,10 @@ class MyApplication : MultiDexApplication() {
         /** setup basic shared pref **/
         Helpers.setupBasicSharedPrefrences(this)
 //        ACRA.init(this);
+
+        registerReceiver(mLogoutBroadcastReceiver, IntentFilter("ACTION_SESSION_EXPIRE"))
+
+
     }
 
     private val requestQueue: RequestQueue? = null
@@ -73,5 +86,29 @@ class MyApplication : MultiDexApplication() {
 //            requestQueue!!.cancelAll(tag)
 //        }
 //    }
+
+
+    private val mLogoutBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == "ACTION_SESSION_EXPIRE") {
+                unregisterReceiver(this)
+                val message = intent.getStringExtra("INTENT_MESSAGE")
+                Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+
+                context?.let { SharedPrefrenceManager.clearAllSharePreference(it) }
+
+                val mIntent = Intent(
+                    context,
+                    WelcomeScreenActivity::class.java
+                )
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(mIntent)
+
+
+            }
+        }
+    }
+
 
 }

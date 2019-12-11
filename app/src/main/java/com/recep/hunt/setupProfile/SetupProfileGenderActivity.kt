@@ -33,7 +33,7 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
         init()
     }
     private fun init(){
-        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
+        avatarFilePath = intent.getStringExtra(IMGURI)
         genderRecyclerView = find(R.id.gender_recyclerView)
 
         setup_gender_continue_btn.setOnClickListener {

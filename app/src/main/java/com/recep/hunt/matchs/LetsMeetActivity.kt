@@ -7,6 +7,7 @@ import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,9 @@ class LetsMeetActivity : AppCompatActivity() {
         super.onPause()
         makeUserOfline()
     }
+
+
+
     fun makeUserOfline()
     {
         val makeUserOnline= MakeUserOnline(false)
@@ -37,7 +41,12 @@ class LetsMeetActivity : AppCompatActivity() {
                 call: Call<MakeUserOnlineResponse>,
                 response: Response<MakeUserOnlineResponse>
             ) {
-
+                if (!response.isSuccessful && !isFinishing) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@LetsMeetActivity, strErrorJson)) {
+                        return
+                    }
+                }
             }
 
         })

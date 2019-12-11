@@ -33,10 +33,7 @@ import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
-import com.recep.hunt.utilis.BaseActivity
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
@@ -238,11 +235,21 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     call: Call<UpdateUserInfoResponseModel>,
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
+
+                    dialog.dismiss()
+                    if (!response.isSuccessful && !isFinishing) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@UserProfileEditActivity, strErrorJson)) {
+                            return
+                        }
+                    }
+
+
                     if (response.isSuccessful) {
                         saveUserProfile()
                         saveImages()
                     }
-                    dialog.dismiss()
+
                 }
             })
 
@@ -308,6 +315,14 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
                     dialog.dismiss()
+                    if (!response.isSuccessful && !isFinishing) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@UserProfileEditActivity, strErrorJson)) {
+                            return
+                        }
+                    }
+
+
                     if (response.isSuccessful) {
                         finish()
                     }
@@ -428,6 +443,14 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                     response: Response<UpdateUserInfoResponseModel>
                 ) {
                     dialog.dismiss()
+                    if (!response.isSuccessful && !isFinishing) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@UserProfileEditActivity, strErrorJson)) {
+                            return
+                        }
+                    }
+
+
                     if (response.isSuccessful) {
                         finish()
                     }

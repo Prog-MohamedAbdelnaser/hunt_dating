@@ -97,17 +97,11 @@ interface ApiInterface {
     @GET("/api/random-question")
     fun getRandomQuestion():Call<GetRandomQuestionReponse>
 
-
-
     @POST("/api/answer-random-question")
     fun answerRandomQuestion(@Body answerRandomQuestions: AnswerRandomQuestions):Call<AnswerRandomQuestions>
 
-
-
     @POST("/api/nearest-place")
     fun getNearestPlace(@Body nearestLocation: NearestLocation,@Header("Authorization")  authorization:String):Call<NearestLocationResponse>
-
-
 
     @POST("/api/select-loation")
     fun selectLocation(@Body selectLocation: SelectLocation,@Header("Authorization")  authorization:String):Call<SelectLocationResponse>

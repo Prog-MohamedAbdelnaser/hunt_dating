@@ -44,6 +44,7 @@ import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.createTicket.CreateTicketResponse
 import com.recep.hunt.profile.model.IceBreakerModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -271,6 +272,13 @@ class CreatorActivity : AppCompatActivity() {
 //                    Log.d("Creator" , "Success" + response.body()!!.data.ticket_id)
 
                     dialog.dismiss()
+
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@CreatorActivity, strErrorJson)) {
+                            return
+                        }
+                    }
 
                 }
             })
