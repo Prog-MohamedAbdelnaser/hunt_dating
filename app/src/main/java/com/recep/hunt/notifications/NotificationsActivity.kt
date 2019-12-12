@@ -15,12 +15,11 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.notifications_adapter_item.view.*
 import org.jetbrains.anko.find
-import org.jetbrains.anko.image
 
 class NotificationsActivity : BaseActivity() {
 
-    private lateinit var noNotificationsLayout : LinearLayout
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var noNotificationsLayout: LinearLayout
+    private lateinit var recyclerView: RecyclerView
     private val adapter = GroupAdapter<ViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,39 +31,52 @@ class NotificationsActivity : BaseActivity() {
         getBaseCancelBtn().textSize = 13f
         init()
     }
-    private fun init(){
+
+    private fun init() {
         noNotificationsLayout = find(R.id.no_notifications_layout)
         recyclerView = find(R.id.notifications_recyclerView)
         getNotification()
         setupRecyclerView()
     }
-    private fun setupRecyclerView(){
+
+    private fun setupRecyclerView() {
         recyclerView.adapter = adapter
         recyclerView.visibility = View.VISIBLE
         recyclerView.addItemDecoration(SimpleDividerItemDecoration(this))
         noNotificationsLayout.visibility = View.GONE
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val notificationsViewModel = NotificationsViewModel.getNotifications(this@NotificationsActivity)
-        for(notification in notificationsViewModel){
-            adapter.add(NotificationsAdapterItem(this,notification))
+        val notificationsViewModel =
+            NotificationsViewModel.getNotifications(this@NotificationsActivity)
+        for (notification in notificationsViewModel) {
+            adapter.add(NotificationsAdapterItem(this, notification))
         }
+
+        if (adapter.itemCount > 0) {
+            noNotificationsLayout.visibility = View.GONE
+        } else {
+            noNotificationsLayout.visibility = View.VISIBLE
+        }
+
+
     }
 
-    private fun clearAllNotifications(){
+    private fun clearAllNotifications() {
         recyclerView.visibility = View.GONE
         noNotificationsLayout.visibility = View.VISIBLE
 
     }
 
-    private fun getNotification()
-    {
-
+    private fun getNotification() {
 
 
     }
 }
-class NotificationsAdapterItem(private val context:Context,private val model:NotificationsModel):Item<ViewHolder>(){
+
+class NotificationsAdapterItem(
+    private val context: Context,
+    private val model: NotificationsModel
+) : Item<ViewHolder>() {
 
     override fun getLayout() = R.layout.notifications_adapter_item
     override fun bind(viewHolder: ViewHolder, position: Int) {

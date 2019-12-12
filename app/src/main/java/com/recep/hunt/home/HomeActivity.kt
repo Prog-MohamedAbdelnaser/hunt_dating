@@ -3,6 +3,7 @@ package com.recep.hunt.home
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,9 +11,11 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,10 +27,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -117,7 +122,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-    private var NEAREST_DISTANCE = 500
+    private var NEAREST_DISTANCE = 1000 // testing purpose
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -265,8 +270,51 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         })
 
+
+        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var gps_enabled = false
+//        var network_enabled = false
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+//        try {
+//            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+//        } catch (ex: Exception) {
+//            ex.printStackTrace()
+//        }
+
+        if (!gps_enabled) {
+            showGPSDisabledAlertToUser()
+        }
+
     }
 
+    private fun showGPSDisabledAlertToUser() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+            .setCancelable(false)
+            .setPositiveButton(
+                "Goto Settings Page To Enable GPS"
+            ) { _, _ ->
+                val callGPSSettingIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivityForResult(callGPSSettingIntent, 0)
+            }
+        alertDialogBuilder.setNegativeButton(
+            "Cancel"
+        ) { dialog, _ -> dialog.cancel() }
+        val alert = alertDialogBuilder.create()
+        alert.show()
+    }
+
+
+    private fun isLocationEnabled(context: Context): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
+    }
 
     private fun showIncognitoBtn() {
         val isIncognito = SharedPrefrenceManager.getisIncognito(this)
@@ -693,8 +741,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //                mMarker = mMap.addMarker(markerOptions)
 //                mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+//                mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
                 mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
                     override fun onMarkerClick(p0: Marker?): Boolean {
                         if (p0?.position?.latitude != latitude && p0?.position?.longitude != longitude) {
@@ -912,7 +960,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         return
                     }
                 }
-
 
 
                 var result = response.body()?.data
