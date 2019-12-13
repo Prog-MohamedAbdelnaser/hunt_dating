@@ -122,7 +122,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-    private var NEAREST_DISTANCE = 1000 // testing purpose
+    private var NEAREST_DISTANCE = 3000 // testing purpose
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -311,10 +311,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-    private fun isLocationEnabled(context: Context): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return LocationManagerCompat.isLocationEnabled(locationManager)
-    }
 
     private fun showIncognitoBtn() {
         val isIncognito = SharedPrefrenceManager.getisIncognito(this)
