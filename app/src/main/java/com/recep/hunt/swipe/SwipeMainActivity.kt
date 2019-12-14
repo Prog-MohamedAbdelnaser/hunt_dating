@@ -3,15 +3,16 @@ package com.recep.hunt.swipe
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.recep.hunt.R
@@ -35,35 +36,39 @@ import kotlinx.android.synthetic.main.swipe_screen_item.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
 
-    private lateinit var parentView : RelativeLayout
-    private lateinit var context : Context
+    private lateinit var parentView: RelativeLayout
+    private lateinit var context: Context
     private lateinit var matchProgressBar: ProgressBar
+    private lateinit var textView50: TextView
     private lateinit var attendanceProgressBar: ProgressBar
-    private lateinit var homeView : ConstraintLayout
+    private lateinit var homeView: ConstraintLayout
     private var storyProgressViews = ArrayList<StoriesProgressView>()
     private var storyImageView = ArrayList<ImageView>()
 
-    private var items =  ArrayList<SwipeUserModel>()
+    private var items = ArrayList<SwipeUserModel>()
 
-    var windowwidth : Int = 0
-    var screenCenter : Int = 0
-    var x_cord : Int = 0
-    var y_cord : Int = 0
+    var windowwidth: Int = 0
+    var screenCenter: Int = 0
+    var x_cord: Int = 0
+    var y_cord: Int = 0
     var x: Int = 0
-    var y : Int = 0
-    var Likes : Int = 0
+    var y: Int = 0
+    var Likes: Int = 0
     var counter = ArrayList<Int>()
-    var currentUser : Int = 0
-    var dummyImages : IntArray = intArrayOf(R.drawable.demo_user, R.drawable.demo_user_1, R.drawable.demo_user_2, R.drawable.demo_user_3, R.drawable.demo_user_4)
+    var currentUser: Int = 0
+    var dummyImages: IntArray = intArrayOf(
+        R.drawable.demo_user,
+        R.drawable.demo_user_1,
+        R.drawable.demo_user_2,
+        R.drawable.demo_user_3,
+        R.drawable.demo_user_4
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,21 +94,33 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         var last = items.size - 1
         for (i in 0..last) {
 
-            var containerView = LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
+            var containerView =
+                LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
             //match status progress bar
             matchProgressBar = containerView.findViewById(R.id.match_status_progressBar)
-            val drawableMatch = context.resources.getDrawable(R.drawable.circular_progressbar_inside_bg)
+            textView50 = containerView.findViewById(R.id.textView50)
+
+
+//            textView50.setText(items[i].totalMeeting)
+
+
+            val drawableMatch =
+                context.resources.getDrawable(R.drawable.circular_progressbar_inside_bg)
             matchProgressBar.progressDrawable = drawableMatch
             matchProgressBar.progress = 75
             matchProgressBar.max = 100
             //attendance status progress bar
             attendanceProgressBar = containerView.findViewById(R.id.attendance_status_progressBar)
-            val drawableAttendance = context.resources.getDrawable(R.drawable.circular_progressbar_attendance_inside_bg)
+            val drawableAttendance =
+                context.resources.getDrawable(R.drawable.circular_progressbar_attendance_inside_bg)
             attendanceProgressBar.progressDrawable = drawableAttendance
             attendanceProgressBar.progress = 90
             attendanceProgressBar.max = 100
 
-            val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
             containerView.layoutParams = layoutParams
 
             containerView.tag = i
@@ -137,7 +154,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             //Show next stories
             storyProgressViews[i].setStoriesListener(this)
 
-            val relativeLayoutContainer = containerView.findViewById<ConstraintLayout>(R.id.relative_container)
+            val relativeLayoutContainer =
+                containerView.findViewById<ConstraintLayout>(R.id.relative_container)
 
             //Touch listener on the layout to swipe image right or left
             relativeLayoutContainer.setOnTouchListener(View.OnTouchListener { v, event ->
@@ -163,33 +181,39 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         if (isAClick(event.eventTime, event.downTime)) {
                             containerView.x = 0f
                             containerView.y = 0f
-                        }
-                        else {
-                            containerView.x = ( x_cord - x ).toFloat()
+                        } else {
+                            containerView.x = (x_cord - x).toFloat()
                             containerView.rotation = ((x_cord - x) * (Math.PI / 256)).toFloat()
 
                             if (x_cord > x) {
-                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
-                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
+                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                    .alpha = 1.0f
+                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                    .imageResource = R.drawable.swipe_like
 //                                if (currentUser > 0) {
 //                                    if ((x_ cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
 //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
 //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
 //                                    }
 //                                }
-                                if ( x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
-                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(179, 58, 204, 225))
-                                else if ( (x_cord - x) % 255 < 179)
-                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb((x_cord - x) % 255, 58, 204, 225))
+                                if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                        Color.argb(179, 58, 204, 225)
+                                    )
+                                else if ((x_cord - x) % 255 < 179)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                        Color.argb((x_cord - x) % 255, 58, 204, 225)
+                                    )
                                 if (x_cord >= (screenCenter + 50)) {
                                     Likes = 2
                                 } else {
                                     Likes = 0
                                 }
-                            }
-                            else if (x_cord < x){
-                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
-                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_dislike
+                            } else if (x_cord < x) {
+                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                    .alpha = 1.0f
+                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                    .imageResource = R.drawable.swipe_dislike
 
 //                                if (currentUser > 0) {
 //                                    if ((x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
@@ -198,46 +222,50 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 //                                    }
 //                                }
                                 if (x - x_cord >= 255 || (x - x_cord) % 255 >= 153)
-                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb(153, 255, 42, 78))
-                                else if ( (x - x_cord) % 255 < 153)
-                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(Color.argb((x - x_cord) % 255, 255, 42, 78))
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                        Color.argb(153, 255, 42, 78)
+                                    )
+                                else if ((x - x_cord) % 255 < 153)
+                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                        Color.argb((x - x_cord) % 255, 255, 42, 78)
+                                    )
                                 if (x_cord <= screenCenter - 50) {
                                     Likes = 1
                                 } else {
                                     Likes = 0
                                 }
-                            }
-                            else {
-                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 0.0f
-                                containerView.findViewById<ImageView>(R.id.story_image_userdetail).colorFilter = null
+                            } else {
+                                containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                    .alpha = 0.0f
+                                containerView.findViewById<ImageView>(R.id.story_image_userdetail)
+                                    .colorFilter = null
                                 Likes = 0
                             }
 
                         }
                     }
                     MotionEvent.ACTION_UP -> {
-                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 0.0f
-                        containerView.findViewById<ImageView>(R.id.story_image_userdetail).colorFilter = null
+                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha =
+                            0.0f
+                        containerView.findViewById<ImageView>(R.id.story_image_userdetail)
+                            .colorFilter = null
 
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
                             if (x >= screenCenter) {
                                 onNext()
 //                                storyProgressViews[currentUser].skip()
-                            }
-                            else {
+                            } else {
                                 onPrev()
 //                                storyProgressViews[currentUser].reverse()
                             }
                             v.parent.requestDisallowInterceptTouchEvent(true)
-                        }
-
-                        else {
+                        } else {
                             x_cord = event.rawX.toInt()
                             y_cord = event.rawY.toInt()
 
                             if (Likes == 0) {
-                                containerView.animate().x(0f).y(0f).rotation(0f).setDuration(300)
+                                containerView.animate().x(0f).y(0f).rotation(0f).duration = 300
 //                                storyProgressViews[currentUser].resume()
                             } else if (Likes == 1) {
                                 Log.e("Event_Status :->", "Dislike")
@@ -245,13 +273,14 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 callSwipeUserApi(items[currentUser].id, Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
-                                    currentUser --
+                                    currentUser--
                                     Likes = 0
-                                    parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
-                                 }
-                                else {
-                                    context.launchActivity<HomeActivity> {}
-                                    finish()
+                                    parentView.getChildAt(currentUser).animate().scaleX(1f)
+                                        .scaleY(1f)
+                                } else {
+                                    gotoMainScreen()
+//                                    context.launchActivity<HomeActivity> {}
+//                                    finish()
                                 }
 
                             } else if (Likes == 2) {
@@ -260,13 +289,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 callSwipeUserApi(items[currentUser].id, Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
-                                    currentUser --
+                                    currentUser--
                                     Likes = 0
-                                    parentView.getChildAt(currentUser).animate().scaleX(1f).scaleY(1f)
-                                }
-                                else {
-                                    context.launchActivity<HomeActivity> {}
-                                    finish()
+                                    parentView.getChildAt(currentUser).animate().scaleX(1f)
+                                        .scaleY(1f)
+                                } else {
+                                    gotoMainScreen()
                                 }
                             }
                         }
@@ -279,8 +307,15 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         }
     }
 
-    private fun callSwipeUserApi(id:Int, like : Int) {
-        var likes : String = ""
+    private fun gotoMainScreen() {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+    }
+
+    private fun callSwipeUserApi(id: Int, like: Int) {
+        var likes: String = ""
         if (like == 1) //Dislike this user
         {
             likes = "dislike"
@@ -292,9 +327,9 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         val swipe = UserSwipe(id, likes)
         val call = ApiClient.getClient.swipeUser(swipe, SharedPrefrenceManager.getUserToken(this))
-        call.enqueue(object : Callback<SwipeUserResponse>{
+        call.enqueue(object : Callback<SwipeUserResponse> {
             override fun onFailure(call: Call<SwipeUserResponse>, t: Throwable) {
-                Log.d("Api call failure -> " , "" + call)
+                Log.d("Api call failure -> ", "" + call)
             }
 
             override fun onResponse(
@@ -311,6 +346,14 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 }
 
                 val status = response.body()?.status
+
+                if (status == 2) {
+                    Toast.makeText(
+                        this@SwipeMainActivity,
+                        "Congratulation, You matched",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
 
         })
@@ -372,11 +415,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
      */
 
-    fun isAClick(dragTime : Long, downTime : Long): Boolean {
-        if (dragTime - downTime < CLICK_ACTION_THRESHOLD)
-            return true
-        else
-            return false
+    fun isAClick(dragTime: Long, downTime: Long): Boolean {
+        return dragTime - downTime < CLICK_ACTION_THRESHOLD
     }
 
     override fun onComplete() {
@@ -385,8 +425,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     override fun onPrev() {
-        if ( counter[currentUser] > 0) {
-            counter[currentUser] --
+        if (counter[currentUser] > 0) {
+            counter[currentUser]--
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
                 .centerCrop()
@@ -395,8 +435,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     override fun onNext() {
-        if ( counter[currentUser] < items[currentUser].images!!.size - 1) {
-            counter[currentUser] ++
+        if (counter[currentUser] < items[currentUser].images!!.size - 1) {
+            counter[currentUser]++
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
                 .centerCrop()
@@ -425,8 +465,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     private fun showIncognitoBtn() {
         val isIncognito = SharedPrefrenceManager.getisIncognito(this)
-        if(isIncognito){
-            SharedPrefrenceManager.setisIncognito(this,false)
+        if (isIncognito) {
+            SharedPrefrenceManager.setisIncognito(this, false)
             val ll = LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
             val dialog = Dialog(this)
             dialog.setContentView(ll)
@@ -438,21 +478,23 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 dialog.dismiss()
             }
             dialog.show()
-        }else{
+        } else {
             home_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost)
             makeUserOnOffline(true)
-            SharedPrefrenceManager.setisIncognito(this,true)
+            SharedPrefrenceManager.setisIncognito(this, true)
         }
 
     }
 
-    private fun makeUserOnOffline(is_online : Boolean)
-    {
-        val makeUserOnline= MakeUserOnline(is_online)
+    private fun makeUserOnOffline(is_online: Boolean) {
+        val makeUserOnline = MakeUserOnline(is_online)
 
-        val call = ApiClient.getClient.makeUserOnline(makeUserOnline,SharedPrefrenceManager.getUserToken(this))
+        val call = ApiClient.getClient.makeUserOnline(
+            makeUserOnline,
+            SharedPrefrenceManager.getUserToken(this)
+        )
 
-        call.enqueue(object :Callback<MakeUserOnlineResponse> {
+        call.enqueue(object : Callback<MakeUserOnlineResponse> {
             override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
 
             }
@@ -469,9 +511,17 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 }
 
                 if (is_online == false)
-                    Toast.makeText(this@SwipeMainActivity,"You're offline",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SwipeMainActivity,
+                        "You're offline",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 else
-                    Toast.makeText(this@SwipeMainActivity,"You're online",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SwipeMainActivity,
+                        "You're online",
+                        Toast.LENGTH_SHORT
+                    ).show()
             }
 
         })

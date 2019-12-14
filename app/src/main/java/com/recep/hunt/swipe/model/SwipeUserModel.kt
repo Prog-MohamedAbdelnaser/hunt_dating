@@ -6,7 +6,16 @@ import android.os.Parcelable
 import com.recep.hunt.model.usersList.Data
 
 @SuppressLint("ParcelCreator")
-class SwipeUserModel(val id:Int, val locationName:String, val firstName:String, val age:Int, val title:String, val detail:String?, val images:ArrayList<String>?) : Parcelable {
+class SwipeUserModel(val id:Int,
+                     val locationName:String,
+                     val firstName:String,
+                     val age:Int,
+                     val title:String,
+                     val detail:String?,
+                     val totalMatching: Float,
+                     val totalMeeting : Int,
+                     val images:ArrayList<String>?
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
@@ -14,6 +23,8 @@ class SwipeUserModel(val id:Int, val locationName:String, val firstName:String, 
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readFloat(),
+        parcel.readInt(),
         parcel.readArrayList(ClassLoader::class.java.classLoader) as ArrayList<String>
     ) {
     }
@@ -25,6 +36,8 @@ class SwipeUserModel(val id:Int, val locationName:String, val firstName:String, 
         parcel.writeInt(age)
         parcel.writeString(title)
         parcel.writeString(detail)
+        parcel.writeFloat(totalMatching)
+        parcel.writeInt(totalMeeting)
         parcel.writeList(images)
     }
 

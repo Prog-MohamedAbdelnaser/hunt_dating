@@ -32,7 +32,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -311,7 +310,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-
     private fun showIncognitoBtn() {
         val isIncognito = SharedPrefrenceManager.getisIncognito(this)
         if (isIncognito) {
@@ -389,7 +387,17 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         if (result[i].distance.toFloat() <= NEAREST_DISTANCE) {
 
                             if (result[i].distance.toFloat() == 0f) {
-                                selectLocationAndGetUsersList(result[i].place_id, result[i].name)
+//                                if (result[i].users != 0) {
+                                selectLocationAndGetUsersList(
+                                    result[i].place_id,
+                                    result[i].name
+                                )
+//                                } else {
+//                                    AlertDialogUtils.displayDialog(
+//                                        this@HomeActivity,
+//                                        getString(R.string.no_user_found)
+//                                    )
+//                                }
                             }
                             nearbyItems.add(result[i])
                         } else {
@@ -979,6 +987,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                                 result[i].age,
                                 result[i].basicInfo.job_title,
                                 result[i].basicInfo.about,
+                                result[i].totalMatching,
+                                result[i].totalMeeting,
                                 images
                             )
                         )
