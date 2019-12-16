@@ -215,7 +215,22 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
-                launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, result.uri.toString()) }
+                if (imgFlag == null) {
+//                    SharedPrefrenceManager.setProfileImg(this, result.bitmap.toString())
+                    launchActivity<SetupProfileAddedPhotoActivity> {
+                        putExtra(
+                            IMGURI,
+                            result.uri.toString()
+                        )
+                    }
+                }
+                else{
+                    setImage(MediaStore
+                        .Images
+                        .Media
+                        .getBitmap(this.getContentResolver(),
+                            result.uri))
+                }
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
             }

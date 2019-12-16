@@ -348,7 +348,9 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                                 this@SetupProfileReferralCodeActivity,
                                 0.toString()
                             )
-                            launchActivity<SetupProfileCompletedActivity> { }
+                            launchActivity<SetupProfileCompletedActivity> {
+                                putExtra(Constants.IMGURI, avatarFilePath)
+                            }
                         }                            //do token related code and also store user json
 
                     }

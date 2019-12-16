@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.constants.APIUtils
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.profile.viewmodel.UserViewModel
@@ -51,11 +52,13 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private lateinit var userName: TextView
     private lateinit var userViewModel: UserViewModel
     private lateinit var bitmap: Bitmap
+    private var avatarFilePath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_setup_profile_completed)
         init()
+        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
     }
 
     private fun init() {
@@ -88,7 +91,11 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
                 .placeholder(R.drawable.account_icon)
                 .into(userImage)
         } else {
-            userImage.setImageBitmap(StringToBitmap(userImageString))
+//            userImage.setImageBitmap(StringToBitmap(userImageString))
+            Glide.with(this)
+                .load(avatarFilePath)
+                .placeholder(R.drawable.account_icon)
+                .into(userImage)
         }
         //  userImage.setImageBitmap(StringToBitmap(userImageString))
         //val userImageString = SharedPrefrenceManager.getUserImage(this)
