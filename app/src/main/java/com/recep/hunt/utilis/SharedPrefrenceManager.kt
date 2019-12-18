@@ -3,6 +3,7 @@ package com.recep.hunt.utilis
 import android.content.Context
 import android.content.SharedPreferences
 import com.facebook.FacebookSdk.getApplicationContext
+import com.orhanobut.logger.Logger
 import com.recep.hunt.constants.Constants
 
 

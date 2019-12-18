@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
@@ -61,7 +62,7 @@ class UserProfileActivity : AppCompatActivity() {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        getData()
+//        getData()
     }
 
     private fun getData() {
@@ -172,9 +173,10 @@ class UserProfileActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        adapter.clear()
-        setupRecyclerView()
-        adapter.notifyDataSetChanged()
+//        adapter.clear()
+//        setupRecyclerView()
+//        adapter.notifyDataSetChanged()
+        getData()
     }
 
     private fun setupRecyclerView() {

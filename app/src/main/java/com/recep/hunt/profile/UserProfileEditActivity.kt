@@ -55,19 +55,6 @@ import java.io.FileOutputStream
 
 
 class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
-
-    override fun onItemClicked(
-        position: Int,
-        questionModel: UserBasicInfoQuestionModel,
-        icon: Int
-    ) {
-        launchActivity<UserProfileEditQuestionActivity> {
-            putExtra(questionModelKey, questionModel)
-            putExtra(questionPositionKey, position)
-            putExtra(questionImageKey, icon)
-        }
-    }
-
     private lateinit var writeAboutYouEditText: EditText
     private lateinit var jobTitleEditText: EditText
     private lateinit var companyNameEditText: EditText
@@ -274,6 +261,18 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
             ImagePicker.with(this).setShowCamera(true).setMultipleMode(false).start()
         }
 
+    }
+
+    override fun onItemClicked(
+        position: Int,
+        questionModel: UserBasicInfoQuestionModel,
+        icon: Int
+    ) {
+        launchActivity<UserProfileEditQuestionActivity> {
+            putExtra(questionModelKey, questionModel)
+            putExtra(questionPositionKey, position)
+            putExtra(questionImageKey, icon)
+        }
     }
 
 
