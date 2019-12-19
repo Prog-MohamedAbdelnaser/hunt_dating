@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bruce.pickerview.popwindow.DatePickerPopWin
 import com.facebook.*
+import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
@@ -266,6 +267,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     private fun setupFbLoginAuth() {
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
+        LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK)
         LoginManager.getInstance()
             .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos","user_birthday","user_gender"))
         LoginManager.getInstance().registerCallback(callbackManager,
