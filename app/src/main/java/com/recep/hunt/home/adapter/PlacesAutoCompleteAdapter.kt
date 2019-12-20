@@ -59,11 +59,12 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                if (results != null && results.count > 0) {
-                    notifyDataSetChanged()
-                } else {
-
-                }
+                notifyDataSetChanged()
+//                if (results != null && results.count > 0) {
+//
+//                } else {
+//
+//                }
             }
 
         }
@@ -117,16 +118,13 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
         return mResultList.get(position)
     }
 
-    inner class PredictionHolder(view : View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class PredictionHolder(view : View) : RecyclerView.ViewHolder(view){
         var address : TextView = view.find(R.id.place_detail_textView)
         var mRow : ConstraintLayout = view.find(R.id.place_item_constraintLayout)
 
         init {
-            view.setOnClickListener(this)
-        }
-        override fun onClick(v: View?) {
-            val item = mResultList[adapterPosition]
-            if (v?.id == R.id.place_item_constraintLayout) {
+            view.setOnClickListener {
+                val item = mResultList[adapterPosition]
                 val placeId = item.placeId.toString()
 
                 val placeFields = Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.ADDRESS)
@@ -146,6 +144,12 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
                 })
             }
         }
+//        override fun onClick(v: View?) {
+
+//            if (v?.id == R.id.place_item_constraintLayout) {
+//
+//            }
+//        }
 
     }
 

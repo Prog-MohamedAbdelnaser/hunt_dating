@@ -4,9 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.view.inputmethod.InputMethodManager
 import com.recep.hunt.login.WelcomeScreenActivity
 import org.json.JSONException
 import org.json.JSONObject
+import androidx.core.content.ContextCompat.getSystemService
+
+
 
 
 interface OkListener {
@@ -39,6 +43,15 @@ object Utils {
         }
 
         return false
+    }
+
+    fun hideKeyboard(mActivity: Activity?){
+        val view = mActivity?.currentFocus
+        if (view != null) {
+            val imm = mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
     }
 
 }

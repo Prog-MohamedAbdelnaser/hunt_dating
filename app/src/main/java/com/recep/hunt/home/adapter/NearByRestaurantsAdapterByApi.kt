@@ -131,6 +131,13 @@ class NearByRestaurantsAdapterByApi(
                     call: Call<SelectLocationResponse>,
                     response: Response<SelectLocationResponse>
                 ) {
+
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(context, strErrorJson)) {
+                            return
+                        }
+                    }
                     var result = response.body()?.data
                     if (result != null) {
                         getUsersList(location_id, age, date, business, friendship)

@@ -90,23 +90,30 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     //PlacesAutoCompleteAdapter override
     override fun click(place: Place) {
-        val markerOptions = MarkerOptions()
-            .position(place.latLng!!)
-            .icon(null)
+        Utils.hideKeyboard(this@HomeActivity)
+        place.latLng?.latitude?.let { place.latLng?.longitude?.let { it1 ->
+            selectLocation(it,
+                it1
+            )
+        } }
+    }
 
-        latitude = place.latLng!!.latitude
-        longitude = place.latLng!!.longitude
+    private fun selectLocation(latitude:Double,longitude:Double){
+//        val markerOptions = MarkerOptions()
+//            .position(LatLng(latitude,longitude))
+//            .icon(null)
+
 
 //        mMarker = mMap.addMarker(markerOptions)
 //        mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude,longitude)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
 
-        setPlaceRipple(place.latLng!!)
+        setPlaceRipple(LatLng(latitude,longitude))
 
         adapter.clear()
-        nearestPlaces(place.latLng!!.latitude, place.latLng!!.longitude)
+        nearestPlaces(latitude, longitude)
         searchTextView.text = ""
     }
 
@@ -747,14 +754,23 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
 //                mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-                mMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
-                    override fun onMarkerClick(p0: Marker?): Boolean {
-                        if (p0?.position?.latitude != latitude && p0?.position?.longitude != longitude) {
-                            p0?.showInfoWindow()
-                        }
-                        return true
+                mMap.setOnMarkerClickListener { p0 ->
+                    if (p0?.position?.latitude != latitude && p0?.position?.longitude != longitude) {
+                        p0?.showInfoWindow()
+                    }
+                    true
+                }
+
+                mMap.setOnMyLocationButtonClickListener(object: GoogleMap.OnMyLocationButtonClickListener{
+
+                     override fun onMyLocationButtonClick(): Boolean {
+                        selectLocation(latitude, longitude)
+                        return false
                     }
                 })
+
+
+
 
                 setPlaceRipple(LatLng(latitude, longitude))
 
