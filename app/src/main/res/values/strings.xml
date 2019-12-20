@@ -434,7 +434,10 @@
 
     <!--    Keep these on LAST-->
 
-    <string name="facebook_app_id">428189314461041</string>
+<!--    <string name="facebook_app_id">428189314461041</string>-->
+    <string name="facebook_app_id">1042270406107761</string>
+    <string name="fb_login_protocol_scheme">fb1042270406107761</string>
+
     <string name="insta_client_id">50861e5c85324044a5c2b888735d7ca8</string>
     <string name="insta_client_secret">ad97c323aaa94ffdb5bdf5a6a25435e</string>
     <string name="insta_callback_url">https://www.gethunt.app/</string>
