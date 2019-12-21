@@ -4,16 +4,12 @@ import android.accounts.Account
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,11 +18,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bruce.pickerview.popwindow.DatePickerPopWin
 import com.facebook.*
 import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
@@ -39,9 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.common.api.Scope
-import com.google.android.gms.plus.People
 import com.google.android.gms.plus.Plus
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -55,19 +48,17 @@ import com.google.gson.GsonBuilder
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.constants.Constants
 import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
 import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
-import com.recep.hunt.constants.Constants
 import com.recep.hunt.login.instagramClassesJava.InstagramApp
-import com.recep.hunt.login.instagramClassesJava.InstagramApp.WHAT_FINALIZE
 import com.recep.hunt.login.model.LoginChatMessageModel
 import com.recep.hunt.login.model.UserSocialModel
 import com.recep.hunt.model.CheckUserEmail
-import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.isEmailRegister.isEmailRegisterResponse
-import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.profile.viewmodel.UserViewModel
 import com.recep.hunt.setupProfile.SetupProfileActivity
+import com.recep.hunt.setupProfile.SetupProfileDobActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.hideKeyboard
@@ -87,15 +78,14 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.UnsupportedEncodingException
-import java.net.URL
-import java.net.URLEncoder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
+    GoogleApiClient.OnConnectionFailedListener {
     override fun onConnectionFailed(p0: ConnectionResult) {
     }
 
@@ -129,12 +119,13 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         if (msg.what == InstagramApp.WHAT_FINALIZE) {
             userInfoHashmap = mApp!!.userInfo
         } else if (msg.what == InstagramApp.WHAT_FINALIZE) {
-            Toast.makeText(this@SocialLoginActivity, "Check your network.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@SocialLoginActivity, "Check your network.", Toast.LENGTH_SHORT)
+                .show()
         }
         false
     })
 
-    private lateinit var account :GoogleSignInAccount
+    private lateinit var account: GoogleSignInAccount
 
 
     private val adapter = GroupAdapter<ViewHolder>()
@@ -159,7 +150,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         try {
             val info = packageManager.getPackageInfo(
                 "com.recep.hunt",
-                PackageManager.GET_SIGNATURES)
+                PackageManager.GET_SIGNATURES
+            )
             for (signature in info.signatures) {
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
@@ -178,7 +170,12 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     }
 
     private fun setupInstaAuth() {
-        mApp = InstagramApp(this@SocialLoginActivity, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.CALLBACK_URL)
+        mApp = InstagramApp(
+            this@SocialLoginActivity,
+            Constants.CLIENT_ID,
+            Constants.CLIENT_SECRET,
+            Constants.CALLBACK_URL
+        )
         mApp!!.setListener(object : InstagramApp.OAuthAuthenticationListener {
             override fun onSuccess() {
                 // userInfoHashmap = mApp.
@@ -215,8 +212,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                     //setupInstaAuth()
                     launchingInst()
 
-                R.id.social_login_skip_btn ->{
-                    SharedPrefrenceManager.setIsFromSocial(this,true)
+                R.id.social_login_skip_btn -> {
+                    SharedPrefrenceManager.setIsFromSocial(this, true)
 
                     launchActivity<SetupProfileActivity>()
                 }
@@ -234,7 +231,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             .requestEmail()
             .requestProfile()
 //            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE) , scope)
-            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE) )
+            .requestScopes(Scope(Scopes.PLUS_ME), Scope(Scopes.PROFILE))
 
             .build()
 
@@ -267,9 +264,12 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
     private fun setupFbLoginAuth() {
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
-        LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK)
+        LoginManager.getInstance().loginBehavior = LoginBehavior.NATIVE_WITH_FALLBACK
         LoginManager.getInstance()
-            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
+            .logInWithReadPermissions(
+                this@SocialLoginActivity,
+                Arrays.asList("public_profile", "email")
+            )
 //            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos","user_birthday","user_gender"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
@@ -368,40 +368,44 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(Exception::class.java)
-                val acct = result.getSignInAccount()
+                val acct = result.signInAccount
                 if (account != null)
                     firebaseAuthWithGoogle(account)
 
-                Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+                Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
                 val person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient)
 
-                CoroutineScope(Dispatchers.IO).launch{
+                CoroutineScope(Dispatchers.IO).launch {
                     withContext(Dispatchers.IO) {
-                        val HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
-                        val JSON_FACTORY  = JacksonFactory.getDefaultInstance();
+                        val HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport()
+                        val JSON_FACTORY = JacksonFactory.getDefaultInstance()
 
 
-                        val cred = GoogleAccountCredential.usingOAuth2(applicationContext ,Collections.singleton(Scopes.PROFILE))
-                        cred.setSelectedAccount(Account(acct!!.email ,"com.google"));
+                        val cred = GoogleAccountCredential.usingOAuth2(
+                            applicationContext,
+                            Collections.singleton(Scopes.PROFILE)
+                        )
+                        cred.selectedAccount = Account(acct!!.email, "com.google")
 
                         val service = PeopleService.Builder(
-                            HTTP_TRANSPORT ,
+                            HTTP_TRANSPORT,
                             JSON_FACTORY,
-                            cred)
+                            cred
+                        )
                             .setApplicationName(getString(R.string.app_name)).build()
 
-                        try{
+                        try {
                             var meProfile = service.people().get("people/me")
                                 .setPersonFields("birthdays")
-                                .execute();
+                                .execute()
 
-                            var d =meProfile.birthdays[0].date
-                           val birthday =  d.month.toString() +"/" +d.day.toString()+"/"+d.year.toString()
+                            var d = meProfile.birthdays[0].date
+                            val birthday =
+                                d.month.toString() + "/" + d.day.toString() + "/" + d.year.toString()
                             SharedPrefrenceManager.setUserDob(applicationContext, birthday)
 
 
-                        }
-                        catch (e :java.lang.Exception){
+                        } catch (e: java.lang.Exception) {
 
                         }
                     }
@@ -439,109 +443,128 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
 
     private fun updateGoogleUI(user: FirebaseUser?) {
         if (user != null) {
-
-            user.email?.let{
-                if(!checkIsUserRegister(it))
-                {
-                    val gson = GsonBuilder().setPrettyPrinting().create()
-                    userDetailsModel = UserSocialModel(
-                        user.uid,
-                        user.photoUrl.toString(),
-                        user.displayName!!,
-                        user.email!!
-                    )
-
-                    //  var userInf  = user.providerData
-
-
-                    val json: String = gson.toJson(userDetailsModel)
-                    Log.e("Full name : ${user.displayName}", "")
-                    val fullname = user.displayName!!.split(" ").toTypedArray()
-
-                    val firstName: String = fullname[0]
-                    val lastName: String = fullname[1]
-
-                    SharedPrefrenceManager.setUserFirstName(this, firstName)
-                    SharedPrefrenceManager.setUserLastName(this, lastName)
-                    SharedPrefrenceManager.setUserEmail(this, user.email!!)
-                    SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
-                    SharedPrefrenceManager.setProfileImg(this, user.photoUrl.toString())
-                    SharedPrefrenceManager.setsocialType(this, "social")
-                    SharedPrefrenceManager.setGoogleLoginToken(this,user.uid)
-                    SharedPrefrenceManager.setGoogleId(this,user.uid)
-
-                    launchActivity<ContinueAsSocialActivity> {
-                        putExtra(socialTypeKey, Constants.socialGoogleType)
-                        putExtra(userSocialModel, json)
-                    }
-                    var googleSignInClient = GoogleSignIn.getClient(this@SocialLoginActivity, gso);
-                    googleSignInClient.signOut();
+            user.email?.let {
+                if (!checkIsUserRegister(it)) {
+                    googleUserDetails(user)
                 }
             }
-
-
-
         } else {
             toast("userNotFound")
         }
     }
 
-    private fun getUserDetails(loginResult: LoginResult) {
-        val data_request = GraphRequest.newMeRequest(loginResult.accessToken) { json_object, response ->
-            try {
-                Log.e(TAG, "facebook respone : $json_object")
-                val picture = json_object.getJSONObject("picture")
-                val data = picture.getJSONObject("data")
-                //Fetch the data from the response
-                val facebook_pic = data.optString("url", "")
-                val social_name = json_object.optString("name", "")
-                val social_email = json_object.optString("email", "")
-                val id = json_object.getString("id")
-                // val gender = json_object.getString("gender").
-                 userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
+    private fun googleUserDetails(user: FirebaseUser) {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        userDetailsModel = UserSocialModel(
+            user.uid,
+            user.photoUrl.toString(),
+            user.displayName!!,
+            user.email!!
+        )
 
-                if(!checkIsUserRegister(social_email))
-                {
-
-                    val gson = GsonBuilder().setPrettyPrinting().create()
-                    val json: String = gson.toJson(userDetailsModel)
-
-                    val fullname = social_name.split(" ").toTypedArray()
-                    val firstName: String = fullname[0]
-                    val lastName: String = fullname[1]
-
-                    SharedPrefrenceManager.setUserFirstName(this, firstName)
-                    SharedPrefrenceManager.setUserLastName(this, lastName)
-                    SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
-                    SharedPrefrenceManager.setUserEmail(this, social_email)
-
-                    SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity,id)
-                    SharedPrefrenceManager.setFacebookLoginToken(this@SocialLoginActivity,loginResult.accessToken.token.toString())
-
-                    try {
-                        SharedPrefrenceManager.setProfileImg(this,facebook_pic)
-                    } catch(e: IOException) {
-                        e.printStackTrace()
-                    }
-                    SharedPrefrenceManager.setsocialType(this, "social")
-
-                    // SharedPrefrenceManager.setUserGender(this, gender)
-                    fbUserImages(id)
-                    launchActivity<ContinueAsSocialActivity> {
-                        putExtra(socialTypeKey, Constants.socialFBType)
-                        putExtra(userSocialModel, json)
-                    }
-                }
+        //  var userInf  = user.providerData
 
 
-            } catch (e: JSONException) {
-                Log.d("JSONException: ", e.message, e)
-            } catch (e: UnsupportedEncodingException) {
-                e.printStackTrace()
-            }
+        val json: String = gson.toJson(userDetailsModel)
+        Log.e("Full name : ${user.displayName}", "")
+        val fullname = user.displayName!!.split(" ").toTypedArray()
+
+        val firstName: String = fullname[0]
+        val lastName: String = fullname[1]
+
+        SharedPrefrenceManager.setUserFirstName(this, firstName)
+        SharedPrefrenceManager.setUserLastName(this, lastName)
+        SharedPrefrenceManager.setUserEmail(this, user.email!!)
+        SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
+        SharedPrefrenceManager.setProfileImg(this, user.photoUrl.toString())
+        SharedPrefrenceManager.setsocialType(this, "social")
+        SharedPrefrenceManager.setGoogleLoginToken(this, user.uid)
+        SharedPrefrenceManager.setGoogleId(this, user.uid)
+
+        //                    launchActivity<ContinueAsSocialActivity> {
+        //                        putExtra(socialTypeKey, Constants.socialGoogleType)
+        //                        putExtra(userSocialModel, json)
+        //                    }
+
+        launchActivity<SetupProfileDobActivity> {
+            putExtra(socialTypeKey, Constants.socialFBType)
+            putExtra(userSocialModel, json)
         }
+
+        val googleSignInClient = GoogleSignIn.getClient(this@SocialLoginActivity, gso)
+        googleSignInClient.signOut()
+    }
+
+    private fun getUserDetails(loginResult: LoginResult) {
+        val data_request =
+            GraphRequest.newMeRequest(loginResult.accessToken) { json_object, response ->
+                try {
+                    Log.e(TAG, "facebook respone : $json_object")
+                    val picture = json_object.getJSONObject("picture")
+                    val data = picture.getJSONObject("data")
+                    //Fetch the data from the response
+                    val facebook_pic = data.optString("url", "")
+                    val social_name = json_object.optString("name", "")
+                    val social_email = json_object.optString("email", "")
+                    val id = json_object.getString("id")
+                    // val gender = json_object.getString("gender").
+                    userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
+
+                    if (!checkIsUserRegister(social_email)) {
+
+                        val gson = GsonBuilder().setPrettyPrinting().create()
+                        val json: String = gson.toJson(userDetailsModel)
+
+                        val fullname = social_name.split(" ").toTypedArray()
+                        val firstName: String = fullname[0]
+                        val lastName: String = fullname[1]
+
+                        SharedPrefrenceManager.setUserFirstName(this, firstName)
+                        SharedPrefrenceManager.setUserLastName(this, lastName)
+                        SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
+                        SharedPrefrenceManager.setUserEmail(this, social_email)
+
+                        SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity, id)
+                        SharedPrefrenceManager.setFacebookLoginToken(
+                            this@SocialLoginActivity,
+                            loginResult.accessToken.token.toString()
+                        )
+
+                        try {
+                            SharedPrefrenceManager.setProfileImg(this, facebook_pic)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                        SharedPrefrenceManager.setsocialType(this, "social")
+
+                        // SharedPrefrenceManager.setUserGender(this, gender)
+                        fbUserImages(id)
+
+
+                        launchActivity<SetupProfileDobActivity> {
+                            putExtra(socialTypeKey, Constants.socialFBType)
+                            putExtra(userSocialModel, json)
+                        }
+
+
+//                    launchActivity<ContinueAsSocialActivity> {
+//                        putExtra(socialTypeKey, Constants.socialFBType)
+//                        putExtra(userSocialModel, json)
+//                    }
+                    }
+
+
+                } catch (e: JSONException) {
+                    Log.d("JSONException: ", e.message, e)
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                }
+            }
         val permission_param = Bundle()
-        permission_param.putString("fields", "id,name,email,picture.width(480).height(480),gender,birthday")
+        permission_param.putString(
+            "fields",
+            "id,name,email,picture.width(480).height(480),gender,birthday"
+        )
         data_request.parameters = permission_param
         data_request.executeAsync()
 
@@ -554,14 +577,14 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
             "http://graph.facebook.com/{$id}/photos",
             null,
             HttpMethod.GET,
-            GraphRequest.Callback() {
+            GraphRequest.Callback {
                 fun onCompleted(response: GraphResponse) {
-                    val a=response
-                    Log.d(TAG,response.toString())
+                    val a = response
+                    Log.d(TAG, response.toString())
                 }
 
             }
-        ).executeAsync();
+        ).executeAsync()
     }
 
 
@@ -622,12 +645,14 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
-    fun checkIsUserRegister(email:String):Boolean
-    {
-        var isEmailAlreadyUse=false
-        val checkIsEmailValid= CheckUserEmail(email)
+    fun checkIsUserRegister(email: String): Boolean {
+        var isEmailAlreadyUse = false
+        val checkIsEmailValid = CheckUserEmail(email)
 
-        val call = ApiClient.getClient.checkIsEmailRegister(SharedPrefrenceManager.getUserToken(this),checkIsEmailValid)
+        val call = ApiClient.getClient.checkIsEmailRegister(
+            SharedPrefrenceManager.getUserToken(this),
+            checkIsEmailValid
+        )
 
         call.enqueue(object : Callback<isEmailRegisterResponse> {
             override fun onFailure(call: Call<isEmailRegisterResponse>, t: Throwable) {
@@ -639,11 +664,11 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
                 response: Response<isEmailRegisterResponse>
             ) {
                 response.body()?.let {
-                    if(!it.status)
-                    {
-                        Toast.makeText(this@SocialLoginActivity,it.message,Toast.LENGTH_SHORT).show()
+                    if (!it.status) {
+                        Toast.makeText(this@SocialLoginActivity, it.message, Toast.LENGTH_SHORT)
+                            .show()
                     }
-                    isEmailAlreadyUse=it.status
+                    isEmailAlreadyUse = it.status
 
                 }
             }

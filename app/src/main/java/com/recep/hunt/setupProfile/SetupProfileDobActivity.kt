@@ -1,27 +1,22 @@
 package com.recep.hunt.setupProfile
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.DatePicker
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProviders
-import com.bruce.pickerview.popwindow.DatePickerPopWin
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.datePicker.datePickerView.DatePickerPopUpWindow
-import com.recep.hunt.profile.model.User
-import com.recep.hunt.profile.viewmodel.UserViewModel
+import com.recep.hunt.login.ContinueAsSocialActivity
+import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.utilis.*
 import kotlinx.android.synthetic.main.activity_setup_profile_dob.*
 import org.jetbrains.anko.*
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.text.ParseException
 
 
 class SetupProfileDobActivity : BaseActivity() {
@@ -30,7 +25,7 @@ class SetupProfileDobActivity : BaseActivity() {
     private val TAG = SetupProfileDobActivity::class.java.simpleName
     private var dob = ""
     private lateinit var dobTextView: TextView
-    private lateinit var calendar: Calendar;
+    private lateinit var calendar: Calendar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_dob)
@@ -55,7 +50,18 @@ class SetupProfileDobActivity : BaseActivity() {
     private fun moveToUploadPicture() {
         if (dob != "") {
             SharedPrefrenceManager.setUserDob(this, dob)
-            launchActivity<SetupProfileUploadPhotoStep2Activity>()
+            if (intent.extras != null && intent.extras?.containsKey(SocialLoginActivity.socialTypeKey) == true) {
+                val socialTypeKey = intent.getStringExtra(SocialLoginActivity.socialTypeKey)
+                val userSocialModel = intent.getStringExtra(SocialLoginActivity.userSocialModel)
+                launchActivity<ContinueAsSocialActivity> {
+                    putExtra(SocialLoginActivity.socialTypeKey, socialTypeKey)
+                    putExtra(SocialLoginActivity.userSocialModel, userSocialModel)
+                    finish()
+                }
+            } else {
+                launchActivity<SetupProfileUploadPhotoStep2Activity>()
+            }
+
         } else {
             Helpers.showErrorSnackBar(
                 this,
@@ -86,25 +92,28 @@ class SetupProfileDobActivity : BaseActivity() {
             yesButton {
                 //dd/M/yyyy parsed date format
 
-                val parsedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
+                val parsedDate =
+                    "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
 
                 val age = getAge(parsedDate)
 
-                if(age<18)
-                {
+                if (age < 18) {
                     Helpers.showErrorSnackBar(
                         this@SetupProfileDobActivity,
                         resources.getString(R.string.complete_form),
-                         "Age must be grater than 18"
+                        "Age must be grater than 18"
                     )
-                }
-                else{
+                } else {
                     val formatedDate = getFormattedDate(parsedDate)
-                    apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
+                    apiDate = getFormattedDate(
+                        input = parsedDate,
+                        outputDateFormat = Constants.apiDateFormat
+                    )
                     dobTextView.text = formatedDate
                     dobTextView.textColor = resources.getColor(R.color.app_text_black)
-                    years_old_textView.text = resources.getString(R.string.years_old, age.toString())
-                    SharedPrefrenceManager.setUserage(this@SetupProfileDobActivity,age.toString())
+                    years_old_textView.text =
+                        resources.getString(R.string.years_old, age.toString())
+                    SharedPrefrenceManager.setUserage(this@SetupProfileDobActivity, age.toString())
                     dob = formatedDate
                     dob_layout.clearFocus()
                     it.dismiss()
@@ -198,8 +207,7 @@ class SetupProfileDobActivity : BaseActivity() {
         dob = formatedDate
         apiDate = getFormattedDate(input = parsedDate, outputDateFormat = Constants.apiDateFormat)
         val age = getAge(parsedDate)
-        if(age<18)
-        {
+        if (age < 18) {
             Helpers.showErrorSnackBar(
                 this@SetupProfileDobActivity,
                 resources.getString(R.string.complete_form),

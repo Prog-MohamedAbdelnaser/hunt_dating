@@ -284,7 +284,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch (ex: Exception) {
-            ex.printStackTrace()
+//            ex.printStackTrace()
         }
 
 //        try {
@@ -740,7 +740,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         title = listAddresses.get(0).getAddressLine(0)
                     }
                 } catch (e: IOException) {
-                    e.printStackTrace()
+//                    e.printStackTrace()
                 }
                 val latLng = LatLng(latitude, longitude)
                 val markerOptions = MarkerOptions()
