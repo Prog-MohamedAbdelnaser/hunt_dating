@@ -269,7 +269,8 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener, GoogleApi
         LoginManager.getInstance().logOut()
         LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK)
         LoginManager.getInstance()
-            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos","user_birthday","user_gender"))
+            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email"))
+//            .logInWithReadPermissions(this@SocialLoginActivity, Arrays.asList("public_profile", "email","user_photos","user_birthday","user_gender"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
