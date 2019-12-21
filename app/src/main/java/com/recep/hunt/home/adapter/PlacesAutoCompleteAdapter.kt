@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.api.ApiException
@@ -19,29 +20,32 @@ import com.google.android.gms.tasks.Tasks
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.*
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.recep.hunt.R
 import org.jetbrains.anko.find
-import java.lang.Exception
 import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<PlacesAutoCompleteAdapter.PredictionHolder>(), Filterable {
+class PlacesAutoCompleteAdapter(val context: Context) :
+    RecyclerView.Adapter<PlacesAutoCompleteAdapter.PredictionHolder>(), Filterable {
 
-    private val placesClient : PlacesClient = Places.createClient(context)
+    private val placesClient: PlacesClient = Places.createClient(context)
     private val STYLE_NORMAL = StyleSpan(Typeface.NORMAL)
     private val STYLE_BOLD = StyleSpan(Typeface.BOLD)
-    private lateinit var clickListener : ClickListener
-    private var mResultList : ArrayList<PlaceAutoComplete> = ArrayList()
+    private lateinit var clickListener: ClickListener
+    private var mResultList: ArrayList<PlaceAutoComplete> = ArrayList()
 
     fun setClickListener(clickListener: ClickListener) {
         this.clickListener = clickListener
     }
 
-    interface  ClickListener {
-        fun click(place : Place)
+    interface ClickListener {
+        fun click(place: Place)
     }
 
     override fun getFilter(): Filter {
@@ -70,7 +74,7 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
         }
     }
 
-    fun getPredictions(constraint : CharSequence) : ArrayList<PlaceAutoComplete> {
+    fun getPredictions(constraint: CharSequence): ArrayList<PlaceAutoComplete> {
         val resultList = ArrayList<PlaceAutoComplete>()
         val token = AutocompleteSessionToken.newInstance()
 
@@ -81,16 +85,23 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
         val autoCompletePredictions = placesClient.findAutocompletePredictions(request)
         try {
             Tasks.await(autoCompletePredictions, 60, TimeUnit.SECONDS)
-        }catch (e : ExecutionException) {
+        } catch (e: ExecutionException) {
             e.printStackTrace()
         }
 
         if (autoCompletePredictions.isSuccessful) {
             val findAutoCompletePredictionsResponse = autoCompletePredictions.result
             if (findAutoCompletePredictionsResponse != null) {
-                val iterator = findAutoCompletePredictionsResponse.autocompletePredictions.iterator()
+                val iterator =
+                    findAutoCompletePredictionsResponse.autocompletePredictions.iterator()
                 iterator.forEach {
-                    resultList.add(PlaceAutoComplete(it.placeId, it.getPrimaryText(STYLE_NORMAL).toString(), it.getFullText(STYLE_BOLD).toString()))
+                    resultList.add(
+                        PlaceAutoComplete(
+                            it.placeId,
+                            it.getPrimaryText(STYLE_NORMAL).toString(),
+                            it.getFullText(STYLE_BOLD).toString()
+                        )
+                    )
                 }
                 return resultList
             } else {
@@ -101,7 +112,8 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PredictionHolder {
-        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layoutInflater =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val convertView = layoutInflater.inflate(R.layout.place_list_item_layout, parent, false)
         return PredictionHolder(convertView)
     }
@@ -114,34 +126,32 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
         holder.address.text = mResultList[position].address.toString()
     }
 
-    fun getItem(position: Int) : PlaceAutoComplete {
+    fun getItem(position: Int): PlaceAutoComplete {
         return mResultList.get(position)
     }
 
-    inner class PredictionHolder(view : View) : RecyclerView.ViewHolder(view){
-        var address : TextView = view.find(R.id.place_detail_textView)
-        var mRow : ConstraintLayout = view.find(R.id.place_item_constraintLayout)
+    inner class PredictionHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var address: TextView = view.find(R.id.place_detail_textView)
+        var mRow: ConstraintLayout = view.find(R.id.place_item_constraintLayout)
 
         init {
             view.setOnClickListener {
                 val item = mResultList[adapterPosition]
                 val placeId = item.placeId.toString()
 
-                val placeFields = Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.ADDRESS)
+                val placeFields =
+                    Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.ADDRESS)
                 val request = FetchPlaceRequest.builder(placeId, placeFields).build()
-                placesClient.fetchPlace(request).addOnSuccessListener (object : OnSuccessListener<FetchPlaceResponse> {
-                    override fun onSuccess(p0: FetchPlaceResponse?) {
+                placesClient.fetchPlace(request)
+                    .addOnSuccessListener { p0 ->
                         val place = p0!!.place
                         clickListener.click(place)
-                    }
-                }).addOnFailureListener(object : OnFailureListener {
-                    override fun onFailure(p0: Exception) {
+                    }.addOnFailureListener { p0 ->
                         if (p0 is ApiException) {
                             Log.d("Home Activity ->", p0.message)
+//                            Toast.makeText(context, p0.message, Toast.LENGTH_LONG).show()
                         }
                     }
-
-                })
             }
         }
 //        override fun onClick(v: View?) {
@@ -153,7 +163,11 @@ class PlacesAutoCompleteAdapter(val context: Context) : RecyclerView.Adapter<Pla
 
     }
 
-    class PlaceAutoComplete(val placeId : CharSequence, val area: CharSequence, val address: CharSequence) {
+    class PlaceAutoComplete(
+        val placeId: CharSequence,
+        val area: CharSequence,
+        val address: CharSequence
+    ) {
 
         override fun toString(): String {
             return area.toString()
