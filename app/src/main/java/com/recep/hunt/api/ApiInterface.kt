@@ -98,7 +98,7 @@ interface ApiInterface {
     fun getRandomQuestion():Call<GetRandomQuestionReponse>
 
     @POST("/api/answer-random-question")
-    fun answerRandomQuestion(@Body answerRandomQuestions: AnswerRandomQuestions):Call<AnswerRandomQuestions>
+    fun answerRandomQuestion(@Header("Authorization")  authorization:String,@Body answerRandomQuestions: AnswerRandomQuestions):Call<AnswerRandomQuestions>
 
     @POST("/api/nearest-place")
     fun getNearestPlace(@Body nearestLocation: NearestLocation,@Header("Authorization")  authorization:String):Call<NearestLocationResponse>

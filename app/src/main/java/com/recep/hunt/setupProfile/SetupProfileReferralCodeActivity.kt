@@ -211,7 +211,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         )
         builder.addFormDataPart(
             "gender",
-            SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity)
+            SharedPrefrenceManager.getUserGender(this@SetupProfileReferralCodeActivity).toLowerCase()
         )
 
         val dob = SharedPrefrenceManager.getUserDob(this@SetupProfileReferralCodeActivity)

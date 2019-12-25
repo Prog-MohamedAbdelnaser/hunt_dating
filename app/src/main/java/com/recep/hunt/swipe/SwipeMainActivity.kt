@@ -20,6 +20,7 @@ import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
 import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.matchs.MatchQuestionnaireActivity
 import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.UserSwipe
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
@@ -270,7 +271,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             } else if (Likes == 1) {
                                 Log.e("Event_Status :->", "Dislike")
                                 parentView.removeView(containerView)
-                                callSwipeUserApi(items[currentUser].id, Likes)
+                                callSwipeUserApi(items[currentUser], Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser--
@@ -286,7 +287,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             } else if (Likes == 2) {
                                 Log.e("Event_Status :->", "Like")
                                 parentView.removeView(containerView)
-                                callSwipeUserApi(items[currentUser].id, Likes)
+                                callSwipeUserApi(items[currentUser], Likes)
                                 if (currentUser > 0) {
 //                                    storyProgressViews[currentUser - 1].startStories()
                                     currentUser--
@@ -314,7 +315,15 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         startActivity(intent)
     }
 
-    private fun callSwipeUserApi(id: Int, like: Int) {
+ private fun gotoMatchQuestionScreen(mSwipeUserModel: SwipeUserModel) {
+        val intent = Intent(this, MatchQuestionnaireActivity::class.java)
+        intent.putExtra("swipeUsers",mSwipeUserModel)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+    }
+
+    private fun callSwipeUserApi(mSwipeUserModel: SwipeUserModel, like: Int) {
         var likes: String = ""
         if (like == 1) //Dislike this user
         {
@@ -325,7 +334,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             likes = "like"
         }
 
-        val swipe = UserSwipe(id, likes)
+        val swipe = UserSwipe(mSwipeUserModel.id, likes)
         val call = ApiClient.getClient.swipeUser(swipe, SharedPrefrenceManager.getUserToken(this))
         call.enqueue(object : Callback<SwipeUserResponse> {
             override fun onFailure(call: Call<SwipeUserResponse>, t: Throwable) {
@@ -353,7 +362,9 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         "Congratulation, You matched",
                         Toast.LENGTH_LONG
                     ).show()
+                    gotoMatchQuestionScreen(mSwipeUserModel)
                 }
+
             }
 
         })
