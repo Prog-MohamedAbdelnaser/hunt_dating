@@ -180,6 +180,9 @@ class WelcomeScreenActivity : AppCompatActivity() {
         user_number_edittext.requestFocus()
 
         videoView.start()
+        if (dialog!=null){
+            dialog.dismiss()
+        }
     }
 
     override fun finish() {
@@ -284,4 +287,6 @@ class WelcomePagerAdapter(private val context: Context, private val subtitle: Ar
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as View)
     }
+
+
 }

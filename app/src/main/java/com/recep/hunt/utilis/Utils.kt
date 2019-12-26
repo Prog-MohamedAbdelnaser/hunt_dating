@@ -9,8 +9,7 @@ import com.recep.hunt.login.WelcomeScreenActivity
 import org.json.JSONException
 import org.json.JSONObject
 import androidx.core.content.ContextCompat.getSystemService
-
-
+import androidx.lifecycle.MutableLiveData
 
 
 interface OkListener {
@@ -19,6 +18,8 @@ interface OkListener {
 
 
 object Utils {
+
+    var placesApiError = MutableLiveData<String>("false")
 
     fun isSessionExpire(context: Context?, errorJsonString: String?): Boolean {
         errorJsonString?.let { it1 ->

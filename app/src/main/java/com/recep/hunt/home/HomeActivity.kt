@@ -155,6 +155,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
+            if (it != "false"){
+                showErrorAlertToUser(it)
+                Utils.placesApiError.value="false"
+            }
+        })
+
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -297,6 +305,21 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
             showGPSDisabledAlertToUser()
         }
 
+    }
+
+    private fun showErrorAlertToUser(msg: String) {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage(msg)
+            .setCancelable(false)
+            .setPositiveButton(
+                "OK"
+            ) { dialog, _ ->
+                dialog.cancel()
+            }
+        val alert = alertDialogBuilder.create()
+        if (!alert.isShowing) {
+            alert.show()
+        }
     }
 
     private fun showGPSDisabledAlertToUser() {
