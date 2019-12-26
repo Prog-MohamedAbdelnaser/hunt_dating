@@ -47,6 +47,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     private lateinit var context: Context
     private lateinit var matchProgressBar: ProgressBar
     private lateinit var textView50: TextView
+    private lateinit var textView51: TextView
+    private lateinit var ivForLiked: ImageView
     private lateinit var attendanceProgressBar: ProgressBar
     private lateinit var homeView: ConstraintLayout
     private var storyProgressViews = ArrayList<StoriesProgressView>()
@@ -100,22 +102,28 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             //match status progress bar
             matchProgressBar = containerView.findViewById(R.id.match_status_progressBar)
             textView50 = containerView.findViewById(R.id.textView50)
+            textView51 = containerView.findViewById(R.id.textView51)
+            ivForLiked = containerView.findViewById(R.id.ivForLiked)
 
 
-//            textView50.setText(items[i].totalMeeting)
+            textView51.text = "" + items[i].totalMeeting
+            textView50.text = "" + items[i].totalMatching.toInt()
+
+
+
 
 
             val drawableMatch =
                 context.resources.getDrawable(R.drawable.circular_progressbar_inside_bg)
             matchProgressBar.progressDrawable = drawableMatch
-            matchProgressBar.progress = 75
+            matchProgressBar.progress = items[i].totalMatching.toInt()
             matchProgressBar.max = 100
             //attendance status progress bar
             attendanceProgressBar = containerView.findViewById(R.id.attendance_status_progressBar)
             val drawableAttendance =
                 context.resources.getDrawable(R.drawable.circular_progressbar_attendance_inside_bg)
             attendanceProgressBar.progressDrawable = drawableAttendance
-            attendanceProgressBar.progress = 90
+            attendanceProgressBar.progress = items[i].totalMeeting
             attendanceProgressBar.max = 100
 
             val layoutParams = LinearLayout.LayoutParams(
@@ -315,9 +323,9 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         startActivity(intent)
     }
 
- private fun gotoMatchQuestionScreen(mSwipeUserModel: SwipeUserModel) {
+    private fun gotoMatchQuestionScreen(mSwipeUserModel: SwipeUserModel) {
         val intent = Intent(this, MatchQuestionnaireActivity::class.java)
-        intent.putExtra("swipeUsers",mSwipeUserModel)
+        intent.putExtra("swipeUsers", mSwipeUserModel)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
