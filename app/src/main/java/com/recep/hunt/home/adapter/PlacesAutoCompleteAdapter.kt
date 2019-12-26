@@ -11,6 +11,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.api.ApiException
@@ -25,6 +26,8 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.recep.hunt.R
+import com.recep.hunt.utilis.Utils
+import kotlinx.coroutines.coroutineScope
 import org.jetbrains.anko.find
 import java.util.*
 import java.util.concurrent.ExecutionException
@@ -86,6 +89,11 @@ class PlacesAutoCompleteAdapter(val context: Context) :
         try {
             Tasks.await(autoCompletePredictions, 60, TimeUnit.SECONDS)
         } catch (e: ExecutionException) {
+            Thread {
+                var message= e.localizedMessage.split(":")[2]
+                Utils.placesApiError.postValue(message)
+            }.start()
+
             e.printStackTrace()
         }
 
@@ -172,5 +180,19 @@ class PlacesAutoCompleteAdapter(val context: Context) :
         override fun toString(): String {
             return area.toString()
         }
+    }
+
+    private fun showErrorAlertToUser(msg: String) {
+
+        val alertDialogBuilder = AlertDialog.Builder(context)
+        alertDialogBuilder.setMessage(msg)
+            .setCancelable(false)
+            .setPositiveButton(
+                "OK"
+            ) { dialog, _ ->
+                dialog.cancel()
+            }
+        val alert = alertDialogBuilder.create()
+        alert.show()
     }
 }
