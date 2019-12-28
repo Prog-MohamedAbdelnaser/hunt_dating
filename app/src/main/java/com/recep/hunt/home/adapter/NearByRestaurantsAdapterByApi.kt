@@ -203,6 +203,10 @@ class NearByRestaurantsAdapterByApi(
                                     result[i].basicInfo.about,
                                     result[i].totalMatching,
                                     result[i].totalMeeting,
+                                    result[i].is_online,
+                                    result[i].for_date,
+                                    result[i]?.for_business,
+                                    result[i].for_friendship,
                                     images
                                 )
                             )
