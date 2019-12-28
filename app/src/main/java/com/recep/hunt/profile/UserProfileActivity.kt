@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants

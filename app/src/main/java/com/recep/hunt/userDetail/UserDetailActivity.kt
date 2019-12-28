@@ -1,5 +1,6 @@
 package com.recep.hunt.userDetail
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -7,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -20,83 +20,134 @@ import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import jp.shts.android.storiesprogressview.StoriesProgressView
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_user_detail.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
-import android.graphics.BitmapFactory
-import android.graphics.Bitmap
+import android.view.MotionEvent
+import android.view.View
+import android.widget.LinearLayout
+import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+import antonkozyriatskyi.circularprogressindicator.PatternProgressTextAdapter
+import com.github.pwittchen.swipe.library.rx2.Swipe
+import com.github.pwittchen.swipe.library.rx2.SwipeListener
+import com.recep.hunt.utilis.CustomProgressTextAdapter
 
 
-
-
-class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListener,
+class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListener,
     SimpleGestureFilter.SimpleGestureListener {
     override fun onSwipe(direction: Int) {
-        when(direction)
-        {
-            SimpleGestureFilter.SWIPE_UP ->{
+        when (direction) {
+            SimpleGestureFilter.SWIPE_UP -> {
+
                 setupUserDetailBottomSheet()
             }
         }
     }
 
     override fun onDoubleTap() {
-        }
+    }
 
     var counter = 0
+
+    private lateinit var swipe: Swipe
+    private lateinit var attendeeProgress: CircularProgressIndicator
+    private lateinit var matchRateProgress: CircularProgressIndicator
+
     private lateinit var storyProgressView: StoriesProgressView
     private lateinit var storyImageView: ImageView
     private var userImagesStoriesData = ArrayList<String>()
-    private var isIncognito :Boolean = false
+    private var isIncognito: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
-        isIncognito=SharedPrefrenceManager.getisIncognito(applicationContext)
+        isIncognito = SharedPrefrenceManager.getisIncognito(applicationContext)
         init()
     }
-    private fun init(){
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun init() {
+        swipe = Swipe()
+        swipe.setListener(object : SwipeListener {
+            override fun onSwipedUp(event: MotionEvent?): Boolean {
+                setupUserDetailBottomSheet()
+
+                return false
+            }
+
+            override fun onSwipedDown(event: MotionEvent?): Boolean {
+                return false
+
+            }
+
+            override fun onSwipingUp(event: MotionEvent?) {
+                setupUserDetailBottomSheet()
+            }
+
+            override fun onSwipedRight(event: MotionEvent?): Boolean {
+                return false
+
+            }
+
+            override fun onSwipingLeft(event: MotionEvent?) {
+            }
+
+            override fun onSwipingRight(event: MotionEvent?) {
+            }
+
+            override fun onSwipingDown(event: MotionEvent?) {
+            }
+
+            override fun onSwipedLeft(event: MotionEvent?): Boolean {
+                return false
+
+            }
+
+        })
+        attendeeProgress = find(R.id.attendance_circularProgress)
+        attendeeProgress.setProgress(75.00, 100.00)
+        attendeeProgress.setProgressTextAdapter(CustomProgressTextAdapter())
+        attendeeProgress.progressTextAdapter.formatText(75.00)
+        matchRateProgress = find(R.id.matchRate_circularProgress)
+        matchRateProgress.setProgress(90.00, 100.00)
+        matchRateProgress.setProgressTextAdapter(CustomProgressTextAdapter())
+        matchRateProgress.progressTextAdapter.formatText(90.00)
         storyProgressView = find(R.id.stories)
         storyImageView = find(R.id.story_image_userdetail)
         setupUserDetailBottomSheet()
         val count = getStoryData().size
-        Log.e("Stories","Total count : $count")
-        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.profile_pic)
-
         userImagesStoriesData = getStoryData()
-        if(userImagesStoriesData.size != 0 ){
+        if (userImagesStoriesData.size != 0) {
             storyProgressView.setStoriesCount(count)
             storyProgressView.setStoryDuration(3500L)
+            storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
 
-                storyImageView.setImageBitmap(largeIcon)
-//
             storyProgressView.setStoriesListener(this)
             skip.setOnClickListener { onNext() }
             reverse.setOnClickListener { onPrev() }
             storyProgressView.startStories()
         }
+        skip.setOnTouchListener { _, event -> swipe.dispatchTouchEvent(event) }
+        reverse.setOnTouchListener { _, event -> swipe.dispatchTouchEvent(event) }
+        if (isIncognito) {
 
-        if(isIncognito){
-            
         }
-
-
 
 
     }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return swipe.dispatchTouchEvent(event)
+    }
+
     override fun onNext() {
-        if(counter != userImagesStoriesData.size)
-        {
-            try{
+        if (counter != userImagesStoriesData.size) {
+            try {
                 storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[++counter]))
-            }
-            catch (e:Exception)
-            {
+            } catch (e: Exception) {
                 onComplete()
 
             }
-        }
-        else
+        } else
             onComplete()
     }
 
@@ -109,7 +160,7 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
 
     }
 
-    private fun getStoryData():ArrayList<String> {
+    private fun getStoryData(): ArrayList<String> {
         val userImagesStoriesData = ArrayList<String>()
 
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
@@ -120,29 +171,35 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
         val userImage = SharedPrefrenceManager.getProfileImg(this)
 
-        if(userImage != Constants.NULL)
+        if (userImage != Constants.NULL)
             userImagesStoriesData.add(userImage)
-        if(firstImage != Constants.NULL)
+        if (firstImage != Constants.NULL)
             userImagesStoriesData.add(firstImage)
-        if(secondImage != Constants.NULL)
+        if (secondImage != Constants.NULL)
             userImagesStoriesData.add(secondImage)
-        if(thirdImage != Constants.NULL)
+        if (thirdImage != Constants.NULL)
             userImagesStoriesData.add(thirdImage)
-        if(fourthImage != Constants.NULL)
+        if (fourthImage != Constants.NULL)
             userImagesStoriesData.add(fourthImage)
-        if(fifthImage != Constants.NULL)
+        if (fifthImage != Constants.NULL)
             userImagesStoriesData.add(fifthImage)
-        if(sixthImage != Constants.NULL)
+        if (sixthImage != Constants.NULL)
             userImagesStoriesData.add(sixthImage)
 
-        userImagesStoriesData.add("")
 
         return userImagesStoriesData
     }
-    private fun setupUserDetailBottomSheet(){
-        val bottomSheet = UserDetalBottomSheetFragment(this)
-        bottomSheet.show(supportFragmentManager, "userDetailBottomSheet")
+
+    var bottomSheet: UserDetalBottomSheetFragment? = null;
+    private fun setupUserDetailBottomSheet() {
+        if (bottomSheet != null) {
+            supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
+        }
+        bottomSheet = UserDetalBottomSheetFragment(this)
+        bottomSheet?.show(supportFragmentManager, "userDetailBottomSheet")
+
     }
+
     private fun setupToolbarClicks() {
         user_detail_filter_btn.setOnClickListener {
             val bottomSheet = FilterBottomSheetDialog(this)
@@ -164,8 +221,8 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
 
     private fun showIncognitoBtn() {
 
-        if(isIncognito){
-            SharedPrefrenceManager.setisIncognito(this,false)
+        if (isIncognito) {
+            SharedPrefrenceManager.setisIncognito(this, false)
             val ll = LayoutInflater.from(this).inflate(R.layout.incoginito_dialog_layout, null)
             val dialog = Dialog(this)
             dialog.setContentView(ll)
@@ -177,10 +234,10 @@ class UserDetailActivity : AppCompatActivity(),StoriesProgressView.StoriesListen
                 dialog.dismiss()
             }
             dialog.show()
-        }else{
+        } else {
             user_detail_incoginoti_btn.image = resources.getDrawable(R.drawable.ghost)
             user_detail_incoginoti_btn.setColorFilter(ContextCompat.getColor(this, R.color.white))
-            SharedPrefrenceManager.setisIncognito(this,true)
+            SharedPrefrenceManager.setisIncognito(this, true)
         }
 
     }
