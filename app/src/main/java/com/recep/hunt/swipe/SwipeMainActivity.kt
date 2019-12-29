@@ -48,7 +48,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     private lateinit var matchProgressBar: ProgressBar
     private lateinit var textView50: TextView
     private lateinit var textView51: TextView
-    private lateinit var ivForLiked: ImageView
     private lateinit var attendanceProgressBar: ProgressBar
     private lateinit var homeView: ConstraintLayout
     private var storyProgressViews = ArrayList<StoriesProgressView>()
