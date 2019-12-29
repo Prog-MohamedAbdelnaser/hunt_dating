@@ -165,7 +165,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
                                 result[i].basicInfo.about,
                                 result[i].totalMatching,
                                 result[i].totalMeeting,
-                                images
+                                images,result[i].basicInfo
                             )
                         )
                     }

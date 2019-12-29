@@ -58,7 +58,7 @@ class TimelineAdapter(private val timeLineModel:ArrayList<TimelineModel>):Recycl
         val model = timeLineModel[position]
         holder.date.text = model.title
         holder.message.text = model.message
-        setMarker(holder, R.drawable.notification_round_btn_bg, R.color.colorPrimaryDark)
+       // setMarker(holder, R.drawable.notification_round_btn_bg, R.color.colorPrimaryDark)
     }
     private fun setMarker(holder: TimeLineViewHolder, drawableResId: Int, colorFilter: Int) {
         holder.timeline.marker = VectorDrawableUtils.getDrawable(holder.itemView.context, drawableResId, ContextCompat.getColor(holder.itemView.context, colorFilter))

@@ -26,6 +26,7 @@ import org.jetbrains.anko.image
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
 import antonkozyriatskyi.circularprogressindicator.PatternProgressTextAdapter
 import com.github.pwittchen.swipe.library.rx2.Swipe
@@ -66,11 +67,11 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
 
     @SuppressLint("ClickableViewAccessibility")
     private fun init() {
-        swipe = Swipe()
+        swipe = Swipe(200, 200)
         swipe.setListener(object : SwipeListener {
             override fun onSwipedUp(event: MotionEvent?): Boolean {
-                setupUserDetailBottomSheet()
-
+                //setupUserDetailBottomSheet()
+                Log.e("TAG", "onSwipedUp")
                 return false
             }
 
@@ -120,14 +121,11 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
             storyProgressView.setStoriesCount(count)
             storyProgressView.setStoryDuration(3500L)
             storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
-
             storyProgressView.setStoriesListener(this)
             skip.setOnClickListener { onNext() }
             reverse.setOnClickListener { onPrev() }
             storyProgressView.startStories()
         }
-        skip.setOnTouchListener { _, event -> swipe.dispatchTouchEvent(event) }
-        reverse.setOnTouchListener { _, event -> swipe.dispatchTouchEvent(event) }
         if (isIncognito) {
 
         }
@@ -135,8 +133,9 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return swipe.dispatchTouchEvent(event)
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        swipe.dispatchTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onNext() {
@@ -145,7 +144,6 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
                 storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[++counter]))
             } catch (e: Exception) {
                 onComplete()
-
             }
         } else
             onComplete()
@@ -185,8 +183,6 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
             userImagesStoriesData.add(fifthImage)
         if (sixthImage != Constants.NULL)
             userImagesStoriesData.add(sixthImage)
-
-
         return userImagesStoriesData
     }
 
