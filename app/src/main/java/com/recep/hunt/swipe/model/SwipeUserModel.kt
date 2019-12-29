@@ -3,21 +3,18 @@ package com.recep.hunt.swipe.model
 import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
-import com.recep.hunt.model.usersList.BasicInfo
 import com.recep.hunt.model.usersList.Data
 
 @SuppressLint("ParcelCreator")
-class SwipeUserModel(
-    val id: Int,
-    val locationName: String,
-    val firstName: String,
-    val age: Int,
-    val title: String,
-    val detail: String?,
-    val totalMatching: Float,
-    val totalMeeting: Int,
-    val images: ArrayList<String>?,
-    val basicInfo: BasicInfo?
+class SwipeUserModel(val id:Int,
+                     val locationName:String,
+                     val firstName:String,
+                     val age:Int,
+                     val title:String,
+                     val detail:String?,
+                     val totalMatching: Float,
+                     val totalMeeting : Int,
+                     val images:ArrayList<String>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -28,8 +25,7 @@ class SwipeUserModel(
         parcel.readString(),
         parcel.readFloat(),
         parcel.readInt(),
-        parcel.readArrayList(ClassLoader::class.java.classLoader) as ArrayList<String>,
-        parcel.readParcelable<BasicInfo>(BasicInfo::class.java.classLoader)
+        parcel.readArrayList(ClassLoader::class.java.classLoader) as ArrayList<String>
     ) {
     }
 
@@ -43,7 +39,6 @@ class SwipeUserModel(
         parcel.writeFloat(totalMatching)
         parcel.writeInt(totalMeeting)
         parcel.writeList(images)
-        parcel.writeParcelable(basicInfo,0)
     }
 
     override fun describeContents(): Int {

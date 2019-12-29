@@ -107,7 +107,7 @@
                         android:src="@drawable/ic_like_filled">
 
                     <ImageView
-                            android:id="@+id/ivForLiked"
+                            android:id="@+id/ivForDate"
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="4dp"
@@ -115,7 +115,8 @@
                             android:layout_marginLeft="4dp"
                             android:background="@drawable/light_blue_circle"
                             android:padding="6dp"
-                            android:src="@drawable/ic_like_filled" />
+                            android:visibility="invisible"
+                            android:src="@drawable/for_date" />
 
 
                     <ImageView
@@ -125,9 +126,10 @@
                             android:layout_marginStart="4dp"
                             android:contentDescription="@null"
                             android:layout_marginLeft="4dp"
-                            android:background="@drawable/light_blue_circle"
+                            android:background="@drawable/light_orange_circle"
                             android:padding="6dp"
-                            android:src="@drawable/ic_like_filled" />
+                            android:visibility="invisible"
+                            android:src="@drawable/for_business" />
 
                     <ImageView
                             android:id="@+id/ivForFriendship"
@@ -136,17 +138,20 @@
                             android:layout_marginStart="4dp"
                             android:contentDescription="@null"
                             android:layout_marginLeft="16dp"
-                            android:background="@drawable/light_blue_circle"
+                            android:background="@drawable/light_purple_circle"
                             android:padding="6dp"
-                            android:src="@drawable/ic_like_filled" />
+                            android:visibility="invisible"
+                            android:src="@drawable/for_friendship" />
                 </LinearLayout>
 
                 <ImageView
+                        android:id="@+id/ivStatusOnline"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
+                        android:visibility="invisible"
                         android:layout_toStartOf="@id/user_detail_username_txtView"
                         android:layout_toLeftOf="@id/user_detail_username_txtView"
                         android:src="@drawable/user_online_status" />

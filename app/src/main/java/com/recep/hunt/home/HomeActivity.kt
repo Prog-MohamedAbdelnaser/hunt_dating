@@ -91,17 +91,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     //PlacesAutoCompleteAdapter override
     override fun click(place: Place) {
         Utils.hideKeyboard(this@HomeActivity)
-        place.latLng?.latitude?.let {
-            place.latLng?.longitude?.let { it1 ->
-                selectLocation(
-                    it,
-                    it1
-                )
-            }
-        }
+        place.latLng?.latitude?.let { place.latLng?.longitude?.let { it1 ->
+            selectLocation(it,
+                it1
+            )
+        } }
     }
 
-    private fun selectLocation(latitude: Double, longitude: Double) {
+    private fun selectLocation(latitude:Double,longitude:Double){
 //        val markerOptions = MarkerOptions()
 //            .position(LatLng(latitude,longitude))
 //            .icon(null)
@@ -110,10 +107,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //        mMarker = mMap.addMarker(markerOptions)
 //        mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude,longitude)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
 
-        setPlaceRipple(LatLng(latitude, longitude))
+        setPlaceRipple(LatLng(latitude,longitude))
 
         adapter.clear()
         nearestPlaces(latitude, longitude)
@@ -160,9 +157,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         setContentView(R.layout.activity_home)
 
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
-            if (it != "false") {
+            if (it != "false"){
                 showErrorAlertToUser(it)
-                Utils.placesApiError.value = "false"
+                Utils.placesApiError.value="false"
             }
         })
 
@@ -787,10 +784,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     true
                 }
 
-                mMap.setOnMyLocationButtonClickListener(object :
-                    GoogleMap.OnMyLocationButtonClickListener {
+                mMap.setOnMyLocationButtonClickListener(object: GoogleMap.OnMyLocationButtonClickListener{
 
-                    override fun onMyLocationButtonClick(): Boolean {
+                     override fun onMyLocationButtonClick(): Boolean {
                         selectLocation(latitude, longitude)
                         return false
                     }
@@ -986,16 +982,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val lat = SharedPrefrenceManager.getUserLatitude(this)
         val lang = SharedPrefrenceManager.getUserLongitude(this)
-        // val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
-        val filter = UsersListFilter(
-            "ChIJDZPv6a8lv0cRBFRz6EJVlxY01",
-            "25,30",
-            "both",
-            "both",
-            "both",
-            "77.6722",
-            "12.8821"
-        )
+        val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
+//            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
         val call =
             ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(this))
 
@@ -1040,8 +1028,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                                 result[i].basicInfo.about,
                                 result[i].totalMatching,
                                 result[i].totalMeeting,
-                                images,
-                                result[i].basicInfo
+                                images
                             )
                         )
                     }
