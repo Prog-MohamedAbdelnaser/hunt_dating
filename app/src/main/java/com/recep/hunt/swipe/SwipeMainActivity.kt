@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -50,6 +51,10 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     private lateinit var textView51: TextView
     private lateinit var attendanceProgressBar: ProgressBar
     private lateinit var homeView: ConstraintLayout
+    private lateinit var ivForDate: ImageView
+    private lateinit var ivForBusiness: ImageView
+    private lateinit var ivForFriendship: ImageView
+    private lateinit var ivStatusOnline: ImageView
     private var storyProgressViews = ArrayList<StoriesProgressView>()
     private var storyImageView = ArrayList<ImageView>()
 
@@ -102,11 +107,29 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             matchProgressBar = containerView.findViewById(R.id.match_status_progressBar)
             textView50 = containerView.findViewById(R.id.textView50)
             textView51 = containerView.findViewById(R.id.textView51)
-            ivForLiked = containerView.findViewById(R.id.ivForLiked)
+            ivForDate = containerView.findViewById(R.id.ivForDate)
+            ivForBusiness = containerView.findViewById(R.id.ivForBusiness)
+            ivForFriendship = containerView.findViewById(R.id.ivForFriendship)
+            ivStatusOnline = containerView.findViewById(R.id.ivStatusOnline)
 
 
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
+
+            if (items[i].is_online=="true"){
+                ivStatusOnline.visibility=VISIBLE
+            }
+            if (items[i].for_bussiness!=null) {
+                if (items[i]?.for_bussiness?.isNotEmpty()!!) {
+                    ivForBusiness.visibility = VISIBLE
+                }
+            }
+            if (items[i].for_date.isNotEmpty()){
+                ivForDate.visibility=VISIBLE
+            }
+            if (items[i].for_friendship.isNotEmpty()){
+                ivForFriendship.visibility=VISIBLE
+            }
 
 
 
