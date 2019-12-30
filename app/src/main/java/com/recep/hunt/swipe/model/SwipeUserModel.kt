@@ -23,20 +23,6 @@ data class SwipeUserModel(val id:Int,
                           val for_friendship:String,
                           val images:ArrayList<String>?,
                           val basicInfo: BasicInfo?
-) : Parcelable
-=======
-@SuppressLint("ParcelCreator")
-class SwipeUserModel(
-    val id: Int,
-    val locationName: String,
-    val firstName: String,
-    val age: Int,
-    val title: String,
-    val detail: String?,
-    val totalMatching: Float,
-    val totalMeeting: Int,
-    val images: ArrayList<String>?,
-    val basicInfo: BasicInfo?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -47,6 +33,10 @@ class SwipeUserModel(
         parcel.readString(),
         parcel.readFloat(),
         parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readArrayList(ClassLoader::class.java.classLoader) as ArrayList<String>,
         parcel.readParcelable<BasicInfo>(BasicInfo::class.java.classLoader)
     ) {
@@ -61,8 +51,13 @@ class SwipeUserModel(
         parcel.writeString(detail)
         parcel.writeFloat(totalMatching)
         parcel.writeInt(totalMeeting)
+
+        parcel.writeString(is_online)
+        parcel.writeString(for_date)
+        parcel.writeString(for_bussiness)
+        parcel.writeString(for_bussiness)
         parcel.writeList(images)
-        parcel.writeParcelable(basicInfo,0)
+        parcel.writeParcelable(basicInfo, 0)
     }
 
     override fun describeContents(): Int {
@@ -78,6 +73,4 @@ class SwipeUserModel(
             return arrayOfNulls(size)
         }
     }
-
 }
->>>>>>> Stashed changes

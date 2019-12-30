@@ -124,20 +124,20 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
 
-            if (items[i].is_online=="true"){
-                ivStatusOnline.visibility=VISIBLE
-            }
-            if (items[i].for_bussiness!=null) {
-                if (items[i]?.for_bussiness?.isNotEmpty()!!) {
-                    ivForBusiness.visibility = VISIBLE
-                }
-            }
-            if (items[i].for_date.isNotEmpty()){
-                ivForDate.visibility=VISIBLE
-            }
-            if (items[i].for_friendship.isNotEmpty()){
-                ivForFriendship.visibility=VISIBLE
-            }
+            /*   if (items[i].is_online=="true"){
+                   ivStatusOnline.visibility=VISIBLE
+               }
+               if (items[i].for_bussiness!=null) {
+                   if (items[i]?.for_bussiness?.isNotEmpty()!!) {
+                       ivForBusiness.visibility = VISIBLE
+                   }
+               }
+               if (items[i].for_date.isNotEmpty()){
+                   ivForDate.visibility=VISIBLE
+               }
+               if (items[i].for_friendship.isNotEmpty()){
+                   ivForFriendship.visibility=VISIBLE
+               }*/
 
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
@@ -320,8 +320,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                         .colorFilter = null
                                     Likes = 0
                                 }
-                            }
-                            else if ((y - y_cord) >= 50) {
+                            } else if ((y - y_cord) >= 50) {
                                 setupUserDetailBottomSheet(items[i])
                             }
 
@@ -527,11 +526,29 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     var bottomSheet: UserDetalBottomSheetFragment? = null;
     private fun setupUserDetailBottomSheet(swipeUserModel: SwipeUserModel) {
+        Log.e("TAG", " called ")
+
         if (bottomSheet != null) {
-            supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
+            try {
+                if (!bottomSheet?.dialog?.isShowing!!) {
+                    supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
+                    bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
+                    bottomSheet?.show(supportFragmentManager, "FilterBottomSheetDialog")
+                }
+            } catch (e: Exception) {
+                try {
+                    supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
+                } catch (e: Exception) {
+                }
+                bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
+                bottomSheet?.show(supportFragmentManager, "FilterBottomSheetDialog")
+            } catch (e: Exception) {
+            }
+        }else{
+            bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
+            bottomSheet?.show(supportFragmentManager, "FilterBottomSheetDialog")
+
         }
-        bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
-        bottomSheet?.show(supportFragmentManager, "userDetailBottomSheet")
 
     }
 
