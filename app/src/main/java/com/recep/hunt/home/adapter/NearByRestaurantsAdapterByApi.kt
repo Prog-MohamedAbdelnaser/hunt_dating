@@ -102,7 +102,7 @@ class NearByRestaurantsAdapterByApi(
             }
         }
 
-        fun selectLocationAndGetUsersList(location_id: String, location_name: String) {
+        fun selectLocationAndGetUsersList( location_id: String, location_name: String) {
             var leftAge = SharedPrefrenceManager.getUserInterestedAgeFrom(context)
             if (leftAge.isEmpty())
                 leftAge = "18"
@@ -116,7 +116,8 @@ class NearByRestaurantsAdapterByApi(
             date = date.toLowerCase()
             business = business.toLowerCase()
             friendship = friendship.toLowerCase()
-            val location = SelectLocation(location_id, location_name)
+            //val location = SelectLocation(location_id, location_name)
+            val location = SelectLocation("ChIJzf5VrmoTrjsRwBKucIO-GEw", "Vishnu Garden Bar and Restaurants")// for testing
             val call = ApiClient.getClient.selectLocation(
                 location,
                 SharedPrefrenceManager.getUserToken(context)
@@ -140,7 +141,8 @@ class NearByRestaurantsAdapterByApi(
                     }
                     var result = response.body()?.data
                     if (result != null) {
-                        getUsersList(location_id, age, date, business, friendship)
+                       // getUsersList(location_id, age, date, business, friendship)
+                        getUsersList("ChIJzf5VrmoTrjsRwBKucIO-GEw", "25,30", "both", "both", "both")
 //                        context.launchActivity<SwipeMainActivity> {  }
                     }
                 }
@@ -156,9 +158,11 @@ class NearByRestaurantsAdapterByApi(
             friendship: String
         ) {
 //            val filter = UsersListFilter(location_id, age, date, business, friendship)
-//            val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
-            val lat = SharedPrefrenceManager.getUserLatitude(context)
-            val lang = SharedPrefrenceManager.getUserLongitude(context)
+           // val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
+            var lat = SharedPrefrenceManager.getUserLatitude(context)
+            var lang = SharedPrefrenceManager.getUserLongitude(context)
+            lat="12.8821";
+            lang="77.6722";
             val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
             val call =
                 ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(context))
@@ -203,10 +207,13 @@ class NearByRestaurantsAdapterByApi(
                                     result[i].basicInfo.about,
                                     result[i].totalMatching,
                                     result[i].totalMeeting,
+<<<<<<< Updated upstream
                                     result[i].is_online,
                                     result[i].for_date,
                                     result[i]?.for_business,
                                     result[i].for_friendship,
+=======
+>>>>>>> Stashed changes
                                     images,
                                     result[i].basicInfo
                                 )

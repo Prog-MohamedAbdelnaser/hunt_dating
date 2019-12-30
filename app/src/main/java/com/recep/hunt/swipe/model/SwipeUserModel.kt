@@ -7,6 +7,7 @@ import com.recep.hunt.model.usersList.BasicInfo
 import com.recep.hunt.model.usersList.Data
 import kotlinx.android.parcel.Parcelize
 
+<<<<<<< Updated upstream
 @Parcelize
 data class SwipeUserModel(val id:Int,
                           val locationName:String,
@@ -23,3 +24,60 @@ data class SwipeUserModel(val id:Int,
                           val images:ArrayList<String>?,
                           val basicInfo: BasicInfo?
 ) : Parcelable
+=======
+@SuppressLint("ParcelCreator")
+class SwipeUserModel(
+    val id: Int,
+    val locationName: String,
+    val firstName: String,
+    val age: Int,
+    val title: String,
+    val detail: String?,
+    val totalMatching: Float,
+    val totalMeeting: Int,
+    val images: ArrayList<String>?,
+    val basicInfo: BasicInfo?
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readFloat(),
+        parcel.readInt(),
+        parcel.readArrayList(ClassLoader::class.java.classLoader) as ArrayList<String>,
+        parcel.readParcelable<BasicInfo>(BasicInfo::class.java.classLoader)
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(locationName)
+        parcel.writeString(firstName)
+        parcel.writeInt(age)
+        parcel.writeString(title)
+        parcel.writeString(detail)
+        parcel.writeFloat(totalMatching)
+        parcel.writeInt(totalMeeting)
+        parcel.writeList(images)
+        parcel.writeParcelable(basicInfo,0)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<SwipeUserModel> {
+        override fun createFromParcel(parcel: Parcel): SwipeUserModel {
+            return SwipeUserModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<SwipeUserModel?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+}
+>>>>>>> Stashed changes
