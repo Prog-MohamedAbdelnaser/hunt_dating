@@ -124,7 +124,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
 
-            /*   if (items[i].is_online=="true"){
+               if (items[i].is_online=="true"){
                    ivStatusOnline.visibility=VISIBLE
                }
                if (items[i].for_bussiness!=null) {
@@ -137,7 +137,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                }
                if (items[i].for_friendship.isNotEmpty()){
                    ivForFriendship.visibility=VISIBLE
-               }*/
+               }
 
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
