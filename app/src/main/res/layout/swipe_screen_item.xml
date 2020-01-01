@@ -98,9 +98,9 @@
                 <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/user_detail_username_txtView"
                         android:layout_toRightOf="@+id/user_detail_username_txtView"
                         android:orientation="horizontal"
@@ -111,12 +111,12 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="4dp"
-                            android:contentDescription="@null"
                             android:layout_marginLeft="4dp"
                             android:background="@drawable/light_blue_circle"
+                            android:contentDescription="@null"
                             android:padding="6dp"
-                            android:visibility="invisible"
-                            android:src="@drawable/for_date" />
+                            android:src="@drawable/for_date"
+                            android:visibility="invisible" />
 
 
                     <ImageView
@@ -124,24 +124,24 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="4dp"
-                            android:contentDescription="@null"
                             android:layout_marginLeft="4dp"
                             android:background="@drawable/light_orange_circle"
+                            android:contentDescription="@null"
                             android:padding="6dp"
-                            android:visibility="invisible"
-                            android:src="@drawable/for_business" />
+                            android:src="@drawable/for_business"
+                            android:visibility="invisible" />
 
                     <ImageView
                             android:id="@+id/ivForFriendship"
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="4dp"
-                            android:contentDescription="@null"
                             android:layout_marginLeft="16dp"
                             android:background="@drawable/light_purple_circle"
+                            android:contentDescription="@null"
                             android:padding="6dp"
-                            android:visibility="invisible"
-                            android:src="@drawable/for_friendship" />
+                            android:src="@drawable/for_friendship"
+                            android:visibility="invisible" />
                 </LinearLayout>
 
                 <ImageView
@@ -151,10 +151,10 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="16dp"
                         android:layout_marginRight="16dp"
-                        android:visibility="invisible"
                         android:layout_toStartOf="@id/user_detail_username_txtView"
                         android:layout_toLeftOf="@id/user_detail_username_txtView"
-                        android:src="@drawable/user_online_status" />
+                        android:src="@drawable/user_online_status"
+                        android:visibility="invisible" />
             </RelativeLayout>
 
             <TextView
@@ -189,7 +189,7 @@
                     android:textSize="12sp" />
         </LinearLayout>
 
-        <jp.shts.android.storiesprogressview.StoriesProgressView
+        <com.recep.hunt.utilis.StoriesProgressView
                 android:id="@+id/stories"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -201,9 +201,8 @@
                 android:layout_marginRight="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_toolbar">
+                app:layout_constraintTop_toBottomOf="@+id/home_toolbar" />
 
-        </jp.shts.android.storiesprogressview.StoriesProgressView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

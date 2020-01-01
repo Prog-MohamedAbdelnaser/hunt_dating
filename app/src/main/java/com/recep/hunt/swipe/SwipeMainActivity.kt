@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.signature.ObjectKey
 import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.github.pwittchen.swipe.library.rx2.SwipeListener
 import com.recep.hunt.R
@@ -34,9 +36,9 @@ import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.userDetail.UserDetalBottomSheetFragment
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.StoriesProgressView
 import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
-import jp.shts.android.storiesprogressview.StoriesProgressView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.swipe_screen_item.*
 import org.jetbrains.anko.find
@@ -99,6 +101,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         screenCenter = windowwidth / 2
 //        items = dummyUsersdata()
         items = intent.getParcelableArrayListExtra("swipeUsers")
+
         addNearbyUsersToSwipe()
     }
 
@@ -108,7 +111,17 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         var last = items.size - 1
         for (i in 0..last) {
-
+            try {
+                items[i].images?.get(0)?.let { items[i].images?.add(it) }
+                items[i + 1].images?.get(0)?.let {
+                    //if(items[i-1].images)
+                    items[i].images?.add(it)
+                }
+                items[i].images?.get(0)?.let { items[i].images?.add(it) }
+            } catch (e: Exception) {
+                items[i - 1].images?.get(0)?.let { items[i].images?.add(it) }
+                items[i].images?.get(0)?.let { items[i].images?.add(it) }
+            }
             var containerView =
                 LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
             //match status progress bar
@@ -124,20 +137,20 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
 
-               if (items[i].is_online=="true"){
-                   ivStatusOnline.visibility=VISIBLE
-               }
-               if (items[i].for_bussiness!=null) {
-                   if (items[i]?.for_bussiness?.isNotEmpty()!!) {
-                       ivForBusiness.visibility = VISIBLE
-                   }
-               }
-               if (items[i].for_date.isNotEmpty()){
-                   ivForDate.visibility=VISIBLE
-               }
-               if (items[i].for_friendship.isNotEmpty()){
-                   ivForFriendship.visibility=VISIBLE
-               }
+            if (items[i].is_online == "true") {
+                ivStatusOnline.visibility = VISIBLE
+            }
+            if (items[i].for_bussiness != null) {
+                if (items[i]?.for_bussiness?.isNotEmpty()!!) {
+                    ivForBusiness.visibility = VISIBLE
+                }
+            }
+            if (items[i].for_date.isNotEmpty()) {
+                ivForDate.visibility = VISIBLE
+            }
+            if (items[i].for_friendship.isNotEmpty()) {
+                ivForFriendship.visibility = VISIBLE
+            }
 
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
@@ -166,15 +179,18 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             storyImageView.add(containerView.findViewById(R.id.story_image_userdetail))
             counter.add(0)
             currentUser = i
-            storyProgressViews[i].setStoriesCount(items[i].images!!.size)
-            storyProgressViews[i].setStoryDuration(3500L)
+            storyProgressViews[i].setStoriesCount(items[i].images!!.size - 1)
+            storyProgressViews[i].setStoryDuration(10000L)
 
             if (items[i].images!!.size > 0)
                 Glide.with(this)
                     .load(items[i].images!![0])
                     .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .signature(ObjectKey(items[currentUser].images!![counter[currentUser]]))
                     .into(storyImageView[i])
-
+            if (i == last)
+                storyProgressViews[i].startStories()
             val nameView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
             val placeView = containerView.findViewById<TextView>(R.id.user_detail_place_txtView)
             val titleView = containerView.findViewById<TextView>(R.id.user_detail_job_title)
@@ -194,46 +210,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
             val relativeLayoutContainer =
                 containerView.findViewById<ConstraintLayout>(R.id.relative_container)
-            swipe.setListener(object : SwipeListener {
-                override fun onSwipedUp(event: MotionEvent?): Boolean {
-                    // setupUserDetailBottomSheet(items[i])
-                    return false
-                }
-
-                override fun onSwipedDown(event: MotionEvent?): Boolean {
-                    return false
-                }
-
-                override fun onSwipingUp(event: MotionEvent?) {
-                    setupUserDetailBottomSheet(items[i])
-                }
-
-                override fun onSwipedRight(event: MotionEvent?): Boolean {
-                    event?.let { checkSwipState(it) }
-                    return false
-                }
-
-                override fun onSwipingLeft(event: MotionEvent?) {
-                    this@SwipeMainActivity.containerView = containerView
-                    event?.let { computeSwipe(it) }
-
-                }
-
-                override fun onSwipingRight(event: MotionEvent?) {
-                    this@SwipeMainActivity.containerView = containerView
-                    event?.let { computeSwipe(it) }
-
-                }
-
-                override fun onSwipingDown(event: MotionEvent?) {
-                }
-
-                override fun onSwipedLeft(event: MotionEvent?): Boolean {
-                    event?.let { checkSwipState(it) }
-                    return false
-                }
-
-            })
             var isCalled = false;
             //Touch listener on the layout to swipe image right or left
             relativeLayoutContainer.setOnTouchListener { v, event ->
@@ -246,11 +222,11 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                     MotionEvent.ACTION_DOWN -> {
                         x = event.x.toInt()
                         y = event.y.toInt()
-
+                        storyProgressViews[currentUser].pause()
                         Log.v("On touch", "$x $y")
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        storyProgressViews[currentUser].pause()
+
                         x_cord = event.rawX.toInt()
                         y_cord = event.rawY.toInt()
 
@@ -262,66 +238,70 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             containerView.rotation = ((x_cord - x) * (Math.PI / 256)).toFloat()
 
                             if ((x - x_cord) <= -150 || (x - x_cord) >= 150) {
-                                if (x_cord > x) {
-                                    containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                        .alpha = 1.0f
-                                    containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                        .imageResource = R.drawable.swipe_like
-                                    //                                if (currentUser > 0) {
-                                    //                                    if ((x_ cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
-                                    //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
-                                    //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
-                                    //                                    }
-                                    //                                }
-                                    if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
-                                        containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
-                                            Color.argb(179, 58, 204, 225)
-                                        )
-                                    else if ((x_cord - x) % 255 < 179)
-                                        containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
-                                            Color.argb((x_cord - x) % 255, 58, 204, 225)
-                                        )
-                                    if (x_cord >= (screenCenter + 50)) {
-                                        Likes = 2
-                                    } else {
+                                when {
+                                    x_cord > x -> {
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                            .alpha = 1.0f
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                            .imageResource = R.drawable.swipe_like
+                                        //                                if (currentUser > 0) {
+                                        //                                    if ((x_ cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
+                                        //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
+                                        //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
+                                        //                                    }
+                                        //                                }
+                                        if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
+                                            containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                                Color.argb(179, 58, 204, 225)
+                                            )
+                                        else if ((x_cord - x) % 255 < 179)
+                                            containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                                Color.argb((x_cord - x) % 255, 58, 204, 225)
+                                            )
+                                        Likes = if (x_cord >= (screenCenter + 50)) {
+                                            2
+                                        } else {
+                                            0
+                                        }
+                                    }
+                                    x_cord < x -> {
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                            .alpha = 1.0f
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                            .imageResource = R.drawable.swipe_dislike
+
+                                        //                                if (currentUser > 0) {
+                                        //                                    if ((x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
+                                        //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
+                                        //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
+                                        //                                    }
+                                        //                                }
+
+                                        if (x - x_cord >= 255 || (x - x_cord) % 255 >= 153)
+                                            containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                                Color.argb(153, 255, 42, 78)
+                                            )
+                                        else if ((x - x_cord) % 255 < 153)
+                                            containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
+                                                Color.argb((x - x_cord) % 255, 255, 42, 78)
+                                            )
+
+                                        Likes = if (x_cord <= screenCenter - 50) {
+                                            1
+                                        } else {
+                                            0
+                                        }
+                                    }
+                                    else -> {
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
+                                            .alpha = 0.0f
+                                        containerView.findViewById<ImageView>(R.id.story_image_userdetail)
+                                            .colorFilter = null
                                         Likes = 0
                                     }
-                                } else if (x_cord < x) {
-                                    containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                        .alpha = 1.0f
-                                    containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                        .imageResource = R.drawable.swipe_dislike
-
-                                    //                                if (currentUser > 0) {
-                                    //                                    if ((x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
-                                    //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
-                                    //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
-                                    //                                    }
-                                    //                                }
-
-                                    if (x - x_cord >= 255 || (x - x_cord) % 255 >= 153)
-                                        containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
-                                            Color.argb(153, 255, 42, 78)
-                                        )
-                                    else if ((x - x_cord) % 255 < 153)
-                                        containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
-                                            Color.argb((x - x_cord) % 255, 255, 42, 78)
-                                        )
-
-                                    Likes = if (x_cord <= screenCenter - 50) {
-                                        1
-                                    } else {
-                                        0
-                                    }
-                                } else {
-                                    containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                        .alpha = 0.0f
-                                    containerView.findViewById<ImageView>(R.id.story_image_userdetail)
-                                        .colorFilter = null
-                                    Likes = 0
                                 }
                             } else if ((y - y_cord) >= 50) {
-                                setupUserDetailBottomSheet(items[i])
+                                // setupUserDetailBottomSheet(items[i])
                             }
 
                         }
@@ -335,14 +315,16 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
                             if (x >= screenCenter) {
-                                onNext()
-                                //                                storyProgressViews[currentUser].skip()
+                                storyProgressViews[currentUser].skip()
+                                //  onNext()
                             } else {
-                                onPrev()
-                                //                                storyProgressViews[currentUser].reverse()
+                                storyProgressViews[currentUser].reverse()
+
+                                //  onPrev()
                             }
                             currentView.parent.requestDisallowInterceptTouchEvent(true)
                         } else {
+                            storyProgressViews[currentUser].resume()
                             x_cord = event.rawX.toInt()
                             y_cord = event.rawY.toInt()
 
@@ -355,8 +337,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     parentView.removeView(containerView)
                                     // callSwipeUserApi(items[currentUser], Likes)
                                     if (currentUser > 0) {
-                                        //                                    storyProgressViews[currentUser - 1].startStories()
                                         currentUser--
+                                        storyProgressViews[currentUser].startStories()
                                         Likes = 0
                                         parentView.getChildAt(currentUser).animate().scaleX(1f)
                                             .scaleY(1f)
@@ -371,8 +353,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     parentView.removeView(containerView)
                                     //callSwipeUserApi(items[currentUser], Likes)
                                     if (currentUser > 0) {
-                                        //                                    storyProgressViews[currentUser - 1].startStories()
                                         currentUser--
+                                        storyProgressViews[currentUser].startStories()
                                         Likes = 0
                                         parentView.getChildAt(currentUser).animate().scaleX(1f)
                                             .scaleY(1f)
@@ -382,6 +364,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 }
                             }
                         }
+
                     }
                 }
                 currentView = v
@@ -390,6 +373,51 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             }
             parentView.addView(containerView)
         }
+
+        swipe.setListener(object : SwipeListener {
+            override fun onSwipedUp(event: MotionEvent?): Boolean {
+                // setupUserDetailBottomSheet(items[i])
+                return false
+            }
+
+            override fun onSwipedDown(event: MotionEvent?): Boolean {
+                return false
+            }
+
+            override fun onSwipingUp(event: MotionEvent?) {
+                setupUserDetailBottomSheet(items[currentUser])
+            }
+
+            override fun onSwipedRight(event: MotionEvent?): Boolean {
+                event?.let { checkSwipState(it) }
+                return false
+            }
+
+            override fun onSwipingLeft(event: MotionEvent?) {
+
+
+            }
+
+            override fun onSwipingRight(event: MotionEvent?) {
+
+
+            }
+
+            override fun onSwipingDown(event: MotionEvent?) {
+            }
+
+            override fun onSwipedLeft(event: MotionEvent?): Boolean {
+                //  event?.let { checkSwipState(it) }
+                return false
+            }
+
+        })
+
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        swipe.dispatchTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     //Control Action Up
@@ -532,21 +560,26 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             try {
                 if (!bottomSheet?.dialog?.isShowing!!) {
                     supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
-                    bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
-                    bottomSheet?.show(supportFragmentManager, "FilterBottomSheetDialog")
                 }
             } catch (e: Exception) {
                 try {
                     supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
                 } catch (e: Exception) {
                 }
-                bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
-                bottomSheet?.show(supportFragmentManager, "FilterBottomSheetDialog")
             } catch (e: Exception) {
             }
-        }else{
+            try {
+                if (!bottomSheet?.dialog?.isShowing!!) {
+                    bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
+                    bottomSheet?.show(supportFragmentManager, "UserDetalBottomSheetFragment")
+                }
+            } catch (e: Exception) {
+                bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
+                bottomSheet?.show(supportFragmentManager, "UserDetalBottomSheetFragment")
+            }
+        } else {
             bottomSheet = UserDetalBottomSheetFragment(this, swipeUserModel)
-            bottomSheet?.show(supportFragmentManager, "FilterBottomSheetDialog")
+            bottomSheet?.show(supportFragmentManager, "UserDetalBottomSheetFragment")
 
         }
 
@@ -558,21 +591,28 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     override fun onPrev() {
+        Log.e("TAG", "OnPrev")
         if (counter[currentUser] > 0) {
             counter[currentUser]--
+           storyProgressViews[currentUser].startStories( counter[currentUser])
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .signature(ObjectKey(items[currentUser].images!![counter[currentUser]]))
                 .into(storyImageView[currentUser])
         }
     }
 
     override fun onNext() {
+        Log.e("TAG", "OnNext")
         if (counter[currentUser] < items[currentUser].images!!.size - 1) {
             counter[currentUser]++
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .signature(ObjectKey(items[currentUser].images!![counter[currentUser]]))
                 .into(storyImageView[currentUser])
         }
     }

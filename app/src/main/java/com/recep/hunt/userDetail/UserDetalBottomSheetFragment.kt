@@ -3,7 +3,10 @@ package com.recep.hunt.userDetail
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +16,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.recep.hunt.R
@@ -141,6 +145,11 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
     }
 
     private fun getUserImages(swipeUserModel: SwipeUserModel?): ArrayList<String>? {
+
+        val images = arrayListOf<String>()
+        if (swipeUserModel != null) {
+            return swipeUserModel.images
+        }
         val image1 = SharedPrefrenceManager.getFirstImg(ctx)
         val image2 = SharedPrefrenceManager.getSecImg(ctx)
         val image3 = SharedPrefrenceManager.getThirdImg(ctx)
@@ -148,10 +157,6 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
         val image5 = SharedPrefrenceManager.getFiveImg(ctx)
         val image6 = SharedPrefrenceManager.getSixImg(ctx)
 
-        val images = arrayListOf<String>()
-        if (swipeUserModel != null) {
-            return swipeUserModel.images
-        }
         if (image1 != Constants.NULL)
             images.add(image1)
         if (image2 != Constants.NULL)
@@ -253,8 +258,98 @@ class UserDetailPhotoInfoItem(private val images: ArrayList<String>, private val
     Item<ViewHolder>() {
     override fun getLayout() = R.layout.user_detail_photos_item
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        for (i in 0 until images.size) {
+            val image = images[i]
+            when (i) {
+                0 -> {
 
+                    if (image.contains("http")) {
+                        Glide.with(ctx)
+                            .load(image)
+                            .placeholder(R.drawable.add_image)
+                            .into(viewHolder.itemView.user_image_1)
+                    } else {
+                        viewHolder.itemView.user_image_1.setImageBitmap(
+                            StringToBitmap(
+                                image
+                            )
+                        )
+                    }
+                }
+                1 -> {
+
+                    if (image.contains("http")) {
+                        Glide.with(ctx)
+                            .load(image)
+                            .placeholder(R.drawable.add_image)
+                            .into(viewHolder.itemView.user_image_2)
+                    } else {
+                        viewHolder.itemView.user_image_2.setImageBitmap(
+                            StringToBitmap(
+                                image
+                            )
+                        )
+                    }
+                }
+                2 -> {
+
+                    if (image.contains("http")) {
+                        Glide.with(ctx)
+                            .load(image)
+                            .placeholder(R.drawable.add_image)
+                            .into(viewHolder.itemView.user_image_3)
+                    } else {
+                        viewHolder.itemView.user_image_3.setImageBitmap(
+                            StringToBitmap(
+                                image
+                            )
+                        )
+                    }
+                }
+                3 -> {
+
+                    if (image.contains("http")) {
+                        Glide.with(ctx)
+                            .load(image)
+                            .placeholder(R.drawable.add_image)
+                            .into(viewHolder.itemView.user_image_4)
+                    } else {
+                        viewHolder.itemView.user_image_4.setImageBitmap(
+                            StringToBitmap(
+                                image
+                            )
+                        )
+                    }
+                }
+                5 -> {
+
+                    if (image.contains("http")) {
+                        Glide.with(ctx)
+                            .load(image)
+                            .placeholder(R.drawable.add_image)
+                            .into(viewHolder.itemView.user_image_5)
+                    } else {
+                        viewHolder.itemView.user_image_5.setImageBitmap(
+                            StringToBitmap(
+                                image
+                            )
+                        )
+                    }
+                }
+            }
+
+
+        }
     }
+}
+
+fun StringToBitmap(img: String): Bitmap? {
+    var bitmap: Bitmap? = null
+    if (img != null) {
+        var b = Base64.decode(img, Base64.DEFAULT)
+        bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
+    }
+    return bitmap
 }
 
 class UserDetailFacebookItem : Item<ViewHolder>() {
