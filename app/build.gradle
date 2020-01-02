@@ -161,4 +161,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.0.0'
 
+    //Phone Number
+    implementation 'com.googlecode.libphonenumber:libphonenumber:7.3.1'
+
 }

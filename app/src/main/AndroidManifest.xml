@@ -61,7 +61,8 @@
         <activity android:name=".inviteFriend.MyInviteCreditActivity" />
         <activity android:name=".inviteFriend.InviteAFriendActivity" />
         <activity android:name=".userDetail.UserDetailActivity" />
-        <activity android:name=".login.WelcomeScreenActivity" android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity android:name=".login.WelcomeScreenActivity"
+                android:windowSoftInputMode="stateAlwaysVisible|adjustResize"/>
         <activity android:name=".payment.SelectPaymentMethodsActivity" />
         <activity android:name=".payment.AddPaymentMethod" />
         <activity android:name=".payment.PaymentMethodActivity" />
