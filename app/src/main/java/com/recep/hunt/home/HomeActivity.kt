@@ -160,7 +160,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        showNoUserBottomSheet()
+//        showNoUserBottomSheet()
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
             if (it != "false") {
                 showErrorAlertToUser(it)
