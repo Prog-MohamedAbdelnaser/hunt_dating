@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -159,9 +160,17 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        showNoUserBottomSheet()
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
             if (it != "false") {
                 showErrorAlertToUser(it)
+                Utils.placesApiError.value = "false"
+            }
+        })
+
+        Utils.noUserError.observe(this, androidx.lifecycle.Observer {
+            if (it != "false") {
+                showNoUserBottomSheet()
                 Utils.placesApiError.value = "false"
             }
         })
@@ -1056,13 +1065,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         )
                     }
                 } else {
-                    AlertDialogUtils.displayDialog(
-                        this@HomeActivity,
-                        getString(R.string.no_user_found)
-                    )
+//                    AlertDialogUtils.displayDialog(
+//                        this@HomeActivity,
+//                        getString(R.string.no_user_found)
+//                    )
+                    showNoUserBottomSheet()
                 }
             }
         })
+    }
+
+    fun showNoUserBottomSheet() {
+          var noUserbottomSheetFragment = NoUserBottomSheetFragment()
+        noUserbottomSheetFragment.show(getSupportFragmentManager(),
+            noUserbottomSheetFragment.tag)
     }
 
     fun selectLocationAndGetUsersList(location_id: String, location_name: String) {

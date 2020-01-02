@@ -225,10 +225,13 @@ class NearByRestaurantsAdapterByApi(
                         val parent = context as Activity
 //                        parent.finish()
                     } else {
-                        AlertDialogUtils.displayDialog(
-                            context,
-                            context.getString(R.string.no_user_found)
-                        )
+//                        AlertDialogUtils.displayDialog(
+//                            context,
+//                            context.getString(R.string.no_user_found)
+//                        )
+                        Thread {
+                            Utils.noUserError.postValue("true")
+                        }.start()
                     }
                 }
             })

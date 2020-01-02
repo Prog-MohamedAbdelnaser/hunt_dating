@@ -14,6 +14,7 @@ import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.AlertDialogUtils
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -181,10 +182,13 @@ class NearByRestaurantsVerticalAdapterByAPi(
                         )
                     }
                 } else {
-                    AlertDialogUtils.displayDialog(
-                        context,
-                        context.getString(R.string.no_user_found)
-                    )
+                    Thread {
+                        Utils.noUserError.postValue("true")
+                    }.start()
+//                    AlertDialogUtils.displayDialog(
+//                        context,
+//                        context.getString(R.string.no_user_found)
+//                    )
                 }
             }
         })

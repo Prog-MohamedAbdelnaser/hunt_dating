@@ -20,6 +20,8 @@ interface OkListener {
 object Utils {
 
     var placesApiError = MutableLiveData<String>("false")
+    var noUserError = MutableLiveData<String>("false")
+
 
     fun isSessionExpire(context: Context?, errorJsonString: String?): Boolean {
         errorJsonString?.let { it1 ->
