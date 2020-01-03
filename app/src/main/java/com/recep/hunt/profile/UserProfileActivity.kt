@@ -46,7 +46,8 @@ import retrofit2.Response
 
 private const val TAG = "UserProfileActivity"
 
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
+
 
     private lateinit var recyclerView: RecyclerView
     lateinit var userInfo: Data
@@ -62,6 +63,22 @@ class UserProfileActivity : AppCompatActivity() {
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 //        getData()
+
+        settings_profile.setOnClickListener(this)
+        edit_profile.setOnClickListener(this)
+
+    }
+
+    override fun onClick(p0: View?) {
+       p0?.let {
+           when (it.id) {
+               R.id.edit_profile -> launchActivity<UserProfileEditActivity>()
+               R.id.settings_profile -> launchActivity<UserProfileSettingsActivity>()
+               else -> finish()
+
+           }
+       }
+
     }
 
     private fun getData() {
@@ -240,22 +257,22 @@ class UserProfileActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.profile_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.profile_menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item != null) {
-            when (item.itemId) {
-                R.id.edit_profile -> launchActivity<UserProfileEditActivity>()
-                R.id.settings_profile -> launchActivity<UserProfileSettingsActivity>()
-                else -> finish()
-
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        if (item != null) {
+//            when (item.itemId) {
+//                R.id.edit_profile -> launchActivity<UserProfileEditActivity>()
+//                R.id.settings_profile -> launchActivity<UserProfileSettingsActivity>()
+//                else -> finish()
+//
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 }
 
 //ProfileHeader
