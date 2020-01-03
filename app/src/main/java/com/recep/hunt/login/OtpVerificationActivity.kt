@@ -283,7 +283,7 @@ class OtpVerificationActivity : AppCompatActivity() {
     private fun getNumber(phoneNumber: String, regionCode: String): String {
         val phoneNumberUtil = PhoneNumberUtil.getInstance()
         val mNumber = phoneNumberUtil.parseAndKeepRawInput(
-            phoneNumber,
+            "$regionCode$phoneNumber",
             regionCode
         )
         return phoneNumberUtil.format(mNumber, PhoneNumberUtil.PhoneNumberFormat.E164)
