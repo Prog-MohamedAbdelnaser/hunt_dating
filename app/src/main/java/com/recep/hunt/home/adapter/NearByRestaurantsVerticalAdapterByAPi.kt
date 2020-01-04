@@ -51,10 +51,10 @@ class NearByRestaurantsVerticalAdapterByAPi(
                     //TODO test converted to glide
                     Glide.with(context)
                         .load(url)
-                        .error(R.drawable.ic_img_gallery)
+                        .error(R.drawable.ic_img_location_placeholder)
 //                        .transform(RoundedTransformation(20, 0))
 //                        .apply(RequestOptions.circleCropTransform())
-                        .placeholder(R.drawable.ic_img_gallery)
+                        .placeholder(R.drawable.ic_img_location_placeholder)
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 } else {
                     //todo test converted to glide

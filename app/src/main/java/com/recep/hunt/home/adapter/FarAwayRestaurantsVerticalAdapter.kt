@@ -6,7 +6,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.recep.hunt.R
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
-import com.recep.hunt.utilis.Helpers
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*

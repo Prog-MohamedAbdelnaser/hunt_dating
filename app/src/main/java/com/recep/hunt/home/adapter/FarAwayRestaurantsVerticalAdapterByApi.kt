@@ -56,10 +56,10 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                     Glide
                         .with(context)
                         .load(url)
-                        .error(R.drawable.ic_img_gallery)
+                        .error(R.drawable.ic_img_location_placeholder)
 //                        .apply(RequestOptions.circleCropTransform())
 //                        .transform(RoundedTransformation(20, 0))
-                        .placeholder(R.drawable.ic_img_gallery)
+                        .placeholder(R.drawable.ic_img_location_placeholder)
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 else {
