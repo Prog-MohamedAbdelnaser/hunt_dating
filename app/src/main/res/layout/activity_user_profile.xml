@@ -15,7 +15,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_back_black" />
+            app:navigationIcon="@drawable/ic_arrow_back_black" >
+
+        <ImageView
+                android:id="@+id/settings_profile"
+
+                android:layout_gravity="end"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:src="@drawable/settings_profile"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
+
+        <ImageView
+                android:id="@+id/edit_profile"
+                android:layout_gravity="end"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/edit_profile"/>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/profile_recyclerView"
