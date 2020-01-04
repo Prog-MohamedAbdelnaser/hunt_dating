@@ -14,10 +14,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.hbb20.CountryCodePicker
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.constants.Constants
-import com.recep.hunt.login.adapter.OnBoardAdapter
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import org.jetbrains.anko.toast
@@ -25,19 +25,20 @@ import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val numberKey = "userPhoneNumberKey"
         const val otpKey = "otpKey"
         const val verificationIdKey = "verificationId"
         const val searchRequestCode = 1
     }
+
     private lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var dialog : KProgressHUD
-    private lateinit var countryCodePicker:CountryCodePicker
+    private lateinit var dialog: KProgressHUD
+    private lateinit var countryCodePicker: CountryCodePicker
 
     private var verificationId = ""
-    private lateinit var viewPager : ViewPager
+    private lateinit var viewPager: ViewPager
     private lateinit var springDotsIndicator: SpringDotsIndicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +47,9 @@ class LoginActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         init()
     }
-    private fun init(){
-        dialog = Helpers.showDialog(this@LoginActivity,this@LoginActivity,"Verifying")
+
+    private fun init() {
+        dialog = Helpers.showDialog(this@LoginActivity, this@LoginActivity, "Verifying")
         countryCodePicker = find(R.id.ccp)
         viewPager = find(R.id.login_viewPager)
 //        springDotsIndicator = find(R.id.login_spring_dots_indicator)
@@ -56,16 +58,15 @@ class LoginActivity : AppCompatActivity() {
             val number = user_number_edittext.text.toString()
             val numberCode = countryCodePicker.selectedCountryCodeWithPlus
             val selectedCountry = countryCodePicker.selectedCountryName
-            if(number.isNotEmpty()){
-                dialog.show()
-                SharedPrefrenceManager.setUserCountryCode(this@LoginActivity,numberCode)
-                SharedPrefrenceManager.setUserCountry(this@LoginActivity,selectedCountry)
-                verify(number,numberCode)
+            if (number.isNotEmpty()) {
+                 dialog.show()
+                SharedPrefrenceManager.setUserCountryCode(this@LoginActivity, numberCode)
+                SharedPrefrenceManager.setUserCountry(this@LoginActivity, selectedCountry)
+                   verify(number, numberCode)
 
-            }else{
-                Helpers.showErrorSnackBar(this@LoginActivity,"Enter number","")
+            } else {
+                Helpers.showErrorSnackBar(this@LoginActivity, "Enter number", "")
             }
-
 
 
         }
@@ -73,8 +74,10 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-     fun verificationCallbacks(number: String){
-        mCallbacks = object  : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
+
+
+    fun verificationCallbacks(number: String) {
+        mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
                 signIn(p0)
                 dialog.dismiss()
@@ -83,20 +86,22 @@ class LoginActivity : AppCompatActivity() {
             override fun onVerificationFailed(p0: FirebaseException) {
                 dialog.dismiss()
             }
+
             override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
                 dialog.dismiss()
-                Log.e("OnCodeSent","OTP : $p0")
+                Log.e("OnCodeSent", "OTP : $p0")
                 verificationId = p0
                 dialog.dismiss()
-                launchActivity<OtpVerificationActivity>{
-                        putExtra(verificationIdKey,verificationId)
-                        putExtra(otpKey,p0)
-                        putExtra(numberKey,number)
-                    }
+                launchActivity<OtpVerificationActivity> {
+                    putExtra(verificationIdKey, verificationId)
+                    putExtra(otpKey, p0)
+                    putExtra(numberKey, number)
+                }
             }
         }
     }
-    private fun verify(number:String,countryCode:String){
+
+    private fun verify(number: String, countryCode: String) {
         verificationCallbacks(number)
         val phoneNumber = "$countryCode$number"
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -131,10 +136,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
-
-
-
-
 
 
 }

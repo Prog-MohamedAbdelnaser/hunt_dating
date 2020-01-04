@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -195,7 +197,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         otp_progrss_txt.visibility = View.GONE
         val textView = find<TextView>(R.id.we_will_send_you_otp_tv)
         val styledText =
-            "We will send you another six digit OTP on <br> <font color='#F64C1F'>\"$countryCode $phoneNumber\"</font>"
+            "We will send you another six digit OTP on <br> <font color='#F64C1F'>\"${getNumber(phoneNumber, countryCode)}\"</font>"
         textView.text = Html.fromHtml(styledText)
 
         val sendOtpAgainBtn = find<Button>(R.id.send_otp_again_btn)
@@ -268,14 +270,24 @@ class OtpVerificationActivity : AppCompatActivity() {
     }
 
     private fun verify(number: String, countryCode: String) {
-        val phoneNumber = "$countryCode$number"
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber,
+            getNumber(number,countryCode),
             60,
             TimeUnit.SECONDS,
             this,
             mCallbacks
         )
+    }
+
+    private fun getNumber(phoneNumber: String, regionCode: String): String {
+        val phoneNumberUtil = PhoneNumberUtil.getInstance()
+        val mNumber = phoneNumberUtil.parseAndKeepRawInput(
+            "$regionCode$phoneNumber",
+            regionCode
+        )
+        return phoneNumberUtil.format(mNumber, PhoneNumberUtil.PhoneNumberFormat.E164)
+
     }
 
 

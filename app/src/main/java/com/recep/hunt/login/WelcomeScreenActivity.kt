@@ -7,26 +7,20 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.ScrollView
-import android.widget.TextView
 import android.widget.VideoView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.crashlytics.android.Crashlytics
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.hbb20.CountryCodePicker
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.recep.hunt.R
@@ -78,7 +72,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         init()
     }
 
-    fun ScrollView.scrollToBottom() {
+    private fun ScrollView.scrollToBottom() {
         // use this for scroll immediately
         scrollTo(0, this.getChildAt(0).height)
 
@@ -95,43 +89,10 @@ class WelcomeScreenActivity : AppCompatActivity() {
         my_scroll_view.scrollToBottom()
 
 
-        user_number_edittext.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                val number = user_number_edittext.text.toString()
-                val numberCode = countryCodePicker.selectedCountryCodeWithPlus
-                val selectedCountry = countryCodePicker.selectedCountryName
-
-
-                if (number.isNotEmpty()) {
-                    try {
-                        dialog.show()
-                    } catch (e: Exception) {
-                    }
-
-                    SharedPrefrenceManager.setUserCountryCode(
-                        this@WelcomeScreenActivity,
-                        numberCode
-                    )
-                    SharedPrefrenceManager.setUserCountry(
-                        this@WelcomeScreenActivity,
-                        selectedCountry
-                    )
-
-//                launchActivity<SocialLoginActivity> ()
-                    launchActivity<OtpVerificationActivity> {
-                        putExtra(WelcomeScreenActivity.verificationIdKey, verificationId)
-                        putExtra(WelcomeScreenActivity.otpKey, "")
-                        putExtra(WelcomeScreenActivity.countryCodeKey, numberCode)
-                        putExtra(WelcomeScreenActivity.numberKey, number)
-                    }
-
-                } else {
-                    Helpers.showErrorSnackBar(this@WelcomeScreenActivity, "Enter number", "")
-                }
-                return true
-            }
-
-        })
+        user_number_edittext.setOnEditorActionListener { _, _, _ ->
+            attemptVerification()
+            true
+        }
 
         videoView = find(R.id.video_view)
         viewPager = find(R.id.welcome_screen_viewPager)
@@ -142,37 +103,64 @@ class WelcomeScreenActivity : AppCompatActivity() {
         videoView.setOnCompletionListener { videoView.start() }
 
         login_nxt_btn.setOnClickListener {
-            //            launchActivity<SocialLoginActivity>()
-            //11.10.19 Guang
-            val number = user_number_edittext.text.toString()
-            val numberCode = countryCodePicker.selectedCountryCodeWithPlus
-            val selectedCountry = countryCodePicker.selectedCountryName
+            attemptVerification()
 
+        }
+        setupViewPager()
+        checkPermission()
+    }
 
-            if (number.isNotEmpty()) {
-
+    //Process to OTP activity.
+    private fun attemptVerification() {
+        val number = user_number_edittext.text.toString()
+        val numberCode = countryCodePicker.selectedCountryCodeWithPlus
+        val selectedCountry = countryCodePicker.selectedCountryName
+        if (number.isNotEmpty()) {
+            if (validateNumber("$numberCode$number", numberCode)) {
                 try {
                     dialog.show()
                 } catch (e: Exception) {
                 }
 
-                SharedPrefrenceManager.setUserCountryCode(this@WelcomeScreenActivity, numberCode)
-                SharedPrefrenceManager.setUserCountry(this@WelcomeScreenActivity, selectedCountry)
+                SharedPrefrenceManager.setUserCountryCode(
+                    this@WelcomeScreenActivity,
+                    numberCode
+                )
+                SharedPrefrenceManager.setUserCountry(
+                    this@WelcomeScreenActivity,
+                    selectedCountry
+                )
 
-//                launchActivity<SocialLoginActivity> ()
+                //                launchActivity<SocialLoginActivity> ()
                 launchActivity<OtpVerificationActivity> {
                     putExtra(WelcomeScreenActivity.verificationIdKey, verificationId)
                     putExtra(WelcomeScreenActivity.otpKey, "")
                     putExtra(WelcomeScreenActivity.countryCodeKey, numberCode)
                     putExtra(WelcomeScreenActivity.numberKey, number)
                 }
-
             } else {
-                Helpers.showErrorSnackBar(this@WelcomeScreenActivity, "Enter number", "")
+                Helpers.showErrorSnackBar(
+                    this@WelcomeScreenActivity,
+                    "Please provide valid phone number",
+                    ""
+                )
+
             }
+        } else {
+            Helpers.showErrorSnackBar(this@WelcomeScreenActivity, "Enter number", "")
         }
-        setupViewPager()
-        checkPermission()
+    }
+
+    //Check if phone number is valid.
+    private fun validateNumber(phoneNumber: String, regionCode: String): Boolean {
+        val phoneNumberUtil = PhoneNumberUtil.getInstance()
+        val mNumber = phoneNumberUtil.parseAndKeepRawInput(
+            phoneNumber,
+            regionCode
+        )
+        return phoneNumberUtil.isValidNumber(
+            mNumber
+        )
     }
 
     override fun onResume() {
@@ -180,13 +168,13 @@ class WelcomeScreenActivity : AppCompatActivity() {
         user_number_edittext.requestFocus()
 
         videoView.start()
-        if (dialog!=null){
+        if (dialog != null) {
             dialog.dismiss()
         }
     }
 
     override fun finish() {
-        if (dialog.isShowing){
+        if (dialog.isShowing) {
             dialog.dismiss()
         }
         super.finish()
