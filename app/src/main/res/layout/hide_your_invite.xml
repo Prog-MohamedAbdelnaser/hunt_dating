@@ -109,7 +109,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:scaleType="fitXY"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/fb_circle"/>
                 </RelativeLayout>
 
@@ -124,7 +125,8 @@
                         android:layout_width="60sp"
                         android:layout_height="61sp"
                         android:layout_centerInParent="true"
-                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/insta"/>
 
             </RelativeLayout>
@@ -139,7 +141,8 @@
                         android:layout_width="61sp"
                         android:layout_height="58sp"
                         android:layout_centerInParent="true"
-                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/u_twitter"/>
 
             </RelativeLayout>

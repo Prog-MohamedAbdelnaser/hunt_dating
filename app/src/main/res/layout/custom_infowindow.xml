@@ -22,7 +22,8 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_marginLeft="3sp"
-                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:src="@drawable/demo_restaurant_1"
                 app:layout_constrainedHeight="true"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -106,7 +107,8 @@
             android:layout_marginStart="159dp"
             android:layout_marginLeft="159dp"
             android:layout_marginTop="0dp"
-            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:src="@drawable/tooltip" />
 
 </RelativeLayout>

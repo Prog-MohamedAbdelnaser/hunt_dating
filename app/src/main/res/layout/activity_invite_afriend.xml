@@ -152,7 +152,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
                     android:layout_marginRight="10sp"
                     android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
 

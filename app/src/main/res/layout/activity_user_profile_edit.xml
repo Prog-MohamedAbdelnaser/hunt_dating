@@ -75,7 +75,8 @@
                                     android:id="@+id/ivPencilEditProfileId"
                                     android:layout_width="match_parent"
                                     android:layout_height="40sp"
-                                    android:scaleType="fitXY"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="fitCenter"
                                     android:src="@drawable/partial_dark" />
 
 
@@ -90,7 +91,7 @@
                                         android:layout_width="15sp"
                                         android:layout_height="15sp"
                                         android:layout_centerVertical="true"
-                                        android:scaleType="fitXY"
+                                        android:scaleType="fitCenter"
                                         android:src="@drawable/ic_mode_edit_white_24dp" />
 
                                 <androidx.appcompat.widget.AppCompatTextView

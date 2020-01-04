@@ -25,7 +25,7 @@ data class Data(
     val lat : String,
     val lang : String,
     val for_date : String,
-    val for_business : String,
+    val for_bussiness : String?,
     val for_friendship : String,
     val created_at : String,
     val updated_at :String,
