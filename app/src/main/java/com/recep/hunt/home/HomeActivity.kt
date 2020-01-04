@@ -861,6 +861,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         if (p0 != null) {
 
             mMap = p0
+            mMap.uiSettings.isCompassEnabled = false
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(
                         this,
@@ -1051,7 +1052,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                                 result[i].totalMeeting,
                                 result[i].is_online,
                                 result[i].for_date,
-                                result[i].for_business,
+                                result[i].for_bussiness,
                                 result[i].for_friendship,
                                 images,
                                 result[i].basicInfo

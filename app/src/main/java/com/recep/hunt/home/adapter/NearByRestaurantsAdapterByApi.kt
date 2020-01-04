@@ -197,6 +197,7 @@ class NearByRestaurantsAdapterByApi(
                                 val baseUrl = "https://hunt.nyc3.digitaloceanspaces.com/User/"
                                 images.add(baseUrl + result[i].profile_pic)
                             }
+//                            try {
                             swipeUserArray.add(
                                 SwipeUserModel(
                                     result[i].id,
@@ -209,12 +210,13 @@ class NearByRestaurantsAdapterByApi(
                                     result[i].totalMeeting,
                                     result[i].is_online,
                                     result[i].for_date,
-                                    result[i].for_business,
+                                    result[i].for_bussiness,
                                     result[i].for_friendship,
                                     images,
                                     result[i].basicInfo
                                 )
                             )
+//                            }catch (ex : Exception){}
                         }
                         context.launchActivity<SwipeMainActivity> {
                             putParcelableArrayListExtra(

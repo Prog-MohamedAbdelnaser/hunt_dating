@@ -10,7 +10,8 @@
     <ImageView
             android:layout_width="88dp"
             android:layout_height="88dp"
-            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:src="@drawable/boy_casual_eyes"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"/>
