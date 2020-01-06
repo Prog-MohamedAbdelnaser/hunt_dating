@@ -141,8 +141,8 @@ class NearByRestaurantsAdapterByApi(
                     }
                     var result = response.body()?.data
                     if (result != null) {
-                       // getUsersList(location_id, age, date, business, friendship)
-                        getUsersList("ChIJzf5VrmoTrjsRwBKucIO-GEw", "25,30", "both", "both", "both")
+                        getUsersList(location_id, age, date, business, friendship)
+//                        getUsersList("ChIJzf5VrmoTrjsRwBKucIO-GEw", "25,30", "both", "both", "both")
 //                        context.launchActivity<SwipeMainActivity> {  }
                     }
                 }
@@ -161,8 +161,8 @@ class NearByRestaurantsAdapterByApi(
            // val filter = UsersListFilter("ChIJDZPv6a8lv0cRBFRz6EJVlxY01", age, date, business, friendship)
             var lat = SharedPrefrenceManager.getUserLatitude(context)
             var lang = SharedPrefrenceManager.getUserLongitude(context)
-            lat="12.8821";
-            lang="77.6722";
+//            lat="12.8821";
+//            lang="77.6722";
             val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
             val call =
                 ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(context))

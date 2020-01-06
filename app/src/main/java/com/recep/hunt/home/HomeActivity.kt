@@ -160,7 +160,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-//        showNoUserBottomSheet()
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
             if (it != "false") {
                 showErrorAlertToUser(it)
@@ -996,16 +995,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val lat = SharedPrefrenceManager.getUserLatitude(this)
         val lang = SharedPrefrenceManager.getUserLongitude(this)
-        // val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
-        val filter = UsersListFilter(
-            "ChIJDZPv6a8lv0cRBFRz6EJVlxY01",
-            "25,30",
-            "both",
-            "both",
-            "both",
-            "77.6722",
-            "12.8821"
-        )
+         val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
+//        val filter = UsersListFilter(
+//            "ChIJDZPv6a8lv0cRBFRz6EJVlxY01",
+//            "25,30",
+//            "both",
+//            "both",
+//            "both",
+//            "77.6722",
+//            "12.8821"
+//        )
         val call =
             ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(this))
 
