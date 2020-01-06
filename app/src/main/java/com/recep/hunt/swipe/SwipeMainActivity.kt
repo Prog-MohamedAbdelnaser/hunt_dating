@@ -111,17 +111,17 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         var last = items.size - 1
         for (i in 0..last) {
-            try {
-                items[i].images?.get(0)?.let { items[i].images?.add(it) }
-                items[i + 1].images?.get(0)?.let {
-                    //if(items[i-1].images)
-                    items[i].images?.add(it)
-                }
-                items[i].images?.get(0)?.let { items[i].images?.add(it) }
-            } catch (e: Exception) {
-                items[i - 1].images?.get(0)?.let { items[i].images?.add(it) }
-                items[i].images?.get(0)?.let { items[i].images?.add(it) }
-            }
+//            try {
+//                items[i].images?.get(0)?.let { items[i].images?.add(it) }
+//                items[i + 1].images?.get(0)?.let {
+//                    //if(items[i-1].images)
+//                    items[i].images?.add(it)
+//                }
+//                items[i].images?.get(0)?.let { items[i].images?.add(it) }
+//            } catch (e: Exception) {
+//                items[i - 1].images?.get(0)?.let { items[i].images?.add(it) }
+//                items[i].images?.get(0)?.let { items[i].images?.add(it) }
+//            }
             var containerView =
                 LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
             //match status progress bar
