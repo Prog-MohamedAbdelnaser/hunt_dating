@@ -168,6 +168,17 @@ class StoriesProgressView : LinearLayout {
 
     private fun callback(index: Int): PausableProgressBar.Callback {
         return object : PausableProgressBar.Callback {
+            override fun onResetProgress() {
+                val next = current + 1
+                if (next <= progressBars.size - 1) {
+                  //  if (storiesListener != null) storiesListener!!.onNext()
+                    progressBars[next].startProgress()
+                } else {
+                    isComplete = true
+                    if (storiesListener != null) storiesListener!!.onComplete()
+                }
+            }
+
             override fun onStartProgress() {
                 current = index
             }

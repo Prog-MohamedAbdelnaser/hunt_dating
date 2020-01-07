@@ -16,10 +16,6 @@ import com.recep.hunt.constants.Constants
 import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
-import jp.shts.android.storiesprogressview.StoriesProgressView
 import kotlinx.android.synthetic.main.activity_user_detail.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
@@ -31,7 +27,7 @@ import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
 import antonkozyriatskyi.circularprogressindicator.PatternProgressTextAdapter
 import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.github.pwittchen.swipe.library.rx2.SwipeListener
-import com.recep.hunt.utilis.CustomProgressTextAdapter
+import com.recep.hunt.utilis.*
 
 
 class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListener,
@@ -119,11 +115,11 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
         userImagesStoriesData = getStoryData()
         if (userImagesStoriesData.size != 0) {
             storyProgressView.setStoriesCount(count)
-            storyProgressView.setStoryDuration(3500L)
+            storyProgressView.setStoryDuration(1000L)
             storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
             storyProgressView.setStoriesListener(this)
-            skip.setOnClickListener { onNext() }
-            reverse.setOnClickListener { onPrev() }
+            skip.setOnClickListener { storyProgressView.skip() }
+            reverse.setOnClickListener { storyProgressView.reverse() }
             storyProgressView.startStories()
         }
         if (isIncognito) {

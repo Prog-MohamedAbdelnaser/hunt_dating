@@ -29,6 +29,7 @@ internal class PausableProgressBar @JvmOverloads constructor(
     internal interface Callback {
         fun onStartProgress()
         fun onFinishProgress()
+        fun onResetProgress()
     }
 
     init {
@@ -51,11 +52,11 @@ internal class PausableProgressBar @JvmOverloads constructor(
 
     fun setMin() {
         finishProgress(false)
+        resetProgress()
     }
 
     fun setMinWithoutCallback() {
         maxProgressView.setBackgroundResource(R.color.progress_secondary)
-
         maxProgressView.visibility = View.VISIBLE
         if (animation != null) {
             animation!!.setAnimationListener(null)
@@ -116,6 +117,25 @@ internal class PausableProgressBar @JvmOverloads constructor(
         })
         animation!!.fillAfter = true
         frontProgressView.startAnimation(animation)
+
+    }
+
+    fun resetProgress() {
+        if (animation != null) {
+            animation!!.setAnimationListener(null)
+            animation!!.cancel()
+            if (callback != null) {
+                callback!!.onResetProgress()
+            }
+        }
+        maxProgressView.setBackgroundResource(R.color.progress_secondary)
+        maxProgressView.visibility = View.VISIBLE
+        if (animation != null) {
+            animation!!.setAnimationListener(null)
+            animation!!.cancel()
+        }
+        frontProgressView.visibility = View.GONE
+        maxProgressView.visibility = View.GONE
     }
 
     fun pauseProgress() {

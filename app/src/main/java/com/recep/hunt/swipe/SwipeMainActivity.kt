@@ -31,6 +31,7 @@ import com.recep.hunt.model.MakeUserOnline
 import com.recep.hunt.model.UserSwipe
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.swipeUser.SwipeUserResponse
+import com.recep.hunt.model.usersList.BasicInfo
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
@@ -99,8 +100,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         parentView = find(R.id.main_layoutView)
         windowwidth = windowManager.defaultDisplay.width
         screenCenter = windowwidth / 2
-//        items = dummyUsersdata()
-        items = intent.getParcelableArrayListExtra("swipeUsers")
+        // items = dummyUsersdata()
+        try {
+            items = intent.getParcelableArrayListExtra("swipeUsers")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         addNearbyUsersToSwipe()
     }
@@ -111,17 +116,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         var last = items.size - 1
         for (i in 0..last) {
-//            try {
-//                items[i].images?.get(0)?.let { items[i].images?.add(it) }
-//                items[i + 1].images?.get(0)?.let {
-//                    //if(items[i-1].images)
-//                    items[i].images?.add(it)
-//                }
-//                items[i].images?.get(0)?.let { items[i].images?.add(it) }
-//            } catch (e: Exception) {
-//                items[i - 1].images?.get(0)?.let { items[i].images?.add(it) }
-//                items[i].images?.get(0)?.let { items[i].images?.add(it) }
-//            }
             var containerView =
                 LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
             //match status progress bar
@@ -179,7 +173,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             storyImageView.add(containerView.findViewById(R.id.story_image_userdetail))
             counter.add(0)
             currentUser = i
-            storyProgressViews[i].setStoriesCount(items[i].images!!.size - 1)
+            storyProgressViews[i].setStoriesCount(items[i].images!!.size)
             storyProgressViews[i].setStoryDuration(10000L)
 
             if (items[i].images!!.size > 0)
@@ -244,12 +238,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                             .alpha = 1.0f
                                         containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
                                             .imageResource = R.drawable.swipe_like
-                                        //                                if (currentUser > 0) {
-                                        //                                    if ((x_ cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
-                                        //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
-                                        //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x_cord.toFloat() - x.toFloat()) / windowwidth.toFloat() / 5
-                                        //                                    }
-                                        //                                }
                                         if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
                                             containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
                                                 Color.argb(179, 58, 204, 225)
@@ -270,12 +258,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                         containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
                                             .imageResource = R.drawable.swipe_dislike
 
-                                        //                                if (currentUser > 0) {
-                                        //                                    if ((x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5 <= 0.1f) {
-                                        //                                        parentView.getChildAt(currentUser - 1).scaleX = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
-                                        //                                        parentView.getChildAt(currentUser - 1).scaleY = 0.9f + (x.toFloat() - x_cord.toFloat()) / windowwidth.toFloat() / 5
-                                        //                                    }
-                                        //                                }
 
                                         if (x - x_cord >= 255 || (x - x_cord) % 255 >= 153)
                                             containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
@@ -337,11 +319,13 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     parentView.removeView(containerView)
                                     // callSwipeUserApi(items[currentUser], Likes)
                                     if (currentUser > 0) {
+                                        storyProgressViews[currentUser].destroy()
                                         currentUser--
                                         storyProgressViews[currentUser].startStories()
                                         Likes = 0
                                         parentView.getChildAt(currentUser).animate().scaleX(1f)
                                             .scaleY(1f)
+
                                     } else {
                                         gotoMainScreen()
                                         //                                    context.launchActivity<HomeActivity> {}
@@ -353,6 +337,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                     parentView.removeView(containerView)
                                     //callSwipeUserApi(items[currentUser], Likes)
                                     if (currentUser > 0) {
+                                        storyProgressViews[currentUser].destroy()
                                         currentUser--
                                         storyProgressViews[currentUser].startStories()
                                         Likes = 0
@@ -493,60 +478,158 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     //Dummy Users Data
-    /*
-    private fun dummyUsersdata():ArrayList<SwipeUserModel>{
+    private fun dummyUsersdata(): ArrayList<SwipeUserModel> {
         val data = ArrayList<SwipeUserModel>()
-        val images = ArrayList<String>()
+        val images: ArrayList<String> = ArrayList<String>()
         images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573485502.jfif")
         images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573546803.jpg")
         val images1 = ArrayList<String>()
         images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574714.jpg")
         images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574732.jfif")
-        if(data.size == 0){
+        if (data.size == 0) {
             data.add(
                 SwipeUserModel(
+                    2,
                     "Hookah Loungh",
-                    "Valentina, 28",
-                    "Actor at Max Studio",
-                    images
+                    "Valentina",
+                    28,
+                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+                    images,
+                    BasicInfo(
+                        "test",
+                        "test",
+                        "test job",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                    )
                 )
             )
             data.add(
                 SwipeUserModel(
+                    2,
                     "Hookah Loungh",
-                    "Stella, 28",
-                    "Model at Fashion Club",
-                    images1
+                    "Valentina",
+                    28,
+                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+                    images1,
+                    BasicInfo(
+                        "test",
+                        "test",
+                        "test job",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                    )
                 )
             )
             data.add(
                 SwipeUserModel(
+                    2,
                     "Hookah Loungh",
-                    "Serena, 23",
-                    "Digital Artist at Blue Tea Productions",
-                    images
+                    "Valentina",
+                    28,
+                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+                    images,
+                    BasicInfo(
+                        "test",
+                        "test",
+                        "test job",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                    )
                 )
             )
             data.add(
                 SwipeUserModel(
+                    2,
                     "Hookah Loungh",
-                    "Jasmin, 25",
-                    "Technical Producer",
-                    images
+                    "Valentina",
+                    28,
+                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+                    images1,
+                    BasicInfo(
+                        "test",
+                        "test",
+                        "test job",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                    )
                 )
             )
             data.add(
                 SwipeUserModel(
+                    2,
                     "Hookah Loungh",
-                    "Allena, 26",
-                    "Pop Singer",
-                    images
+                    "Valentina",
+                    28,
+                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+                    images,
+                    BasicInfo(
+                        "test",
+                        "test",
+                        "test job",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                    )
                 )
             )
         }
         return data
     }
-     */
 
     fun isAClick(dragTime: Long, downTime: Long): Boolean {
         return dragTime - downTime < CLICK_ACTION_THRESHOLD
@@ -594,7 +677,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         Log.e("TAG", "OnPrev")
         if (counter[currentUser] > 0) {
             counter[currentUser]--
-           storyProgressViews[currentUser].startStories( counter[currentUser])
             Glide.with(this)
                 .load(items[currentUser].images!![counter[currentUser]])
                 .centerCrop()

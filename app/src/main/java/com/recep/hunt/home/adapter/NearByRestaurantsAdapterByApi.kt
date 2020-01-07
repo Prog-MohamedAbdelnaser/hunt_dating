@@ -116,8 +116,8 @@ class NearByRestaurantsAdapterByApi(
             date = date.toLowerCase()
             business = business.toLowerCase()
             friendship = friendship.toLowerCase()
-            //val location = SelectLocation(location_id, location_name)
-            val location = SelectLocation("ChIJzf5VrmoTrjsRwBKucIO-GEw", "Vishnu Garden Bar and Restaurants")// for testing
+            val location = SelectLocation(location_id, location_name)
+            //val location = SelectLocation("ChIJzf5VrmoTrjsRwBKucIO-GEw", "Vishnu Garden Bar and Restaurants")// for testing
             val call = ApiClient.getClient.selectLocation(
                 location,
                 SharedPrefrenceManager.getUserToken(context)

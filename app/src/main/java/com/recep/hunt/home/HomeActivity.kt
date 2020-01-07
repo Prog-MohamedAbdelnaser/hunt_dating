@@ -159,7 +159,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
             if (it != "false") {
                 showErrorAlertToUser(it)
@@ -795,14 +794,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     true
                 }
 
-                mMap.setOnMyLocationButtonClickListener(object :
-                    GoogleMap.OnMyLocationButtonClickListener {
-
-                    override fun onMyLocationButtonClick(): Boolean {
-                        selectLocation(latitude, longitude)
-                        return false
-                    }
-                })
+                mMap.setOnMyLocationButtonClickListener {
+                    selectLocation(latitude, longitude)
+                    false
+                }
 
 
 
@@ -995,7 +990,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val lat = SharedPrefrenceManager.getUserLatitude(this)
         val lang = SharedPrefrenceManager.getUserLongitude(this)
-         val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
+        val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
 //        val filter = UsersListFilter(
 //            "ChIJDZPv6a8lv0cRBFRz6EJVlxY01",
 //            "25,30",
@@ -1076,9 +1071,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     fun showNoUserBottomSheet() {
-          var noUserbottomSheetFragment = NoUserBottomSheetFragment()
-        noUserbottomSheetFragment.show(getSupportFragmentManager(),
-            noUserbottomSheetFragment.tag)
+        var noUserbottomSheetFragment = NoUserBottomSheetFragment()
+        noUserbottomSheetFragment.show(
+            getSupportFragmentManager(),
+            noUserbottomSheetFragment.tag
+        )
     }
 
     fun selectLocationAndGetUsersList(location_id: String, location_name: String) {
