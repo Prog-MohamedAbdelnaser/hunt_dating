@@ -10,22 +10,30 @@
         android:scrollbars="vertical"
         android:background="@color/white">
 <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_setup_profile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        tools:context=".setupProfile.SetupProfileActivity">
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        tools:context=".setupProfile.SetupProfileActivity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp">
+
+        >
+
+<!--    <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="26dp"-->
+<!--            android:layout_marginLeft="16dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginRight="16dp"-->
+<!--            android:orientation="vertical"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
 
         <TextView
                 android:id="@+id/textView2"
@@ -35,33 +43,56 @@
                 android:text="@string/full_name"
                 android:textAlignment="center"
                 android:textColor="@color/app_text_black"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+               />
 
         <EditText
                 android:id="@+id/first_name_editText"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="26dp"
                 android:background="@drawable/round_app_stroke_bg"
                 android:fontFamily="@font/montserrat_light"
                 android:imeOptions="actionNext"
                 android:hint="@string/first_name"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_marginTop="26dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+
+                />
 
         <EditText
                 android:id="@+id/last_name_editText"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
                 android:background="@drawable/round_app_stroke_bg"
                 android:fontFamily="@font/montserrat_light"
                 android:hint="@string/last_name"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
-                android:textAlignment="center" />
-    </LinearLayout>
-    <Button android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/first_name_editText"
+
+                />
+<!--    </LinearLayout>-->
+    <Button android:id="@+id/full_name_next_btn"
+            android:layout_width="match_parent"
             android:background="@drawable/rectangle_app_btn"
             android:layout_height="60dp"
             android:text="@string/next"
@@ -72,7 +103,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/full_name_next_btn"
+
     />
     <TextView
             android:layout_width="wrap_content"
