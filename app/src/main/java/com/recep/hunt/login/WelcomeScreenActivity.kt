@@ -63,11 +63,11 @@ class WelcomeScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome_screen)
         mAuth = FirebaseAuth.getInstance()
-        my_scroll_view.scrollToBottom()
+       // my_scroll_view.scrollToBottom()
 
         observeEditText.observe(this, androidx.lifecycle.Observer {
             user_number_edittext.requestFocus()
-            my_scroll_view.scrollToBottom()
+          //  my_scroll_view.scrollToBottom()
         })
         init()
     }
@@ -86,7 +86,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         user_number_edittext.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         user_number_edittext.requestFocus()
-        my_scroll_view.scrollToBottom()
+      //  my_scroll_view.scrollToBottom()
 
 
         user_number_edittext.setOnEditorActionListener { _, _, _ ->
@@ -133,10 +133,10 @@ class WelcomeScreenActivity : AppCompatActivity() {
 
                 //                launchActivity<SocialLoginActivity> ()
                 launchActivity<OtpVerificationActivity> {
-                    putExtra(WelcomeScreenActivity.verificationIdKey, verificationId)
-                    putExtra(WelcomeScreenActivity.otpKey, "")
-                    putExtra(WelcomeScreenActivity.countryCodeKey, numberCode)
-                    putExtra(WelcomeScreenActivity.numberKey, number)
+                    putExtra(verificationIdKey, verificationId)
+                    putExtra(otpKey, "")
+                    putExtra(countryCodeKey, numberCode)
+                    putExtra(numberKey, number)
                 }
             } else {
                 Helpers.showErrorSnackBar(
@@ -192,7 +192,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
             R.string.be_part_of_hunt2
         )
         user_number_edittext.requestFocus()
-        my_scroll_view.scrollToBottom()
+      //  my_scroll_view.scrollToBottom()
 
 
         viewPager.adapter = WelcomePagerAdapter(this, subtitleArray)
@@ -202,7 +202,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         val handler = Handler()
         val Update = Runnable {
             user_number_edittext.requestFocus()
-            my_scroll_view.scrollToBottom()
+           // my_scroll_view.scrollToBottom()
 
             if (currentPage == 3) {
                 currentPage = 0
@@ -245,7 +245,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         user_number_edittext.requestFocus()
-        my_scroll_view.scrollToBottom()
+        //my_scroll_view.scrollToBottom()
 
 
     }
