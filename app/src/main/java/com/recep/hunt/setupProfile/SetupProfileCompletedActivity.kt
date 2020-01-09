@@ -73,13 +73,16 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         lottieAnimationView.playAnimation()
 
         lets_start_btn.setOnClickListener {
-            SharedPrefrenceManager.setIsLoggedIn(this, true)
             Log.d("hello","hello")
-            SharedPrefrenceManager.setIsOtpVerified(this, true)
             val intent = Intent(this, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+
+        //in case user did not press start button and kill the application or press back button (exit).
+        // will keep it logged in
+        SharedPrefrenceManager.setIsLoggedIn(this, true)
+        SharedPrefrenceManager.setIsOtpVerified(this, true)
     }
 
     private fun setupViews() {
