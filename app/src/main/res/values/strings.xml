@@ -38,7 +38,7 @@
     <string name="last_name">Last Name</string>
     <string name="we_will_never_show_last_name">We will never show your last name to other users.</string>
     <string name="dob">Date of birth</string>
-    <string name="dobFormat">MM//DD/YYYY</string>
+    <string name="dobFormat">MM/DD/YYYY</string>
     <string name="years_old">%1$s Years Old</string>
     <string name="want_some_gifts">Do you want to get some birthday presents?</string>
     <string name="upload_photo">Upload profile photo</string>

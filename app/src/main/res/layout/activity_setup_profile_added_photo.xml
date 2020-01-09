@@ -42,87 +42,105 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/add_photo_layout"
-            android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginBottom="8dp"
             android:foreground="?android:attr/selectableItemBackground"
+            android:paddingLeft="11.6dp"
+            android:paddingRight="11.6dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/setup_profile_upload_pic_next_btn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="0.393">
+            >
 
 
-        <RelativeLayout android:layout_width="300dp"
-                        android:layout_height="300dp"
-                        android:gravity="center"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+        <!--        <RelativeLayout android:layout_width="300dp"-->
+        <!--                        android:layout_height="300dp"-->
+        <!--                        android:gravity="center"-->
+        <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                        app:layout_constraintStart_toStartOf="parent"-->
+        <!--                        app:layout_constraintTop_toTopOf="parent">-->
 
 
-            <RelativeLayout
-                    android:layout_width="255dp"
-                    android:layout_height="255dp">
+        <!--            <RelativeLayout-->
+        <!--                    android:layout_width="255dp"-->
+        <!--                    android:layout_height="255dp">-->
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image"
-                        android:layout_width="246dp"
-                        android:layout_height="248dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/boy_casual_eyes"
-                        app:civ_border_color="@color/black"
-                        app:civ_border_overlay="true"
-                        app:civ_border_width="0dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/boy_casual_eyes"
+                app:civ_border_color="@color/black"
+                app:civ_border_overlay="true"
+                app:civ_border_width="0dp"
+                android:paddingLeft="11.6dp"
+                android:paddingRight="11.6dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
 
-
-                <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/profile_image"
-                        android:layout_alignRight="@+id/profile_image"
-                        android:layout_alignBottom="@+id/profile_image"
-                        android:paddingLeft="11.6sp"
-                        android:paddingRight="11.6sp">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="70sp"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/partial_dark"/>
+                />
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/change_pic_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="15sp"
-                            android:drawableStart="@drawable/ic_mode_edit_white_24dp"
-                            android:drawableLeft="@drawable/ic_edit_white"
-                            android:gravity="center"
-                            android:padding="4sp"
-                            android:text="@string/change_pic"
-                            android:textColor="@color/white"
-                            android:fontFamily="@font/montserrat"
-                            android:textSize="14sp"
-                            android:textStyle="normal"/>
+        <!--                <RelativeLayout-->
+        <!--                        android:layout_width="match_parent"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_alignLeft="@+id/profile_image"-->
+        <!--                        android:layout_alignRight="@+id/profile_image"-->
+        <!--                        android:layout_alignBottom="@+id/profile_image"-->
+        <!--                        android:paddingLeft="11.6sp"-->
+        <!--                        android:paddingRight="11.6sp">-->
 
-                </RelativeLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/partial_dark"
+                android:layout_marginTop="212dp"
+                android:paddingLeft="21dp"
+                android:paddingRight="19dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </RelativeLayout>
 
-        </RelativeLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/change_pic_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:drawableStart="@drawable/ic_mode_edit_white_24dp"
+                android:drawableLeft="@drawable/ic_edit_white"
+                android:gravity="center"
+                android:padding="4sp"
+                android:text="@string/change_pic"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:paddingLeft="11.6sp"
+                android:paddingRight="11.6sp"
+                android:layout_marginTop="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <!--                </RelativeLayout>-->
+
+        <!--            </RelativeLayout>-->
+
+        <!--        </RelativeLayout>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

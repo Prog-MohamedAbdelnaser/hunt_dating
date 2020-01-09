@@ -65,6 +65,7 @@ import com.recep.hunt.utilis.hideKeyboard
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_social_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -167,6 +168,11 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
         messageEditText = find(R.id.type_msg_et)
         setupRecyclerView()
 
+        constraintLayout_fb.setOnClickListener(this)
+        constraintLayout_instagram.setOnClickListener(this)
+        constraintLayout_google.setOnClickListener(this)
+        send_msg_btn.setOnClickListener(this)
+
     }
 
     private fun setupInstaAuth() {
@@ -200,15 +206,15 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                         addMessage()
                     }
                 }
-                R.id.connect_with_fb_btn -> {
+                R.id.constraintLayout_fb -> {
                     setupFbLoginAuth()
 //                    launchActivity<HomeActivity>()
                 }
-                R.id.connect_with_google_btn -> {
+                R.id.constraintLayout_google -> {
                     val signInIntent = mGoogleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
                 }
-                R.id.connect_with_insta_btn ->// toast("Coming soon.. !")
+                R.id.constraintLayout_instagram ->// toast("Coming soon.. !")
                     //setupInstaAuth()
                     launchingInst()
 
