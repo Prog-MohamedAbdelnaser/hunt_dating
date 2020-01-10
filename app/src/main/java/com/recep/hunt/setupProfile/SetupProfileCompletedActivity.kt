@@ -64,8 +64,6 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private fun init() {
         userImage = find(R.id.completed_profile_user_image)
         userName = find(R.id.user_completed_profile_name)
-        setSupportActionBar(setupProfile_complete_toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         setupViews()
 
