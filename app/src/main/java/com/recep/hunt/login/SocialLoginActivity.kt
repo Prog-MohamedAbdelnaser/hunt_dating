@@ -59,6 +59,7 @@ import com.recep.hunt.model.isEmailRegister.isEmailRegisterResponse
 import com.recep.hunt.profile.viewmodel.UserViewModel
 import com.recep.hunt.setupProfile.SetupProfileActivity
 import com.recep.hunt.setupProfile.SetupProfileDobActivity
+import com.recep.hunt.setupProfile.SetupProfileEmailActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.hideKeyboard
@@ -517,39 +518,45 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                     userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
 
                     if (!checkIsUserRegister(social_email)) {
+                        if (social_email == null) {
+                            launchActivity<SetupProfileEmailActivity>()
+                        } else {
+                            val gson = GsonBuilder().setPrettyPrinting().create()
+                            val json: String = gson.toJson(userDetailsModel)
 
-                        val gson = GsonBuilder().setPrettyPrinting().create()
-                        val json: String = gson.toJson(userDetailsModel)
+                            val fullname = social_name.split(" ").toTypedArray()
+                            val firstName: String = fullname[0]
+                            val lastName: String = fullname[1]
 
-                        val fullname = social_name.split(" ").toTypedArray()
-                        val firstName: String = fullname[0]
-                        val lastName: String = fullname[1]
+                            SharedPrefrenceManager.setUserFirstName(this, firstName)
+                            SharedPrefrenceManager.setUserLastName(this, lastName)
+                            SharedPrefrenceManager.setUserDetailModel(
+                                this@SocialLoginActivity,
+                                json
+                            )
+                            SharedPrefrenceManager.setUserEmail(this, social_email)
 
-                        SharedPrefrenceManager.setUserFirstName(this, firstName)
-                        SharedPrefrenceManager.setUserLastName(this, lastName)
-                        SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
-                        SharedPrefrenceManager.setUserEmail(this, social_email)
+                            SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity, id)
+                            SharedPrefrenceManager.setFacebookLoginToken(
+                                this@SocialLoginActivity,
+                                loginResult.accessToken.token.toString()
+                            )
 
-                        SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity, id)
-                        SharedPrefrenceManager.setFacebookLoginToken(
-                            this@SocialLoginActivity,
-                            loginResult.accessToken.token.toString()
-                        )
+                            try {
+                                SharedPrefrenceManager.setProfileImg(this, facebook_pic)
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                            SharedPrefrenceManager.setsocialType(this, "social")
 
-                        try {
-                            SharedPrefrenceManager.setProfileImg(this, facebook_pic)
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                        SharedPrefrenceManager.setsocialType(this, "social")
-
-                        // SharedPrefrenceManager.setUserGender(this, gender)
-                        fbUserImages(id)
+                            // SharedPrefrenceManager.setUserGender(this, gender)
+                            fbUserImages(id)
 
 
-                        launchActivity<SetupProfileDobActivity> {
-                            putExtra(socialTypeKey, Constants.socialFBType)
-                            putExtra(userSocialModel, json)
+                            launchActivity<SetupProfileDobActivity> {
+                                putExtra(socialTypeKey, Constants.socialFBType)
+                                putExtra(userSocialModel, json)
+                            }
                         }
 
 
