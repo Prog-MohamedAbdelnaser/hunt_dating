@@ -39,7 +39,7 @@ class SetupProfileActivity : BaseActivity() {
             if(firstName.isNotEmpty() && lastName.isNotEmpty()){
                 SharedPrefrenceManager.setUserFirstName(this@SetupProfileActivity,firstName)
                 SharedPrefrenceManager.setUserLastName(this@SetupProfileActivity,lastName)
-                launchActivity<SetupProfileDobActivity>()
+                launchActivity<SetupProfileEmailActivity>()
             }else{
                 Helpers.showErrorSnackBar(this@SetupProfileActivity,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
             }
