@@ -2,6 +2,7 @@ package com.recep.hunt.setupProfile
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -350,6 +351,9 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                             )
                             launchActivity<SetupProfileCompletedActivity> {
                                 putExtra(Constants.IMGURI, avatarFilePath)
+
+                                //clear back stack if the user has completed registration flow.
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             }
                         }                            //do token related code and also store user json
 
