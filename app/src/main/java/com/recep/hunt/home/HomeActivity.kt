@@ -45,6 +45,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -65,6 +67,7 @@ import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.*
+import com.squareup.moshi.Json
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
@@ -75,6 +78,7 @@ import kotlinx.android.synthetic.main.custom_infowindow.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.layoutInflater
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -419,6 +423,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
                 var result = response.body()?.data
+               // val text = resources.openRawResource(R.raw.dummydata).bufferedReader().use { it.readText() }
+
+             //  var dummydata:NearestLocationResponse =Gson().fromJson<NearestLocationResponse>(text,NearestLocationResponse::class.java)
+              //  result=dummydata.data
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
                     val farItems = ArrayList<NearestLocationData>()
@@ -449,7 +457,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
 //                    mMap.setMaxZoomPreference(animateZoomTo)
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-                    setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
+   setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
                     setupSortedListView(nearbyItems, farItems)
                 }
             }
