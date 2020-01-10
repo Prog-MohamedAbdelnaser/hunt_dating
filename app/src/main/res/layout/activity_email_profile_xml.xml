@@ -73,7 +73,7 @@
             android:text="@string/we_will_never_show_last_name"
             android:textAlignment="center"
             android:textSize="13sp"
-            app:layout_constraintBottom_toTopOf="@+id/full_name_next_btn"
+            app:layout_constraintBottom_toTopOf="@+id/email_address_next_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

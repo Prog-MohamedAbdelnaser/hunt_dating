@@ -46,9 +46,11 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.GsonBuilder
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
 import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
 import com.recep.hunt.login.instagramClassesJava.InstagramApp
@@ -517,13 +519,12 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                     // val gender = json_object.getString("gender").
                     userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
 
-                    if (!checkIsUserRegister(social_email)) {
-                        if (social_email == null) {
-                            launchActivity<SetupProfileEmailActivity>()
-                        } else {
+                    if (social_email.isEmpty()) {
+                        launchActivity<SetupProfileEmailActivity>()
+                    } else {
+                        if (!checkIsUserRegister(social_email)) {
                             val gson = GsonBuilder().setPrettyPrinting().create()
                             val json: String = gson.toJson(userDetailsModel)
-
                             val fullname = social_name.split(" ").toTypedArray()
                             val firstName: String = fullname[0]
                             val lastName: String = fullname[1]
@@ -558,13 +559,14 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                                 putExtra(userSocialModel, json)
                             }
                         }
+                    }
 
 
 //                    launchActivity<ContinueAsSocialActivity> {
 //                        putExtra(socialTypeKey, Constants.socialFBType)
 //                        putExtra(userSocialModel, json)
 //                    }
-                    }
+
 
 
                 } catch (e: JSONException) {

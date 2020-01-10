@@ -107,6 +107,8 @@
     </string>
     <string name="complete_form">Complete Form!</string>
     <string name="you_have_complete_form">You must complete the form before moving</string>
+    <string name="already_registered_email">Email is already registered</string>
+    <string name="invalid_email_address">Invalid email address!</string>
     <string name="search_locations">Search Locations</string>
     <string name="filter">Filter</string>
     <string name="interested_in">Interested in</string>
