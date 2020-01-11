@@ -2,10 +2,12 @@ package com.recep.hunt.userDetail
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
@@ -25,9 +27,12 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
 import antonkozyriatskyi.circularprogressindicator.PatternProgressTextAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.github.pwittchen.swipe.library.rx2.SwipeListener
 import com.recep.hunt.utilis.*
+import org.jetbrains.anko.imageResource
 
 
 class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListener,
@@ -45,7 +50,11 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
     }
 
     var counter = 0
-
+    var screenCenter: Int = 0
+    var x_cord: Int = 0
+    var y_cord: Int = 0
+    var x: Int = 0
+    var y: Int = 0
     private lateinit var swipe: Swipe
     private lateinit var attendeeProgress: CircularProgressIndicator
     private lateinit var matchRateProgress: CircularProgressIndicator
@@ -112,21 +121,55 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
         storyImageView = find(R.id.story_image_userdetail)
         setupUserDetailBottomSheet()
         val count = getStoryData().size
+        screenCenter = Resources.getSystem().displayMetrics.widthPixels / 2
         userImagesStoriesData = getStoryData()
         if (userImagesStoriesData.size != 0) {
             storyProgressView.setStoriesCount(count)
-            storyProgressView.setStoryDuration(1000L)
-            storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[counter]))
+            storyProgressView.setStoryDuration(10000L)
+            Glide.with(this)
+                .load(Base64.decode(userImagesStoriesData[counter], Base64.DEFAULT))
+                .into(storyImageView)
             storyProgressView.setStoriesListener(this)
-            skip.setOnClickListener { storyProgressView.skip() }
-            reverse.setOnClickListener { storyProgressView.reverse() }
             storyProgressView.startStories()
         }
-        if (isIncognito) {
+        storyImageView.setOnTouchListener { _, event ->
+            x_cord = event.rawX.toInt()
+            y_cord = event.rawY.toInt()
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    x = event.x.toInt()
+                    y = event.y.toInt()
+                    storyProgressView.pause()
+                }
+                MotionEvent.ACTION_MOVE -> {
 
+
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (isAClick(event.eventTime, event.downTime)) {
+                        Log.e("Event_Status :->", "Only Clicked")
+                        if (x >= screenCenter) {
+                            storyProgressView.skip()
+                            //  onNext()
+                        } else {
+                            storyProgressView.reverse()
+
+                            //  onPrev()
+                        }
+                    } else {
+                        storyProgressView.resume()
+
+                    }
+                }
+            }
+
+            true
         }
 
+    }
 
+    fun isAClick(dragTime: Long, downTime: Long): Boolean {
+        return dragTime - downTime < Constants.CLICK_ACTION_THRESHOLD
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -137,7 +180,10 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
     override fun onNext() {
         if (counter != userImagesStoriesData.size) {
             try {
-                storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[++counter]))
+
+                Glide.with(this)
+                    .load(Base64.decode(userImagesStoriesData[++counter], Base64.DEFAULT))
+                    .into(storyImageView)
             } catch (e: Exception) {
                 onComplete()
             }
@@ -147,7 +193,9 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
 
     override fun onPrev() {
         if (counter - 1 < 0) return
-        storyImageView.setImageBitmap(Helpers.stringToBitmap(userImagesStoriesData[--counter]))
+        Glide.with(this)
+            .load(Base64.decode(userImagesStoriesData[--counter], Base64.DEFAULT))
+            .into(storyImageView)
     }
 
     override fun onComplete() {

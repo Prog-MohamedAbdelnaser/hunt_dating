@@ -98,76 +98,57 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="70dp"
-            android:orientation="horizontal">
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stories">
 
-        <View
-                android:id="@+id/reverse"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                android:id="@+id/attendance_circularProgress"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:direction="clockwise"
+                app:drawDot="false"
+                app:enableProgressAnimation="true"
+                app:fillBackground="true"
+                app:gradientEndColor="@color/colorAccent"
+                app:gradientType="linear"
+                app:progressBackgroundColor="#ffff"
+                app:progressBackgroundStrokeWidth="2dp"
+                app:progressCap="round"
+                app:progressColor="@color/colorProgressbar"
+                app:progressStrokeWidth="2dp"
+                app:startAngle="270"
+                app:textColor="@color/colorProgressbar"
+                app:textSize="14sp" />
 
-        <View
-                android:id="@+id/skip"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-        <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="200dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginRight="0dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-                    android:id="@+id/attendance_circularProgress"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:direction="clockwise"
-                    app:drawDot="false"
-                    app:enableProgressAnimation="true"
-                    app:fillBackground="true"
-                    app:gradientEndColor="@color/colorAccent"
-                    app:gradientType="linear"
-                    app:progressBackgroundColor="#ffff"
-                    app:progressBackgroundStrokeWidth="2dp"
-                    app:progressCap="round"
-                    app:progressColor="@color/colorProgressbar"
-                    app:progressStrokeWidth="2dp"
-                    app:startAngle="270"
-                    app:textColor="@color/colorProgressbar"
-                    app:textSize="14sp" />
-
-            <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-                    android:id="@+id/matchRate_circularProgress"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:direction="clockwise"
-                    app:drawDot="false"
-                    app:enableProgressAnimation="true"
-                    app:fillBackground="true"
-                    app:gradientEndColor="@color/colorAccent"
-                    app:gradientType="linear"
-                    app:progressBackgroundColor="#ffff"
-                    app:progressBackgroundStrokeWidth="2dp"
-                    app:progressCap="round"
-                    app:progressColor="@color/colorProgressbar"
-                    app:progressStrokeWidth="2dp"
-                    app:startAngle="270"
-                    app:textColor="@color/colorProgressbar"
-                    app:textSize="14sp" />
-        </LinearLayout>
+        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                android:id="@+id/matchRate_circularProgress"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:direction="clockwise"
+                app:drawDot="false"
+                app:enableProgressAnimation="true"
+                app:fillBackground="true"
+                app:gradientEndColor="@color/colorAccent"
+                app:gradientType="linear"
+                app:progressBackgroundColor="#ffff"
+                app:progressBackgroundStrokeWidth="2dp"
+                app:progressCap="round"
+                app:progressColor="@color/colorProgressbar"
+                app:progressStrokeWidth="2dp"
+                app:startAngle="270"
+                app:textColor="@color/colorProgressbar"
+                app:textSize="14sp" />
     </LinearLayout>
 
 
