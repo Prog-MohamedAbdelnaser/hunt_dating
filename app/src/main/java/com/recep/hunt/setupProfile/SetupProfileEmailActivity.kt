@@ -47,7 +47,7 @@ class SetupProfileEmailActivity : BaseActivity() {
                     )
                 }
 
-                checkIsUserRegister(emailAddress) -> {
+                !checkIsUserRegister(emailAddress) -> {
                     Helpers.showErrorSnackBar(
                         this@SetupProfileEmailActivity,
                         resources.getString(R.string.complete_form),

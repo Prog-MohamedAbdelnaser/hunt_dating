@@ -200,6 +200,10 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             SharedPrefrenceManager.getUserLastName(this@SetupProfileReferralCodeActivity)
         )
         builder.addFormDataPart(
+            "email",
+            SharedPrefrenceManager.getUserEmail(this@SetupProfileReferralCodeActivity)
+        )
+        builder.addFormDataPart(
             "mobile_no",
             SharedPrefrenceManager.getUserMobileNumber(this@SetupProfileReferralCodeActivity).replace(
                 "+",
@@ -276,6 +280,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             "reference_code",
             SharedPrefrenceManager.getRefrenceCode(this@SetupProfileReferralCodeActivity)
         )
+
 
         if (file != null && file.exists()) {
             builder.addFormDataPart(
