@@ -83,34 +83,35 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
         if (p0 != null) {
             when (p0.id) {
                 R.id.email_address_next_btn -> {
-                    dialog.show()
 
                     emailAddress = email_address_editText.text.toString()
                     when {
 
-
                         emailAddress.isEmpty() -> {
-
                             Helpers.showErrorSnackBar(
                                 this@SetupProfileEmailActivity,
                                 resources.getString(R.string.complete_form),
                                 resources.getString(R.string.complete_form)
                             )
+
                         }
                         !isEmailValid(emailAddress) -> {
-
                             Helpers.showErrorSnackBar(
                                 this@SetupProfileEmailActivity,
                                 resources.getString(R.string.complete_form),
                                 resources.getString(R.string.invalid_email_address)
                             )
+
                         }
 
                         else -> {
-
                             checkIsUserRegister(emailAddress)
+                            dialog.show()
+
+
 
                         }
+
                     }
 
                 }
@@ -121,6 +122,7 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
 
     private fun isEmailValid(email: CharSequence): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
     }
 
     private fun checkIsUserRegister(email: String) {
@@ -133,13 +135,14 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
 
         call.enqueue(object : Callback<isEmailRegisterResponse> {
             override fun onFailure(call: Call<isEmailRegisterResponse>, t: Throwable) {
-
+                dialog.dismiss()
             }
 
             override fun onResponse(
                 call: Call<isEmailRegisterResponse>,
                 response: Response<isEmailRegisterResponse>
             ) {
+                dialog.dismiss()
                 response.body()?.let {
                     emailCheckStatus.postValue(it.status)
 
