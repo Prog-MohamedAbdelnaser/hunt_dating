@@ -662,6 +662,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
             mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
             locationButton.callOnClick()
 
+            /** for testing **/
+//            selectLocationAndGetUsersList("ChIJre4ubGm1lzMRJqzbXpzzNOk"
+//                , "DA'RhaYn's Lux BAR")
 
         }
 
@@ -988,8 +991,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-    fun getUsersList(
-        location_id: String,
+    fun getUsersList(location_id: String,
         age: String,
         date: String,
         business: String,
