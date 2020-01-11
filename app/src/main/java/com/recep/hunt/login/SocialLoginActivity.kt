@@ -46,9 +46,11 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.GsonBuilder
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
 import com.recep.hunt.login.adapter.SocialLoginChatSentAdapter
 import com.recep.hunt.login.instagramClassesJava.InstagramApp
@@ -59,6 +61,7 @@ import com.recep.hunt.model.isEmailRegister.isEmailRegisterResponse
 import com.recep.hunt.profile.viewmodel.UserViewModel
 import com.recep.hunt.setupProfile.SetupProfileActivity
 import com.recep.hunt.setupProfile.SetupProfileDobActivity
+import com.recep.hunt.setupProfile.SetupProfileEmailActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.hideKeyboard
@@ -516,48 +519,54 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                     // val gender = json_object.getString("gender").
                     userDetailsModel = UserSocialModel(id, facebook_pic, social_name, social_email)
 
-                    if (!checkIsUserRegister(social_email)) {
+                    if (social_email.isEmpty()) {
+                        launchActivity<SetupProfileEmailActivity>()
+                    } else {
+                        if (!checkIsUserRegister(social_email)) {
+                            val gson = GsonBuilder().setPrettyPrinting().create()
+                            val json: String = gson.toJson(userDetailsModel)
+                            val fullname = social_name.split(" ").toTypedArray()
+                            val firstName: String = fullname[0]
+                            val lastName: String = fullname[1]
 
-                        val gson = GsonBuilder().setPrettyPrinting().create()
-                        val json: String = gson.toJson(userDetailsModel)
+                            SharedPrefrenceManager.setUserFirstName(this, firstName)
+                            SharedPrefrenceManager.setUserLastName(this, lastName)
+                            SharedPrefrenceManager.setUserDetailModel(
+                                this@SocialLoginActivity,
+                                json
+                            )
+                            SharedPrefrenceManager.setUserEmail(this, social_email)
 
-                        val fullname = social_name.split(" ").toTypedArray()
-                        val firstName: String = fullname[0]
-                        val lastName: String = fullname[1]
+                            SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity, id)
+                            SharedPrefrenceManager.setFacebookLoginToken(
+                                this@SocialLoginActivity,
+                                loginResult.accessToken.token.toString()
+                            )
 
-                        SharedPrefrenceManager.setUserFirstName(this, firstName)
-                        SharedPrefrenceManager.setUserLastName(this, lastName)
-                        SharedPrefrenceManager.setUserDetailModel(this@SocialLoginActivity, json)
-                        SharedPrefrenceManager.setUserEmail(this, social_email)
+                            try {
+                                SharedPrefrenceManager.setProfileImg(this, facebook_pic)
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                            SharedPrefrenceManager.setsocialType(this, "social")
 
-                        SharedPrefrenceManager.setFacebookId(this@SocialLoginActivity, id)
-                        SharedPrefrenceManager.setFacebookLoginToken(
-                            this@SocialLoginActivity,
-                            loginResult.accessToken.token.toString()
-                        )
+                            // SharedPrefrenceManager.setUserGender(this, gender)
+                            fbUserImages(id)
 
-                        try {
-                            SharedPrefrenceManager.setProfileImg(this, facebook_pic)
-                        } catch (e: IOException) {
-                            e.printStackTrace()
+
+                            launchActivity<SetupProfileDobActivity> {
+                                putExtra(socialTypeKey, Constants.socialFBType)
+                                putExtra(userSocialModel, json)
+                            }
                         }
-                        SharedPrefrenceManager.setsocialType(this, "social")
-
-                        // SharedPrefrenceManager.setUserGender(this, gender)
-                        fbUserImages(id)
-
-
-                        launchActivity<SetupProfileDobActivity> {
-                            putExtra(socialTypeKey, Constants.socialFBType)
-                            putExtra(userSocialModel, json)
-                        }
+                    }
 
 
 //                    launchActivity<ContinueAsSocialActivity> {
 //                        putExtra(socialTypeKey, Constants.socialFBType)
 //                        putExtra(userSocialModel, json)
 //                    }
-                    }
+
 
 
                 } catch (e: JSONException) {
