@@ -18,7 +18,6 @@
 
         <ImageView
                 android:id="@+id/settings_profile"
-
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="end"

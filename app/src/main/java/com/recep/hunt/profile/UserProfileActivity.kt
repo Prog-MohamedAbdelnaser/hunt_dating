@@ -24,10 +24,7 @@ import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.userDetail.UserDetailActivity
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.Utils
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -46,7 +43,7 @@ import retrofit2.Response
 
 private const val TAG = "UserProfileActivity"
 
-class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
+class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
 
     private lateinit var recyclerView: RecyclerView

@@ -43,7 +43,7 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
 
 
 
-        email_address_next_btn.setOnClickListener(this)
+
 
         setObservers()
         init()
@@ -51,15 +51,13 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun init() {
-
-
+        email_address_next_btn.setOnClickListener(this)
     }
 
     private fun setObservers() {
 
         emailCheckStatus.observe(this, Observer {
             //process
-            Logger.d("Observer: $it")
             when (it) {
                 false -> {
                     Helpers.showErrorSnackBar(
@@ -108,7 +106,6 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
                         else -> {
                             checkIsUserRegister(emailAddress)
                             dialog.show()
-
 
 
                         }
