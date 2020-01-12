@@ -43,7 +43,7 @@ import retrofit2.Response
 
 private const val TAG = "UserProfileActivity"
 
-class UserProfileActivity : BaseActivity(), View.OnClickListener {
+class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private lateinit var recyclerView: RecyclerView
