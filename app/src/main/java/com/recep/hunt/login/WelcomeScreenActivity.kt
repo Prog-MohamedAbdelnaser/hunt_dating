@@ -7,7 +7,9 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -17,6 +19,8 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.github.pwittchen.swipe.library.rx2.Swipe
+import com.github.pwittchen.swipe.library.rx2.SwipeListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthProvider
@@ -54,6 +58,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
     private lateinit var videoView: VideoView
     private lateinit var viewPager: ViewPager
     private lateinit var indicators: TabLayout
+    private lateinit var swipe: Swipe
     var currentPage = 0
     var timer: Timer? = null
     val DELAY_MS: Long = 500//delay in m illiseconds before task is to be executed
@@ -63,11 +68,11 @@ class WelcomeScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome_screen)
         mAuth = FirebaseAuth.getInstance()
-       // my_scroll_view.scrollToBottom()
+        // my_scroll_view.scrollToBottom()
 
         observeEditText.observe(this, androidx.lifecycle.Observer {
             user_number_edittext.requestFocus()
-          //  my_scroll_view.scrollToBottom()
+            //  my_scroll_view.scrollToBottom()
         })
         init()
     }
@@ -86,7 +91,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         user_number_edittext.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         user_number_edittext.requestFocus()
-      //  my_scroll_view.scrollToBottom()
+        //  my_scroll_view.scrollToBottom()
 
 
         user_number_edittext.setOnEditorActionListener { _, _, _ ->
@@ -192,17 +197,73 @@ class WelcomeScreenActivity : AppCompatActivity() {
             R.string.be_part_of_hunt2
         )
         user_number_edittext.requestFocus()
-      //  my_scroll_view.scrollToBottom()
+        //  my_scroll_view.scrollToBottom()
+         swipe = Swipe(100, 100)
+        swipe.setListener(object : SwipeListener {
+            override fun onSwipedUp(event: MotionEvent?): Boolean {
+                return false
+            }
 
+            override fun onSwipedDown(event: MotionEvent?): Boolean {
+                return false
+            }
+
+            override fun onSwipingUp(event: MotionEvent?) {
+
+            }
+
+            override fun onSwipedRight(event: MotionEvent?): Boolean {
+                return false
+            }
+
+            override fun onSwipingLeft(event: MotionEvent?) {
+                Log.e("TAG","onSwipingLeft \n Currnt page :$currentPage")
+                if (currentPage == 2) {
+                    viewPager.setCurrentItem(0, true)
+                }
+            }
+
+            override fun onSwipingRight(event: MotionEvent?) {
+                Log.e("TAG","onSwipingRight \n Currnt page :$currentPage")
+                if (currentPage == 0) {
+                    viewPager.setCurrentItem(2, true)
+                }
+            }
+
+            override fun onSwipingDown(event: MotionEvent?) {
+            }
+
+            override fun onSwipedLeft(event: MotionEvent?): Boolean {
+
+                return false
+            }
+
+        })
 
         viewPager.adapter = WelcomePagerAdapter(this, subtitleArray)
         indicators.setupWithViewPager(viewPager)
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
 
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                currentPage = position
+            }
+
+        })
         /*After setting the adapter use the timer */
         val handler = Handler()
         val Update = Runnable {
             user_number_edittext.requestFocus()
-           // my_scroll_view.scrollToBottom()
+            // my_scroll_view.scrollToBottom()
 
             if (currentPage == 3) {
                 currentPage = 0
@@ -216,6 +277,11 @@ class WelcomeScreenActivity : AppCompatActivity() {
                 handler.post(Update)
             }
         }, DELAY_MS, PERIOD_MS)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        swipe.dispatchTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun checkPermission() {

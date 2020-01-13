@@ -61,13 +61,12 @@ data class SwipeUserModel(val id:Int,
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<SwipeUserModel> {
-        override fun createFromParcel(parcel: Parcel): SwipeUserModel {
-            return SwipeUserModel(parcel)
-        }
 
-        override fun newArray(size: Int): Array<SwipeUserModel?> {
-            return arrayOfNulls(size)
+    companion object{
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<SwipeUserModel> {
+            override fun createFromParcel(parcel: Parcel) = SwipeUserModel(parcel)
+            override fun newArray(size: Int) = arrayOfNulls<SwipeUserModel>(size)
         }
     }
 }
