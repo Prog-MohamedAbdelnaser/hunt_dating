@@ -33,6 +33,7 @@ import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.model.RegistrationModule.RegistrationResponse
 import com.recep.hunt.utilis.Helpers
+import com.recep.hunt.utilis.LogUtil
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_referral_code.*
@@ -49,9 +50,17 @@ import java.io.File
 
 class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
+    companion object{
+
+        val TAG = SetupProfileReferralCodeActivity.javaClass.simpleName
+    }
+
+
     private lateinit var dialog: KProgressHUD
     private val REQUEST_CODE_ASK_PERMISSIONS = 101
     private var avatarFilePath = ""
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +112,8 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
 
     private fun init() {
         avatarFilePath = intent.getStringExtra(Constants.IMGURI)
+        LogUtil.d(TAG,"Image "+avatarFilePath)
+
 
         tvSkip.setOnClickListener {
             SharedPrefrenceManager.setRefrencecode(this@SetupProfileReferralCodeActivity, "")

@@ -26,6 +26,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -39,6 +40,7 @@ import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.profile.UserProfileEditActivity
 import com.recep.hunt.utilis.BaseActivity
+import com.recep.hunt.utilis.LogUtil
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -73,6 +75,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
     private fun init() {
         imgFlag = intent.getStringExtra(UserProfileEditActivity.imgBlock)
+        Logger.d("imgFlag from intent ",imgFlag)
         camera_layout.setOnClickListener { takePhoto() }
         gallery_layout.setOnClickListener {
             setupPermissions()
@@ -191,7 +194,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             val imageString = BitMapToString(images)
             if (imgFlag == null) {
                 SharedPrefrenceManager.setProfileImg(this, imageString)
-                launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, imageString) }
+                launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, data.data.toString()) }
             } else {
                 setImage(images)
             }
@@ -213,9 +216,17 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             }
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+
+
             val result = CropImage.getActivityResult(data)
+
+
             if (resultCode === Activity.RESULT_OK) {
-                if (imgFlag == null) {
+                LogUtil.d("Uri ",result.uri.toString())
+                if (imgFlag.isNullOrEmpty()) {
+                    LogUtil.d("imageFlag","Called")
+
 //                    SharedPrefrenceManager.setProfileImg(this, result.bitmap.toString())
                     launchActivity<SetupProfileAddedPhotoActivity> {
                         putExtra(
