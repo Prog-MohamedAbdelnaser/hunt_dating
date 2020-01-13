@@ -218,7 +218,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         showMyLocationCardView = find(R.id.my_location_crd)
 
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
-        placesRecyclerView = find(R.id.places_recylcer_view)
+        placesRecyclerView = find(R.id.places_recycler_view)
         placesRecyclerView.layoutManager = LinearLayoutManager(this)
         placesRecyclerView.addItemDecoration(
             ListPaddingDecoration(
