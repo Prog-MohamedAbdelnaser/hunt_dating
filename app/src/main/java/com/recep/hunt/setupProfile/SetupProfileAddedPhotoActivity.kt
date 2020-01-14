@@ -22,10 +22,7 @@ import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.constants.Constants.Companion.IMGURI
-import com.recep.hunt.utilis.BaseActivity
-import com.recep.hunt.utilis.Helpers
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.launchActivity
+import com.recep.hunt.utilis.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_setup_profile_added_photo.*
@@ -53,8 +50,11 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
 
     private fun init() {
         avatarFilePath = intent.getStringExtra(IMGURI)
+        LogUtil.e("SetupProfileAddedPhotoActivity","Uri "+avatarFilePath)
         var profileImg = SharedPrefrenceManager.getProfileImg(this@SetupProfileAddedPhotoActivity)
         SharedPrefrenceManager.setUserImage(this@SetupProfileAddedPhotoActivity, profileImg)
+
+
         Glide.with(this)
             .load(avatarFilePath)
             .into(profile_image)

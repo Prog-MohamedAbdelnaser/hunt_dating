@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.recep.hunt.R
 import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.constants.Constants
@@ -45,7 +46,12 @@ import java.io.File
 import java.io.IOException
 import java.net.URL
 
-class SetupProfileCompletedActivity : AppCompatActivity() {
+class SetupProfileCompletedActivity : BaseActivity() {
+
+    companion object{
+        val TAG = SetupProfileCompletedActivity.javaClass.simpleName
+
+    }
 
     private var mHttpClient: DefaultHttpClient? = null
     private lateinit var userImage: CircleImageView
@@ -58,13 +64,18 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_setup_profile_completed)
         init()
-        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
     }
 
     private fun init() {
+
+        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
+        LogUtil.e("SetupProfileCompletedActivity","Image "+avatarFilePath)
+
+
         userImage = find(R.id.completed_profile_user_image)
         userName = find(R.id.user_completed_profile_name)
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
         setupViews()
 
         SharedPrefrenceManager.setUserGenderChanged(this, true)
@@ -86,19 +97,36 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private fun setupViews() {
         val userImageString = SharedPrefrenceManager.getProfileImg(this)
         val socialType = SharedPrefrenceManager.getsocialType(this)
-        if (socialType.equals("social")) {
-            Glide.with(this)
-                .load(Uri.parse(userImageString))
-                .placeholder(R.drawable.account_icon)
-                .into(userImage)
-        } else {
-//            userImage.setImageBitmap(StringToBitmap(userImageString))
-            Glide.with(this)
-                .load(avatarFilePath)
-                .placeholder(R.drawable.account_icon)
-                .into(userImage)
-        }
-        //  userImage.setImageBitmap(StringToBitmap(userImageString))
+
+/*
+        Glide.with(this)
+            .load(avatarFilePath)
+            .placeholder(R.drawable.account_icon)
+            .into(userImage)*/
+
+
+
+    /*    Glide.with(this)
+            .load(avatarFilePath)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .placeholder(R.drawable.account_icon)
+            .into(completed_profile_user_image)*/
+
+
+              if (socialType.equals("social")) {
+                  Glide.with(this)
+                      .load(Uri.parse(userImageString))
+                      .placeholder(R.drawable.account_icon)
+                      .into(userImage)
+              } else {
+      //            userImage.setImageBitmap(StringToBitmap(userImageString))
+                  Glide.with(this)
+                      .load(avatarFilePath)
+                      .placeholder(R.drawable.account_icon)
+                      .into(userImage)
+              }
+              //  userImage.setImageBitmap(StringToBitmap(userImageString))
         //val userImageString = SharedPrefrenceManager.getUserImage(this)
         //Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
         val firstName = SharedPrefrenceManager.getUserFirstName(this)

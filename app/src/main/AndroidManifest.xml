@@ -84,8 +84,8 @@
         <activity android:name=".profile.UserProfileEditQuestionActivity" />
         <activity android:name=".profile.UserProfileSettingsActivity" />
         <activity android:name=".profile.UserProfileEditActivity" />
-        <activity android:name=".profile.UserProfileActivity" >
-
+        <activity android:name=".profile.UserProfileActivity"
+                android:parentActivityName=".home.HomeActivity">
         </activity>
         <activity android:name=".home.HomeActivity" />
         <activity android:name=".setupProfile.TurnOnGPSActivity" />
