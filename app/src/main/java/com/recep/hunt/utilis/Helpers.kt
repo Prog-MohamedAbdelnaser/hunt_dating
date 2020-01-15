@@ -110,6 +110,7 @@ class Helpers {
                 .show()
         }
         fun showErrorSnackBar(activity: Activity,title: String,msg:String){
+
             CookieBar.build(activity)
                 .setTitle("\t$title")
                 .setMessage(msg)

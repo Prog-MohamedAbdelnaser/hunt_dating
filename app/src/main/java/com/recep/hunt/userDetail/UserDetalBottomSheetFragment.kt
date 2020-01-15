@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,10 +29,7 @@ import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.userDetail.models.TimelineModel
-import com.recep.hunt.utilis.FlowLayout
-import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.SimpleDividerItemDecoration
-import com.recep.hunt.utilis.Utils
+import com.recep.hunt.utilis.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -76,6 +74,7 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
     ): View? {
         val view = inflater.inflate(R.layout.user_detail_bottom_sheet_layout, container, false)
         init(view)
+
         return view
     }
 
@@ -109,7 +108,7 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
         adapter.add(UserDetailExperienceItem(ctx, getExperienceTimeline()))
         adapter.add(UserEducationItem(ctx, getEducationTimeline()))
         //adapter.add(UserSpotifyTopArtistItem(ctx, getMyTopArtists()))
-        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx),ctx,swipeUserModel))
+        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx),requireActivity(),swipeUserModel))
     }
 
     private fun getExperienceTimeline(): ArrayList<TimelineModel> {
@@ -397,15 +396,18 @@ class MyTopUserArtistItem(private val name: String) : Item<ViewHolder>() {
     }
 }
 
-class ReportProfileItem(private val userName: String, private val ctx: Context, private val swipeUserModel: SwipeUserModel?) : Item<ViewHolder>() {
+class ReportProfileItem(private val userName: String, private val ctx: Activity, private val swipeUserModel: SwipeUserModel?) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.report_profile_item_layout
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.report_profile_btn_text.text = "Report ${swipeUserModel?.firstName}'s Profile"
+
         viewHolder.itemView.reportProfileLout.setOnClickListener {
             askReportUser()
         }
+        viewHolder.itemView.report_profile_btn_text.setOnClickListener {
+            viewHolder.itemView.reportProfileLout.performClick()
+        }
     }
-
 
     private fun askReportUser() {
         val ll =
@@ -454,6 +456,7 @@ class ReportProfileItem(private val userName: String, private val ctx: Context, 
         })
 
     }
+
     private fun reportAccountDialog() {
         val ll = LayoutInflater.from(ctx).inflate(R.layout.delete_account_first_dailog_layout, null)
         val dialog = Dialog(ctx)
@@ -502,6 +505,7 @@ class ReportProfileItem(private val userName: String, private val ctx: Context, 
 
 
     private fun otherReasonDialog() {
+
         val ll =
             LayoutInflater.from(ctx).inflate(R.layout.delete_account_reason_dialog_layout, null)
         val dialog = Dialog(ctx)
@@ -511,11 +515,20 @@ class ReportProfileItem(private val userName: String, private val ctx: Context, 
         dialog.tvOtherReasonsTitle.text=ctx.getString(R.string.report_user)
         dialog.delete_account_back_btn.setOnClickListener { dialog.dismiss() }
         dialog.delete_account_submit_btn.setOnClickListener {
-            if (dialog. inputReason.text.toString().isNullOrEmpty().not())
-            reportUser(dialog. inputReason.text.toString())
 
-            dialog.dismiss()
+            if (dialog. inputReason.text.toString().isNullOrEmpty().not()){
+                reportUser(dialog. inputReason.text.toString())
+                dialog.dismiss()
+            }else{
+                dialog.inputReason.error="Enter Reason !"
+              //  Helpers.showErrorSnackBar(ctx, "Enter Reason !", "")
 
+            }
+
+
+        }
+        dialog. inputReason.addTextChangedListener {
+            dialog.inputReason.error=null
         }
 
         dialog.show()
