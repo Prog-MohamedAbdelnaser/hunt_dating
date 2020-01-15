@@ -46,7 +46,9 @@ class SetupProfileInterestedInActivity : BaseActivity(),
 //                    toast(selectedInterstedIn)
 //                    launchActivity<TurnOnGPSActivity>()
 //            launchActivity<TurnOnGPSUpdateAcitivity>()
-            launchActivity<SetupProfileReferralCodeActivity>()
+            launchActivity<SetupProfileReferralCodeActivity>{
+                putExtra(Constants.IMGURI,avatarFilePath)
+            }
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {

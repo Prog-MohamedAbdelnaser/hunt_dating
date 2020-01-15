@@ -58,7 +58,7 @@ class SetupProfileCompletedActivity : BaseActivity() {
     private lateinit var userName: TextView
     private lateinit var userViewModel: UserViewModel
     private lateinit var bitmap: Bitmap
-    private var avatarFilePath = ""
+    private var avatarFilePath:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,7 +68,7 @@ class SetupProfileCompletedActivity : BaseActivity() {
 
     private fun init() {
 
-        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
+        avatarFilePath = intent?.getStringExtra(Constants.IMGURI)
         LogUtil.e("SetupProfileCompletedActivity","Image "+avatarFilePath)
 
 
@@ -106,27 +106,25 @@ class SetupProfileCompletedActivity : BaseActivity() {
 
 
 
-    /*    Glide.with(this)
-            .load(avatarFilePath)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .placeholder(R.drawable.account_icon)
-            .into(completed_profile_user_image)*/
+        /*    Glide.with(this)
+                .load(avatarFilePath)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .placeholder(R.drawable.account_icon)
+                .into(completed_profile_user_image)*/
 
 
-              if (socialType.equals("social")) {
-                  Glide.with(this)
-                      .load(Uri.parse(userImageString))
-                      .placeholder(R.drawable.account_icon)
-                      .into(userImage)
-              } else {
-      //            userImage.setImageBitmap(StringToBitmap(userImageString))
-                  Glide.with(this)
-                      .load(avatarFilePath)
-                      .placeholder(R.drawable.account_icon)
-                      .into(userImage)
-              }
-              //  userImage.setImageBitmap(StringToBitmap(userImageString))
+        if (socialType.equals("social")) {
+            Glide.with(this)
+                .load(Uri.parse(userImageString))
+                .placeholder(R.drawable.account_icon)
+                .into(userImage)
+        } else {
+
+            avatarFilePath?.let { Glide.with(this).load(it).placeholder(R.drawable.account_icon).into(userImage) }
+
+        }
+        //  userImage.setImageBitmap(StringToBitmap(userImageString))
         //val userImageString = SharedPrefrenceManager.getUserImage(this)
         //Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
