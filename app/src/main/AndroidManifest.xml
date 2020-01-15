@@ -105,6 +105,7 @@
         <activity android:name=".setupProfile.SetupProfileDobActivity" />
         <activity android:name=".setupProfile.SetupProfileEmailActivity" android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity android:name=".setupProfile.SetupProfileActivity" android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity android:name=".setupProfile.SetupProfileRelationshipActivity" />
         <activity android:name=".login.SocialLoginActivity" >
         </activity>
         <activity android:name=".login.OtpVerificationActivity" android:windowSoftInputMode="stateVisible|adjustResize"

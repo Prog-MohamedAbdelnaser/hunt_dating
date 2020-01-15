@@ -76,6 +76,12 @@ class Constants {
         //Mouse click duration
         const val CLICK_ACTION_THRESHOLD = 200
 
+        //Relationship Status
+        const val SINGLE="Single"
+        const val MARRIED="Married"
+        const val INRELATION="In Relationship"
+        const val DIV0RCED="Divorced"
+
 
 //        val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRefrence&key=${context.resources.getString(R.string.google_api_key)}"
 

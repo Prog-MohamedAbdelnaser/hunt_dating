@@ -137,6 +137,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                 SharedPrefrenceManager.setUserLatitude(this, userInfo.lat)
                 SharedPrefrenceManager.setProfileImg(this, userInfo.profile_pic)
 
+
                 for ((index, it1) in userInfo.user_profile_image.withIndex()) {
                     when (index) {
                         0 -> {

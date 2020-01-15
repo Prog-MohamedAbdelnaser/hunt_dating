@@ -118,7 +118,7 @@ class BasicInfoViewModel(private val app: Application) {
 
     fun getData(basicInfo: BasicInfo?): ArrayList<UserBasicInfoModel> {
         val basicModel = ArrayList<UserBasicInfoModel>()
-        val questionModel = getBasicInfoQuestions()
+        val questionModel = getBasicInfoQuestions(basicInfo)
         if (basicModel.size == 0) {
             basicModel.add(
                 UserBasicInfoModel(
@@ -210,6 +210,192 @@ class BasicInfoViewModel(private val app: Application) {
             )
         }
         return basicModel
+    }
+
+    fun getBasicInfoQuestions( basicInfo: BasicInfo?): ArrayList<UserBasicInfoQuestionModel> {
+        val questionModel = ArrayList<UserBasicInfoQuestionModel>()
+        if (questionModel.size == 0) {
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.relation_question,
+                    true,
+                    arrayListOf(
+                        R.string.relation_option_1,
+                        R.string.relation_option_2,
+                        R.string.relation_option_3,
+                        R.string.relation_option_4,
+                        R.string.relation_option_5
+                    ),
+                    null,
+                   "Single"
+                )
+            )
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.height_question,
+                    false,
+                    null,
+                    R.string.height_placeholder,
+                   basicInfo?.height
+                )
+            )
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.gym_question,
+                    true,
+                    arrayListOf(
+                        R.string.gym_option_1,
+                        R.string.gym_option_2,
+                        R.string.gym_option_3
+                    ),
+                    null,
+                   basicInfo?.gym
+                )
+            )
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.edutcation_question,
+                    true,
+                    arrayListOf(
+                        R.string.education_option_1,
+                        R.string.education_option_2,
+                        R.string.education_option_3,
+                        R.string.education_option_4,
+                        R.string.education_option_5,
+                        R.string.education_option_6
+                    ),
+                    null,
+                   basicInfo?.education_level
+                )
+            )
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.drink_question,
+                    true,
+                    arrayListOf(
+                        R.string.drink_option_1,
+                        R.string.drink_option_2,
+                        R.string.drink_option_3
+                    ),
+                    null,
+                    basicInfo?.drink
+                )
+            )
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.smoke_question,
+                    true,
+                    arrayListOf(
+                        R.string.smoke_option_1,
+                        R.string.smoke_option_2,
+                        R.string.smoke_option_3
+                    ),
+                    null,
+                   basicInfo?.smoke
+                )
+            )
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.pets_question,
+                    true,
+                    arrayListOf(
+                        R.string.pet_option_1,
+                        R.string.pet_option_2,
+                        R.string.pet_option_3,
+                        R.string.pet_option_4,
+                        R.string.pet_option_5,
+                        R.string.pet_option_6
+                    ),
+                    null,
+                   basicInfo?.pets
+                )
+            )
+
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.looking_for_question,
+                    true,
+                    arrayListOf(
+                        R.string.looking_for_option_1,
+                        R.string.looking_for_option_2,
+                        R.string.looking_for_option_3,
+                        R.string.looking_for_option_4
+                    ),
+                    null,
+                    basicInfo?.zodiac
+                )
+            )
+
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.kids_question,
+                    true,
+                    arrayListOf(
+                        R.string.kids_option_1,
+                        R.string.kids_option_2,
+                        R.string.kids_option_3,
+                        R.string.kids_option_4
+                    ),
+                    null,
+                    basicInfo?.kids
+                )
+            )
+
+
+
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.zodiac_question,
+                    true,
+                    arrayListOf(
+                        R.string.zodiac_option_1,
+                        R.string.zodiac_option_2,
+                        R.string.zodiac_option_3,
+                        R.string.zodiac_option_4,
+                        R.string.zodiac_option_5,
+                        R.string.zodiac_option_6,
+                        R.string.zodiac_option_7,
+                        R.string.zodiac_option_8,
+                        R.string.zodiac_option_9,
+                        R.string.zodiac_option_10,
+                        R.string.zodiac_option_11,
+                        R.string.zodiac_option_12
+                    ),
+                    null,
+                    basicInfo?.zodiac
+                )
+            )
+
+
+            questionModel.add(
+                UserBasicInfoQuestionModel(
+                    R.string.religion_question,
+                    true,
+                    arrayListOf(
+                        R.string.religin_option_1,
+                        R.string.religin_option_2,
+                        R.string.religin_option_3,
+                        R.string.religin_option_4,
+                        R.string.religin_option_5,
+                        R.string.religin_option_6
+                    ),
+                    null,
+                    basicInfo?.religion
+                )
+            )
+
+        }
+
+        return questionModel
     }
 
     fun getBasicInfoQuestions(): ArrayList<UserBasicInfoQuestionModel> {

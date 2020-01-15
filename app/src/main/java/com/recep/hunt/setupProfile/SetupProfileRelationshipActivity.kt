@@ -14,17 +14,17 @@ import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
-import kotlinx.android.synthetic.main.activity_setup_profile_gender.*
+import kotlinx.android.synthetic.main.activity_setup_profile_reletionship.*
 import org.jetbrains.anko.find
 
-class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
+class SetupProfileRelationshipActivity : BaseActivity() , LookingForListeners {
     var avatarFilePath = ""
 
-    private var selectedGender = ""
-    private lateinit var genderRecyclerView: RecyclerView
+    private var selectedOption = ""
+    private lateinit var reletionshipRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setup_profile_gender)
+        setContentView(R.layout.activity_setup_profile_reletionship)
         setScreenTitle(R.string.setup_profile)
         getBaseCancelBtn().setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
         getBackButton().setOnClickListener {
@@ -34,12 +34,12 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
     }
     private fun init(){
         avatarFilePath = intent.getStringExtra(IMGURI)
-        genderRecyclerView = find(R.id.gender_recyclerView)
+        reletionshipRecyclerView = find(R.id.reletionship_recyclerView)
 
-        setup_gender_continue_btn.setOnClickListener {
-            if(selectedGender.isNotEmpty()){
+        setup_reletionship_continue_btn.setOnClickListener {
+            if(selectedOption.isNotEmpty()){
 
-                SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
+                SharedPrefrenceManager.setUserGender(this@SetupProfileRelationshipActivity,selectedOption)
                 launchActivity<SetupProfileLookingForActivity>{
                     putExtra(IMGURI, avatarFilePath)
                 }
@@ -54,19 +54,19 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
 
     private fun setupRecyclerView(){
         val lookingForData= dummyImageData()
-        genderRecyclerView.layoutManager = LinearLayoutManager(this)
-        genderRecyclerView.adapter =
+        reletionshipRecyclerView.layoutManager = LinearLayoutManager(this)
+        reletionshipRecyclerView.adapter =
             SetupProfileInterestedInAdapter(
                 lookingForData,
-                this@SetupProfileGenderActivity,
+                this@SetupProfileRelationshipActivity,
                 this
             )
 
     }
 
     override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
-        selectedGender = lookingFor
-        SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
+        selectedOption = lookingFor
+        SharedPrefrenceManager.setUsrRelationship(this@SetupProfileRelationshipActivity,selectedOption)
         launchActivity<SetupProfileLookingForActivity>{
             putExtra(IMGURI, avatarFilePath)
         }
@@ -79,7 +79,7 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
                 LookingForModel(
                     R.drawable.ic_man,
                     R.drawable.ic_man_white,
-                    Constants.MALE,
+                    Constants.SINGLE,
                     false,
                     null
                 )
@@ -88,7 +88,25 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
                 LookingForModel(
                     R.drawable.ic_female,
                     R.drawable.ic_female_white,
-                    Constants.FEMALE,
+                    Constants.INRELATION,
+                    false,
+                    null
+                )
+            )
+            data.add(
+                LookingForModel(
+                    R.drawable.ic_others_gender,
+                    R.drawable.ic_other_white,
+                    Constants.MARRIED,
+                    false,
+                    null
+                )
+            )
+            data.add(
+                LookingForModel(
+                    R.drawable.ic_others_gender,
+                    R.drawable.ic_other_white,
+                    Constants.DIV0RCED,
                     false,
                     null
                 )

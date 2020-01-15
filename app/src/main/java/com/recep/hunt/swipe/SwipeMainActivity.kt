@@ -100,12 +100,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         parentView = find(R.id.main_layoutView)
         windowwidth = windowManager.defaultDisplay.width
         screenCenter = windowwidth / 2
-        // items = dummyUsersdata()
-        try {
+        items = dummyUsersdata()
+       /* try {
             items = intent.getParcelableArrayListExtra("swipeUsers")
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
 
         addNearbyUsersToSwipe()
     }
@@ -317,7 +317,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 } else if (Likes == 1) {
                                     Log.e("Event_Status :->", "Dislike")
                                     parentView.removeView(containerView)
-                                     callSwipeUserApi(items[currentUser], Likes)
+                                    // callSwipeUserApi(items[currentUser], Likes)
                                     if (currentUser > 0) {
                                         storyProgressViews[currentUser].destroy()
                                         currentUser--
@@ -335,7 +335,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                 } else if (Likes == 2) {
                                     Log.e("Event_Status :->", "Like")
                                     parentView.removeView(containerView)
-                                    callSwipeUserApi(items[currentUser], Likes)
+                                   // callSwipeUserApi(items[currentUser], Likes)
                                     if (currentUser > 0) {
                                         storyProgressViews[currentUser].destroy()
                                         currentUser--
