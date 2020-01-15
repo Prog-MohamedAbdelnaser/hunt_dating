@@ -1,0 +1,166 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+
+androidExtensions {
+    experimental = true
+}
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.0"
+    defaultConfig {
+        applicationId "com.recep.hunt"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/httpclient-4.2.1.jar')
+    implementation files('libs/httpmime-4.2.1.jar')
+    implementation files('libs/httpcore-4.2.1.jar')
+    implementation files('libs/json-simple-1.1.jar')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
+//
+//    implementation 'com.google.api-client:google-api-client:1.23.0'
+//     implementation 'com.google.api-client:google-api-client-android:1.23.0'
+//     implementation 'com.google.apis:google-api-services-people:v1-rev4-1.22.0'
+    compile ('com.google.api-client:google-api-client:1.23.0'){
+        exclude module: 'httpcore' exclude module: 'httpclient'
+    }
+    compile ('com.google.api-client:google-api-client-android:1.23.0'){
+        exclude module: 'httpcore' exclude module: 'httpclient'
+    }
+    compile ('com.google.apis:google-api-services-people:v1-rev277-1.23.0'){
+        exclude module: 'httpcore' exclude module: 'httpclient'
+    }
+
+    //Third party libs
+    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:3.0.3'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.xwray:groupie:2.3.0'
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation 'com.github.arcadefire:nice-spinner:1.4.3'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.GoodieBag:Pinview:v1.4'
+    implementation 'com.github.nguyenhoanglam:ImagePicker:1.3.3'
+    implementation 'com.airbnb.android:lottie:3.0.7'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
+    implementation 'org.aviran.cookiebar2:cookiebar2:1.1.0'
+    implementation 'com.hbb20:ccp:2.3.1'
+    implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
+    implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
+    implementation 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    implementation 'com.brucetoo.pickview:library:1.2.3'
+    implementation 'com.github.vipulasri:timelineview:1.1.0'
+    implementation 'com.github.squti:Android-Wave-Recorder:1.2.0'
+
+    implementation 'me.relex:circleindicator:2.1.4'
+
+    // Room components
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+// Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$rootProject.androidxArchVersion"
+
+// ViewModel Kotlin support
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.archLifecycleVersion"
+
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.3.0'
+    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
+    implementation 'org.sufficientlysecure:html-textview:3.7'
+
+
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
+
+
+    def moshiVersion="1.8.0"
+    def retrofit2_version = "2.5.0"
+    def okhttp3_version = "3.12.0"
+    def kotlinCoroutineVersion = "1.0.1"
+    def picassoVersion = "2.71828"
+
+    //Moshi
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+
+    //Retrofit2
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+
+    //Okhttp3
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+    //logger
+    implementation 'com.orhanobut:logger:2.2.0'
+
+    //glide image loader
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    //firebase
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.android.gms:play-services-plus:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+
+    //facebook
+    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+    implementation 'ch.acra:acra:4.9.0'
+
+    //google-map / location
+    implementation "com.google.android.gms:play-services-location:17.0.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.0.0'
+
+    //Phone Number
+    implementation 'com.googlecode.libphonenumber:libphonenumber:7.3.1'
+
+}

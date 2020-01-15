@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff"
+        tools:context=".inviteFriend.InviteAFriendActivity">
+
+
+    <ImageView
+            android:id="@+id/imageView23"
+            android:layout_width="115dp"
+            android:layout_height="121dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view6"
+            app:srcCompat="@drawable/invite_a_friend_icon"/>
+
+    <View
+            android:id="@+id/view6"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="56dp"
+            android:background="@color/seprator_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button android:id="@+id/send_invite_btn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/rectangle_app_btn"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/send_invite"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+            android:id="@+id/button4"
+            android:layout_width="65dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/credit_btn_bg"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="$15"
+            android:textColor="#E50A45"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+            android:id="@+id/invite_friend_back_btn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_black"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:id="@+id/textView35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="@string/invite_a_friend_and_earn"
+            android:textColor="@color/app_text_black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView23"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView37"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/send_the_invite_code_to_friend"
+            android:textAlignment="center"
+            android:textColor="#CDD1D9"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView35"
+            app:layout_constraintStart_toStartOf="@+id/textView35"
+            app:layout_constraintTop_toBottomOf="@+id/textView35"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/refer_a_friend"
+            android:textColor="@color/app_text_black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/view6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+            android:id="@+id/cvShowHideId"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/invite_rect"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView37">
+
+
+        <RelativeLayout
+                android:id="@+id/rlHideShowId"
+                android:layout_width="match_parent"
+                android:layout_height="56sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvShowHideInvitesid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat"
+                    android:shadowColor="#08000000"
+                    android:shadowDx="10"
+                    android:shadowDy="13"
+                    android:paddingLeft="5sp"
+                    android:text="Show your invites"
+                    android:textColor="#ff3c4a6d"
+                    android:textSize="12sp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivHideShowId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="10sp"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+
+        </RelativeLayout>
+
+        <View android:id="@+id/view9"
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:layout_below="@+id/rlHideShowId"
+              android:background="#A1EFEFEF"
+              android:paddingLeft="10sp"
+              android:paddingRight="10sp"
+              android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+            android:id="@+id/flReferFriendId"
+            android:layout_width="0sp"
+            android:layout_height="0sp"
+            android:layout_marginTop="10sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvFaqId"
+            app:layout_constraintEnd_toEndOf="@+id/cvShowHideId"
+            app:layout_constraintStart_toStartOf="@+id/cvShowHideId"
+            app:layout_constraintTop_toBottomOf="@+id/cvShowHideId">
+
+    </FrameLayout>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFaqId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5sp"
+            android:background="#ffffffff"
+            android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="FAQs  |  Terms and conditions"
+            android:textColor="#ffbac0cb"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

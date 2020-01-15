@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".matchs.MatchQuestionnaireActivity">
+
+
+    <View
+            android:id="@+id/view10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_match"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"/>
+
+
+    <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="center"
+            android:text="It's a Match!"
+            android:textColor="@color/white"
+            android:textSize="36dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.572"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:gravity="center"
+            android:text="You and Stella like each other!"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvTitle"
+            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivUserImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="82dp"
+            android:layout_marginTop="42dp"
+            android:src="@drawable/profile_pic"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvMessage" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivLikedPersonImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="42dp"
+
+            android:layout_marginRight="82dp"
+            android:src="@drawable/ic_avatar"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvMessage" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivLiked"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@drawable/gradinet_color"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivUserImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivUserImage" />
+
+
+    <ImageView
+            android:id="@+id/imageView26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_harte"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLiked"
+            app:layout_constraintEnd_toEndOf="@+id/ivLiked"
+            app:layout_constraintStart_toStartOf="@+id/ivLiked"
+            app:layout_constraintTop_toTopOf="@+id/ivLiked" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/setpOne"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked">
+
+        <org.sufficientlysecure.htmltextview.HtmlTextView
+                android:id="@+id/welcomeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="42dp"
+                android:layout_marginRight="42dp"
+                android:gravity="center"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp"
+                android:text="Before you start the HUNT , answer some of Stella's questions."
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+                android:id="@+id/optionButton"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+        <Button
+                android:id="@+id/check_code_btn"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/app_btn_round"
+                android:fontFamily="@font/montserrat"
+                android:text="Let's Go!"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/setpTwo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked">
+
+        <TextView
+                android:id="@+id/ranQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:text="Do you plans on having children?"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+                android:id="@+id/btnOption1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginRight="34dp"
+                android:onClick="goTonext"
+                android:textAllCaps="false"
+                android:background="@drawable/partially_transparent"
+                android:text="Want someday"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ranQuestion" />
+
+        <Button
+                android:id="@+id/btnOption2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="18dp"
+                android:textAllCaps="false"
+                android:layout_marginRight="34dp"
+                android:onClick="goTonext"
+
+                android:background="@drawable/partially_transparent"
+                android:text="Don't want"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOption1" />
+
+        <Button
+                android:id="@+id/btnOption3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/partially_transparent"
+                android:text="Have &amp; Want more"
+                android:onClick="goTonext"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="18dp"
+                android:textAllCaps="false"
+                android:layout_marginRight="34dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOption2" />
+   <Button
+                android:id="@+id/btnOption4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/partially_transparent"
+                android:text="Have &amp; Don't want more"
+                android:onClick="goTonext"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="18dp"
+                android:textAllCaps="false"
+                android:layout_marginRight="34dp"
+           android:visibility="gone"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOption3" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_progress_bar_two"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOption4">
+
+
+            <ProgressBar
+                    android:id="@+id/otp_progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:max="15"
+                    android:layout_height="match_parent"
+                    android:indeterminate="false" />
+
+            <TextView
+                    android:layout_margin="16dp"
+                    android:id="@+id/two_progrss_txt"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:fontFamily="@font/montserrat"
+                    android:background="@drawable/white_radius"
+                    android:gravity="center"
+                    android:text="15"
+                    android:textColor="@color/colorProgressbar"
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/otp_progressBar"
+                    app:layout_constraintEnd_toEndOf="@+id/otp_progressBar"
+                    app:layout_constraintStart_toStartOf="@+id/otp_progressBar"
+                    app:layout_constraintTop_toTopOf="@+id/otp_progressBar" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/setpThree"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
+            app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+                android:id="@+id/tvQuestiom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:text="Do you plans on having children?"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginRight="34dp"
+                android:textAllCaps="false"
+                android:background="@drawable/partially_transparent"
+                android:text="Have &amp; Want more"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQuestiom" />
+
+
+        <TextView
+                android:id="@+id/tvWantToMeetWithQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:gravity="center"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:text="Do you want to meet with Sella?"
+                android:textColor="@color/white"
+                android:textSize="26dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button4" />
+
+        <Button
+                android:id="@+id/btn_no"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="No"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+        <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/app_btn_round"
+                android:fontFamily="@font/montserrat"
+                android:text="YES"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stepFour"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
+            app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+                android:id="@+id/tvDoYouWantToMeet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:text="Where do you want to meet?"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+                android:id="@+id/edtEnterLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginRight="34dp"
+                android:background="@drawable/partially_transparent"
+                android:hint="Enter custom location"
+                android:gravity="center"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantToMeet" />
+
+
+        <Button
+                android:id="@+id/btn_goto_next_five"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtEnterLocation"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stepFive"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
+            app:layout_constraintVertical_bias="0.0">
+
+
+        <Button
+                android:id="@+id/optionDj"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="Dj Tabel"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toTopOf="@+id/edtEnterL"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantTo"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+        <Button
+                android:id="@+id/check_enters_btn"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/white_backgroud_btn"
+                android:fontFamily="@font/montserrat"
+                android:text="Entreance"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@+id/edtEnterL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantTo" />
+
+
+        <TextView
+                android:id="@+id/tvDoYouWantTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:text="Where do you want to meet?"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+                android:id="@+id/edtEnterL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="92dp"
+                android:layout_marginRight="34dp"
+                android:background="@drawable/partially_transparent"
+                android:hint="Enter custom location"
+                android:gravity="center"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantTo" />
+
+
+        <Button
+                android:id="@+id/btn"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="Yes"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtEnterL"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stepSix"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
+            app:layout_constraintVertical_bias="0.0">
+
+
+        <Button
+                android:id="@+id/icEnterance"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/white_backgroud_btn"
+                android:gravity="center"
+                android:text="Entreance"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+        <Button
+                android:id="@+id/id_add_time"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/marine_corner_card"
+                android:fontFamily="@font/montserrat"
+                android:text="+ 1 Min"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/icEnterance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/icEnterance" />
+
+        <FrameLayout
+                android:id="@+id/fl"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvRemaningTime"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/icEnterance">
+
+            <ProgressBar
+                    android:id="@+id/pbTimer"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:indeterminate="false" />
+
+            <ImageView
+                    android:layout_margin="16dp"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@null"
+                    android:fontFamily="@font/montserrat"
+                    android:background="@drawable/white_radius"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_cancel"
+                    android:textColor="@color/colorProgressbar"
+                    android:textSize="22sp"
+                    />
+
+        </FrameLayout>
+<!--        <ProgressBar-->
+<!--                android:id="@+id/progrssbar_select"-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="108dp"-->
+<!--                android:layout_height="108dp"-->
+<!--                android:indeterminate="false"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/tvRemaningTime"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                android:visibility="gone"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/icEnterance" />-->
+
+<!--        <TextView-->
+<!--                android:id="@+id/otp_progrss"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+
+<!--                android:fontFamily="@font/montserrat"-->
+<!--                android:visibility="gone"-->
+<!--                android:text="15"-->
+<!--                android:textColor="@color/colorProgressbar"-->
+<!--                android:textSize="22sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/progrssbar_select"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/progrssbar_select"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/progrssbar_select"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/progrssbar_select" />-->
+        <TextView
+                android:id="@+id/tvRemaningTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="00 : 05 : 45"
+                android:textColor="@color/white"
+                android:textSize="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvStepSix"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        <Button
+                android:id="@+id/idSubmit"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="24dp"
+                app:layout_goneMarginLeft="24dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/app_btn_round"
+                android:fontFamily="@font/montserrat"
+                android:text="We Met!"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+                android:id="@+id/tvStepSix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time Remaining"
+                android:textColor="@color/white"
+                android:alpha="0.8"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/idSubmit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

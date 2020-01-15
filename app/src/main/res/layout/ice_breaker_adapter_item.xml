@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+    <TextView
+            android:id="@+id/ice_breaker_question_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What you expect from relationship?"
+            android:textSize="16sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="@color/app_text_black"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            />
+    <TextView
+            android:id="@+id/ice_breaker_date_time_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="29 June 2019 - 10:00 pm"
+            android:fontFamily="@font/montserrat_medium"
+            android:textSize="12sp"
+            android:textColor="#9A9DA4"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            />
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp">
+        <Button
+                android:id="@+id/ice_breaker_edit_btn"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:text="@string/edit"
+                android:textColor="#28A745"
+                android:textSize="12sp"
+                android:fontFamily="@font/montserrat_medium"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:drawableLeft="@drawable/ic_edit_green"
+                android:drawableStart="@drawable/ic_edit_green"
+                android:drawableTint="#28A745"
+                />
+        <Button
+                android:id="@+id/ice_breaker_delete_btn"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:text="@string/delete"
+                android:textColor="#FF2A4E"
+                android:textSize="12sp"
+                android:fontFamily="@font/montserrat_medium"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:drawableLeft="@drawable/ic_delete_red"
+                android:drawableStart="@drawable/ic_delete_red"
+                android:drawableTint="#FF2A4E"
+                />
+
+    </LinearLayout>
+
+</LinearLayout>

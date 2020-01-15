@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:cardCornerRadius="10dp">
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_account"
+                android:textColor="@color/pink"
+                android:fontFamily="@font/montserrat_medium"
+                android:textSize="13sp"
+                android:layout_marginTop="16dp"
+                android:textAlignment="center"
+                />
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tell_us_why_and_we_ll_see_what_we_can_do"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/pink"
+                android:textAlignment="center"
+                android:textSize="12sp"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/type_other_reason_here"
+                android:fontFamily="@font/montserrat"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"/>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/round_app_stroke_bg"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/app_text_black"
+                android:hint="@string/type_here"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_height="45dp">
+
+            <Button
+                    android:id="@+id/delete_account_back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/back"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/app_light_text_color"
+                    android:textSize="15sp"
+                    android:background="@drawable/app_normal_stroke_btn_bg"
+                    />
+
+            <Button
+                    android:id="@+id/delete_account_submit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/submit"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="#F64C1F"
+                    android:textSize="15sp"
+                    android:background="@drawable/app_normal_stroke_btn_bg"
+                    />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
