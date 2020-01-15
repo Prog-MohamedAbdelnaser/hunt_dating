@@ -5,24 +5,25 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.recep.hunt.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.model.ReportUser
+import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
 import com.recep.hunt.swipe.model.SwipeUserModel
@@ -30,19 +31,23 @@ import com.recep.hunt.userDetail.models.TimelineModel
 import com.recep.hunt.utilis.FlowLayout
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.SimpleDividerItemDecoration
+import com.recep.hunt.utilis.Utils
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.basic_info_btn_item.view.*
+import kotlinx.android.synthetic.main.delete_account_reason_dialog_layout.*
+import kotlinx.android.synthetic.main.dont_want_to_join_hunt_dialog.*
 import kotlinx.android.synthetic.main.my_top_user_artist_item.view.*
+import kotlinx.android.synthetic.main.number_changed_success_layout.*
 import kotlinx.android.synthetic.main.report_profile_item_layout.view.*
+import kotlinx.android.synthetic.main.report_user_question_dialog_layout.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
-import kotlinx.android.synthetic.main.user_detail_bottom_sheet_layout.view.*
 import kotlinx.android.synthetic.main.user_detail_header_item.view.*
-import kotlinx.coroutines.flow.flow
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
-import org.jetbrains.anko.support.v4.find
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 /**
@@ -104,7 +109,7 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
         adapter.add(UserDetailExperienceItem(ctx, getExperienceTimeline()))
         adapter.add(UserEducationItem(ctx, getEducationTimeline()))
         //adapter.add(UserSpotifyTopArtistItem(ctx, getMyTopArtists()))
-        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx)))
+        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx),ctx,swipeUserModel))
     }
 
     private fun getExperienceTimeline(): ArrayList<TimelineModel> {
@@ -392,9 +397,143 @@ class MyTopUserArtistItem(private val name: String) : Item<ViewHolder>() {
     }
 }
 
-class ReportProfileItem(private val userName: String) : Item<ViewHolder>() {
+class ReportProfileItem(private val userName: String, private val ctx: Context, private val swipeUserModel: SwipeUserModel?) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.report_profile_item_layout
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.report_profile_btn_text.text = "Report $userName's Profile"
+        viewHolder.itemView.report_profile_btn_text.text = "Report ${swipeUserModel?.firstName}'s Profile"
+        viewHolder.itemView.reportProfileLout.setOnClickListener {
+            askReportUser()
+        }
+    }
+
+
+    private fun askReportUser() {
+        val ll =
+            LayoutInflater.from(ctx).inflate(R.layout.report_user_question_dialog_layout, null)
+        val dialog = Dialog(ctx)
+        dialog.setContentView(ll)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+        dialog.btnNo.setOnClickListener { dialog.dismiss() }
+        dialog.btnYes.setOnClickListener {
+            reportAccountDialog()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
+    }
+
+
+
+    private fun reportUser(resone:String) {
+
+        val reportUserModel= ReportUser(swipeUserModel?.id.toString(),resone)
+
+        val call = ApiClient.getClient.reportUser(reportUserModel)
+
+        call.enqueue(object: Callback<ReportUserResponse> {
+            override fun onFailure(call: Call<ReportUserResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<ReportUserResponse>,
+                response: Response<ReportUserResponse>
+            ) {
+                if (!response.isSuccessful) {
+                    val strErrorJson = response.errorBody()?.string()
+                    if (Utils.isSessionExpire(ctx, strErrorJson)) {
+                        return
+                    }
+                }
+
+                reportAccountSuccessDialog(ctx)
+            }
+
+        })
+
+    }
+    private fun reportAccountDialog() {
+        val ll = LayoutInflater.from(ctx).inflate(R.layout.delete_account_first_dailog_layout, null)
+        val dialog = Dialog(ctx)
+        dialog.setContentView(ll)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+        dialog.tvTitleReasons.text=ctx.getString(R.string.report_user)
+
+        dialog.reason1_btn.setOnClickListener {
+            reportUser( dialog.reason1_btn.text.toString())
+            dialog.dismiss()
+        }
+        dialog.reason2_btn.setOnClickListener {
+            reportUser( dialog.reason2_btn.text.toString())
+
+
+            dialog.dismiss()
+        }
+        dialog.reason3_btn.setOnClickListener {
+
+            reportUser( dialog.reason3_btn.text.toString())
+
+            dialog.dismiss()
+
+        }
+        dialog.reason4_btn.setOnClickListener {
+            reportUser( dialog.reason4_btn.text.toString())
+
+            dialog.dismiss()
+        }
+        dialog.reason5_btn.setOnClickListener {
+            reportUser( dialog.reason5_btn.text.toString())
+
+            dialog.dismiss()
+        }
+        dialog.reason6_btn.setOnClickListener {
+
+            dialog.dismiss()
+            otherReasonDialog()
+        }
+        dialog.show()
+    }
+
+
+    private fun otherReasonDialog() {
+        val ll =
+            LayoutInflater.from(ctx).inflate(R.layout.delete_account_reason_dialog_layout, null)
+        val dialog = Dialog(ctx)
+        dialog.setContentView(ll)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+        dialog.tvOtherReasonsTitle.text=ctx.getString(R.string.report_user)
+        dialog.delete_account_back_btn.setOnClickListener { dialog.dismiss() }
+        dialog.delete_account_submit_btn.setOnClickListener {
+            if (dialog. inputReason.text.toString().isNullOrEmpty().not())
+            reportUser(dialog. inputReason.text.toString())
+
+            dialog.dismiss()
+
+        }
+
+        dialog.show()
+
+    }
+
+    private fun reportAccountSuccessDialog(ctx: Context) {
+
+        val ll = LayoutInflater.from(ctx).inflate(R.layout.number_changed_success_layout, null)
+        val dialog = Dialog(ctx)
+        dialog.setContentView(ll)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+        dialog.number_change_success_dialog_title.text =
+            ctx.resources.getText(R.string.you_have_successfully_deactivated)
+        dialog.lottieAnimationView2.playAnimation()
+        dialog.ok_btn.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
     }
 }
