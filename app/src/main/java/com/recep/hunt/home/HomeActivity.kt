@@ -423,10 +423,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
                 var result = response.body()?.data
-               // val text = resources.openRawResource(R.raw.dummydata).bufferedReader().use { it.readText() }
-
-             //  var dummydata:NearestLocationResponse =Gson().fromJson<NearestLocationResponse>(text,NearestLocationResponse::class.java)
-              //  result=dummydata.data
+                val text = resources.openRawResource(R.raw.dummydata).bufferedReader()
+                    .use { it.readText() }
+                var dummydata: NearestLocationResponse = Gson().fromJson<NearestLocationResponse>(
+                    text,
+                    NearestLocationResponse::class.java
+                )
+                result = dummydata.data
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
                     val farItems = ArrayList<NearestLocationData>()
@@ -457,7 +460,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
 //                    mMap.setMaxZoomPreference(animateZoomTo)
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-   setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
+                    setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
                     setupSortedListView(nearbyItems, farItems)
                 }
             }
@@ -1033,7 +1036,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 var result = response.body()?.data
                 var swipeUserArray = ArrayList<SwipeUserModel>()
-                if (result != null && result.size > 0) {
+                  if (result != null && result.size > 0) {
                     for (i in 0 until result.size) {
                         val images = ArrayList<String>()
                         if (result[i].user_profile_image.size != 0) {
@@ -1070,11 +1073,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         )
                     }
                 } else {
-//                    AlertDialogUtils.displayDialog(
-//                        this@HomeActivity,
-//                        getString(R.string.no_user_found)
-//                    )
-                    showNoUserBottomSheet()
+                      launchActivity<SwipeMainActivity> {
+                          putParcelableArrayListExtra(
+                              "swipeUsers",
+                              swipeUserArray
+                          )
+                      }
+                    //showNoUserBottomSheet()
                 }
             }
         })
