@@ -11,14 +11,17 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.profile.viewmodel.UserViewModel
@@ -46,7 +49,8 @@ import java.io.File
 import java.io.IOException
 import java.net.URL
 
-class SetupProfileCompletedActivity : BaseActivity() {
+
+class SetupProfileCompletedActivity : AppCompatActivity() {
 
     companion object{
         val TAG = SetupProfileCompletedActivity.javaClass.simpleName
@@ -68,8 +72,8 @@ class SetupProfileCompletedActivity : BaseActivity() {
 
     private fun init() {
 
-        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
-        LogUtil.e("SetupProfileCompletedActivity","Image "+avatarFilePath)
+        avatarFilePath = intent.getStringExtra(IMGURI)
+        Logger.d("SetupProfileCompletedActivity $avatarFilePath")
 
 
         userImage = find(R.id.completed_profile_user_image)
@@ -124,7 +128,7 @@ class SetupProfileCompletedActivity : BaseActivity() {
                   Glide.with(this)
                       .load(avatarFilePath)
                       .placeholder(R.drawable.account_icon)
-                      .into(userImage)
+                      .into(completed_profile_user_image)
               }
               //  userImage.setImageBitmap(StringToBitmap(userImageString))
         //val userImageString = SharedPrefrenceManager.getUserImage(this)
