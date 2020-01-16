@@ -87,7 +87,11 @@
         <activity android:name=".profile.UserProfileActivity"
                 android:parentActivityName=".home.HomeActivity">
         </activity>
+
+
+
         <activity android:name=".home.HomeActivity" />
+
         <activity android:name=".setupProfile.TurnOnGPSActivity" />
         <activity
                 android:name=".setupProfile.SetupProfileReferralCodeActivity"

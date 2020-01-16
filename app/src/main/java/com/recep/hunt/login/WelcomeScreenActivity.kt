@@ -285,15 +285,20 @@ class WelcomeScreenActivity : AppCompatActivity() {
     }
 
     private fun checkPermission() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     android.Manifest.permission.RECORD_AUDIO
-                ), TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE)
+                ),
+                TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE
+            )
             return
         }
     }

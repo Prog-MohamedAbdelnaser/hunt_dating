@@ -78,7 +78,6 @@ class SplashActivity : AppCompatActivity() {
 
     }
     private fun segueToApp(){
-
         val isOtpVerified = SharedPrefrenceManager.getIsOtpVerified(this@SplashActivity)
         val isLoggedIn = SharedPrefrenceManager.getIsLoggedIn(this)
         if (isOtpVerified) {

@@ -72,7 +72,6 @@ class MyApplication : MultiDexApplication() {
         super.onCreate()
         instance = this
 
-        printHashKey(this)
         /** logger initialization **/
         Logger.addLogAdapter(AndroidLogAdapter())
 

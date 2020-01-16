@@ -444,7 +444,7 @@
     <string name="insta_client_secret">ad97c323aaa94ffdb5bdf5a6a25435e</string>
     <string name="insta_callback_url">https://www.gethunt.app/</string>
     <string name="insta_base_url">https://api.instagram.com/</string>
-    <string name="google_maps_key">AIzaSyAjnK5xpEI0MbaYJHmIQkeYYDpV5sYj8-c</string>
+    <string name="google_maps_key">AIzaSyBhvzS_RLc7O0yf4Ru8yec086IZT530Jy8</string>
     <string name="browser_key">AIzaSyD2s-3Kcz0Q2t_zjJB_bNP6UqnK82j-oGw</string>
     <string name="delete_account">Delete Account</string>
 
