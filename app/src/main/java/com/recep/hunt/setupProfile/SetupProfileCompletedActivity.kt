@@ -58,8 +58,6 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     }
 
     private var mHttpClient: DefaultHttpClient? = null
-    private lateinit var userImage: CircleImageView
-    private lateinit var userName: TextView
     private lateinit var userViewModel: UserViewModel
     private lateinit var bitmap: Bitmap
     private var avatarFilePath = ""
@@ -73,11 +71,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private fun init() {
 
         avatarFilePath = intent.getStringExtra(IMGURI)
-        Logger.d("SetupProfileCompletedActivity $avatarFilePath")
 
-
-        userImage = find(R.id.completed_profile_user_image)
-        userName = find(R.id.user_completed_profile_name)
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
         setupViews()
@@ -122,7 +116,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
                   Glide.with(this)
                       .load(Uri.parse(userImageString))
                       .placeholder(R.drawable.account_icon)
-                      .into(userImage)
+                      .into(completed_profile_user_image)
               } else {
       //            userImage.setImageBitmap(StringToBitmap(userImageString))
                   Glide.with(this)
@@ -136,7 +130,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
 
-        userName.text = "$firstName $lastName"
+        user_completed_profile_name.text = "$firstName $lastName"
     }
 
     private fun insertUserIntoDb() {
