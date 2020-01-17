@@ -526,11 +526,16 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                             val gson = GsonBuilder().setPrettyPrinting().create()
                             val json: String = gson.toJson(userDetailsModel)
                             val fullname = social_name.split(" ").toTypedArray()
+
+                            if(fullname.size == 2) {
+                                SharedPrefrenceManager.setUserLastName(this, fullname[1])
+                            } else {
+                                fullname[1] = " "
+                            }
                             val firstName: String = fullname[0]
-                            val lastName: String = fullname[1]
 
                             SharedPrefrenceManager.setUserFirstName(this, firstName)
-                            SharedPrefrenceManager.setUserLastName(this, lastName)
+
                             SharedPrefrenceManager.setUserDetailModel(
                                 this@SocialLoginActivity,
                                 json
