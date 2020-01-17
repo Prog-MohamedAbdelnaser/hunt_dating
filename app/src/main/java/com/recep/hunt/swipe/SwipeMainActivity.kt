@@ -108,6 +108,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         }
 
         addNearbyUsersToSwipe()
+        setupToolbarClicks()
     }
 
     //todo implement viewpager
@@ -370,7 +371,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             }
 
             override fun onSwipingUp(event: MotionEvent?) {
-                Log.i("onSwipingUp","onSwipingUp")
                 setupUserDetailBottomSheet(items[currentUser])
             }
 
@@ -637,7 +637,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     var bottomSheet: UserDetalBottomSheetFragment? = null;
-
     private fun setupUserDetailBottomSheet(swipeUserModel: SwipeUserModel) {
         Log.e("TAG", " called ")
 
