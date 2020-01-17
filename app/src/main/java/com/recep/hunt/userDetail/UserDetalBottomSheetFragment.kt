@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.recep.hunt.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel

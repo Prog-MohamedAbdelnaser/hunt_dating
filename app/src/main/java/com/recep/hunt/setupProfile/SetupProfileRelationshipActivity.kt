@@ -51,7 +51,7 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
         setup_reletionship_continue_btn.setOnClickListener {
             if (selectedOption != -1) {
 
-                SharedPrefrenceManager.setUserGender(
+                SharedPrefrenceManager.setRelationshipStatus(
                     this@SetupProfileRelationshipActivity,
                     relatiionShipData[selectedOption].label
                 )

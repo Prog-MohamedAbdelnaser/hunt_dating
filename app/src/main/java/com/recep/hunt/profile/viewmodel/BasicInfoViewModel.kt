@@ -1,7 +1,6 @@
 package com.recep.hunt.profile.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import com.recep.hunt.R
 import com.recep.hunt.model.usersList.BasicInfo
 import com.recep.hunt.profile.model.UserBasicInfoModel
@@ -212,7 +211,7 @@ class BasicInfoViewModel(private val app: Application) {
         return basicModel
     }
 
-    fun getBasicInfoQuestions( basicInfo: BasicInfo?): ArrayList<UserBasicInfoQuestionModel> {
+    fun getBasicInfoQuestions(basicInfo: BasicInfo?): ArrayList<UserBasicInfoQuestionModel> {
         val questionModel = ArrayList<UserBasicInfoQuestionModel>()
         if (questionModel.size == 0) {
             questionModel.add(
@@ -227,7 +226,7 @@ class BasicInfoViewModel(private val app: Application) {
                         R.string.relation_option_5
                     ),
                     null,
-                   "Single"
+                    "Single"
                 )
             )
 
@@ -237,7 +236,7 @@ class BasicInfoViewModel(private val app: Application) {
                     false,
                     null,
                     R.string.height_placeholder,
-                   basicInfo?.height
+                    basicInfo?.height
                 )
             )
 
@@ -251,7 +250,7 @@ class BasicInfoViewModel(private val app: Application) {
                         R.string.gym_option_3
                     ),
                     null,
-                   basicInfo?.gym
+                    basicInfo?.gym
                 )
             )
 
@@ -268,7 +267,7 @@ class BasicInfoViewModel(private val app: Application) {
                         R.string.education_option_6
                     ),
                     null,
-                   basicInfo?.education_level
+                    basicInfo?.education_level
                 )
             )
 
@@ -296,7 +295,7 @@ class BasicInfoViewModel(private val app: Application) {
                         R.string.smoke_option_3
                     ),
                     null,
-                   basicInfo?.smoke
+                    basicInfo?.smoke
                 )
             )
 
@@ -313,7 +312,7 @@ class BasicInfoViewModel(private val app: Application) {
                         R.string.pet_option_6
                     ),
                     null,
-                   basicInfo?.pets
+                    basicInfo?.pets
                 )
             )
 
@@ -503,7 +502,18 @@ class BasicInfoViewModel(private val app: Application) {
                 )
             )
 
-
+            var forFriendship =
+                SharedPrefrenceManager.getLookingForFriendship(app.applicationContext) != "null"
+            var forBussiness =
+                SharedPrefrenceManager.getLookingForBusniess(app.applicationContext) != "null"
+            var for_dating =
+                SharedPrefrenceManager.getLookingForDate(app.applicationContext) != "null"
+            var selectdValueLookinfor = "";
+            if (for_dating) selectdValueLookinfor = "Dating"
+            if (forBussiness) selectdValueLookinfor += " Business"
+            if (forFriendship) selectdValueLookinfor += " Friendship"
+            if (forFriendship && forBussiness && for_dating)
+                selectdValueLookinfor = "All"
             questionModel.add(
                 UserBasicInfoQuestionModel(
                     R.string.looking_for_question,
@@ -515,7 +525,7 @@ class BasicInfoViewModel(private val app: Application) {
                         R.string.looking_for_option_4
                     ),
                     null,
-                    SharedPrefrenceManager.getLookingFor(app.applicationContext)
+                    selectdValueLookinfor
                 )
             )
 
