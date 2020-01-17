@@ -111,7 +111,7 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
         adapter.add(UserDetailExperienceItem(ctx, getExperienceTimeline()))
         adapter.add(UserEducationItem(ctx, getEducationTimeline()))
         //adapter.add(UserSpotifyTopArtistItem(ctx, getMyTopArtists()))
-        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx),requireActivity(),swipeUserModel))
+//        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx),requireActivity(),swipeUserModel))
     }
 
     private fun getExperienceTimeline(): ArrayList<TimelineModel> {
