@@ -453,6 +453,10 @@
     <string name="notice">Notice</string>
     <string name="report_question_detail">Are you sure you want to\nreport this user ?</string>
     <string name="report_user">Report User</string>
-
+    <string name="inappropriate_content">inappropriate content</string>
+    <string name="sexual_picture">Sexual Picture</string>
+    <string name="spam_or_advertising">Spam/Advertising</string>
+    <string name="harrassment">Harrassment</string>
+    <string name="fraud">Fraud</string>
 </resources>
 

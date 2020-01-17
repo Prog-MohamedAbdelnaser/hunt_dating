@@ -35,10 +35,13 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.delete_account_reason_dialog_layout.*
 import kotlinx.android.synthetic.main.dont_want_to_join_hunt_dialog.*
+import kotlinx.android.synthetic.main.dont_want_to_join_hunt_dialog.reason6_btn
+import kotlinx.android.synthetic.main.dont_want_to_join_hunt_dialog.tvTitleReasons
 import kotlinx.android.synthetic.main.my_top_user_artist_item.view.*
 import kotlinx.android.synthetic.main.number_changed_success_layout.*
 import kotlinx.android.synthetic.main.report_profile_item_layout.view.*
 import kotlinx.android.synthetic.main.report_user_question_dialog_layout.*
+import kotlinx.android.synthetic.main.report_user_reasons_dailog_layout.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
 import kotlinx.android.synthetic.main.user_detail_header_item.view.*
 import org.jetbrains.anko.find
@@ -458,44 +461,43 @@ class ReportProfileItem(private val userName: String, private val ctx: Activity,
     }
 
     private fun reportAccountDialog() {
-        val ll = LayoutInflater.from(ctx).inflate(R.layout.delete_account_first_dailog_layout, null)
+        val ll = LayoutInflater.from(ctx).inflate(R.layout.report_user_reasons_dailog_layout, null)
         val dialog = Dialog(ctx)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCancelable(false)
+        dialog.setCancelable(true)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
         dialog.tvTitleReasons.text=ctx.getString(R.string.report_user)
 
-        dialog.reason1_btn.setOnClickListener {
-            reportUser( dialog.reason1_btn.text.toString())
+        dialog.tvInappropriateContent.setOnClickListener {
+            reportUser( dialog.tvInappropriateContent.text.toString())
             dialog.dismiss()
         }
-        dialog.reason2_btn.setOnClickListener {
-            reportUser( dialog.reason2_btn.text.toString())
-
-
-            dialog.dismiss()
-        }
-        dialog.reason3_btn.setOnClickListener {
-
-            reportUser( dialog.reason3_btn.text.toString())
-
-            dialog.dismiss()
-
-        }
-        dialog.reason4_btn.setOnClickListener {
-            reportUser( dialog.reason4_btn.text.toString())
+        dialog.tvSexualPicture.setOnClickListener {
+            reportUser( dialog.tvSexualPicture.text.toString())
 
             dialog.dismiss()
         }
-        dialog.reason5_btn.setOnClickListener {
-            reportUser( dialog.reason5_btn.text.toString())
+        dialog.tvSpamOrAdvertising.setOnClickListener {
+
+            reportUser( dialog.tvSpamOrAdvertising.text.toString())
+
+            dialog.dismiss()
+
+        }
+        dialog.tvHarrassment.setOnClickListener {
+            reportUser( dialog.tvHarrassment.text.toString())
 
             dialog.dismiss()
         }
-        dialog.reason6_btn.setOnClickListener {
+        dialog.tvFraud.setOnClickListener {
+            reportUser( dialog.tvFraud.text.toString())
+
+            dialog.dismiss()
+        }
+        dialog.tvOtherReasons.setOnClickListener {
 
             dialog.dismiss()
             otherReasonDialog()
@@ -513,7 +515,9 @@ class ReportProfileItem(private val userName: String, private val ctx: Activity,
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)
         dialog.tvOtherReasonsTitle.text=ctx.getString(R.string.report_user)
-        dialog.delete_account_back_btn.setOnClickListener { dialog.dismiss() }
+        dialog.delete_account_back_btn.setOnClickListener { dialog.dismiss()
+            reportAccountDialog()
+        }
         dialog.delete_account_submit_btn.setOnClickListener {
 
             if (dialog. inputReason.text.toString().isNullOrEmpty().not()){
@@ -521,8 +525,6 @@ class ReportProfileItem(private val userName: String, private val ctx: Activity,
                 dialog.dismiss()
             }else{
                 dialog.inputReason.error="Enter Reason !"
-              //  Helpers.showErrorSnackBar(ctx, "Enter Reason !", "")
-
             }
 
 
