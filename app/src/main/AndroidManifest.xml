@@ -84,9 +84,14 @@
         <activity android:name=".profile.UserProfileEditQuestionActivity" />
         <activity android:name=".profile.UserProfileSettingsActivity" />
         <activity android:name=".profile.UserProfileEditActivity" />
-        <activity android:name=".profile.UserProfileActivity">
+        <activity android:name=".profile.UserProfileActivity"
+                android:parentActivityName=".home.HomeActivity">
         </activity>
+
+
+
         <activity android:name=".home.HomeActivity" />
+
         <activity android:name=".setupProfile.TurnOnGPSActivity" />
         <activity
                 android:name=".setupProfile.SetupProfileReferralCodeActivity"
@@ -120,6 +125,12 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
+
+        <activity
+            android:name=".utilis.location.EnableLocationServiceSettingActivity"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <service
                 android:name=".firebaseHelper.FirebaseInstanceClass"

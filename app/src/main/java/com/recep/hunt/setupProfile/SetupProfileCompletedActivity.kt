@@ -60,7 +60,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
     private var mHttpClient: DefaultHttpClient? = null
     private lateinit var userViewModel: UserViewModel
     private lateinit var bitmap: Bitmap
-    private var avatarFilePath = ""
+    private var avatarFilePath:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -96,37 +96,18 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         val userImageString = SharedPrefrenceManager.getProfileImg(this)
         val socialType = SharedPrefrenceManager.getsocialType(this)
 
-/*
-        Glide.with(this)
-            .load(avatarFilePath)
-            .placeholder(R.drawable.account_icon)
-            .into(userImage)*/
-
-
-
-    /*    Glide.with(this)
-            .load(avatarFilePath)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .placeholder(R.drawable.account_icon)
-            .into(completed_profile_user_image)*/
-
-
               if (socialType.equals("social")) {
                   Glide.with(this)
                       .load(Uri.parse(userImageString))
                       .placeholder(R.drawable.account_icon)
                       .into(completed_profile_user_image)
               } else {
-      //            userImage.setImageBitmap(StringToBitmap(userImageString))
                   Glide.with(this)
                       .load(avatarFilePath)
                       .placeholder(R.drawable.account_icon)
                       .into(completed_profile_user_image)
               }
-              //  userImage.setImageBitmap(StringToBitmap(userImageString))
-        //val userImageString = SharedPrefrenceManager.getUserImage(this)
-        //Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
+
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
 

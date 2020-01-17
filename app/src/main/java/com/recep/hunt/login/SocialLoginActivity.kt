@@ -271,6 +271,22 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun setupFbLoginAuth() {
+        /** public profile fields
+         * id
+            first_name
+            last_name
+            middle_name
+            name
+            name_format
+            picture
+            short_name
+         * **/
+        /**
+         * needs app review
+         * user_photos, user_birthday
+         * instagram_basic
+         * **/
+
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
         LoginManager.getInstance().loginBehavior = LoginBehavior.NATIVE_WITH_FALLBACK

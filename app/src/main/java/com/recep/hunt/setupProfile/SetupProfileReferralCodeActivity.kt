@@ -112,8 +112,13 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
-        LogUtil.d(TAG,"Image "+avatarFilePath)
+        try {
+            avatarFilePath = intent.getStringExtra(Constants.IMGURI)
+
+            LogUtil.d(TAG,"Image "+avatarFilePath)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
 
 
         tvSkip.setOnClickListener {

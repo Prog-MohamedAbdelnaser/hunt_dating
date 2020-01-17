@@ -2,8 +2,10 @@ package com.recep.hunt.home
 
 import android.Manifest
 import android.app.Dialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Canvas
 import android.graphics.Color
@@ -17,6 +19,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -67,12 +70,16 @@ import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.*
+import com.recep.hunt.utilis.location.EnableLocationServiceSettingActivity
 import com.squareup.moshi.Json
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import com.yarolegovich.discretescrollview.DSVOrientation
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
+import io.reactivex.Single
+import io.reactivex.SingleEmitter
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.custom_infowindow.view.*
 import org.jetbrains.anko.find
@@ -92,6 +99,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     PlacesAutoCompleteAdapter.ClickListener,
     NearByRestaurantsAdapter.NearByRestaurantsAdapterListener,
     FarAwayRestaurantsVerticalAdapter.FarAwayRestaurantsVerticalAdapterListener {
+
 
     //PlacesAutoCompleteAdapter override
     override fun click(place: Place) {
@@ -131,9 +139,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
 
     companion object {
+
+        const val PROVIDERS_CHANGED = "android.location.PROVIDERS_CHANGED"
+
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val animateZoomTo = 13.0f
     }
+
+    private val disposables = CompositeDisposable()
+
+    private var gpsReceiver: GpsLocationReceiver? = null
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
     private var NEAREST_DISTANCE = 3000 // testing purpose
@@ -202,8 +217,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         mapFrag.getMapAsync(this)
         val mapFragView = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
         mapFragView.alpha = 0.95f
-        locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View)
-            .findViewById(Integer.parseInt("2"))
+        locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View).findViewById(Integer.parseInt("2"))
 
         geoCoder = Geocoder(this, Locale.getDefault())
 
@@ -218,6 +232,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         showMyLocationCardView = find(R.id.my_location_crd)
 
         sortedListRecyclerView = find(R.id.sorted_near_by_restaurants_recyclerView)
+
         placesRecyclerView = find(R.id.places_recycler_view)
         placesRecyclerView.layoutManager = LinearLayoutManager(this)
         placesRecyclerView.addItemDecoration(
@@ -265,20 +280,18 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         })
 
         setupCardClicks()
+
         setupToolbarClicks()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             checkPermission()
+
         buildLocationRequest()
         buildLocationCallBack()
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
 
         searchTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -298,28 +311,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         })
 
-
-        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var gps_enabled = false
-//        var network_enabled = false
-
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        } catch (ex: Exception) {
-//            ex.printStackTrace()
-        }
-
-//        try {
-//            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-//        } catch (ex: Exception) {
-//            ex.printStackTrace()
-//        }
-
-        if (!gps_enabled) {
-            showGPSDisabledAlertToUser()
-        }
-
     }
+
+
+    fun isLocationEnabled()=EnableLocationServiceSettingActivity.isLocationEnabled(this)
 
     private fun showErrorAlertToUser(msg: String) {
         val alertDialogBuilder = AlertDialog.Builder(this)
@@ -658,14 +653,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun setupCardClicks() {
         showMyLocationCardView.setOnClickListener {
-            //            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-            locationButton.callOnClick()
-
-            /** for testing **/
-//            selectLocationAndGetUsersList("ChIJre4ubGm1lzMRJqzbXpzzNOk"
-//                , "DA'RhaYn's Lux BAR")
-
+            checkLocationSetting()
         }
 
         showSortedListCardView.setOnClickListener {
@@ -770,6 +758,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun buildLocationCallBack() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
+
                 super.onLocationResult(p0)
                 mLastLocation = p0!!.locations[p0.locations.size - 1]
                 if (mMarker != null) {
@@ -778,6 +767,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 latitude = mLastLocation.latitude
                 longitude = mLastLocation.longitude
                 var title = "Your Place"
+
                 try {
                     val listAddresses = geoCoder.getFromLocation(latitude, longitude, 1)
                     if (listAddresses != null && listAddresses.size > 0) {
@@ -810,19 +800,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     false
                 }
 
-
-
-
                 setPlaceRipple(LatLng(latitude, longitude))
 
-                SharedPrefrenceManager.setUserLatitude(
-                    this@HomeActivity,
-                    mLastLocation.latitude.toString()
-                )
-                SharedPrefrenceManager.setUserLongitude(
-                    this@HomeActivity,
-                    mLastLocation.longitude.toString()
-                )
+                SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
+
+                SharedPrefrenceManager.setUserLongitude(this@HomeActivity, mLastLocation.longitude.toString())
 
                 if (Helpers.isInternetConnection(this@HomeActivity)) {
                     if (callAPIOnlyOnceStatus == 1) {
@@ -835,23 +817,20 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 }
 
-
             }
         }
     }
 
     private fun checkPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
+                LOCATION_PERMISSION_REQUEST_CODE)
+
             return
+        }else{
+            listenToGPSChanges()
         }
     }
 
@@ -881,6 +860,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
             mMap.uiSettings.isMapToolbarEnabled = false
             locationButton.visibility = View.GONE
             mMap.setInfoWindowAdapter(CustomInfoWindowView(this))
+            checkLocationSetting()
         }
 
     }
@@ -1134,6 +1114,63 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         })
     }
 
+    private fun listenToGPSChanges() {
+        this?.apply {
+            gpsReceiver = GpsLocationReceiver()
+            registerReceiver(gpsReceiver, IntentFilter(PROVIDERS_CHANGED))
+        }
+    }
+
+    inner class GpsLocationReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.w("GpsLocationReceiver", "onReceive ${intent.action}")
+            if (intent.action?.equals(PROVIDERS_CHANGED) == true) {
+                val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    onEnableGPS()
+                } else {
+                    onDisableGPS()
+                    //showErrorSnackbar(contentView, getString(R.string.wont_detect_location))
+                }
+            }
+        }
+    }
+
+    fun clickMyLocationButton(){
+        locationButton.callOnClick()
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
+    }
+
+    private fun onDisableGPS() {
+        checkLocationSetting()
+    }
+
+    private fun checkLocationSetting() {
+        disposables.add(EnableLocationServiceSettingActivity.checkLocationServiceSetting(this).
+            subscribe({
+                if (it){
+                    clickMyLocationButton()
+                }
+            },{
+                it.printStackTrace()
+            }))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (gpsReceiver != null) {
+             unregisterReceiver(gpsReceiver)
+                gpsReceiver = null
+        }
+        if (disposables.isDisposed.not())
+            disposables.dispose()
+    }
+
+    private fun onEnableGPS() {
+
+    }
 }
 
 class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
@@ -1201,3 +1238,4 @@ class ListPaddingDecoration(context: Context, val paddingLeft: Int, val paddingR
         }
     }
 }
+
