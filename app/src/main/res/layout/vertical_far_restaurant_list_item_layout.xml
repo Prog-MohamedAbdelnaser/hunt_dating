@@ -129,6 +129,19 @@
                 app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_distance_image"
                 app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
 
+        <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="42dp"
+                android:layout_height="30dp"
+                android:background="@drawable/near_by_arrow_custom_bg"
+                android:paddingRight="0.15dp"
+                android:paddingLeft="0.15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:rotation="180"
+                android:src="@drawable/ic_arrow_back_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

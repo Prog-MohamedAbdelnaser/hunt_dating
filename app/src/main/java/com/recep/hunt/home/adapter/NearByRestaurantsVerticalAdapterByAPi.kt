@@ -20,6 +20,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_list_image

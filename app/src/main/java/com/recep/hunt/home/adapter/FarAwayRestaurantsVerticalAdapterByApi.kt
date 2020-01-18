@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -18,6 +19,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_list_image
@@ -46,6 +48,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if(item != null){
+            viewHolder.itemView.imageView9.visibility = View.GONE
             try{
                 val model = item[position - nearItemsCount - 2]
                 if(!model.image.isNullOrEmpty()){
@@ -71,8 +74,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
-                val distance = model.distance.roundToInt()
-                viewHolder.itemView.textView_distance_numbers.text = distance.toString() + " M"
+                viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
 
                 viewHolder.itemView.setOnClickListener {
                     val ll = LayoutInflater.from(context).inflate(R.layout.far_away_dialog_layout, null)
