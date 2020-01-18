@@ -53,7 +53,7 @@ class Constants {
 
         const val MALE = "Male"
         const val FEMALE = "Female"
-        const val OTHERS = "Others"
+        const val OTHERS = "Other"
         const val BOTH = "Both"
         const val isUserGenderChanged = false
 

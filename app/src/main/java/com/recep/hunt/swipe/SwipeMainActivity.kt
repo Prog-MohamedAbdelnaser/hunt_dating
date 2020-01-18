@@ -108,6 +108,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         }*/
 
         addNearbyUsersToSwipe()
+        setupToolbarClicks()
     }
 
     //todo implement viewpager

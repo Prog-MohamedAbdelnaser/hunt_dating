@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.model.UserProfile.Data
 import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
@@ -60,7 +62,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 //        getData()
-
+        profile_toolbar.setNavigationOnClickListener { finish() }
         settings_profile.setOnClickListener(this)
         edit_profile.setOnClickListener(this)
 

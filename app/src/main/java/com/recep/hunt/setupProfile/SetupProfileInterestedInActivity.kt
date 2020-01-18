@@ -49,7 +49,7 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         } else {
             launchActivity<SetupProfileReferralCodeActivity> {
                 putExtra(Constants.IMGURI, avatarFilePath)
-            }
+        }
         }
     }
 
