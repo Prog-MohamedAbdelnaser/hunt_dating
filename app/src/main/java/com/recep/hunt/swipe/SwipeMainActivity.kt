@@ -297,8 +297,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
-                            callSwipeUserApi(items[currentUser], 2)
-
                             if (x >= screenCenter) {
                                 storyProgressViews[currentUser].skip()
                                 //  onNext()

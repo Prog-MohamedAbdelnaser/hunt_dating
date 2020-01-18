@@ -174,6 +174,10 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
             gotToSixStep()
         }
 
+        btnCancelLocation.setOnClickListener {
+            gotoHomeScreen()
+        }
+
     }
 
     fun gotToSixStep(){
