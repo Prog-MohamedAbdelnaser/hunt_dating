@@ -416,15 +416,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     }
                 }
 
-
                 var result = response.body()?.data
-                val text = resources.openRawResource(R.raw.dummydata).bufferedReader()
-                    .use { it.readText() }
-                var dummydata: NearestLocationResponse = Gson().fromJson<NearestLocationResponse>(
-                    text,
-                    NearestLocationResponse::class.java
-                )
-                result = dummydata.data
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
                     val farItems = ArrayList<NearestLocationData>()
@@ -1012,7 +1004,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         return
                     }
                 }
-
 
                 var result = response.body()?.data
                 var swipeUserArray = ArrayList<SwipeUserModel>()
