@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
@@ -111,7 +112,19 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
         adapter.add(UserDetailExperienceItem(ctx, getExperienceTimeline()))
         adapter.add(UserEducationItem(ctx, getEducationTimeline()))
         //adapter.add(UserSpotifyTopArtistItem(ctx, getMyTopArtists()))
-//        adapter.add(ReportProfileItem(SharedPrefrenceManager.getUserFirstName(ctx),requireActivity(),swipeUserModel))
+
+        swipeUserModel?.email?.let {
+            adapter.add(
+                ReportProfileItem(
+                    SharedPrefrenceManager.getUserFirstName(ctx),
+                    requireActivity(),
+                    swipeUserModel
+                )
+            )
+
+        }
+
+
     }
 
     private fun getExperienceTimeline(): ArrayList<TimelineModel> {
@@ -399,10 +412,15 @@ class MyTopUserArtistItem(private val name: String) : Item<ViewHolder>() {
     }
 }
 
-class ReportProfileItem(private val userName: String, private val ctx: Activity, private val swipeUserModel: SwipeUserModel?) : Item<ViewHolder>() {
+class ReportProfileItem(
+    private val userName: String,
+    private val ctx: Activity,
+    private val swipeUserModel: SwipeUserModel?
+) : Item<ViewHolder>() {
     override fun getLayout() = R.layout.report_profile_item_layout
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.report_profile_btn_text.text = "Report ${swipeUserModel?.firstName}'s Profile"
+        viewHolder.itemView.report_profile_btn_text.text =
+            "Report ${swipeUserModel?.firstName}'s Profile"
 
         viewHolder.itemView.reportProfileLout.setOnClickListener {
             askReportUser()
@@ -430,14 +448,13 @@ class ReportProfileItem(private val userName: String, private val ctx: Activity,
     }
 
 
+    private fun reportUser(resone: String) {
 
-    private fun reportUser(resone:String) {
-
-        val reportUserModel= ReportUser(swipeUserModel?.id.toString(),resone)
+        val reportUserModel = ReportUser(swipeUserModel?.id.toString(), resone)
 
         val call = ApiClient.getClient.reportUser(reportUserModel)
 
-        call.enqueue(object: Callback<ReportUserResponse> {
+        call.enqueue(object : Callback<ReportUserResponse> {
             override fun onFailure(call: Call<ReportUserResponse>, t: Throwable) {
 
             }
@@ -469,31 +486,31 @@ class ReportProfileItem(private val userName: String, private val ctx: Activity,
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
-        dialog.tvTitleReasons.text=ctx.getString(R.string.report_user)
+        dialog.tvTitleReasons.text = ctx.getString(R.string.report_user)
 
         dialog.tvInappropriateContent.setOnClickListener {
-            reportUser( dialog.tvInappropriateContent.text.toString())
+            reportUser(dialog.tvInappropriateContent.text.toString())
             dialog.dismiss()
         }
         dialog.tvSexualPicture.setOnClickListener {
-            reportUser( dialog.tvSexualPicture.text.toString())
+            reportUser(dialog.tvSexualPicture.text.toString())
 
             dialog.dismiss()
         }
         dialog.tvSpamOrAdvertising.setOnClickListener {
 
-            reportUser( dialog.tvSpamOrAdvertising.text.toString())
+            reportUser(dialog.tvSpamOrAdvertising.text.toString())
 
             dialog.dismiss()
 
         }
         dialog.tvHarrassment.setOnClickListener {
-            reportUser( dialog.tvHarrassment.text.toString())
+            reportUser(dialog.tvHarrassment.text.toString())
 
             dialog.dismiss()
         }
         dialog.tvFraud.setOnClickListener {
-            reportUser( dialog.tvFraud.text.toString())
+            reportUser(dialog.tvFraud.text.toString())
 
             dialog.dismiss()
         }
@@ -514,23 +531,24 @@ class ReportProfileItem(private val userName: String, private val ctx: Activity,
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false)
-        dialog.tvOtherReasonsTitle.text=ctx.getString(R.string.report_user)
-        dialog.delete_account_back_btn.setOnClickListener { dialog.dismiss()
+        dialog.tvOtherReasonsTitle.text = ctx.getString(R.string.report_user)
+        dialog.delete_account_back_btn.setOnClickListener {
+            dialog.dismiss()
             reportAccountDialog()
         }
         dialog.delete_account_submit_btn.setOnClickListener {
 
-            if (dialog. inputReason.text.toString().isNullOrEmpty().not()){
-                reportUser(dialog. inputReason.text.toString())
+            if (dialog.inputReason.text.toString().isNullOrEmpty().not()) {
+                reportUser(dialog.inputReason.text.toString())
                 dialog.dismiss()
-            }else{
-                dialog.inputReason.error="Enter Reason !"
+            } else {
+                dialog.inputReason.error = "Enter Reason !"
             }
 
 
         }
-        dialog. inputReason.addTextChangedListener {
-            dialog.inputReason.error=null
+        dialog.inputReason.addTextChangedListener {
+            dialog.inputReason.error = null
         }
 
         dialog.show()

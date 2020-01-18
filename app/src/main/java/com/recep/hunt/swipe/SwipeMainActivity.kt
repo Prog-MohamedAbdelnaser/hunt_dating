@@ -479,158 +479,158 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     }
 
     //Dummy Users Data
-    private fun dummyUsersdata(): ArrayList<SwipeUserModel> {
-        val data = ArrayList<SwipeUserModel>()
-        val images: ArrayList<String> = ArrayList<String>()
-        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573485502.jfif")
-        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573546803.jpg")
-        val images1 = ArrayList<String>()
-        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574714.jpg")
-        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574732.jfif")
-        if (data.size == 0) {
-            data.add(
-                SwipeUserModel(
-                    2,
-                    "Hookah Loungh",
-                    "Valentina",
-                    28,
-                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-                    images,
-                    BasicInfo(
-                        "test",
-                        "test",
-                        "test job",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test"
-                    )
-                )
-            )
-            data.add(
-                SwipeUserModel(
-                    2,
-                    "Hookah Loungh",
-                    "Valentina",
-                    28,
-                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-                    images1,
-                    BasicInfo(
-                        "test",
-                        "test",
-                        "test job",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test"
-                    )
-                )
-            )
-            data.add(
-                SwipeUserModel(
-                    2,
-                    "Hookah Loungh",
-                    "Valentina",
-                    28,
-                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-                    images,
-                    BasicInfo(
-                        "test",
-                        "test",
-                        "test job",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test"
-                    )
-                )
-            )
-            data.add(
-                SwipeUserModel(
-                    2,
-                    "Hookah Loungh",
-                    "Valentina",
-                    28,
-                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-                    images1,
-                    BasicInfo(
-                        "test",
-                        "test",
-                        "test job",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test"
-                    )
-                )
-            )
-            data.add(
-                SwipeUserModel(
-                    2,
-                    "Hookah Loungh",
-                    "Valentina",
-                    28,
-                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-                    images,
-                    BasicInfo(
-                        "test",
-                        "test",
-                        "test job",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test",
-                        "test"
-                    )
-                )
-            )
-        }
-        return data
-    }
+//    private fun dummyUsersdata(): ArrayList<SwipeUserModel> {
+//        val data = ArrayList<SwipeUserModel>()
+//        val images: ArrayList<String> = ArrayList<String>()
+//        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573485502.jfif")
+//        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573546803.jpg")
+//        val images1 = ArrayList<String>()
+//        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574714.jpg")
+//        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574732.jfif")
+//        if (data.size == 0) {
+//            data.add(
+//                SwipeUserModel(
+//                    2,
+//                    "Hookah Loungh",
+//                    "Valentina",
+//                    28,
+//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+//                    images,
+//                    BasicInfo(
+//                        "test",
+//                        "test",
+//                        "test job",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test"
+//                    )
+//                )
+//            )
+//            data.add(
+//                SwipeUserModel(
+//                    2,
+//                    "Hookah Loungh",
+//                    "Valentina",
+//                    28,
+//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+//                    images1,
+//                    BasicInfo(
+//                        "test",
+//                        "test",
+//                        "test job",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test"
+//                    )
+//                )
+//            )
+//            data.add(
+//                SwipeUserModel(
+//                    2,
+//                    "Hookah Loungh",
+//                    "Valentina",
+//                    28,
+//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+//                    images,
+//                    BasicInfo(
+//                        "test",
+//                        "test",
+//                        "test job",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test"
+//                    )
+//                )
+//            )
+//            data.add(
+//                SwipeUserModel(
+//                    2,
+//                    "Hookah Loungh",
+//                    "Valentina",
+//                    28,
+//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+//                    images1,
+//                    BasicInfo(
+//                        "test",
+//                        "test",
+//                        "test job",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test"
+//                    )
+//                )
+//            )
+//            data.add(
+//                SwipeUserModel(
+//                    2,
+//                    "Hookah Loungh",
+//                    "Valentina",
+//                    28,
+//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
+//                    images,
+//                    BasicInfo(
+//                        "test",
+//                        "test",
+//                        "test job",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test",
+//                        "test"
+//                    )
+//                )
+//            )
+//        }
+//        return data
+//    }
 
     fun isAClick(dragTime: Long, downTime: Long): Boolean {
         return dragTime - downTime < CLICK_ACTION_THRESHOLD

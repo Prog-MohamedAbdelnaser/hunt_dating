@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.share.Share
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import org.jetbrains.anko.find
 import com.recep.hunt.api.ApiClient
@@ -27,6 +29,7 @@ import org.jetbrains.anko.activityManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 
 /**
@@ -98,6 +101,7 @@ class NearByRestaurantsAdapterByApi(
                 userNumbers.text = model.users.toString()
                 goToSwipeView.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
+
                 }
             }
         }
@@ -206,6 +210,7 @@ class NearByRestaurantsAdapterByApi(
                                 SwipeUserModel(
                                     result[i].id,
                                     result[i].location_name,
+                                    result[i].email,
                                     result[i].first_name,
                                     result[i].age,
                                     result[i].basicInfo.job_title,

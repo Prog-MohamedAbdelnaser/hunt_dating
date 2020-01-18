@@ -160,6 +160,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
                             SwipeUserModel(
                                 result[i].id,
                                 result[i].location_name,
+                                result[i].email,
                                 result[i].first_name,
                                 result[i].age,
                                 result[i].basicInfo.job_title,
