@@ -17,10 +17,10 @@ import retrofit2.Response
 abstract class BaseActivity : AppCompatActivity() {
 
     lateinit var mTextViewScreenTitle: TextView
+    lateinit var cancelBtn: Button
     lateinit var mImageButtonBack: ImageButton
     lateinit var progressDialog: Dialog
     lateinit var fakeToolbar: RelativeLayout
-    lateinit var cancelBtn: Button
     override fun setContentView(layoutResID: Int) {
         val coordinatorLayout: CoordinatorLayout =
             layoutInflater.inflate(R.layout.activity_base, null) as CoordinatorLayout

@@ -9,6 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 data class SwipeUserModel(val id:Int,
                           val locationName:String,
+                          val email:String,
                           val firstName:String,
                           val age:Int,
                           val title:String,
@@ -24,6 +25,7 @@ data class SwipeUserModel(val id:Int,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
@@ -43,6 +45,7 @@ data class SwipeUserModel(val id:Int,
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
         parcel.writeString(locationName)
+        parcel.writeString(email)
         parcel.writeString(firstName)
         parcel.writeInt(age)
         parcel.writeString(title)

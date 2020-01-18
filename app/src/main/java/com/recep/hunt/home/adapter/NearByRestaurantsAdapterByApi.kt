@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.share.Share
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import org.jetbrains.anko.find
 import com.recep.hunt.api.ApiClient
@@ -27,6 +29,7 @@ import org.jetbrains.anko.activityManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 
 /**
@@ -72,32 +75,27 @@ class NearByRestaurantsAdapterByApi(
 
             if (model != null) {
 
-                if (!model.image.isNullOrEmpty()) {
+//                if (!model.image.isNullOrEmpty()) {
+//
+//                }
+                //                    val photoRefrence = model.photos[0].photoReference
+                val url =
+                    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 
-//                    val photoRefrence = model.photos[0].photoReference
-                    val url =
-                        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
-                    Log.e("Url", "Image : $url")
-//                    Picasso.get()
-//                        .load(url)
-//                        .error(R.drawable.ic_img_gallery)
-//                        .transform(RoundedTransformation(20, 0))
-//                        .placeholder(R.drawable.ic_img_gallery)
-//                        .into(restaurantImage)
-
-                    //todo test converted from glide
-                    Glide.with(context)
-                        .load(url)
-                        .error(R.drawable.ic_img_gallery)
+                //todo test converted from glide
+                Glide.with(context)
+                    .load(url)
+                    .error(R.drawable.ic_img_location_placeholder)
 //                        .apply(RequestOptions.circleCropTransform())
-                        .placeholder(R.drawable.ic_img_gallery)
-                        .into(restaurantImage)
-                }
+                    .placeholder(R.drawable.ic_img_location_placeholder)
+                    .into(restaurantImage)
+
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
                 userNumbers.text = model.users.toString()
                 goToSwipeView.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
+
                 }
             }
         }
@@ -206,6 +204,7 @@ class NearByRestaurantsAdapterByApi(
                                 SwipeUserModel(
                                     result[i].id,
                                     result[i].location_name,
+                                    result[i].email,
                                     result[i].first_name,
                                     result[i].age,
                                     result[i].basicInfo.job_title,

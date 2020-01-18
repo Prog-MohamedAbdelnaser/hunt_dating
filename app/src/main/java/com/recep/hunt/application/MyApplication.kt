@@ -6,7 +6,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.text.TextUtils
+import android.util.Base64
+import android.util.Log
 import android.widget.Toast
 import androidx.multidex.MultiDexApplication
 import com.android.volley.Request
@@ -24,6 +27,8 @@ import com.recep.hunt.utilis.SharedPrefrenceManager
 import org.acra.ReportingInteractionMode
 import org.acra.annotation.ReportsCrashes
 import org.koin.android.ext.android.startKoin
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 /**
@@ -45,6 +50,25 @@ class MyApplication : MultiDexApplication() {
             private set
     }
 
+
+
+    fun printHashKey(pContext: Context) {
+        try {
+            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val hashKey = String(Base64.encode(md.digest(), 0))
+                Log.i(TAG, "printHashKey() Hash Key: $hashKey")
+                Log.i(TAG, "PACKAGE_NAME: $packageName")
+            }
+        } catch (e: NoSuchAlgorithmException) {
+            Log.e(TAG, "printHashKey()", e)
+        } catch (e: Exception) {
+            Log.e(TAG, "printHashKey()", e)
+        }
+
+    }
 
     override fun onCreate() {
         super.onCreate()

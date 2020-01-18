@@ -64,6 +64,7 @@ class SetupProfileAddedPhotoActivity : BaseActivity() {
         }
         setup_profile_upload_pic_next_btn.setOnClickListener {
             launchActivity<SetupProfileGenderActivity>{ putExtra(IMGURI, avatarFilePath)}
+            Logger.d("SetupProfileAddedPhotoActivity $avatarFilePath")
         }
     }
 

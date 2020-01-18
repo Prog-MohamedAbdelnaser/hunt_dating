@@ -2,6 +2,7 @@ package com.recep.hunt.home.adapter
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -18,10 +19,17 @@ import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_list_image
+import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.textView_user_numbers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.roundToInt
 
 
 /**
@@ -37,9 +45,10 @@ class NearByRestaurantsVerticalAdapterByAPi(
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
 
-    override fun getLayout() = R.layout.vertical_restaurant_list_item_layout
+    override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.imageView9.visibility = View.VISIBLE
         if (item != null) {
             try {
                 val model = item[position - 1]
@@ -59,13 +68,14 @@ class NearByRestaurantsVerticalAdapterByAPi(
                 } else {
                     //todo test converted to glide
                     Glide.with(context)
-                        .load(R.drawable.demo_restaurant_1)
+                        .load(R.drawable.ic_img_location_placeholder)
                         //.transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image))
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
+                viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
 
                 viewHolder.itemView.imageView9.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
@@ -160,6 +170,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
                             SwipeUserModel(
                                 result[i].id,
                                 result[i].location_name,
+                                result[i].email,
                                 result[i].first_name,
                                 result[i].age,
                                 result[i].basicInfo.job_title,
