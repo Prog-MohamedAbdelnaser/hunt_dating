@@ -417,38 +417,46 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 }
 
                 var result = response.body()?.data
-                if (result != null) {
-                    val nearbyItems = ArrayList<NearestLocationData>()
-                    val farItems = ArrayList<NearestLocationData>()
-                    for (i in 0 until result.size) {
-                        //If it's near than 50m
-                        if (result[i].distance.toFloat() <= NEAREST_DISTANCE) {
+                result?.let {
+                    if(it.isEmpty()){
+                        Toast.makeText(this@HomeActivity,
+                            "No locations found/possible google quota issue",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    else {
+                        val nearbyItems = ArrayList<NearestLocationData>()
+                        val farItems = ArrayList<NearestLocationData>()
+                        for (i in 0 until result.size) {
+                            //If it's near than 50m
+                            if (result[i].distance.toFloat() <= NEAREST_DISTANCE) {
 
-                            if (result[i].distance.toFloat() == 0f) {
+                                if (result[i].distance.toFloat() == 0f) {
 //                                if (result[i].users != 0) {
-                                selectLocationAndGetUsersList(
-                                    result[i].place_id,
-                                    result[i].name
-                                )
+                                    selectLocationAndGetUsersList(
+                                        result[i].place_id,
+                                        result[i].name
+                                    )
 //                                } else {
 //                                    AlertDialogUtils.displayDialog(
 //                                        this@HomeActivity,
 //                                        getString(R.string.no_user_found)
 //                                    )
 //                                }
+                                }
+                                nearbyItems.add(result[i])
+                            } else {
+                                farItems.add(result[i])
                             }
-                            nearbyItems.add(result[i])
-                        } else {
-                            farItems.add(result[i])
                         }
-                    }
-                    setPlacesMarker(nearbyItems, R.drawable.close_rest_marker)
-                    setPlacesMarker(farItems, R.drawable.far_rest_markers)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
+                        setPlacesMarker(nearbyItems, R.drawable.close_rest_marker)
+                        setPlacesMarker(farItems, R.drawable.far_rest_markers)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
 //                    mMap.setMaxZoomPreference(animateZoomTo)
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-                    setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
-                    setupSortedListView(nearbyItems, farItems)
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
+                        setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
+                        setupSortedListView(nearbyItems, farItems)
+                    }
                 }
             }
 

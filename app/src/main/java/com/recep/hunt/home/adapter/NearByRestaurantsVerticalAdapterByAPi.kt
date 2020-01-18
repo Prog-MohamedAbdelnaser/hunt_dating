@@ -2,6 +2,7 @@ package com.recep.hunt.home.adapter
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -47,6 +48,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
     override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.imageView9.visibility = View.VISIBLE
         if (item != null) {
             try {
                 val model = item[position - 1]

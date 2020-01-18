@@ -47,8 +47,8 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
     override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.itemView.imageView9.visibility = View.GONE
         if(item != null){
-            viewHolder.itemView.imageView9.visibility = View.GONE
             try{
                 val model = item[position - nearItemsCount - 2]
                 if(!model.image.isNullOrEmpty()){
