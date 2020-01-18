@@ -352,7 +352,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
         this@SocialLoginActivity.hideKeyboard()
     }
 
-    //Dummy Chat Data
+    //Dummy Chat QuestionData
     private fun dummyChatdata(): ArrayList<LoginChatMessageModel> {
         val data = ArrayList<LoginChatMessageModel>()
         if (data.size == 0) {
@@ -527,7 +527,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                     Log.e(TAG, "facebook respone : $json_object")
                     val picture = json_object.getJSONObject("picture")
                     val data = picture.getJSONObject("data")
-                    //Fetch the data from the response
+                    //Fetch the questionData from the response
                     val facebook_pic = data.optString("url", "")
                     val social_name = json_object.optString("name", "")
                     val social_email = json_object.optString("email", "")

@@ -245,12 +245,12 @@ class CreatorActivity : AppCompatActivity() {
 //                builder.addFormDataPart(
 //                    "image",
 //                    imageFile.name,
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), imageFile)
+//                    RequestBody.create(MediaType.parse("multipart/form-questionData"), imageFile)
 //                )
 //                builder.addFormDataPart(
 //                    "audio",
 //                    File(voiceFile).name,
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), File(voiceFile))
+//                    RequestBody.create(MediaType.parse("multipart/form-questionData"), File(voiceFile))
 //                )
 //            }
             val call = ApiClient.getClient.createTicket(
@@ -269,7 +269,7 @@ class CreatorActivity : AppCompatActivity() {
                     response: Response<CreateTicketResponse>
                 ) {
                     Log.d("Creator" , "Success" + response.code())
-//                    Log.d("Creator" , "Success" + response.body()!!.data.ticket_id)
+//                    Log.d("Creator" , "Success" + response.body()!!.questionData.ticket_id)
 
                     dialog.dismiss()
 

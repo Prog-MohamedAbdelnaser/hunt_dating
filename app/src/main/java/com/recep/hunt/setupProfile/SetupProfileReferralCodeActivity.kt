@@ -124,7 +124,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
             onBackPressed()
         }
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-        check_code_btn.setOnClickListener {
+        btnLetsGo.setOnClickListener {
             if (edtReferelCode.text.toString().equals("huntwelcome")) {
                 SharedPrefrenceManager.setRefrencecode(
                     this@SetupProfileReferralCodeActivity,
@@ -298,7 +298,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                 "profile_pic",
                 file.name,
                 RequestBody.create(
-                    MediaType.parse("multipart/form-data"),
+                    MediaType.parse("multipart/form-questionData"),
                     file
                 )
             )

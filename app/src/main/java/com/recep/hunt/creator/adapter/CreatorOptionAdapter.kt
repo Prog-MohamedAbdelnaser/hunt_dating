@@ -5,16 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.recep.hunt.R
-import com.recep.hunt.creator.model.CreatorQustion
 import com.recep.hunt.creator.model.OptionModel
-import com.recep.hunt.home.adapter.NearByRestaurantsAdapter
-import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
-import com.recep.hunt.payment.model.FaqPayments
-import com.recep.hunt.utilis.Helpers
 import org.jetbrains.anko.find
 
 class CreatorOptionAdapter(val context: Context,val item:ArrayList<OptionModel>?):RecyclerView.Adapter<CreatorOptionAdapter.CreatorOptionViewholder>() {
@@ -35,7 +28,7 @@ class CreatorOptionAdapter(val context: Context,val item:ArrayList<OptionModel>?
     }
 
     inner class CreatorOptionViewholder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var option: Button = itemView.find(R.id.optionButton)
+        var option: Button = itemView.find(R.id.btnCancelStepOne)
 
         init {
             itemView.setOnClickListener {

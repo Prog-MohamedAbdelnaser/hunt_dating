@@ -69,7 +69,7 @@ public class InstagramApp {
     public static int WHAT_FINALIZE = 0;
     public static int WHAT_ERROR = 1;
     private static int WHAT_FETCH_INFO = 2;
-    public static final String TAG_DATA = "data";
+    public static final String TAG_DATA = "questionData";
     public static final String TAG_IMAGES = "images";
     public static final String TAG_THUMBNAIL = "thumbnail";
     public static final String TAG_URL = "url";

@@ -14,7 +14,7 @@ import java.net.URL
 class Multipart
 /**
  * This constructor initializes a new HTTP POST request with content type
- * is set to multipart/form-data
+ * is set to multipart/form-questionData
  * @param url
  * *
  * @throws IOException
@@ -39,7 +39,7 @@ constructor(url: URL) {
         httpConnection.setRequestProperty("Accept-Charset", "UTF-8")
         httpConnection.setRequestProperty("Connection", "Keep-Alive")
         httpConnection.setRequestProperty("Cache-Control", "no-cache")
-        httpConnection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+        httpConnection.setRequestProperty("Content-Type", "multipart/form-questionData; boundary=$boundary")
         httpConnection.setChunkedStreamingMode(maxBufferSize)
         httpConnection.doInput = true
         httpConnection.doOutput = true    // indicates POST method
@@ -56,7 +56,7 @@ constructor(url: URL) {
      */
     fun addFormField(name: String, value: String) {
         writer.append("--").append(boundary).append(LINE_FEED)
-        writer.append("Content-Disposition: form-data; name=\"").append(name).append("\"")
+        writer.append("Content-Disposition: form-questionData; name=\"").append(name).append("\"")
             .append(LINE_FEED)
         writer.append(LINE_FEED)
         writer.append(value).append(LINE_FEED)

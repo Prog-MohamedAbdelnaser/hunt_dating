@@ -297,6 +297,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
+                            callSwipeUserApi(items[currentUser], 2)
+
                             if (x >= screenCenter) {
                                 storyProgressViews[currentUser].skip()
                                 //  onNext()
@@ -463,6 +465,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 }
 
                 val status = response.body()?.status
+                gotoMatchQuestionScreen(mSwipeUserModel)
 
                 if (status == 2) {
                     Toast.makeText(
@@ -478,7 +481,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         })
     }
 
-    //Dummy Users Data
+    //Dummy Users QuestionData
     private fun dummyUsersdata(): ArrayList<SwipeUserModel> {
         val data = ArrayList<SwipeUserModel>()
         val images: ArrayList<String> = ArrayList<String>()

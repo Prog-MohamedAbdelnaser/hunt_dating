@@ -49,7 +49,7 @@ class SetupProfileGalleryActivity : BaseActivity() {
         }
     }
 
-    //Dummy Chat Data
+    //Dummy Chat QuestionData
     private fun dummyImagedata():ArrayList<GalleryImageDetailsModel>{
         val data = ArrayList<GalleryImageDetailsModel>()
         if(data.size == 0){

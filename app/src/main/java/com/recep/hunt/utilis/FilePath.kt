@@ -89,7 +89,7 @@ object FilePath {
     }
 
     /**
-     * Get the value of the data column for this Uri. This is useful for
+     * Get the value of the questionData column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
      * @param context

@@ -13,6 +13,6 @@ data class MakeUserOnlineResponse(
     val message: String,
 
     @Expose
-    @SerializedName("data")
+    @SerializedName("questionData")
     val data:String?
 )

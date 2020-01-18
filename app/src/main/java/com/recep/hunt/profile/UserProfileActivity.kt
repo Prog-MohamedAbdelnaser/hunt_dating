@@ -61,7 +61,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
         recyclerView = find(R.id.profile_recyclerView)
         setSupportActionBar(profile_toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-//        getData()
+//        getQuestionData()
         profile_toolbar.setNavigationOnClickListener { finish() }
         settings_profile.setOnClickListener(this)
         edit_profile.setOnClickListener(this)

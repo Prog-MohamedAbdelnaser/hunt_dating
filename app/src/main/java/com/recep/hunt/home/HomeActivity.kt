@@ -426,7 +426,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                // val text = resources.openRawResource(R.raw.dummydata).bufferedReader().use { it.readText() }
 
              //  var dummydata:NearestLocationResponse =Gson().fromJson<NearestLocationResponse>(text,NearestLocationResponse::class.java)
-              //  result=dummydata.data
+              //  result=dummydata.questionData
                 if (result != null) {
                     val nearbyItems = ArrayList<NearestLocationData>()
                     val farItems = ArrayList<NearestLocationData>()

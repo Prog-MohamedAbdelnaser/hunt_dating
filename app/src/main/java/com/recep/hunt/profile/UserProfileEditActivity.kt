@@ -288,7 +288,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }
@@ -356,7 +356,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }
@@ -368,7 +368,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }
@@ -380,7 +380,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }
@@ -392,7 +392,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }
@@ -404,7 +404,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }
@@ -416,7 +416,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 builder.addFormDataPart(
                     "user_profile",
                     firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-data"), firstFile)
+                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
                 )
                 isImageAvailable = true
             }

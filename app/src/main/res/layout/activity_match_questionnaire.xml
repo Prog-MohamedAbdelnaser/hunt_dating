@@ -102,6 +102,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/setpOne"
             android:layout_width="wrap_content"
+
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
             android:visibility="visible"
@@ -127,7 +128,7 @@
 
 
         <Button
-                android:id="@+id/optionButton"
+                android:id="@+id/btnCancelStepOne"
                 android:layout_width="162dp"
                 android:layout_height="58dp"
                 android:layout_margin="26dp"
@@ -142,7 +143,7 @@
                 app:strokeWidth="100dp" />
 
         <Button
-                android:id="@+id/check_code_btn"
+                android:id="@+id/btnLetsGo"
                 android:layout_width="162dp"
                 android:layout_height="58dp"
                 android:layout_margin="26dp"
@@ -159,380 +160,16 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/setpTwo"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="56dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/view10"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivLiked">
-
-        <TextView
-                android:id="@+id/ranQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:gravity="center"
-                android:text="Do you plans on having children?"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        <Button
-                android:id="@+id/btnOption1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="34dp"
-                android:layout_marginRight="34dp"
-                android:onClick="goTonext"
-                android:textAllCaps="false"
-                android:background="@drawable/partially_transparent"
-                android:text="Want someday"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ranQuestion" />
-
-        <Button
-                android:id="@+id/btnOption2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="18dp"
-                android:textAllCaps="false"
-                android:layout_marginRight="34dp"
-                android:onClick="goTonext"
-
-                android:background="@drawable/partially_transparent"
-                android:text="Don't want"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnOption1" />
-
-        <Button
-                android:id="@+id/btnOption3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/partially_transparent"
-                android:text="Have &amp; Want more"
-                android:onClick="goTonext"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="18dp"
-                android:textAllCaps="false"
-                android:layout_marginRight="34dp"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnOption2" />
-   <Button
-                android:id="@+id/btnOption4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/partially_transparent"
-                android:text="Have &amp; Don't want more"
-                android:onClick="goTonext"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="18dp"
-                android:textAllCaps="false"
-                android:layout_marginRight="34dp"
-           android:visibility="gone"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnOption3" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_progress_bar_two"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnOption4">
-
-
-            <ProgressBar
-                    android:id="@+id/otp_progressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:max="15"
-                    android:layout_height="match_parent"
-                    android:indeterminate="false" />
-
-            <TextView
-                    android:layout_margin="16dp"
-                    android:id="@+id/two_progrss_txt"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:fontFamily="@font/montserrat"
-                    android:background="@drawable/white_radius"
-                    android:gravity="center"
-                    android:text="15"
-                    android:textColor="@color/colorProgressbar"
-                    android:textSize="22sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/otp_progressBar"
-                    app:layout_constraintEnd_toEndOf="@+id/otp_progressBar"
-                    app:layout_constraintStart_toStartOf="@+id/otp_progressBar"
-                    app:layout_constraintTop_toTopOf="@+id/otp_progressBar" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/setpThree"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="56dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/view10"
-            app:layout_constraintStart_toStartOf="parent"
+    <include
+            layout="@layout/question_layout"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked"
-            app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-                android:id="@+id/tvQuestiom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:gravity="center"
-                android:text="Do you plans on having children?"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        <Button
-                android:id="@+id/button4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="34dp"
-                android:layout_marginRight="34dp"
-                android:textAllCaps="false"
-                android:background="@drawable/partially_transparent"
-                android:text="Have &amp; Want more"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvQuestiom" />
-
-
-        <TextView
-                android:id="@+id/tvWantToMeetWithQ"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
-                android:gravity="center"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="Do you want to meet with Sella?"
-                android:textColor="@color/white"
-                android:textSize="26dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button4" />
-
-        <Button
-                android:id="@+id/btn_no"
-                android:layout_width="162dp"
-                android:layout_height="58dp"
-                android:layout_margin="26dp"
-                android:background="@drawable/transprent_button"
-                android:gravity="center"
-                android:text="No"
-                android:textColor="@color/white"
-                app:cornerRadius="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:strokeColor="@color/white"
-                app:strokeWidth="100dp" />
-
-        <Button
-                android:id="@+id/btn_yes"
-                android:layout_width="162dp"
-                android:layout_height="58dp"
-                android:layout_margin="26dp"
-                android:background="@drawable/app_btn_round"
-                android:fontFamily="@font/montserrat"
-                android:text="YES"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/stepFour"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_width="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
-            app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-                android:id="@+id/tvDoYouWantToMeet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:gravity="center"
-                android:text="Where do you want to meet?"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        <EditText
-                android:id="@+id/edtEnterLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="34dp"
-                android:layout_marginRight="34dp"
-                android:background="@drawable/partially_transparent"
-                android:hint="Enter custom location"
-                android:gravity="center"
-                android:padding="18dp"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantToMeet" />
-
-
-        <Button
-                android:id="@+id/btn_goto_next_five"
-                android:layout_width="162dp"
-                android:layout_height="58dp"
-                android:layout_margin="26dp"
-                android:background="@drawable/transprent_button"
-                android:gravity="center"
-                android:text="Cancel"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:cornerRadius="18dp"
-                android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtEnterLocation"
-                app:strokeColor="@color/white"
-                app:strokeWidth="100dp" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/stepFive"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="56dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/view10"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
-            app:layout_constraintVertical_bias="0.0">
-
-
-        <Button
-                android:id="@+id/optionDj"
-                android:layout_width="162dp"
-                android:layout_height="58dp"
-                android:layout_margin="26dp"
-                android:background="@drawable/transprent_button"
-                android:gravity="center"
-                android:text="Dj Tabel"
-                android:textColor="@color/white"
-                app:cornerRadius="18dp"
-                app:layout_constraintBottom_toTopOf="@+id/edtEnterL"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantTo"
-                app:strokeColor="@color/white"
-                app:strokeWidth="100dp" />
-
-        <Button
-                android:id="@+id/check_enters_btn"
-                android:layout_width="162dp"
-                android:layout_height="58dp"
-                android:layout_margin="26dp"
-                android:background="@drawable/white_backgroud_btn"
-                android:fontFamily="@font/montserrat"
-                android:text="Entreance"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toTopOf="@+id/edtEnterL"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantTo" />
-
-
-        <TextView
-                android:id="@+id/tvDoYouWantTo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:gravity="center"
-                android:text="Where do you want to meet?"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        <EditText
-                android:id="@+id/edtEnterL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="34dp"
-                android:layout_marginTop="92dp"
-                android:layout_marginRight="34dp"
-                android:background="@drawable/partially_transparent"
-                android:hint="Enter custom location"
-                android:gravity="center"
-                android:padding="18dp"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantTo" />
-
-
-        <Button
-                android:id="@+id/btn"
-                android:layout_width="162dp"
-                android:layout_height="58dp"
-                android:layout_margin="26dp"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/transprent_button"
-                android:gravity="center"
-                android:text="Yes"
-                android:textColor="@color/white"
-                app:cornerRadius="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtEnterL"
-                app:strokeColor="@color/white"
-                app:strokeWidth="100dp" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/stepSix"
@@ -679,6 +316,239 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askAboutWantToMeetLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
+            app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+                android:id="@+id/tvLastQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:text="Do you plans on having children?"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+                android:id="@+id/btnLastAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginRight="34dp"
+                android:textAllCaps="false"
+                android:background="@drawable/partially_transparent"
+                android:text="Have &amp; Want more"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLastQuestion" />
+
+
+        <TextView
+                android:id="@+id/tvWantToMeetWithUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:gravity="center"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                tools:text="Do you want to meet with Sella?"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnLastAnswer" />
+
+        <Button
+                android:id="@+id/btnCancelMeet"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="No"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+        <Button
+                android:id="@+id/btnYesWantMeet"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/app_btn_round"
+                android:fontFamily="@font/montserrat"
+                android:text="YES"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askAboutMeetingLocationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
+            app:layout_constraintVertical_bias="0.0">
+
+
+        <TextView
+                android:id="@+id/tvDoYouWantToMeet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:gravity="center"
+                android:text="Where do you want to meet?"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/locationsLayout"
+                app:layout_constraintTop_toBottomOf="@+id/tvDoYouWantToMeet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:id="@+id/btnLocation1"
+                    android:layout_width="162dp"
+                    android:layout_height="58dp"
+                    android:layout_margin="26dp"
+                    android:background="@drawable/transprent_button"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:text="Dj Tabel"
+                    android:textColor="@color/white"
+                    app:cornerRadius="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="100dp" />
+
+            <Button
+                    android:id="@+id/btnLocation2"
+                    android:layout_width="162dp"
+                    android:layout_height="58dp"
+                    android:layout_margin="26dp"
+                    android:visibility="gone"
+                    android:background="@drawable/white_backgroud_btn"
+                    android:fontFamily="@font/montserrat"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Entreance"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+                    />
+
+
+
+            <Button
+                    android:id="@+id/btnLocation3"
+                    android:layout_width="162dp"
+                    android:layout_height="58dp"
+                    android:layout_margin="26dp"
+                    android:visibility="gone"
+                    android:background="@drawable/white_backgroud_btn"
+                    android:fontFamily="@font/montserrat"
+                    app:layout_constraintTop_toBottomOf="@+id/btnLocation1"
+                    android:text="Entreance"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+                    />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+        <EditText
+                android:id="@+id/edtEnterLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="34dp"
+                android:background="@drawable/partially_transparent"
+                android:hint="Enter custom location"
+                android:gravity="center"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationsLayout" />
+
+
+
+
+        <Button
+                android:id="@+id/btnCancelLocation"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/transprent_button"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                app:cornerRadius="18dp"
+                app:layout_constraintTop_toBottomOf="@+id/edtEnterLocation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="100dp" />
+
+        <Button
+                android:id="@+id/btnAddLocation"
+                android:layout_width="162dp"
+                android:layout_height="58dp"
+                android:layout_margin="26dp"
+                android:background="@drawable/app_btn_round"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/add"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintTop_toBottomOf="@+id/edtEnterLocation"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

@@ -189,8 +189,8 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
                 setImage(imagesBtm)
             }
         } else if (requestCode == 9 && resultCode == Activity.RESULT_OK && data != null) {
-            Log.e("Data Extras : ", " ${data.extras}")
-            val images = data.extras.get("data") as Bitmap
+            Log.e("QuestionData Extras : ", " ${data.extras}")
+            val images = data.extras.get("questionData") as Bitmap
             val imageString = BitMapToString(images)
             if (imgFlag == null) {
                 SharedPrefrenceManager.setProfileImg(this, imageString)

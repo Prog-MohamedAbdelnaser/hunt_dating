@@ -4,24 +4,38 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.base.adapter.BaseAdapter
+import com.recep.hunt.base.adapter.BaseViewHolder
+import com.recep.hunt.features.common.CommonState
 import com.recep.hunt.home.HomeActivity
+import com.recep.hunt.matchs.vm.MatchQuestionsViewModel
 import com.recep.hunt.model.AnswerRandomQuestions
+import com.recep.hunt.model.randomQuestion.QuestionData
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
+import kotlinx.android.synthetic.main.question_item.*
+import kotlinx.android.synthetic.main.question_item.view.*
+import kotlinx.android.synthetic.main.question_layout.*
 import org.jetbrains.anko.find
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,66 +43,61 @@ import java.util.concurrent.TimeUnit
 
 class MatchQuestionnaireActivity : AppCompatActivity() {
 
+    private lateinit var currentQuestion: QuestionData
+    private var questionNumber =0
+
     private var pStatus = 15
+
     private var pStatusVisible = 15
+
     private lateinit var cl_progressbar: ConstraintLayout
+
     private lateinit var progressBar: ProgressBar
+
     private lateinit var pbMatchTime: ProgressBar
+
     private val handler = Handler()
+
     private var currentTime = 0L
 
     private lateinit var cl_timer_progrss: ConstraintLayout
+
     private lateinit var progressBarTimer: ProgressBar
+
     private val timerHandler = Handler()
 
     lateinit var countDownTimer: CountDownTimer
+
     private var timerPstatus = 360
 
     private var addTime = 1L
 
     private lateinit var ivLikedPersonImage: CircleImageView
+
     private lateinit var ivUserImage: CircleImageView
 
     private var mSwipeUserModel: SwipeUserModel? = null
+
+    private val matchQuestionViewModel:MatchQuestionsViewModel by viewModel()
+
+    private val questionAdapter by lazy { QuestionsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match_questionnaire)
 
-
         ivLikedPersonImage = find(R.id.ivLikedPersonImage)
+
         ivUserImage = find(R.id.ivUserImage)
 
-        progressBar = find(R.id.otp_progressBar)
+        progressBar = find(R.id.progressBarCountDown)
+
         pbMatchTime = find(R.id.pbTimer)
+
         cl_progressbar = find(R.id.cl_progress_bar_two)
 
-
-        check_code_btn.setOnClickListener {
-
-
-            getQuestions()
-
-        }
-
-        btn_yes.setOnClickListener {
-            setpThree.visibility = View.GONE
-            stepFour.visibility = View.VISIBLE
-            tvTitle.text = "Let the Hunt begin!"
-
-        }
-        btn_goto_next_five.setOnClickListener {
-            stepFour.visibility = View.GONE
-            stepFive.visibility = View.VISIBLE
-
-        }
-
-        btn.setOnClickListener {
-            stepFive.visibility = View.GONE
-            stepSix.visibility = View.VISIBLE
-            setTimer(6 * 60 * 1000)
-            tvTitle.text = "Time to Hunt!"
-
+        btnLetsGo.setOnClickListener {
+            matchQuestionViewModel.getQuestions(this)
         }
 
         idSubmit.setOnClickListener {
@@ -101,11 +110,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
         }
 
-        optionButton.setOnClickListener {
-            gotoHomeScreen()
-        }
-
-        btn_no.setOnClickListener {
+        btnCancelStepOne.setOnClickListener {
             gotoHomeScreen()
         }
 
@@ -129,7 +134,126 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
             }
         }
 
+        initUI()
+
         displaySwipeUser()
+
+        initRecyclerQuestions()
+
+        initModelObservers()
+
+
+    }
+
+    private fun initUI() {
+        btnYesWantMeet.setOnClickListener {
+            askAboutMeetingLocationLayout.visibility=View.VISIBLE
+            askAboutWantToMeetLayout.visibility=View.GONE
+
+
+        }
+
+        btnAddLocation.setOnClickListener {
+            addLocation(edtEnterLocation.text.toString())
+            edtEnterLocation.setText("")
+        }
+
+        btnCancelMeet.setOnClickListener {
+            gotoHomeScreen()
+
+        }
+
+        btnLocation1.setOnClickListener {
+            gotToSixStep()
+        }
+        btnLocation2.setOnClickListener {
+            gotToSixStep()
+
+        }
+        btnLocation3.setOnClickListener {
+            gotToSixStep()
+        }
+
+    }
+
+    fun gotToSixStep(){
+        setTimer(6 * 60 * 1000)
+        tvTitle.text = "Time to Hunt!"
+
+        stepSix.visibility=View.VISIBLE
+        askAboutMeetingLocationLayout.visibility=View.GONE
+    }
+    private fun addLocation(customeLocation: String) {
+        if (btnLocation1.isVisible.not()) {
+            btnLocation1.visibility = View.VISIBLE
+            btnLocation1.text=customeLocation
+
+        }else {
+
+            if (btnLocation2.isVisible.not()) {
+                btnLocation2.visibility = View.VISIBLE
+                btnLocation2.text = customeLocation
+
+            }else{
+                if (btnLocation3.isVisible.not()) {
+                    btnLocation3.visibility = View.VISIBLE
+                    btnLocation3.text = customeLocation
+                    edtEnterLocation.isEnabled = false
+                    btnAddLocation.isEnabled = false
+                }
+            }
+        }
+
+    }
+
+    private fun initModelObservers() {
+        matchQuestionViewModel.apply {
+            getQuestionLiveData.observe(this@MatchQuestionnaireActivity, Observer {
+                Log.i("matchQuestionViewModel","getQuestionLiveData : ${it.toString()}")
+                handleGetQuestionState(it)
+            })
+        }
+    }
+
+    private fun initRecyclerQuestions() {
+        recyclerViewQuestions.apply {
+            this.setHasFixedSize(true)
+            adapter=questionAdapter
+            layoutManager = object : LinearLayoutManager(context) {
+                override fun isAutoMeasureEnabled(): Boolean {
+                    return false
+                }
+            }
+        }
+
+    }
+
+
+    private fun handleGetQuestionState(state: CommonState<Response<RandomQuestionResponse>>?) {
+        when(state){
+            is CommonState.Success->{
+
+                setpOne.visibility = View.GONE
+                setProgressStart()
+
+                if (!state.data.isSuccessful) {
+                    val strErrorJson = state.data.errorBody()?.string()
+                    if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
+                        return
+                    }
+                }
+
+                questionlayout.visibility=View.VISIBLE
+
+                val randomQuestions = state.data.body()
+                if (randomQuestions != null) {
+                    setQuestion(state.data.body()!!.data)
+                }
+            }
+            is CommonState.Error->{
+
+            }
+        }
     }
 
     private fun gotoHomeScreen() {
@@ -141,58 +265,56 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         }
     }
 
-    private fun getQuestions() {
-        val call =
-            ApiClient.getClient.getRandomQuestion(SharedPrefrenceManager.getUserToken(this))
-
-        call.enqueue(object : Callback<RandomQuestionResponse> {
-            override fun onFailure(call: Call<RandomQuestionResponse>, t: Throwable) {
-
-            }
-
-            override fun onResponse(
-                call: Call<RandomQuestionResponse>,
-                response: Response<RandomQuestionResponse>
-            ) {
-
-
-//                setpTwo.visibility = View.VISIBLE
+//    private fun getQuestions() {
+//        val call =
+//            ApiClient.getClient.getRandomQuestion(SharedPrefrenceManager.getUserToken(this))
+//
+//        call.enqueue(object : Callback<RandomQuestionResponse> {
+//            override fun onFailure(call: Call<RandomQuestionResponse>, t: Throwable) {
+//
+//            }
+//
+//            override fun onResponse(
+//                call: Call<RandomQuestionResponse>,
+//                response: Response<RandomQuestionResponse>) {
+//
+//
+////                setpTwo.visibility = View.VISIBLE
+////                setpOne.visibility = View.GONE
 //                setpOne.visibility = View.GONE
-                setpTwo.visibility = View.VISIBLE
-                setpOne.visibility = View.GONE
-                setProgressStart()
+//                setProgressStart()
+//
+//                if (!response.isSuccessful) {
+//                    val strErrorJson = response.errorBody()?.string()
+//                    if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
+//                        return
+//                    }
+//                }
+//                val randomQuestions = response.body()
+//                if (randomQuestions != null) {
+//
+//                }
+//            }
+//
+//        })
+//    }
 
-                if (!response.isSuccessful) {
-                    val strErrorJson = response.errorBody()?.string()
-                    if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
-                        return
-                    }
-                }
-                val randomQuestions = response.body()
-                if (randomQuestions != null) {
-                    val question = randomQuestions.data.question
-                    ranQuestion.text = question
-                    tvQuestiom.text = question
-                    tvDoYouWantToMeet.text = question
-                    tvDoYouWantTo.text = question
-                    btnOption1.text = randomQuestions.data.answer[0]
-                    btnOption2.text = randomQuestions.data.answer[1]
-                    btnOption3.text = randomQuestions.data.answer[2]
-                }
-            }
 
-        })
+    fun showLastQuestion(question:String , answers: String){
+        askAboutWantToMeetLayout.visibility=View.VISIBLE
+        btnLastAnswer.text=answers
+        tvLastQuestion.text=question
+        questionlayout.visibility=View.GONE
+
     }
-
 
     private fun answerQuestion(answers: String) {
         val call =
             ApiClient.getClient.answerRandomQuestion(
+
                 SharedPrefrenceManager.getUserToken(this),
-                AnswerRandomQuestions(
-                    question = tvQuestiom.text.toString().trim(),
-                    answer = answers
-                )
+                AnswerRandomQuestions(question = tvQuestionTitle.text.toString().trim(), answer = answers)
+
             )
 
         call.enqueue(object : Callback<AnswerRandomQuestions> {
@@ -200,72 +322,29 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
             }
 
-            override fun onResponse(
-                call: Call<AnswerRandomQuestions>,
-                response: Response<AnswerRandomQuestions>
-            ) {
+            override fun onResponse(call: Call<AnswerRandomQuestions>, response: Response<AnswerRandomQuestions>) {
+
                 if (!response.isSuccessful) {
                     val strErrorJson = response.errorBody()?.string()
                     if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
                         return
                     }
                 }
+
             }
 
         })
     }
 
 
-//    override fun onPause() {
-//        super.onPause()
-//        makeUserOfline()
-//    }
-//    fun makeUserOfline()
-//    {
-//        val makeUserOnline= MakeUserOnline(false)
-//
-//        val call = ApiClient.getClient.makeUserOnline(makeUserOnline, SharedPrefrenceManager.getUserToken(this))
-//
-//        call.enqueue(object : Callback<MakeUserOnlineResponse> {
-//            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
-//
-//            }
-//
-//            override fun onResponse(
-//                call: Call<MakeUserOnlineResponse>,
-//                response: Response<MakeUserOnlineResponse>
-//            ) {
-//                if (!response.isSuccessful && !isFinishing) {
-//                    val strErrorJson = response.errorBody()?.string()
-//                    if (Utils.isSessionExpire(this@MatchQuestionnaireActivity, strErrorJson)) {
-//                        return
-//                    }
-//                }
-//            }
-//
-//        })
-//
-//    }
 
 
-    fun goTonext(view: View) {
-        setpThree.visibility = View.VISIBLE
-        setpTwo.visibility = View.GONE
+    fun goTonext(answers: String) {
         pStatus = -1
-
-        when (view) {
-            btnOption1 -> {
-                button4.text = btnOption1.text.toString().trim()
-
-            }
-            btnOption2 -> {
-                button4.text = btnOption2.text.toString().trim()
-            }
-            btnOption3 -> {
-                button4.text = btnOption3.text.toString().trim()
-            }
+        answerQuestion(answers)
+        if (questionNumber==1){
+            showLastQuestion(currentQuestion.question,answers)
         }
-        answerQuestion(button4.text.toString().trim())
     }
 
     fun setProgressStart() {
@@ -311,9 +390,9 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
                     if (pStatusVisible == 0) {
                         runOnUiThread {
-
-                            setpThree.visibility = View.VISIBLE
-                            setpThree.visibility = View.GONE
+                            questionlayout.visibility=View.VISIBLE
+//                            setpThree.visibility = View.VISIBLE
+//                            setpThree.visibility = View.GONE
 
                         }
                     }
@@ -410,7 +489,7 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                         .into(ivUserImage)
                 }
 
-                tvWantToMeetWithQ.text = "Do you want to meet with ${mSwipeUserModel?.firstName}?"
+                tvWantToMeetWithUser.text = "Do you want to meet with ${mSwipeUserModel?.firstName}?"
                 tvMessage.text = "You and ${mSwipeUserModel?.firstName} like each other!"
                 welcomeText.text =
                     "Before you start the HUNT , answer some of ${mSwipeUserModel?.firstName}'s questions."
@@ -419,4 +498,27 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     }
 
 
+    fun setQuestion(questionData: QuestionData){
+        questionNumber = +1
+        currentQuestion=questionData
+        tvQuestionTitle.text =  questionData.question
+        questionAdapter.updateItems(questionData.answer)
+    }
+    inner class QuestionsAdapter(): BaseAdapter<String>(itemLayoutRes = R.layout.question_item) {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<String> {
+            return QuestionsViewHolder(getItemView(parent))
+        }
+
+        inner class QuestionsViewHolder(view: View): BaseViewHolder<String>(view) {
+            override fun fillData() {
+                Log.i("QuestionsAdapter","fillData ${item}")
+               itemView. btnAnswerOption.text=item
+
+                itemView.btnAnswerOption.setOnClickListener {
+                    Log.i("btnAnswerOption","click ${item}")
+                    goTonext(item!!) }
+            }
+
+        }
+    }
 }
