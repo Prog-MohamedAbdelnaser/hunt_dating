@@ -28,6 +28,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        textview_version_name.text = "V${BuildConfig.VERSION_NAME}"
+
         lottieAnimationView =findViewById(R.id.animation_view)
 
         lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
