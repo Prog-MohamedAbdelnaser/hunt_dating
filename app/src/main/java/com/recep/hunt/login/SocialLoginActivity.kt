@@ -271,6 +271,22 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun setupFbLoginAuth() {
+        /** public profile fields
+         * id
+            first_name
+            last_name
+            middle_name
+            name
+            name_format
+            picture
+            short_name
+         * **/
+        /**
+         * needs app review
+         * user_photos, user_birthday
+         * instagram_basic
+         * **/
+
         // Initialize Facebook Login button
         LoginManager.getInstance().logOut()
         LoginManager.getInstance().loginBehavior = LoginBehavior.NATIVE_WITH_FALLBACK
@@ -526,11 +542,16 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                             val gson = GsonBuilder().setPrettyPrinting().create()
                             val json: String = gson.toJson(userDetailsModel)
                             val fullname = social_name.split(" ").toTypedArray()
+
+                            if(fullname.size == 2) {
+                                SharedPrefrenceManager.setUserLastName(this, fullname[1])
+                            } else {
+                                fullname[1] = " "
+                            }
                             val firstName: String = fullname[0]
-                            val lastName: String = fullname[1]
 
                             SharedPrefrenceManager.setUserFirstName(this, firstName)
-                            SharedPrefrenceManager.setUserLastName(this, lastName)
+
                             SharedPrefrenceManager.setUserDetailModel(
                                 this@SocialLoginActivity,
                                 json

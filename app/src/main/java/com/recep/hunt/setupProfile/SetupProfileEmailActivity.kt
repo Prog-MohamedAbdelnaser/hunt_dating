@@ -72,7 +72,7 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
                         emailAddress
                     )
                     launchActivity<SetupProfileDobActivity>()
-                    Logger.d("SetupProfileEmail: ${SharedPrefrenceManager.getUserEmail(this)}")
+
                 }
             }
         })

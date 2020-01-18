@@ -12,6 +12,7 @@
             android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tvTitleReasons"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_account"

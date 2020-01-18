@@ -11,14 +11,17 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.profile.viewmodel.UserViewModel
@@ -46,7 +49,8 @@ import java.io.File
 import java.io.IOException
 import java.net.URL
 
-class SetupProfileCompletedActivity : BaseActivity() {
+
+class SetupProfileCompletedActivity : AppCompatActivity() {
 
     companion object{
         val TAG = SetupProfileCompletedActivity.javaClass.simpleName
@@ -54,11 +58,9 @@ class SetupProfileCompletedActivity : BaseActivity() {
     }
 
     private var mHttpClient: DefaultHttpClient? = null
-    private lateinit var userImage: CircleImageView
-    private lateinit var userName: TextView
     private lateinit var userViewModel: UserViewModel
     private lateinit var bitmap: Bitmap
-    private var avatarFilePath = ""
+    private var avatarFilePath:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,12 +70,8 @@ class SetupProfileCompletedActivity : BaseActivity() {
 
     private fun init() {
 
-        avatarFilePath = intent.getStringExtra(Constants.IMGURI)
-        LogUtil.e("SetupProfileCompletedActivity","Image "+avatarFilePath)
+        avatarFilePath = intent.getStringExtra(IMGURI)
 
-
-        userImage = find(R.id.completed_profile_user_image)
-        userName = find(R.id.user_completed_profile_name)
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
         setupViews()
@@ -98,41 +96,22 @@ class SetupProfileCompletedActivity : BaseActivity() {
         val userImageString = SharedPrefrenceManager.getProfileImg(this)
         val socialType = SharedPrefrenceManager.getsocialType(this)
 
-/*
-        Glide.with(this)
-            .load(avatarFilePath)
-            .placeholder(R.drawable.account_icon)
-            .into(userImage)*/
-
-
-
-    /*    Glide.with(this)
-            .load(avatarFilePath)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .placeholder(R.drawable.account_icon)
-            .into(completed_profile_user_image)*/
-
-
               if (socialType.equals("social")) {
                   Glide.with(this)
                       .load(Uri.parse(userImageString))
                       .placeholder(R.drawable.account_icon)
-                      .into(userImage)
+                      .into(completed_profile_user_image)
               } else {
-      //            userImage.setImageBitmap(StringToBitmap(userImageString))
                   Glide.with(this)
                       .load(avatarFilePath)
                       .placeholder(R.drawable.account_icon)
-                      .into(userImage)
+                      .into(completed_profile_user_image)
               }
-              //  userImage.setImageBitmap(StringToBitmap(userImageString))
-        //val userImageString = SharedPrefrenceManager.getUserImage(this)
-        //Picasso.get().load(Uri.parse(userImageString)).placeholder(R.drawable.account_icon).into(userImage)
+
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
 
-        userName.text = "$firstName $lastName"
+        user_completed_profile_name.text = "$firstName $lastName"
     }
 
     private fun insertUserIntoDb() {
