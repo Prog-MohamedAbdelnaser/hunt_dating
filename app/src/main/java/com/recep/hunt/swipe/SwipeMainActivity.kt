@@ -100,12 +100,12 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         parentView = find(R.id.main_layoutView)
         windowwidth = windowManager.defaultDisplay.width
         screenCenter = windowwidth / 2
-        items = dummyUsersdata()
-       /* try {
+//        items = dummyUsersdata()
+       try {
             items = intent.getParcelableArrayListExtra("swipeUsers")
         } catch (e: Exception) {
             e.printStackTrace()
-        }*/
+        }
 
         addNearbyUsersToSwipe()
         setupToolbarClicks()
