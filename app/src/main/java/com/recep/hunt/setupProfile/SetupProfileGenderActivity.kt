@@ -40,7 +40,7 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
             if(selectedGender.isNotEmpty()){
 
                 SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
-                launchActivity<SetupProfileLookingForActivity>{
+                launchActivity<SetupProfileRelationshipActivity>{
                     putExtra(IMGURI, avatarFilePath)
                 }
             }else{
@@ -67,7 +67,7 @@ class SetupProfileGenderActivity : BaseActivity() , LookingForListeners {
     override fun getSelectedLookingFor(lookingFor: String, state: AddRemoveMode?) {
         selectedGender = lookingFor
         SharedPrefrenceManager.setUserGender(this@SetupProfileGenderActivity,selectedGender)
-        launchActivity<SetupProfileLookingForActivity>{
+        launchActivity<SetupProfileRelationshipActivity>{
             putExtra(IMGURI, avatarFilePath)
         }
     }

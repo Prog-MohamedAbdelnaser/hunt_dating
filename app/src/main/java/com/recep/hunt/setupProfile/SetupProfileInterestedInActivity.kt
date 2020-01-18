@@ -36,21 +36,23 @@ class SetupProfileInterestedInActivity : BaseActivity(),
 
 
         iterator.forEach {
-            SharedPrefrenceManager.setUserInterestedIn(this@SetupProfileInterestedInActivity,lookingFor,it)
+            SharedPrefrenceManager.setUserInterestedIn(
+                this@SetupProfileInterestedInActivity,
+                lookingFor,
+                it
+            )
         }
 
         val count = selectedInterests.size
-        if(count < 3){
+        if (count < 3) {
             showAddExtraChoiceDialog()
-        }else{
-//                    toast(selectedInterstedIn)
-//                    launchActivity<TurnOnGPSActivity>()
-//            launchActivity<TurnOnGPSUpdateAcitivity>()
-            launchActivity<SetupProfileReferralCodeActivity>{
-                putExtra(Constants.IMGURI,avatarFilePath)
-            }
+        } else {
+            launchActivity<SetupProfileReferralCodeActivity> {
+                putExtra(Constants.IMGURI, avatarFilePath)
+        }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_interested_in)
@@ -61,32 +63,39 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         }
         init()
     }
-    private fun init(){
+
+    private fun init() {
         avatarFilePath = intent.getStringExtra(Constants.IMGURI)
-        selectedInterests = intent.getStringArrayListExtra(SetupProfileLookingForActivity.selectedInterestKey)
+        selectedInterests =
+            intent.getStringArrayListExtra(SetupProfileLookingForActivity.selectedInterestKey)
 
         setupRecyclerView()
 
         setup_interested_in_continue_btn.setOnClickListener {
-            if(selectedInterstedIn.isNotEmpty()){
+            if (selectedInterstedIn.isNotEmpty()) {
                 val count = selectedInterests.size
-                if(count < 3){
+                if (count < 3) {
                     showAddExtraChoiceDialog()
-                }else{
+                } else {
 //                    toast(selectedInterstedIn)
 //                    launchActivity<TurnOnGPSActivity>()
                     launchActivity<TurnOnGPSUpdateAcitivity>()
                 }
-            }else{
-                Helpers.showErrorSnackBar(this@SetupProfileInterestedInActivity,resources.getString(R.string.complete_form),resources.getString(R.string.you_have_complete_form))
+            } else {
+                Helpers.showErrorSnackBar(
+                    this@SetupProfileInterestedInActivity,
+                    resources.getString(R.string.complete_form),
+                    resources.getString(R.string.you_have_complete_form)
+                )
             }
 
 
         }
 
     }
-    private fun setupRecyclerView(){
-        val lookingForData= dummyImageData()
+
+    private fun setupRecyclerView() {
+        val lookingForData = dummyImageData()
         rc_view1.layoutManager = LinearLayoutManager(this)
         rc_view1.adapter = SetupProfileInterestedInAdapter(
             lookingForData,
@@ -96,10 +105,10 @@ class SetupProfileInterestedInActivity : BaseActivity(),
 
     }
 
-    private fun showAddExtraChoiceDialog(){
-        val yesButton : Button
-        val noButton : Button
-        val ll =  LayoutInflater.from(this).inflate(R.layout.add_extra_choice_dialog, null)
+    private fun showAddExtraChoiceDialog() {
+        val yesButton: Button
+        val noButton: Button
+        val ll = LayoutInflater.from(this).inflate(R.layout.add_extra_choice_dialog, null)
         val dialog = Dialog(this@SetupProfileInterestedInActivity)
         dialog.setContentView(ll)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -112,7 +121,7 @@ class SetupProfileInterestedInActivity : BaseActivity(),
         }
         noButton.setOnClickListener {
             dialog.dismiss()
-            launchActivity<SetupProfileReferralCodeActivity>{
+            launchActivity<SetupProfileReferralCodeActivity> {
                 putExtra(Constants.IMGURI, avatarFilePath)
             }
         }
@@ -121,9 +130,9 @@ class SetupProfileInterestedInActivity : BaseActivity(),
     }
 
 
-    private fun dummyImageData():ArrayList<LookingForModel>{
+    private fun dummyImageData(): ArrayList<LookingForModel> {
         val data = ArrayList<LookingForModel>()
-        if(data.size == 0){
+        if (data.size == 0) {
             data.add(
                 LookingForModel(
                     R.drawable.ic_man,

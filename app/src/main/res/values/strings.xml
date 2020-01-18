@@ -45,6 +45,7 @@
     <string name="add_photo">Add photo</string>
     <string name="hi_there">Hi There!</string>
     <string name="select_gender">Select Your Gender</string>
+    <string name="relationship_status">Selec your Relationship Status</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="both">Both</string>

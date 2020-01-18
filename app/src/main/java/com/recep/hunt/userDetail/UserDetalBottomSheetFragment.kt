@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -204,26 +205,48 @@ class UserDetailHeaderItem(private val ctx: Context, val swipeUserModel: SwipeUs
         var jobTitle: String? = null
         var firstName: String? = null
         var age: String? = null
+        var locationName: String? = ""
+        var for_bussiness = true;
+        var for_friendship = true;
+        var for_dating = true;
 
         if (swipeUserModel != null) {
             aboutYou = swipeUserModel.detail
             jobTitle = ""
             firstName = swipeUserModel.firstName
             age = swipeUserModel.age.toString()
+            locationName = swipeUserModel.locationName
+            for_friendship =
+                SharedPrefrenceManager.getLookingForFriendship(ctx) == swipeUserModel.for_friendship
+            for_bussiness =
+                SharedPrefrenceManager.getLookingForBusniess(ctx) == swipeUserModel.for_bussiness
+            for_dating =
+                SharedPrefrenceManager.getLookingForDate(ctx) == swipeUserModel.for_date
         } else {
             aboutYou = SharedPrefrenceManager.getAboutYou(ctx)
             jobTitle = SharedPrefrenceManager.getJobTitle(ctx)
             firstName = SharedPrefrenceManager.getUserFirstName(ctx)
             age = SharedPrefrenceManager.getUserAge(ctx)
+            for_friendship =
+                SharedPrefrenceManager.getLookingForFriendship(ctx) != "null"
+            for_bussiness =
+                SharedPrefrenceManager.getLookingForBusniess(ctx) != "null"
+            for_dating =
+                SharedPrefrenceManager.getLookingForDate(ctx) != "null"
+
         }
         if (aboutYou != Constants.NULL)
             viewHolder.itemView.user_detail_about_you.text = aboutYou
         if (jobTitle != Constants.NULL)
             viewHolder.itemView.user_detail_job_title.text = jobTitle
-
+        viewHolder.itemView.location_name.text = locationName
         if (age == null) {
             age = "18"
         }
+        viewHolder.itemView.for_friendship.visibility =
+            if (for_friendship) View.VISIBLE else View.GONE
+        viewHolder.itemView.for_business.visibility = if (for_bussiness) View.VISIBLE else View.GONE
+        viewHolder.itemView.for_date.visibility = if (for_dating) View.VISIBLE else View.GONE
         viewHolder.itemView.user_detail_username_txtView.text = "$firstName, $age"
     }
 }
