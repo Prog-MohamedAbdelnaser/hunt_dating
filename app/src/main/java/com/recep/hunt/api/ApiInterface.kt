@@ -1,5 +1,8 @@
 package com.recep.hunt.api
 
+import com.recep.hunt.domain.entities.APIResponse
+import com.recep.hunt.domain.entities.BeginHuntLocation
+import com.recep.hunt.domain.entities.BeginHuntLocationParams
 import com.recep.hunt.model.*
 import com.recep.hunt.model.GetRandomQuestions.GetRandomQuestionReponse
 import com.recep.hunt.model.RegistrationModule.RegistrationResponse
@@ -21,6 +24,8 @@ import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.swipeUser.SwipeUserResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.model.viewTicket.ViewTicketResponse
+import io.reactivex.Single
+
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -126,4 +131,12 @@ interface ApiInterface {
 
     @POST("/api/email-check")
     fun checkIsEmailRegister(@Header("Authorization")  authorization:String,@Body email:CheckUserEmail):Call<isEmailRegisterResponse>
+
+
+    /*@POST("/api/user-hunt-begin")
+    fun sendUserHuntBeginLocation(@Header("Authorization")  authorization:String,@Body beginHuntLocationParams: BeginHuntLocationParams): Single<Any>
+    */
+    @POST("/api/user-hunt-begin")
+    fun sendUserHuntBeginLocation(@Body beginHuntLocationParams: BeginHuntLocationParams): Single<APIResponse<BeginHuntLocation>>
+
 }

@@ -1,0 +1,12 @@
+package com.recep.hunt
+
+object FeaturesConstants {
+
+    const val LOCATION_OBJECT_KEY="LOCATION_OBJECT_KEY"
+
+    const val KEY_UNAUTHORIZATION_STATUS = "9"
+
+    const val KEY_SIGNED_IN_OTHER_DEVICE_STATUS = "8"
+
+    val EXPIRE_SESSION_LIST_STATUS = arrayOf(KEY_UNAUTHORIZATION_STATUS,KEY_SIGNED_IN_OTHER_DEVICE_STATUS)
+}

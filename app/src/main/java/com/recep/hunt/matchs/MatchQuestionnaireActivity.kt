@@ -9,17 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.base.activity.BaseActivity
 import com.recep.hunt.base.adapter.BaseAdapter
 import com.recep.hunt.base.adapter.BaseViewHolder
+import com.recep.hunt.base.extentions.handleApiErrorWithSnackBar
+import com.recep.hunt.domain.entities.BeginHuntLocationParams
 import com.recep.hunt.features.common.CommonState
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.matchs.vm.MatchQuestionsViewModel
@@ -31,7 +34,6 @@ import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_match_questionnaire.*
-import kotlinx.android.synthetic.main.question_item.*
 import kotlinx.android.synthetic.main.question_item.view.*
 import kotlinx.android.synthetic.main.question_layout.*
 import org.jetbrains.anko.find
@@ -41,7 +43,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
-class MatchQuestionnaireActivity : AppCompatActivity() {
+class MatchQuestionnaireActivity : BaseActivity() {
 
     private lateinit var currentQuestion: QuestionData
     private var questionNumber =0
@@ -81,6 +83,8 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
     private val matchQuestionViewModel:MatchQuestionsViewModel by viewModel()
 
     private val questionAdapter by lazy { QuestionsAdapter() }
+
+    private var locationName:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,6 +138,8 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
             }
         }
 
+        locationName=getLocationNameFromArgs()
+
         initUI()
 
         displaySwipeUser()
@@ -141,6 +147,14 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         initRecyclerQuestions()
 
         initModelObservers()
+
+    }
+
+    @Throws(IllegalArgumentException::class)
+    fun getLocationNameFromArgs():String?{
+        if (intent.extras.isEmpty.not()&&intent.extras.containsKey(FeaturesConstants.LOCATION_OBJECT_KEY)){
+            return intent.extras.getString(FeaturesConstants.LOCATION_OBJECT_KEY)
+        } else throw IllegalArgumentException("${this.javaClass.simpleName} arguments must contains Location name Params")
 
 
     }
@@ -164,14 +178,14 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         }
 
         btnLocation1.setOnClickListener {
-            gotToSixStep()
+            sendHuntLocation(btnLocation1.text.toString())
         }
         btnLocation2.setOnClickListener {
-            gotToSixStep()
+            sendHuntLocation(btnLocation2.text.toString())
 
         }
         btnLocation3.setOnClickListener {
-            gotToSixStep()
+            sendHuntLocation(btnLocation3.text.toString())
         }
 
         btnCancelLocation.setOnClickListener {
@@ -180,10 +194,17 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
     }
 
+    fun sendHuntLocation(locationName:String){
+        matchQuestionViewModel.sendHuntLocation(createHuntLocation(locationName))
+    }
+
+    private fun createHuntLocation(locationName: String): BeginHuntLocationParams {
+        return BeginHuntLocationParams(mSwipeUserModel?.id!!,locationName,locationName)
+    }
+
     fun gotToSixStep(){
         setTimer(6 * 60 * 1000)
         tvTitle.text = "Time to Hunt!"
-
         stepSix.visibility=View.VISIBLE
         askAboutMeetingLocationLayout.visibility=View.GONE
     }
@@ -216,7 +237,30 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
                 Log.i("matchQuestionViewModel","getQuestionLiveData : ${it.toString()}")
                 handleGetQuestionState(it)
             })
+
+            sendHuntLocationLiveData.observe(this@MatchQuestionnaireActivity, Observer {
+                handleSendHuntLocationState(it)
+            })
         }
+    }
+
+    private fun handleSendHuntLocationState(state: CommonState<Any>?) {
+
+        when (state) {
+            CommonState.LoadingShow->showProgressDialog()
+            CommonState.LoadingFinished->hideProgressDialog()
+            is CommonState.Success -> {
+                Log.i("matchQuestionViewModel","getQuestionLiveData : ${state.data.toString()}")
+                gotToSixStep()
+            }
+            is CommonState.Error -> {
+                handleApiErrorWithSnackBar(state.exception)
+                state.exception.printStackTrace()
+                Log.i("matchQuestionViewModel","getQuestionLiveData : ${state.exception.toString()}")
+
+            }
+        }
+
     }
 
     private fun initRecyclerQuestions() {
@@ -421,7 +465,6 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
 
     }
 
-
     private fun startTimer(noOfMinutes: Long) {
 
         countDownTimer = (object : CountDownTimer(noOfMinutes, 1000) {
@@ -474,7 +517,6 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         setTimer(nowTime)
     }
 
-
     private fun displaySwipeUser() {
         if (intent != null && intent.extras != null) {
             mSwipeUserModel = intent.getParcelableExtra("swipeUsers")
@@ -501,13 +543,13 @@ class MatchQuestionnaireActivity : AppCompatActivity() {
         }
     }
 
-
     fun setQuestion(questionData: QuestionData){
         questionNumber = +1
         currentQuestion=questionData
         tvQuestionTitle.text =  questionData.question
         questionAdapter.updateItems(questionData.answer)
     }
+
     inner class QuestionsAdapter(): BaseAdapter<String>(itemLayoutRes = R.layout.question_item) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<String> {
             return QuestionsViewHolder(getItemView(parent))
