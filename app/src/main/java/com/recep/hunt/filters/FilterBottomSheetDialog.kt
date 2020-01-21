@@ -206,6 +206,7 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
             SharedPrefrenceManager.setUserInterestedIn(v.context, lookingForBusiness, "Business")
             SharedPrefrenceManager.setUserInterestedAge(v.context, leftAge.toString(), rightAge.toString())
             dismiss()
+            mBottomSheetListener?.onFilterBottomSheetClickApplyListener()
 
         }
 
@@ -263,8 +264,19 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         return viewPager.currentItem + i
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FilterBottomSheetListener){
+            mBottomSheetListener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mBottomSheetListener= null
+    }
     interface FilterBottomSheetListener{
-        fun onOptionClick(text: String)
+        fun onFilterBottomSheetClickApplyListener()
     }
 
 

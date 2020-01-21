@@ -133,7 +133,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         searchTextView.text = ""
     }
 
-    override fun onOptionClick(text: String) {
+    override fun onFilterBottomSheetClickApplyListener() {
+
+        nearestPlaces(latitude,longitude)
     }
 
     private lateinit var mMap: GoogleMap
@@ -419,11 +421,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 var result = response.body()?.data
                 result?.let {
                     if(it.isEmpty()){
-                        Toast.makeText(this@HomeActivity,
-                            "No locations found/possible google quota issue",
-                            Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(this@HomeActivity, "No locations found/possible google quota issue", Toast.LENGTH_SHORT).show()
                     }
+
                     else {
                         val nearbyItems = ArrayList<NearestLocationData>()
                         val farItems = ArrayList<NearestLocationData>()
