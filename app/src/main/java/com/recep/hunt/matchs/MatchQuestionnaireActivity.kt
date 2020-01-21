@@ -85,7 +85,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
     private val questionAdapter by lazy { QuestionsAdapter() }
 
-    private var locationName:String?=null
+    private var placeName:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,7 +139,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
             }
         }
 
-        locationName=getLocationNameFromArgs()
+        placeName=getLocationNameFromArgs()
 
         initUI()
 
@@ -202,7 +202,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
     }
 
     private fun createHuntLocation(locationName: String): BeginHuntLocationParams {
-        return BeginHuntLocationParams(mSwipeUserModel?.id!!,locationName,locationName)
+        return BeginHuntLocationParams(mSwipeUserModel?.id!!,locationName,placeName!!)
     }
 
     fun gotToSixStep(){
