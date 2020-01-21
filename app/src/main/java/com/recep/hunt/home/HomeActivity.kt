@@ -393,6 +393,15 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //    }
 
     //integration of nearest-place api
+
+    fun setupNearByRestaurantsRecyclerViewByApiEmpty(){
+        horizontal_list_near_by_user.adapter=null
+        horizontal_list_near_by_user.removeAllViewsInLayout()
+        horizontal_list_near_by_user.removeAllViews()
+
+
+    }
+
     private fun nearestPlaces(lat: Double, long: Double) {
         val nearestLocation = NearestLocation(lat, long)
         val call = ApiClient.getClient.getNearestPlace(
@@ -421,9 +430,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                 var result = response.body()?.data
                 result?.let {
                     if(it.isEmpty()){
+                        setupNearByRestaurantsRecyclerViewByApiEmpty()
+                        Utils.noUserError.postValue("true")
+
                         Toast.makeText(this@HomeActivity, "No locations found/possible google quota issue", Toast.LENGTH_SHORT).show()
                     }
-
                     else {
                         val nearbyItems = ArrayList<NearestLocationData>()
                         val farItems = ArrayList<NearestLocationData>()
@@ -975,10 +986,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
     fun getUsersList(location_id: String,
-        age: String,
-        date: String,
-        business: String,
-        friendship: String
+                     age: String,
+                     date: String,
+                     business: String,
+                     friendship: String
     ) {
 
         val lat = SharedPrefrenceManager.getUserLatitude(this)
@@ -1015,7 +1026,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 var result = response.body()?.data
                 var swipeUserArray = ArrayList<SwipeUserModel>()
-                  if (result != null && result.size > 0) {
+                if (result != null && result.size > 0) {
                     for (i in 0 until result.size) {
                         val images = ArrayList<String>()
                         if (result[i].user_profile_image.size != 0) {
@@ -1053,12 +1064,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         )
                     }
                 } else {
-                      launchActivity<SwipeMainActivity> {
-                          putParcelableArrayListExtra(
-                              "swipeUsers",
-                              swipeUserArray
-                          )
-                      }
+                    launchActivity<SwipeMainActivity> {
+                        putParcelableArrayListExtra(
+                            "swipeUsers",
+                            swipeUserArray
+                        )
+                    }
                     //showNoUserBottomSheet()
                 }
             }
@@ -1166,8 +1177,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onDestroy() {
         super.onDestroy()
         if (gpsReceiver != null) {
-             unregisterReceiver(gpsReceiver)
-                gpsReceiver = null
+            unregisterReceiver(gpsReceiver)
+            gpsReceiver = null
         }
         if (disposables.isDisposed.not())
             disposables.dispose()
