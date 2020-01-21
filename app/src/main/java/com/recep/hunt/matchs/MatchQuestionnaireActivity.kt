@@ -30,6 +30,7 @@ import com.recep.hunt.model.AnswerRandomQuestions
 import com.recep.hunt.model.randomQuestion.QuestionData
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import de.hdodenhof.circleimageview.CircleImageView
@@ -168,8 +169,10 @@ class MatchQuestionnaireActivity : BaseActivity() {
         }
 
         btnAddLocation.setOnClickListener {
-            addLocation(edtEnterLocation.text.toString())
-            edtEnterLocation.setText("")
+            if (edtEnterLocation.text.toString().length>3) {
+                addLocation(edtEnterLocation.text.toString())
+                edtEnterLocation.setText("")
+            }else Helpers.showErrorSnackBar(this,getString(R.string.notice),getString(R.string.invalid_length))
         }
 
         btnCancelMeet.setOnClickListener {
