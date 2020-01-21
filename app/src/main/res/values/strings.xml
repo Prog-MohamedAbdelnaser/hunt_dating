@@ -459,5 +459,6 @@
     <string name="spam_or_advertising">Spam/Advertising</string>
     <string name="harrassment">Harrassment</string>
     <string name="fraud">Fraud</string>
+    <string name="default_notification_channel_id" >com.recep.hunt.notification</string>
 </resources>
 

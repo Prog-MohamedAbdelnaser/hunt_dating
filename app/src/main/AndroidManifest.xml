@@ -4,6 +4,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="com.recep.hunt">
 
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <dist:module dist:instant="true" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +15,6 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -20,15 +22,13 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.SET_DEBUG_APP"
-            tools:ignore="ProtectedPermissions"></uses-permission>
-
+    <uses-permission
+            android:name="android.permission.SET_DEBUG_APP"
+            tools:ignore="ProtectedPermissions" />
 
     <uses-feature
             android:name="android.hardware.camera"
             android:required="true" />
-
-    <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_launcher"/>
 
     <application
             android:name=".application.MyApplication"
@@ -42,16 +42,15 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".matchs.MatchQuestionnaireActivity" >
-
-        </activity>
+        <activity android:name=".matchs.MatchQuestionnaireActivity" />
         <activity android:name=".matchs.LetsMeetActivity" />
-        <activity android:name=".payment.TrasactionDone"></activity>
+        <activity android:name=".payment.TrasactionDone" />
         <activity android:name=".faq.FaqDashboard" />
         <activity android:name=".creator.TicketGenrated" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,8 +60,9 @@
         <activity android:name=".inviteFriend.MyInviteCreditActivity" />
         <activity android:name=".inviteFriend.InviteAFriendActivity" />
         <activity android:name=".userDetail.UserDetailActivity" />
-        <activity android:name=".login.WelcomeScreenActivity"
-                android:windowSoftInputMode="stateAlwaysVisible|adjustResize"/>
+        <activity
+                android:name=".login.WelcomeScreenActivity"
+                android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity android:name=".payment.SelectPaymentMethodsActivity" />
         <activity android:name=".payment.AddPaymentMethod" />
         <activity android:name=".payment.PaymentMethodActivity" />
@@ -84,14 +84,10 @@
         <activity android:name=".profile.UserProfileEditQuestionActivity" />
         <activity android:name=".profile.UserProfileSettingsActivity" />
         <activity android:name=".profile.UserProfileEditActivity" />
-        <activity android:name=".profile.UserProfileActivity"
-                android:parentActivityName=".home.HomeActivity">
-        </activity>
-
-
-
+        <activity
+                android:name=".profile.UserProfileActivity"
+                android:parentActivityName=".home.HomeActivity" />
         <activity android:name=".home.HomeActivity" />
-
         <activity android:name=".setupProfile.TurnOnGPSActivity" />
         <activity
                 android:name=".setupProfile.SetupProfileReferralCodeActivity"
@@ -107,39 +103,70 @@
         <activity android:name=".setupProfile.SetupProfileGenderActivity" />
         <activity android:name=".setupProfile.SetupProfileUploadPhotoActivity" />
         <activity android:name=".setupProfile.SetupProfileDobActivity" />
-        <activity android:name=".setupProfile.SetupProfileEmailActivity" android:windowSoftInputMode="stateVisible|adjustResize"/>
-        <activity android:name=".setupProfile.SetupProfileActivity" android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+                android:name=".setupProfile.SetupProfileEmailActivity"
+                android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+                android:name=".setupProfile.SetupProfileActivity"
+                android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".setupProfile.SetupProfileRelationshipActivity" />
-        <activity android:name=".login.SocialLoginActivity" >
-        </activity>
-        <activity android:name=".login.OtpVerificationActivity" android:windowSoftInputMode="stateVisible|adjustResize"
-                >
-        </activity>
+        <activity android:name=".login.SocialLoginActivity" />
+        <activity
+                android:name=".login.OtpVerificationActivity"
+                android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".setupProfile.TurnOnGPSUpdateAcitivity" />
         <activity
                 android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
                 android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".creator.CreatorActivity" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+        <activity android:name=".creator.CreatorActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-
         <activity
-            android:name=".utilis.location.EnableLocationServiceSettingActivity"
-            android:theme="@style/Theme.AppCompat.Translucent"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+                android:name=".utilis.location.EnableLocationServiceSettingActivity"
+                android:launchMode="singleTask"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Translucent" />
 
+
+
+
+
+
+
+
+        <!--     fcm          -->
         <service
                 android:name=".firebaseHelper.FirebaseInstanceClass"
-                android:stopWithTask="false">
+                android:stopWithTask="false"
+                tools:ignore="ExportedService"
+                >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@mipmap/ic_launcher" />
+
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorAccent" />
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="@string/default_notification_channel_id" />
+
+        <!--************************************* -->
+
 
         <receiver android:name=".utilis.SMSReceiver">
             <intent-filter>
