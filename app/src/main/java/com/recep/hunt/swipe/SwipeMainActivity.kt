@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
@@ -24,7 +25,10 @@ import com.github.pwittchen.swipe.library.rx2.SwipeListener
 import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.base.extentions.handleApiErrorWithSnackBar
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
+import com.recep.hunt.domain.entities.PushNotificationSingleUserParams
+import com.recep.hunt.features.common.CommonState
 import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.matchs.MatchQuestionnaireActivity
@@ -36,6 +40,7 @@ import com.recep.hunt.model.usersList.BasicInfo
 import com.recep.hunt.notifications.NotificationsActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.swipe.vm.SwipeViewModel
 import com.recep.hunt.userDetail.UserDetalBottomSheetFragment
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.StoriesProgressView
@@ -46,6 +51,7 @@ import kotlinx.android.synthetic.main.swipe_screen_item.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.imageResource
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -88,10 +94,33 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     )
 
 
+    private val swipViewModel:SwipeViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swipe_main)
         init()
+        initModelObservers()
+    }
+
+    private fun initModelObservers() {
+        swipViewModel.apply {
+            sendPushNotificationSingleUserLiveData.observe(this@SwipeMainActivity, Observer {
+                handlePushNotificationSingleUserState(it)
+            })
+        }
+    }
+
+    private fun handlePushNotificationSingleUserState(state: CommonState<Any>?) {
+        when(state){
+            is CommonState.Success->{
+                //todo when like sent successfully
+                gotoMatchQuestionScreen(items[currentUser])
+            }
+            is CommonState.Error->{
+                handleApiErrorWithSnackBar(state.exception)
+            }
+        }
     }
 
     @SuppressLint("NewApi")
@@ -105,6 +134,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         try {
             items = intent.getParcelableArrayListExtra("swipeUsers")
             locationName = intent.getStringExtra(FeaturesConstants.LOCATION_OBJECT_KEY)
+
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -120,8 +150,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         var last = items.size - 1
         for (i in 0..last) {
-            var containerView =
-                LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
+            var containerView = LayoutInflater.from(context).inflate(R.layout.swipe_screen_item, null)
             //match status progress bar
             matchProgressBar = containerView.findViewById(R.id.match_status_progressBar)
             textView50 = containerView.findViewById(R.id.textView50)
@@ -153,8 +182,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()
 
-            val drawableMatch =
-                context.resources.getDrawable(R.drawable.circular_progressbar_inside_bg)
+            val drawableMatch = context.resources.getDrawable(R.drawable.circular_progressbar_inside_bg)
+
             matchProgressBar.progressDrawable = drawableMatch
             matchProgressBar.progress = items[i].totalMatching.toInt()
             matchProgressBar.max = 100
@@ -236,16 +265,17 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             containerView.rotation = ((x_cord - x) * (Math.PI / 256)).toFloat()
 
                             if ((x - x_cord) <= -150 || (x - x_cord) >= 150) {
+
                                 when {
                                     x_cord > x -> {
-                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                            .alpha = 1.0f
-                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
-                                            .imageResource = R.drawable.swipe_like
+
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView).alpha = 1.0f
+
+                                        containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
+
                                         if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
                                             containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
-                                                Color.argb(179, 58, 204, 225)
-                                            )
+                                                Color.argb(179, 58, 204, 225))
                                         else if ((x_cord - x) % 255 < 179)
                                             containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
                                                 Color.argb((x_cord - x) % 255, 58, 204, 225)
@@ -255,6 +285,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                                         } else {
                                             0
                                         }
+
                                     }
                                     x_cord < x -> {
                                         containerView.findViewById<ImageView>(R.id.like_dislike_imageView)
@@ -300,8 +331,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
-                            callSwipeUserApi(items[currentUser], 2)
-
                             if (x >= screenCenter) {
                                 storyProgressViews[currentUser].skip()
                                 //  onNext()
@@ -381,6 +410,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
             override fun onSwipedRight(event: MotionEvent?): Boolean {
                 event?.let { checkSwipState(it) }
+                sendLikeToUser(items[currentUser])
+
                 return false
             }
 
@@ -404,6 +435,11 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         })
 
+    }
+
+    private fun sendLikeToUser(swipeUserModel: SwipeUserModel) {
+        Log.i("ACTION_MOVE","   sendLikeToUser :${items[currentUser].firstName}")
+        swipViewModel.sendPushNotificationSingleUser(PushNotificationSingleUserParams(swipeUserModel.id,"Like"))
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -470,9 +506,10 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 }
 
                 val status = response.body()?.status
-                gotoMatchQuestionScreen(mSwipeUserModel)
 
                 if (status == 2) {
+                    gotoMatchQuestionScreen(mSwipeUserModel)
+
                     Toast.makeText(
                         this@SwipeMainActivity,
                         "Congratulation, You matched",

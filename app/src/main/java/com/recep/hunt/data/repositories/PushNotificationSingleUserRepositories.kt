@@ -6,12 +6,7 @@ import com.recep.hunt.domain.entities.BeginHuntLocation
 import com.recep.hunt.domain.entities.BeginHuntLocationParams
 import io.reactivex.Single
 
-class BeginHuntRepositories(private val apiInterface: ApiInterface,private val token:String) {
-
-    fun callSendBeginHuntLocationAPI(beginHuntLocationParams: BeginHuntLocationParams):Single<BeginHuntLocation>{
-        return apiInterface.sendUserHuntBeginLocation(beginHuntLocationParams).map { res->res.payload }
-    }
-
+class PushNotificationSingleUserRepositories(private val apiInterface: ApiInterface) {
 
     fun callPushNotificationSingleUsernAPI(params: PushNotificationSingleUserParams):Single<Any>{
         return apiInterface.pushNotificationSingleUser(params).map { res->res.payload }

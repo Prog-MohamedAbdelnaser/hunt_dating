@@ -6,8 +6,10 @@ import com.recep.hunt.domain.entities.BeginHuntLocation
 import com.recep.hunt.domain.entities.BeginHuntLocationParams
 import io.reactivex.Single
 
-class BeginHuntUseCases(private val beginHuntRepositories: BeginHuntRepositories) :UseCase<BeginHuntLocationParams,Single<BeginHuntLocation>>{
+class BeginHuntLocationUseCases(private val beginHuntRepositories: BeginHuntRepositories) :UseCase<BeginHuntLocationParams,Single<BeginHuntLocation>>{
     override fun execute(param: BeginHuntLocationParams?): Single<BeginHuntLocation> {
         return beginHuntRepositories.callSendBeginHuntLocationAPI(param!!)
     }
+
+
 }

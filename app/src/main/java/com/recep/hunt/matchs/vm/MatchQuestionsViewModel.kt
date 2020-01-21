@@ -8,21 +8,18 @@ import androidx.lifecycle.ViewModel
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.domain.entities.BeginHuntLocation
 import com.recep.hunt.domain.entities.BeginHuntLocationParams
-import com.recep.hunt.domain.usecases.BeginHuntUseCases
+import com.recep.hunt.domain.usecases.BeginHuntLocationUseCases
 import com.recep.hunt.features.common.CommonState
-import com.recep.hunt.model.randomQuestion.QuestionData
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.utilis.SharedPrefrenceManager
-import com.recep.hunt.utilis.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_match_questionnaire.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MatchQuestionsViewModel(private val beginHuntUseCases: BeginHuntUseCases): ViewModel() {
+class MatchQuestionsViewModel(private val beginHuntLocationUseCases: BeginHuntLocationUseCases): ViewModel() {
 
     private val disposables=CompositeDisposable()
 
@@ -51,7 +48,7 @@ class MatchQuestionsViewModel(private val beginHuntUseCases: BeginHuntUseCases):
     }
 
     fun sendHuntLocation(beginHuntLocationParams: BeginHuntLocationParams){
-        disposables.add(beginHuntUseCases.execute(beginHuntLocationParams)
+        disposables.add(beginHuntLocationUseCases.execute(beginHuntLocationParams)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { sendHuntLocationMutableLiveData.value=CommonState.LoadingShow }

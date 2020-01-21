@@ -1,5 +1,6 @@
 package com.recep.hunt.api
 
+import com.recep.hunt.domain.entities.PushNotificationSingleUserParams
 import com.recep.hunt.domain.entities.APIResponse
 import com.recep.hunt.domain.entities.BeginHuntLocation
 import com.recep.hunt.domain.entities.BeginHuntLocationParams
@@ -138,5 +139,9 @@ interface ApiInterface {
     */
     @POST("/api/user-hunt-begin")
     fun sendUserHuntBeginLocation(@Body beginHuntLocationParams: BeginHuntLocationParams): Single<APIResponse<BeginHuntLocation>>
+
+    @POST("/api/push-notification-single-user")
+    fun pushNotificationSingleUser(@Body pushNotificationSingleUserParams: PushNotificationSingleUserParams): Single<APIResponse<Any>>
+
 
 }
