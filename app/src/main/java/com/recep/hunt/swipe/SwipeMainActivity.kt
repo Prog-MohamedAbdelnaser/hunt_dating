@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
 import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.github.pwittchen.swipe.library.rx2.SwipeListener
+import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants.Companion.CLICK_ACTION_THRESHOLD
@@ -68,7 +69,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     private var storyImageView = ArrayList<ImageView>()
     private lateinit var swipe: Swipe
     private var items = ArrayList<SwipeUserModel>()
-
+    private var locationName:String?=null
     var windowwidth: Int = 0
     var screenCenter: Int = 0
     var x_cord: Int = 0
@@ -103,6 +104,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
         try {
             items = intent.getParcelableArrayListExtra("swipeUsers")
+            locationName = intent.getStringExtra(FeaturesConstants.LOCATION_OBJECT_KEY)
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -297,6 +300,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
                         if (isAClick(event.eventTime, event.downTime)) {
                             Log.e("Event_Status :->", "Only Clicked")
+                            callSwipeUserApi(items[currentUser], 2)
+
                             if (x >= screenCenter) {
                                 storyProgressViews[currentUser].skip()
                                 //  onNext()
@@ -426,6 +431,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
     private fun gotoMatchQuestionScreen(mSwipeUserModel: SwipeUserModel) {
         val intent = Intent(this, MatchQuestionnaireActivity::class.java)
         intent.putExtra("swipeUsers", mSwipeUserModel)
+        intent.putExtra(FeaturesConstants.LOCATION_OBJECT_KEY, locationName)
+
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
@@ -463,6 +470,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                 }
 
                 val status = response.body()?.status
+                gotoMatchQuestionScreen(mSwipeUserModel)
 
                 if (status == 2) {
                     Toast.makeText(
@@ -470,7 +478,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                         "Congratulation, You matched",
                         Toast.LENGTH_LONG
                     ).show()
-                    gotoMatchQuestionScreen(mSwipeUserModel)
                 }
 
             }

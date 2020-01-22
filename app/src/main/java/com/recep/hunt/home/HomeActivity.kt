@@ -51,6 +51,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.orhanobut.logger.Logger
+import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.filters.FilterBottomSheetDialog
@@ -984,10 +985,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
     fun getUsersList(location_id: String,
-                     age: String,
-                     date: String,
-                     business: String,
-                     friendship: String
+        age: String,
+        date: String,
+        business: String,
+        friendship: String,
+        location_name: String
     ) {
 
         val lat = SharedPrefrenceManager.getUserLatitude(this)
@@ -1056,18 +1058,17 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                         )
                     }
                     launchActivity<SwipeMainActivity> {
-                        putParcelableArrayListExtra(
-                            "swipeUsers",
-                            swipeUserArray
-                        )
+                        putParcelableArrayListExtra("swipeUsers", swipeUserArray)
+                        putExtra(FeaturesConstants.LOCATION_OBJECT_KEY,location_name)
+
                     }
                 } else {
-                    launchActivity<SwipeMainActivity> {
-                        putParcelableArrayListExtra(
-                            "swipeUsers",
-                            swipeUserArray
-                        )
-                    }
+                      launchActivity<SwipeMainActivity> {
+                          putParcelableArrayListExtra("swipeUsers", swipeUserArray)
+                          putExtra(FeaturesConstants.LOCATION_OBJECT_KEY,location_name)
+
+
+                      }
                     //showNoUserBottomSheet()
                 }
             }
@@ -1120,7 +1121,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 var result = response.body()?.data
                 if (result != null) {
-                    getUsersList(location_id, age, date, business, friendship)
+                    getUsersList(location_id, age, date, business, friendship,location_name)
 //                        context.launchActivity<SwipeMainActivity> {  }
                 }
             }

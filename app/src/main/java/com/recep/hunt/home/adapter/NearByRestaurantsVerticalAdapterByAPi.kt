@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.SelectLocation
@@ -13,14 +14,12 @@ import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
-import com.recep.hunt.utilis.AlertDialogUtils
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
@@ -122,7 +121,8 @@ class NearByRestaurantsVerticalAdapterByAPi(
             ) {
                 var result = response.body()?.data
                 if (result != null) {
-                    getUsersList(location_id, age, date, business, friendship)
+
+                    getUsersList(location_id, age, date, business, friendship,location_name)
 //                        context.launchActivity<SwipeMainActivity> {  }
                 }
             }
@@ -135,7 +135,8 @@ class NearByRestaurantsVerticalAdapterByAPi(
         age: String,
         date: String,
         business: String,
-        friendship: String
+        friendship: String,
+        locationName: String
     ) {
         val lat = SharedPrefrenceManager.getUserLatitude(context)
         val lang = SharedPrefrenceManager.getUserLongitude(context)
@@ -187,10 +188,9 @@ class NearByRestaurantsVerticalAdapterByAPi(
                         )
                     }
                     context.launchActivity<SwipeMainActivity> {
-                        putParcelableArrayListExtra(
-                            "swipeUsers",
-                            swipeUserArray
-                        )
+                        putParcelableArrayListExtra("swipeUsers", swipeUserArray)
+                        putExtra(FeaturesConstants.LOCATION_OBJECT_KEY, locationName)
+
                     }
                 } else {
                     Thread {
