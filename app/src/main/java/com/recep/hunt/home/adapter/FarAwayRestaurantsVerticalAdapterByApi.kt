@@ -4,13 +4,20 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.recep.hunt.R
 import com.recep.hunt.home.model.nearByRestaurantsModel.NearByRestaurantsModelResults
 import com.recep.hunt.model.nearestLocation.NearestLocationData
@@ -63,14 +70,47 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
 //                        .apply(RequestOptions.circleCropTransform())
 //                        .transform(RoundedTransformation(20, 0))
                         .placeholder(R.drawable.ic_img_location_placeholder)
+
+                        .addListener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                return false
+                            }
+
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+
+                                val imageBitmap = resource?.toBitmap()
+                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+                                imageDrawable.isCircular = true
+                                imageDrawable.cornerRadius = 16.0f
+                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
+
+                                return true
+                            }
+                        })
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 else {
                     Glide.with(context)
                         .load(R.drawable.demo_restaurant_1)
-//                        .transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image))
+                        .addListener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                return false
+                            }
+
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+
+                                val imageBitmap = resource?.toBitmap()
+                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+                                imageDrawable.isCircular = true
+                                imageDrawable.cornerRadius = 16.0f
+                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
+
+                                return true
+                            }
+                        })
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
+
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()

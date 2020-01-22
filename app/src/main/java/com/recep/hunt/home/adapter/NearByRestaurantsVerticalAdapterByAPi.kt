@@ -1,9 +1,17 @@
 package com.recep.hunt.home.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.model.SelectLocation
@@ -19,7 +27,6 @@ import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
@@ -45,7 +52,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
 
-    override fun getLayout() = R.layout.vertical_far_restaurant_list_item_layout
+    override fun getLayout() = R.layout.vertical_restaurant_list_item_layout
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.imageView9.visibility = View.VISIBLE
@@ -61,24 +68,75 @@ class NearByRestaurantsVerticalAdapterByAPi(
                     Glide.with(context)
                         .load(url)
                         .error(R.drawable.ic_img_location_placeholder)
-//                        .transform(RoundedTransformation(20, 0))
-//                        .apply(RequestOptions.circleCropTransform())
-                        .placeholder(R.drawable.ic_img_location_placeholder)
-                        .into(viewHolder.itemView.restaurant_vertical_list_image)
+                        .placeholder(R.drawable.ic_img_location_placeholder).addListener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                val imageBitmap = resource?.toBitmap()
+                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+                                imageDrawable.isCircular = true
+                                imageDrawable.cornerRadius = 16.0f
+                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
+
+                                return true
+                            }
+
+                        }).into(viewHolder.itemView.restaurant_vertical_list_image)
+
                 } else {
                     //todo test converted to glide
                     Glide.with(context)
                         .load(R.drawable.ic_img_location_placeholder)
-                        //.transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image))
-                        .into(viewHolder.itemView.restaurant_vertical_list_image)
+                        .addListener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                val imageBitmap = resource?.toBitmap()
+                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+                                imageDrawable.isCircular = true
+                                imageDrawable.cornerRadius = 16.0f
+                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
+
+                                return true
+                            }
+
+                        }).into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
-                viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
-
+                //viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
                 viewHolder.itemView.imageView9.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
+                }
+                viewHolder.itemView.setOnClickListener {
+                    viewHolder.itemView.imageView9.performClick()
                 }
 
 
