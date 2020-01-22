@@ -202,7 +202,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
     }
 
     private fun createHuntLocation(locationName: String): BeginHuntLocationParams {
-        return BeginHuntLocationParams(mSwipeUserModel?.id!!,locationName,placeName!!)
+        return BeginHuntLocationParams(mSwipeUserModel?.id!!,placeName!!,locationName)
     }
 
     fun gotToSixStep(){
