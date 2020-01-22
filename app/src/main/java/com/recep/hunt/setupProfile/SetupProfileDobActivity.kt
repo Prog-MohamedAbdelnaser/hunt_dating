@@ -96,11 +96,11 @@ class SetupProfileDobActivity : BaseActivity() {
 
                 val age = getAge(parsedDate)
 
-                if (age < 18) {
+                if (age < MAX_AGE) {
                     Helpers.showErrorSnackBar(
                         this@SetupProfileDobActivity,
                         resources.getString(R.string.complete_form),
-                        "Age must be grater than 18"
+                        "Age must be grater than 17"
                     )
                 } else {
                     val formatedDate = getFormattedDate(parsedDate)
@@ -130,7 +130,7 @@ class SetupProfileDobActivity : BaseActivity() {
     private fun createMaxDate(): Calendar{
         val calendar =createMinDate()
         calendar.add(Calendar.YEAR,-MAX_AGE )
-        calendar.add(Calendar.DAY_OF_MONTH, 7)
+     //   calendar.add(Calendar.DAY_OF_MONTH, 7)
         return calendar
     }
 
@@ -175,14 +175,12 @@ class SetupProfileDobActivity : BaseActivity() {
         val month = dob.get(Calendar.MONTH)
         val day = dob.get(Calendar.DAY_OF_MONTH)
 
-        dob.set(year, month + 1, day)
-
+        dob.set(year, month , day)
         var age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
 
         if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
             age--
         }
-
 
 
         return age
