@@ -49,6 +49,7 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.login.adapter.SocialLoginChatReceivedAdapter
@@ -700,11 +701,11 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                 response: Response<isEmailRegisterResponse>
             ) {
                 response.body()?.let {
-                    if (!it.status) {
+                    if (it.status !=APIUtils.SUCCESS_STATUS_CODE) {
                         Toast.makeText(this@SocialLoginActivity, it.message, Toast.LENGTH_SHORT)
                             .show()
                     }
-                    isEmailAlreadyUse = it.status
+                    isEmailAlreadyUse = it.status!=APIUtils.SUCCESS_STATUS_CODE
 
                 }
             }

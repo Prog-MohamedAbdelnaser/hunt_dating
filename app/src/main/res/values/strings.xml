@@ -464,5 +464,6 @@
     <string name="timeout_error_message">Looks like the server is taking too long to respond, please try again in sometime
     </string>
     <string name="invalid_length">Invalid Length</string>
+    <string name="default_notification_channel_id" >com.recep.hunt.notification</string>
 </resources>
 
