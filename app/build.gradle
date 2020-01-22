@@ -129,6 +129,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2_version"
+
 
     //Okhttp3
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
@@ -178,6 +180,12 @@ dependencies {
 
     //androidx viewmodel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+
+    // rx
+     def rxKotlin = '2.3.0'
+     def rxAndroid = '2.1.1'
+
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
 
 
 }

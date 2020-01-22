@@ -32,9 +32,8 @@ object Utils {
                         val status = mJsonObject.optString("status")
                         val message = mJsonObject.optString("message")
                         if (status == "9") {
-                            val mIntent = Intent("ACTION_SESSION_EXPIRE")
-                            mIntent.putExtra("INTENT_MESSAGE",message)
-                            context.sendBroadcast(mIntent)
+
+                            sendExpireSessionToBroascast(message,context)
                             return true
                         }
                     }catch (e: JSONException){
@@ -46,6 +45,12 @@ object Utils {
         }
 
         return false
+    }
+
+    fun sendExpireSessionToBroascast(message:String,context: Context) {
+        val mIntent = Intent("ACTION_SESSION_EXPIRE")
+        mIntent.putExtra("INTENT_MESSAGE",message)
+        context.sendBroadcast(mIntent)
     }
 
     fun hideKeyboard(mActivity: Activity?){
