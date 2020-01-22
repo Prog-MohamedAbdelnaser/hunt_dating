@@ -20,6 +20,7 @@ class InfoYouProvideActivity : AppCompatActivity() {
     private fun init(){
         setSupportActionBar(info_you_provide_toolbar)
         txtEmail.text=SharedPrefrenceManager.getUserEmail(this@InfoYouProvideActivity)
+
         full_name_next_btn.setOnClickListener {
             finish()
         }

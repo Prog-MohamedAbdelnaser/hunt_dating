@@ -16,6 +16,7 @@ import com.kaopiz.kprogresshud.KProgressHUD
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.constants.APIUtils
 import com.recep.hunt.model.CheckUserEmail
 import com.recep.hunt.model.isEmailRegister.isEmailRegisterResponse
 import com.recep.hunt.utilis.*
@@ -142,7 +143,7 @@ class SetupProfileEmailActivity : BaseActivity(), View.OnClickListener {
             ) {
                 dialog.dismiss()
                 response.body()?.let {
-                    emailCheckStatus.postValue(it.status)
+                    emailCheckStatus.postValue(it.status==APIUtils.SUCCESS_STATUS_CODE)
 
                 }
             }
