@@ -58,7 +58,19 @@ class Helpers {
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f)
         }
+
+        fun createProgressDialog( context: Context, title:String): KProgressHUD {
+            return KProgressHUD.create(context)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(title)
+                .setCancellable(false)
+                .setBackgroundColor(context.resources.getColor(R.color.transparent_black))
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f)
+        }
+
         fun isInternetConnection(context: Context): Boolean {
+
             val cn =  context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val nf = cn.activeNetworkInfo
             val statusInternet: Boolean
