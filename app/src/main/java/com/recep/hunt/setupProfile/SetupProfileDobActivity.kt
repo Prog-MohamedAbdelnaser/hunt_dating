@@ -26,6 +26,7 @@ class SetupProfileDobActivity : BaseActivity() {
     private var dob = ""
     private lateinit var dobTextView: TextView
     private lateinit var calendar: Calendar
+    val MAX_AGE=18
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_dob)
@@ -41,7 +42,9 @@ class SetupProfileDobActivity : BaseActivity() {
         show_dob_dialog_btn.setOnClickListener {
             showDatePicker()
         }
-
+        dob_layout.setOnClickListener {
+            show_dob_dialog_btn.performClick()
+        }
         setup_profile_dob_next_btn.setOnClickListener {
             moveToUploadPicture()
         }
@@ -82,18 +85,14 @@ class SetupProfileDobActivity : BaseActivity() {
 
             customView {
                 verticalLayout {
-                    datePicker = datePicker {
-                        maxDate = System.currentTimeMillis()
-
-                    }
+                    datePicker = datePicker { maxDate = createMaxDate().timeInMillis }
                 }
             }
 
             yesButton {
                 //dd/M/yyyy parsed date format
 
-                val parsedDate =
-                    "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
+                val parsedDate = "${datePicker.dayOfMonth}/${datePicker.month + 1}/${datePicker.year}"
 
                 val age = getAge(parsedDate)
 
@@ -126,6 +125,18 @@ class SetupProfileDobActivity : BaseActivity() {
             noButton { }
 
         }.show()
+    }
+
+    private fun createMaxDate(): Calendar{
+        val calendar =createMinDate()
+        calendar.add(Calendar.YEAR,-MAX_AGE )
+        calendar.add(Calendar.DAY_OF_MONTH, 7)
+        return calendar
+    }
+
+    private fun createMinDate(): Calendar {
+        val calendar =Calendar.getInstance()
+        return calendar
     }
 
     private fun getFormattedDate(
