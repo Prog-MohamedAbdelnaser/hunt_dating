@@ -462,5 +462,7 @@
     <string name="loading">Loading...</string>
     <string name="check_your_network_connection_and_try_again">Check your network connection and try again</string>
     <string name="timeout_error_message">Looks like the server is taking too long to respond, please try again in sometime
-    </string></resources>
+    </string>
+    <string name="invalid_length">Invalid Length</string>
+</resources>
 

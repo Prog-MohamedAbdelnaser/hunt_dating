@@ -30,6 +30,7 @@ import com.recep.hunt.model.AnswerRandomQuestions
 import com.recep.hunt.model.randomQuestion.QuestionData
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import de.hdodenhof.circleimageview.CircleImageView
@@ -84,7 +85,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
     private val questionAdapter by lazy { QuestionsAdapter() }
 
-    private var locationName:String?=null
+    private var placeName:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,7 +139,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
             }
         }
 
-        locationName=getLocationNameFromArgs()
+        placeName=getLocationNameFromArgs()
 
         initUI()
 
@@ -168,8 +169,10 @@ class MatchQuestionnaireActivity : BaseActivity() {
         }
 
         btnAddLocation.setOnClickListener {
-            addLocation(edtEnterLocation.text.toString())
-            edtEnterLocation.setText("")
+            if (edtEnterLocation.text.toString().length>3) {
+                addLocation(edtEnterLocation.text.toString())
+                edtEnterLocation.setText("")
+            }else Helpers.showErrorSnackBar(this,getString(R.string.notice),getString(R.string.invalid_length))
         }
 
         btnCancelMeet.setOnClickListener {
@@ -199,7 +202,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
     }
 
     private fun createHuntLocation(locationName: String): BeginHuntLocationParams {
-        return BeginHuntLocationParams(mSwipeUserModel?.id!!,locationName,locationName)
+        return BeginHuntLocationParams(mSwipeUserModel?.id!!,placeName!!,locationName)
     }
 
     fun gotToSixStep(){
