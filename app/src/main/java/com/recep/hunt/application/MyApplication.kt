@@ -18,12 +18,15 @@ import com.android.volley.toolbox.Volley
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
+import com.recep.hunt.data.sources.remote.di.remoteModule
 import com.recep.hunt.login.WelcomeScreenActivity
 import com.recep.hunt.matchs.di.matchQuestionsModule
+import com.recep.hunt.swipe.di.swipModule
 import com.recep.hunt.utilis.AlertDialogUtils
 import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.OkListener
 import com.recep.hunt.utilis.SharedPrefrenceManager
+import com.rent.client.di.applicationModule
 import org.acra.ReportingInteractionMode
 import org.acra.annotation.ReportsCrashes
 import org.koin.android.ext.android.startKoin
@@ -73,7 +76,7 @@ class MyApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        startKoin(this, listOf(matchQuestionsModule))
+        startKoin(this, listOf(matchQuestionsModule,remoteModule,applicationModule, swipModule))
         /** logger initialization **/
         Logger.addLogAdapter(AndroidLogAdapter())
 

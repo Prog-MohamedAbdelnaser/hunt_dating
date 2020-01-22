@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.recep.hunt.api.ApiClient;
+import com.recep.hunt.constants.APIUtils;
 import com.recep.hunt.constants.Constants;
 import com.recep.hunt.login.ContinueAsSocialActivity;
 import com.recep.hunt.login.model.UserSocialModel;
@@ -478,12 +479,12 @@ public class InstagramApp {
 
             @Override
             public void onResponse(Call<isEmailRegisterResponse> call, Response<isEmailRegisterResponse> response) {
-                if(response.body().getStatus())
+                if(response.body().getStatus() == APIUtils.SUCCESS_STATUS_CODE)
                 {
                     Toast.makeText(getApplicationContext(),response.body().getMessage(),Toast.LENGTH_LONG).show();
 
                 }
-                 result=response.body().getStatus();
+                 result=response.body().getStatus()== APIUtils.SUCCESS_STATUS_CODE;
             }
 
             @Override

@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -36,6 +37,24 @@ object ApiClient {
 
     val getClient: ApiInterface by lazy {
         retrofit.create(ApiInterface::class.java)
+    }
+
+
+    val retrofitRx: Retrofit by lazy {
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(builder)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+    }
+
+    val getClientRx: ApiInterface by lazy {
+        retrofitRx.create(ApiInterface::class.java)
     }
 //        get() {
 

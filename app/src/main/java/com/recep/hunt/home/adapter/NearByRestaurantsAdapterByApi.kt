@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.facebook.share.Share
 import com.orhanobut.logger.Logger
+import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import org.jetbrains.anko.find
 import com.recep.hunt.api.ApiClient
@@ -44,7 +45,7 @@ class NearByRestaurantsAdapterByApi(
 ) : RecyclerView.Adapter<NearByRestaurantsAdapterByApi.NearByRestViewHolder>() {
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-
+    private var nearbyLocation:NearestLocationData?=null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NearByRestViewHolder {
         return NearByRestViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -89,6 +90,7 @@ class NearByRestaurantsAdapterByApi(
 //                        .apply(RequestOptions.circleCropTransform())
                     .placeholder(R.drawable.ic_img_location_placeholder)
                     .into(restaurantImage)
+
 
                 restaurantName.text = model.name
                 restaurantDetail.text = model.address
@@ -222,10 +224,9 @@ class NearByRestaurantsAdapterByApi(
 //                            }catch (ex : Exception){}
                         }
                         context.launchActivity<SwipeMainActivity> {
-                            putParcelableArrayListExtra(
-                                "swipeUsers",
-                                swipeUserArray
-                            )
+                            putParcelableArrayListExtra("swipeUsers", swipeUserArray)
+                            Log.i("SwipeMainActivity","LOCATION_OBJECT_KEY ${item!![adapterPosition].name}")
+                            putExtra(FeaturesConstants.LOCATION_OBJECT_KEY,item!![adapterPosition].name)
                         }
                         val parent = context as Activity
 //                        parent.finish()
