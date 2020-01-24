@@ -187,5 +187,6 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
 
+    implementation 'com.koushikdutta.ion:ion:1.1.1'
 
 }

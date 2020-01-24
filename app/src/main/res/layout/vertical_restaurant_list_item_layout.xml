@@ -64,6 +64,47 @@
                 app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_user_image"
                 app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
 
+
+
+
+
+        <ImageView
+                android:id="@+id/snear_vertical_rest_distance_image"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:tint="@color/colorAccent"
+                android:src="@drawable/ic_far_away_distance"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView_user_numbers"
+                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+
+        <TextView
+                android:id="@+id/textView_distance_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/snear_rest_user_image"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="100 M"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_distance_image"
+                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+
+
+
+
         <ImageView
                 android:id="@+id/imageView9"
                 android:layout_width="42dp"

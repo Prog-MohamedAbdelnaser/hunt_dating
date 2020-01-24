@@ -1,6 +1,7 @@
 package com.recep.hunt.home.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
@@ -22,13 +23,13 @@ import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
+import com.recep.hunt.utilis.Helpers.Companion.createSclead
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
-import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
@@ -38,6 +39,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.math.roundToInt
+
+
+
 
 
 /**
@@ -70,12 +74,9 @@ class NearByRestaurantsVerticalAdapterByAPi(
                         .load(url)
                         .error(R.drawable.ic_img_location_placeholder)
                         .placeholder(R.drawable.ic_img_location_placeholder).addListener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),viewHolder.itemView.restaurant_vertical_list_image)
+
                                 return false
                             }
 
@@ -86,53 +87,37 @@ class NearByRestaurantsVerticalAdapterByAPi(
                                 dataSource: DataSource?,
                                 isFirstResource: Boolean
                             ): Boolean {
-                                val imageBitmap = resource?.toBitmap()
-                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
-                                imageDrawable.isCircular = true
-                                imageDrawable.cornerRadius = 16.0f
-                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
-
+                               refactorImage(resource,viewHolder.itemView.restaurant_vertical_list_image)
                                 return true
                             }
 
-                        }).into(viewHolder.itemView.restaurant_vertical_list_image)
+                        }).submit()
 
                 } else {
                     //todo test converted to glide
                     Glide.with(context)
                         .load(R.drawable.ic_img_location_placeholder)
                         .addListener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),viewHolder.itemView.restaurant_vertical_list_image)
+
                                 return false
                             }
 
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
                                 dataSource: DataSource?,
                                 isFirstResource: Boolean
                             ): Boolean {
-                                val imageBitmap = resource?.toBitmap()
-                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
-                                imageDrawable.isCircular = true
-                                imageDrawable.cornerRadius = 16.0f
-                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
-
+                                refactorImage(resource,viewHolder.itemView.restaurant_vertical_list_image)
                                 return true
                             }
 
-                        }).into(viewHolder.itemView.restaurant_vertical_list_image)
+                        }).submit()
                 }
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
-                //viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
+                viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
                 viewHolder.itemView.imageView9.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
                 }
@@ -147,6 +132,16 @@ class NearByRestaurantsVerticalAdapterByAPi(
 
 
         }
+
+    }
+
+    private fun refactorImage(resource: Drawable?,imageView: ImageView) {
+        var imageBitmap = resource?.toBitmap()
+        imageBitmap =createSclead(imageBitmap!!,imageView)
+        val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+        imageDrawable.isCircular = true
+        imageDrawable.cornerRadius = 16.0f
+       imageView.setImageDrawable(imageDrawable)
 
     }
 

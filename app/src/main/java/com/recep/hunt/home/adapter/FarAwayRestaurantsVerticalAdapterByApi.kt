@@ -25,7 +25,6 @@ import com.recep.hunt.utilis.Helpers
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.vertical_far_restaurant_list_item_layout.view.*
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
@@ -73,42 +72,32 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
 
                         .addListener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),viewHolder.itemView.restaurant_vertical_list_image)
+
                                 return false
                             }
 
                             override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-
-                                val imageBitmap = resource?.toBitmap()
-                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
-                                imageDrawable.isCircular = true
-                                imageDrawable.cornerRadius = 16.0f
-                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
-
+                                refactorImage(resource,viewHolder.itemView.restaurant_vertical_list_image)
                                 return true
                             }
-                        })
-                        .into(viewHolder.itemView.restaurant_vertical_list_image)
+                        }) .submit()
                 }
                 else {
                     Glide.with(context)
                         .load(R.drawable.demo_restaurant_1)
                         .addListener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),viewHolder.itemView.restaurant_vertical_list_image)
                                 return false
                             }
 
                             override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-
-                                val imageBitmap = resource?.toBitmap()
-                                val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
-                                imageDrawable.isCircular = true
-                                imageDrawable.cornerRadius = 16.0f
-                                viewHolder.itemView.restaurant_vertical_list_image.setImageDrawable(imageDrawable)
-
+                                refactorImage(resource,viewHolder.itemView.restaurant_vertical_list_image)
                                 return true
                             }
                         })
-                        .into(viewHolder.itemView.restaurant_vertical_list_image)
+                        .submit()
                 }
 
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
@@ -139,6 +128,16 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
 
         }
 
+
+    }
+
+    private fun refactorImage(resource: Drawable?,imageView: ImageView) {
+        var imageBitmap = resource?.toBitmap()
+        imageBitmap = Helpers.createSclead(imageBitmap!!, imageView)
+        val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+        imageDrawable.isCircular = true
+        imageDrawable.cornerRadius = 16.0f
+        imageView.setImageDrawable(imageDrawable)
 
     }
 }

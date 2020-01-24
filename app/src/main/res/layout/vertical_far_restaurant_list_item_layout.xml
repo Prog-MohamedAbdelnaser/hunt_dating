@@ -21,7 +21,7 @@
 
         <ImageView
                 android:id="@+id/restaurant_vertical_list_image"
-                android:layout_width="90dp"
+                android:layout_width="92dp"
                 android:layout_height="0dp"
                 tools:src="@drawable/demo_restaurant_1"
                 android:adjustViewBounds="true"
