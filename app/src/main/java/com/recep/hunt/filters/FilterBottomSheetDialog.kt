@@ -130,52 +130,69 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         }
         maleImageView.setOnClickListener {
             interestedIn = "Male"
-            changeGenderBackgrounds(Constants.MALE)
-
+            var interstedInMale=""
             when (viewPager.currentItem) {
                 0 -> {
-                    lookingForDate = Constants.MALE
+                    lookingForDate = if (lookingForDate == Constants.MALE) "" else Constants.MALE
+                    interstedInMale  =lookingForDate
                 }
 
                 1 -> {
-                    lookingForFriendship = Constants.MALE
+                    lookingForFriendship = if (lookingForFriendship ==Constants.MALE ) "" else Constants.MALE
+                    interstedInMale= lookingForFriendship
                 }
                 2 -> {
-                    lookingForBusiness = Constants.MALE
+                    lookingForBusiness = if (lookingForBusiness== Constants.MALE) "" else Constants.MALE
+                    interstedInMale=lookingForBusiness
                 }
             }
+
+            changeGenderBackgrounds(interstedInMale)
+
         }
         feMaleImageView.setOnClickListener {
             interestedIn = "Female"
-            changeGenderBackgrounds(Constants.FEMALE)
+            var interstedInFemale=""
             when (viewPager.currentItem) {
                 0 -> {
-                    lookingForDate = Constants.FEMALE
+                    lookingForDate = if (lookingForDate == Constants.FEMALE) "" else Constants.FEMALE
+                    interstedInFemale  =lookingForDate
                 }
 
                 1 -> {
-                    lookingForFriendship = Constants.FEMALE
+                    lookingForFriendship = if (lookingForFriendship ==Constants.FEMALE ) "" else Constants.FEMALE
+                    interstedInFemale= lookingForFriendship
                 }
                 2 -> {
-                    lookingForBusiness = Constants.FEMALE
+                    lookingForBusiness = if (lookingForBusiness== Constants.FEMALE) "" else Constants.FEMALE
+                    interstedInFemale=lookingForBusiness
                 }
             }
+
+            changeGenderBackgrounds(interstedInFemale)
         }
         bothImageView.setOnClickListener {
             interestedIn = "Both"
-            changeGenderBackgrounds(Constants.BOTH)
+            var interstedInBoth = ""
             when (viewPager.currentItem) {
                 0 -> {
-                    lookingForDate = Constants.BOTH
+                    lookingForDate = if (lookingForDate == Constants.BOTH) "" else Constants.BOTH
+                    interstedInBoth = lookingForDate
                 }
 
                 1 -> {
-                    lookingForFriendship = Constants.BOTH
+                    lookingForFriendship =
+                        if (lookingForFriendship == Constants.BOTH) "" else Constants.BOTH
+                    interstedInBoth = lookingForFriendship
                 }
                 2 -> {
-                    lookingForBusiness = Constants.BOTH
+                    lookingForBusiness =
+                        if (lookingForBusiness == Constants.BOTH) "" else Constants.BOTH
+                    interstedInBoth = lookingForBusiness
                 }
             }
+            changeGenderBackgrounds(interstedInBoth)
+
         }
 
 
@@ -206,6 +223,7 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
             SharedPrefrenceManager.setUserInterestedIn(v.context, lookingForBusiness, "Business")
             SharedPrefrenceManager.setUserInterestedAge(v.context, leftAge.toString(), rightAge.toString())
             dismiss()
+            mBottomSheetListener?.onFilterBottomSheetClickApplyListener()
 
         }
 
@@ -263,8 +281,19 @@ class FilterBottomSheetDialog(val ctx: Context) : BottomSheetDialogFragment() {
         return viewPager.currentItem + i
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FilterBottomSheetListener){
+            mBottomSheetListener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mBottomSheetListener= null
+    }
     interface FilterBottomSheetListener{
-        fun onOptionClick(text: String)
+        fun onFilterBottomSheetClickApplyListener()
     }
 
 
