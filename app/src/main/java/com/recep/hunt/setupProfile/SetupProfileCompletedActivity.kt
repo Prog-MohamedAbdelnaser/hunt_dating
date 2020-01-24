@@ -113,7 +113,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
 
         user_completed_profile_name.text = "$firstName $lastName"
     }
-
+/*
     private fun insertUserIntoDb() {
         val firstName = SharedPrefrenceManager.getUserFirstName(this)
         val lastName = SharedPrefrenceManager.getUserLastName(this)
@@ -152,7 +152,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
             val lat = SharedPrefrenceManager.getUserLatitude(context)
             val lang = SharedPrefrenceManager.getUserLongitude(context)
             val device_type = "android"
-            val device_id = "1"
+            val device_id =
             val device_token = SharedPrefrenceManager.getDeviceToken(context)
             val for_date = SharedPrefrenceManager.getUserInterestedIn(context)
             val for_bussiness = SharedPrefrenceManager.getUserInterestedIn(context)
@@ -355,6 +355,7 @@ class SetupProfileCompletedActivity : AppCompatActivity() {
         }
     }
 
+*/
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         finish()

@@ -18,6 +18,7 @@ enum class PersistenceKeys {
     IsFromSocial,
     UserMobileNumber,
     DeviceToken,
+    DEVICE_ID,
     UserFirstName,
     UserLastName,
     UserGender,
@@ -179,6 +180,14 @@ object SharedPrefrenceManager {
         return sharedPreferences.getBoolean(PersistenceKeys.IsFromSocial.toString(), false)
     }
 
+
+    //DeviceID
+    fun setDeviceID(context: Context, value: String) {
+        setSharedPrefs(context, PersistenceKeys.DEVICE_ID.toString(), value)
+    }
+
+    fun getDeviceID(context: Context) =
+        getSharePrefs(context, PersistenceKeys.DEVICE_ID.toString())
 
     //DeviceToken
     fun setDeviceToken(context: Context, value: String) {

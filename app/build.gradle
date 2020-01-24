@@ -186,6 +186,11 @@ dependencies {
      def rxAndroid = '2.1.1'
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
+    //rxpermissions
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 
+
+
+    implementation 'com.koushikdutta.ion:ion:1.1.1'
 
 }
