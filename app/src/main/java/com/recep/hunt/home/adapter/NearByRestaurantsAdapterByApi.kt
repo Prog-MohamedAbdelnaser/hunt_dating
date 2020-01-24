@@ -87,8 +87,7 @@ class NearByRestaurantsAdapterByApi(
 //
 //                }
                 //                    val photoRefrence = model.photos[0].photoReference
-                val url =
-                    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+                val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 
                 //todo test converted from glide
                 Glide.with(context)
@@ -102,20 +101,16 @@ class NearByRestaurantsAdapterByApi(
                             model: Any?,
                             target: Target<Drawable>?,
                             isFirstResource: Boolean): Boolean {
+                            refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),restaurantImage)
+
                             return false
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            val imageBitmap = resource?.toBitmap()
-                            val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
-                            imageDrawable.isCircular = true
-                            imageDrawable.cornerRadius = 16.0f
-                            restaurantImage.setImageDrawable(imageDrawable)
-
+                            refactorImage(resource,restaurantImage)
                             return true
                         }
-                    })
-                    .into(restaurantImage)
+                    }).submit()
 
 
                 restaurantName.text = model.name
@@ -270,6 +265,17 @@ class NearByRestaurantsAdapterByApi(
                 }
             })
         }
+
+    }
+
+    private fun refactorImage(resource: Drawable?,imageView: ImageView) {
+        var imageBitmap = resource?.toBitmap()
+        imageBitmap = Helpers.createSclead(imageBitmap!!, imageView.width,imageView.height)
+        val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+        imageDrawable.isCircular = true
+        imageDrawable.cornerRadius = 16.0f
+        imageView.setImageDrawable(imageDrawable)
+
 
     }
 }

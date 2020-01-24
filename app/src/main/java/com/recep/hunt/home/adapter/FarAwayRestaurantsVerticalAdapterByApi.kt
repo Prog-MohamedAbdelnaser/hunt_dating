@@ -133,7 +133,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
 
     private fun refactorImage(resource: Drawable?,imageView: ImageView) {
         var imageBitmap = resource?.toBitmap()
-        imageBitmap = Helpers.createSclead(imageBitmap!!, imageView)
+        imageBitmap = Helpers.createSclead(imageBitmap!!, 500,400)
         val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
         imageDrawable.isCircular = true
         imageDrawable.cornerRadius = 16.0f

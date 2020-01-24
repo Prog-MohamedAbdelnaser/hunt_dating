@@ -137,7 +137,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
 
     private fun refactorImage(resource: Drawable?,imageView: ImageView) {
         var imageBitmap = resource?.toBitmap()
-        imageBitmap =createSclead(imageBitmap!!,imageView)
+        imageBitmap =createSclead(imageBitmap!!,500,400)
         val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
         imageDrawable.isCircular = true
         imageDrawable.cornerRadius = 16.0f

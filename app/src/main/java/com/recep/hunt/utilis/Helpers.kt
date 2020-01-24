@@ -50,9 +50,8 @@ class Helpers {
     companion object{
         fun createSclead(
             bitmap: Bitmap,
-            restaurantVerticalListImage: ImageView
-        ): Bitmap {
-            return Bitmap.createScaledBitmap(bitmap,500,400, true)
+            width:Int,height:Int): Bitmap {
+            return Bitmap.createScaledBitmap(bitmap,width,height, true)
         }
         fun showDialog(activity: Activity, context: Context, title:String): KProgressHUD {
             return KProgressHUD.create(activity)
