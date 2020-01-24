@@ -134,7 +134,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         searchTextView.text = ""
     }
 
-    override fun onOptionClick(text: String) {
+    override fun onFilterBottomSheetClickApplyListener() {
+
+        nearestPlaces(latitude,longitude)
     }
 
     private lateinit var mMap: GoogleMap
