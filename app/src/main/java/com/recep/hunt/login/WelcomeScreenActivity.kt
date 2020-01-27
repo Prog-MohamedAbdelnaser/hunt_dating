@@ -198,7 +198,7 @@ class WelcomeScreenActivity : AppCompatActivity() {
         )
         user_number_edittext.requestFocus()
         //  my_scroll_view.scrollToBottom()
-         swipe = Swipe(100, 100)
+        swipe = Swipe(100, 100)
         swipe.setListener(object : SwipeListener {
             override fun onSwipedUp(event: MotionEvent?): Boolean {
                 return false
@@ -285,17 +285,16 @@ class WelcomeScreenActivity : AppCompatActivity() {
     }
 
     private fun checkPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
+        if (checkPermession(android.Manifest.permission.ACCESS_FINE_LOCATION)||
+            checkPermession(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)||
+            checkPermession(android.Manifest.permission.RECORD_AUDIO)||
+            checkPermession(android.Manifest.permission.READ_PHONE_STATE)) {
+            ActivityCompat.requestPermissions(this,
                 arrayOf(
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.RECORD_AUDIO
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.READ_PHONE_STATE
                 ),
                 TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE
             )
@@ -303,6 +302,11 @@ class WelcomeScreenActivity : AppCompatActivity() {
         }
     }
 
+    fun checkPermession(string: String):Boolean{
+        val isGranted=ActivityCompat.checkSelfPermission(this,string) != PackageManager.PERMISSION_GRANTED
+        Log.i("checkPermession","Permession $isGranted :  $string")
+        return isGranted
+    }
 
     override fun onBackPressed() {
         finish()
