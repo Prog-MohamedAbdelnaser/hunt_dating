@@ -3,6 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@android:color/transparent"
         android:layout_height="match_parent"
         app:cardElevation="0dp">
 
@@ -23,10 +24,9 @@
                 android:id="@+id/like_dislike_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0"
+                tools:src="@drawable/swipe_like"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/swipe_like" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/return_home_layout"
@@ -252,7 +252,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="75%"
+                        tools:text="75%"
                         android:textColor="@color/colorProgressbar"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="@+id/match_status_progressBar"

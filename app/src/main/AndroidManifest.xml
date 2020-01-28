@@ -3,7 +3,6 @@
         xmlns:dist="http://schemas.android.com/apk/distribution"
         xmlns:tools="http://schemas.android.com/tools"
         package="com.recep.hunt">
-
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -42,6 +41,10 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity
+                android:name=".swipe.activities.SwipProfilesActivity"
+                android:label="@string/title_activity_swip_profiles"
+                android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".matchs.MatchQuestionnaireActivity" />
         <activity android:name=".matchs.LetsMeetActivity" />
         <activity android:name=".payment.TrasactionDone" />
@@ -130,21 +133,11 @@
                 android:name=".utilis.location.EnableLocationServiceSettingActivity"
                 android:launchMode="singleTask"
                 android:screenOrientation="portrait"
-                android:theme="@style/Theme.AppCompat.Translucent" />
-
-
-
-
-
-
-
-
-        <!--     fcm          -->
+                android:theme="@style/Theme.AppCompat.Translucent" /> <!-- fcm -->
         <service
                 android:name=".firebaseHelper.FirebaseInstanceClass"
                 android:stopWithTask="false"
-                tools:ignore="ExportedService"
-                >
+                tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -153,7 +146,6 @@
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@mipmap/ic_launcher" />
-
         <!--
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
@@ -163,11 +155,7 @@
                 android:resource="@color/colorAccent" />
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="@string/default_notification_channel_id" />
-
-        <!--************************************* -->
-
-
+                android:value="@string/default_notification_channel_id" /> <!-- ************************************* -->
         <receiver android:name=".utilis.SMSReceiver">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
