@@ -104,19 +104,6 @@ class MyApplication : MultiDexApplication() {
         requestQueue?.add(request)
     }
 
-//    fun <T> addToRequestQueue(request: Request<T>) {
-//        request.tag = TAG
-//        requestQueue?.add(request)
-//    }
-//
-//
-//    fun cancelPendingRequests(tag: Any) {
-//        if (requestQueue != null) {
-//            requestQueue!!.cancelAll(tag)
-//        }
-//    }
-
-
     private val mLogoutBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == "ACTION_SESSION_EXPIRE") {
