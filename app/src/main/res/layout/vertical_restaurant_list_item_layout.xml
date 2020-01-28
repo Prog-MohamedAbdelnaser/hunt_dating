@@ -31,7 +31,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/demo_restaurant_1" />
+                tools:src="@drawable/ic_img_location_placeholder" />
 
         <ImageView
                 android:id="@+id/snear_vertical_rest_user_image"

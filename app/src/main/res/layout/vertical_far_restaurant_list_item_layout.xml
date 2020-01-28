@@ -23,7 +23,7 @@
                 android:id="@+id/restaurant_vertical_list_image"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                tools:src="@drawable/demo_restaurant_1"
+                tools:src="@drawable/ic_img_location_placeholder"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 app:layout_constraintStart_toStartOf="parent"

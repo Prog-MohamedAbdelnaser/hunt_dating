@@ -67,7 +67,7 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                 }
                 else {
                     Glide.with(context)
-                        .load(R.drawable.demo_restaurant_1)
+                        .load(R.drawable.ic_img_location_placeholder)
 //                        .transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image))
                         .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }

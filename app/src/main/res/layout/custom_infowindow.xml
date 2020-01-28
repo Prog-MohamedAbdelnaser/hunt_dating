@@ -24,7 +24,7 @@
                 android:layout_marginLeft="3sp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/demo_restaurant_1"
+                tools:src="@drawable/ic_img_location_placeholder"
                 app:layout_constrainedHeight="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
