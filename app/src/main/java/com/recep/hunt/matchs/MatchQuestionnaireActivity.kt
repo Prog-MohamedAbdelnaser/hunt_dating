@@ -109,14 +109,16 @@ class MatchQuestionnaireActivity : BaseActivity() {
             tvStepSix.visibility = View.GONE
             val mIntent = Intent(this, LetsMeetActivity::class.java)
             mIntent.putExtra("swipeUsers", mSwipeUserModel)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(mIntent)
+            finish()
 
         }
 
         btnCancelStepOne.setOnClickListener {
-            gotoHomeScreen()
+//            gotoHomeScreen()
+            onBackPressed()
         }
 
         id_add_time.setOnClickListener {
@@ -176,8 +178,8 @@ class MatchQuestionnaireActivity : BaseActivity() {
         }
 
         btnCancelMeet.setOnClickListener {
-            gotoHomeScreen()
-
+//            gotoHomeScreen()
+            onBackPressed()
         }
 
         btnLocation1.setOnClickListener {
@@ -192,7 +194,8 @@ class MatchQuestionnaireActivity : BaseActivity() {
         }
 
         btnCancelLocation.setOnClickListener {
-            gotoHomeScreen()
+//            gotoHomeScreen()
+            onBackPressed()
         }
 
     }
@@ -308,12 +311,12 @@ class MatchQuestionnaireActivity : BaseActivity() {
     }
 
     private fun gotoHomeScreen() {
-        if (!isFinishing) {
-            val mIntent = Intent(this, HomeActivity::class.java)
-            mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(mIntent)
-        }
+//        if (!isFinishing) {
+//            val mIntent = Intent(this, HomeActivity::class.java)
+//            mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//            startActivity(mIntent)
+//        }
     }
 
 //    private fun getQuestions() {
@@ -430,7 +433,8 @@ class MatchQuestionnaireActivity : BaseActivity() {
                             "Your time is completed!",
                             Toast.LENGTH_LONG
                         ).show()
-                        gotoHomeScreen()
+//                        gotoHomeScreen()
+                        onBackPressed()
                     }
                     return@Runnable
                 }
