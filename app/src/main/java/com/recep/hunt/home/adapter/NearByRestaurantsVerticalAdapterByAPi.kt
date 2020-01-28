@@ -177,7 +177,7 @@ class NearByRestaurantsVerticalAdapterByAPi(
                                 result[i].basicInfo.job_title,
                                 result[i].basicInfo.about,
                                 result[i].totalMatching,
-                                result[i].totalMeeting,
+                                result[i].totalMeeting.toInt(),
                                 result[i].is_online,
                                 result[i].for_date,
                                 result[i].for_bussiness,

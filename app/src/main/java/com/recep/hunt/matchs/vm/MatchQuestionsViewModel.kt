@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.domain.entities.BeginHuntLocation
 import com.recep.hunt.domain.entities.BeginHuntLocationParams
+import com.recep.hunt.domain.entities.UpdateHuntBeginParams
 import com.recep.hunt.domain.usecases.BeginHuntLocationUseCases
 import com.recep.hunt.features.common.CommonState
 import com.recep.hunt.model.randomQuestion.RandomQuestionResponse
@@ -22,12 +23,16 @@ import retrofit2.Response
 class MatchQuestionsViewModel(private val beginHuntLocationUseCases: BeginHuntLocationUseCases): ViewModel() {
 
     private val disposables=CompositeDisposable()
-
+    private lateinit var beginHuntLocation: BeginHuntLocation
     private val getQuestionMutableLiveData =MutableLiveData<CommonState<Response<RandomQuestionResponse>>>()
     val getQuestionLiveData:LiveData<CommonState<Response<RandomQuestionResponse>>> = getQuestionMutableLiveData
 
     private val sendHuntLocationMutableLiveData =MutableLiveData<CommonState<BeginHuntLocation>>()
     val sendHuntLocationLiveData:LiveData<CommonState<BeginHuntLocation>> = sendHuntLocationMutableLiveData
+
+    private val updateHuntBeginMutableLiveData =MutableLiveData<CommonState<Any>>()
+    val updateHuntBeginLiveData:LiveData<CommonState<Any>> = updateHuntBeginMutableLiveData
+
 
 
     fun getQuestions(context: Context) {
@@ -53,8 +58,22 @@ class MatchQuestionsViewModel(private val beginHuntLocationUseCases: BeginHuntLo
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { sendHuntLocationMutableLiveData.value=CommonState.LoadingShow }
             .doFinally { sendHuntLocationMutableLiveData.value=CommonState.LoadingFinished  }
-            .subscribe({sendHuntLocationMutableLiveData.value=CommonState.Success(it)},{
+            .subscribe({
+                beginHuntLocation=it
+                sendHuntLocationMutableLiveData.value=CommonState.Success(it)},{
                 sendHuntLocationMutableLiveData.value=CommonState.Error(it)
+            }))
+    }
+
+    fun updateHuntBegin(updateHuntBeginParams: UpdateHuntBeginParams){
+        updateHuntBeginParams.huntId=beginHuntLocation.schedule?.huntId
+        disposables.add(beginHuntLocationUseCases.executeUpdateHuntBegin(updateHuntBeginParams)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { updateHuntBeginMutableLiveData.value=(CommonState.LoadingShow) }
+            .doFinally { updateHuntBeginMutableLiveData.value=(CommonState.LoadingFinished)  }
+            .subscribe({updateHuntBeginMutableLiveData.value=(CommonState.Success(it))},{
+                updateHuntBeginMutableLiveData.value=(CommonState.Error(it))
             }))
     }
 }
