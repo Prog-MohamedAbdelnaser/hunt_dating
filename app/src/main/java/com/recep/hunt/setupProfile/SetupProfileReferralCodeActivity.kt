@@ -37,6 +37,9 @@ import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.LogUtil
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
+import com.rent.client.di.DIConstants
+import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_setup_profile_referral_code.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -44,6 +47,7 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.json.JSONObject
+import org.koin.android.ext.android.get
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +60,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         val TAG = SetupProfileReferralCodeActivity.javaClass.simpleName
     }
 
+    private val disposables= CompositeDisposable()
 
     private lateinit var dialog: KProgressHUD
     private val REQUEST_CODE_ASK_PERMISSIONS = 101
@@ -69,11 +74,7 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         AndroidNetworking.initialize(applicationContext)
         dialog = Helpers.showDialog(this, this, "Processing")
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat
                 .requestPermissions(
                     this,
@@ -81,9 +82,10 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
                     REQUEST_CODE_ASK_PERMISSIONS
                 )
         } else {
-            init()
+
 
         }
+        grantPermission {  init() }
 
     }
 
@@ -142,6 +144,25 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         }
     }
 
+    private fun grantPermission(onGranted: (isGranted: Boolean) -> Unit){
+
+        Log.d("TASKLOC", "checkPermission")
+
+        val rxPermissions = RxPermissions(this)
+        disposables.add(
+            rxPermissions.request(Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe({ granted ->
+                    if (!granted) {
+                        grantPermission() {onGranted(it)}
+                    }else{
+                        onGranted(true)
+                    }
+                },{
+                    it.printStackTrace()
+                }))
+
+
+    }
     private fun registerUser() {
 
         dialog.show()
@@ -255,7 +276,11 @@ class SetupProfileReferralCodeActivity : AppCompatActivity() {
         )
 //                    builder.addFormDataPart("device_type", "android")
         builder.addFormDataPart(
-            "device_id",
+            "device_id", get(DIConstants.KEY_DEVICE_ID)
+        )
+
+        builder.addFormDataPart(
+            "device_token",
             SharedPrefrenceManager.getDeviceToken(this@SetupProfileReferralCodeActivity)
         )
         builder.addFormDataPart(

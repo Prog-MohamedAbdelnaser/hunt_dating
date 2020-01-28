@@ -17,6 +17,7 @@ import com.recep.hunt.utilis.Helpers
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import kotlinx.android.synthetic.main.activity_setup_profile_reletionship.*
+import kotlinx.android.synthetic.main.layout_toolbar_back.*
 import kotlinx.android.synthetic.main.looking_for_adapter_item.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
@@ -27,13 +28,6 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
     var avatarFilePath = ""
 
     private var selectedOption = -1
-    lateinit var mTextViewScreenTitle: TextView
-    lateinit var cancelBtn: Button
-    lateinit var mImageButtonBack: ImageButton
-    lateinit var mImageViewSingle: ImageView
-    lateinit var mImageViewMarried: ImageView
-    lateinit var mTextVieSingle: TextView
-    lateinit var mTextVieMarried: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_reletionship)
@@ -42,22 +36,14 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
 
     private fun init() {
         avatarFilePath = intent.getStringExtra(IMGURI)
-        mTextViewScreenTitle = find(R.id.text_screen_title)
-        mImageButtonBack = find(R.id.image_back_button)
-        mImageButtonBack.setOnClickListener { finish() }
-        cancelBtn = find(R.id.base_cancel_btn)
-        mTextViewScreenTitle.text = resources.getString(R.string.setup_profile)
-        cancelBtn.setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
+
+        image_back_button.setOnClickListener { finish() }
+        text_screen_title.text = resources.getString(R.string.setup_profile)
+        base_cancel_btn.setOnClickListener { Helpers.segueToSocialLoginScreen(this) }
+
         setup_reletionship_continue_btn.setOnClickListener {
             if (selectedOption != -1) {
-
-                SharedPrefrenceManager.setRelationshipStatus(
-                    this@SetupProfileRelationshipActivity,
-                    relatiionShipData[selectedOption].label
-                )
-                launchActivity<SetupProfileLookingForActivity> {
-                    putExtra(IMGURI, avatarFilePath)
-                }
+                goToNextStep()
             } else {
                 Helpers.showErrorSnackBar(
                     this,
@@ -72,12 +58,8 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
 
     private fun setupRelationShipData() {
         relatiionShipData = dummyImageData()
-        mImageViewSingle = find(R.id.imageView_single)
-        mImageViewMarried = find(R.id.imageView_married)
-        mTextVieSingle = find(R.id.title_single)
-        mTextVieMarried = find(R.id.title_married)
         restStatus()
-        mImageViewSingle.setOnClickListener {
+        imageView_single.setOnClickListener {
             if (selectedOption != -1) {
                 relatiionShipData[selectedOption].isSelected =
                     !relatiionShipData[selectedOption].isSelected
@@ -85,7 +67,7 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
                     relatiionShipData[0].isSelected = true;
                 }
             } else {
-                selectedOption = 0;
+                selectedOption = 0
                 relatiionShipData[selectedOption].isSelected =
                     !relatiionShipData[selectedOption].isSelected
             }
@@ -93,8 +75,9 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
                 0
             } else -1;
             restStatus()
+            goToNextStep()
         }
-        mImageViewMarried.setOnClickListener {
+        imageView_married.setOnClickListener {
             if (selectedOption != -1) {
                 relatiionShipData[selectedOption].isSelected =
                     !relatiionShipData[selectedOption].isSelected
@@ -110,35 +93,37 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
                 1
             } else -1;
             restStatus()
+            goToNextStep()
         }
 
     }
 
+    /** listener part **/
     private fun restStatus() {
         if (relatiionShipData[0].isSelected) {
-            selectedOption = 0;
-            mImageViewSingle.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-            mImageViewSingle.image = resources.getDrawable(relatiionShipData[0].selectedImage)
-            mTextVieSingle.textColor = resources.getColor(R.color.app_text_black)
+            selectedOption = 0
+            //todo fix icon
+            imageView_single.background = resources.getDrawable(R.drawable.selected_cirular_btn)
+            imageView_single.image = resources.getDrawable(relatiionShipData[0].selectedImage)
+            title_single.textColor = resources.getColor(R.color.app_text_black)
         } else {
-            mImageViewSingle.background =
+            imageView_single.background =
                 resources.getDrawable(R.drawable.unselected_circular_btn)
-            mImageViewSingle.image =
+            imageView_single.image =
                 resources.getDrawable(relatiionShipData[0].unSelectedImage)
-            mTextVieSingle.textColor = resources.getColor(R.color.app_light_text_color)
-
+            title_single.textColor = resources.getColor(R.color.app_light_text_color)
         }
         if (relatiionShipData[1].isSelected) {
             selectedOption = 1
-            mImageViewMarried.background = resources.getDrawable(R.drawable.selected_cirular_btn)
-            mImageViewMarried.image = resources.getDrawable(relatiionShipData[1].selectedImage)
-            mTextVieMarried.textColor = resources.getColor(R.color.app_text_black)
+            imageView_married.background = resources.getDrawable(R.drawable.selected_cirular_btn)
+            imageView_married.image = resources.getDrawable(relatiionShipData[1].selectedImage)
+            title_married.textColor = resources.getColor(R.color.app_text_black)
         } else {
-            mImageViewMarried.background =
+            imageView_married.background =
                 resources.getDrawable(R.drawable.unselected_circular_btn)
-            mImageViewMarried.image =
+            imageView_married.image =
                 resources.getDrawable(relatiionShipData[1].unSelectedImage)
-            mTextVieMarried.textColor = resources.getColor(R.color.app_light_text_color)
+            title_married.textColor = resources.getColor(R.color.app_light_text_color)
 
         }
     }
@@ -166,5 +151,15 @@ class SetupProfileRelationshipActivity : AppCompatActivity() {
             )
         }
         return data
+    }
+
+    private fun goToNextStep(){
+        SharedPrefrenceManager.setRelationshipStatus(
+            this@SetupProfileRelationshipActivity,
+            relatiionShipData[selectedOption].label
+        )
+        launchActivity<SetupProfileLookingForActivity> {
+            putExtra(IMGURI, avatarFilePath)
+        }
     }
 }

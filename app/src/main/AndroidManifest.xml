@@ -8,6 +8,7 @@
 
     <dist:module dist:instant="true" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -44,7 +45,7 @@
         <activity
                 android:name=".swipe.activities.SwipProfilesActivity"
                 android:label="@string/title_activity_swip_profiles"
-                android:theme="@style/AppTheme.NoActionBar"></activity>
+                android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".matchs.MatchQuestionnaireActivity" />
         <activity android:name=".matchs.LetsMeetActivity" />
         <activity android:name=".payment.TrasactionDone" />
@@ -145,7 +146,7 @@
 
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@mipmap/ic_launcher" />
+                android:resource="@mipmap/ic_launcher_foreground" />
         <!--
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.

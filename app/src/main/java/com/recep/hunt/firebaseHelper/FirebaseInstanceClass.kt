@@ -69,7 +69,7 @@ class FirebaseInstanceClass : FirebaseMessagingService() {
             .setColor(context.resources.getColor(R.color.colorAccent))
             .setSound(defaultSoundUri)
             .setContentText(text)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setOnlyAlertOnce(true)
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
