@@ -1208,18 +1208,19 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                     val url =
                         "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 
+                    Logger.d("url = $url")
                     Glide.with(context)
                         .load(url)
                         .error(R.drawable.ic_img_location_placeholder)
                         .placeholder(R.drawable.ic_img_location_placeholder)
-                        .apply(RequestOptions.circleCropTransform())
                         .into(view.info_window_rest_image)
                 }
 
                 else{
                     Glide.with(context)
                         .load(R.drawable.ic_img_location_placeholder)
-                        .apply(RequestOptions.circleCropTransform())
+                        .error(R.drawable.ic_img_location_placeholder)
+                        .placeholder(R.drawable.ic_img_location_placeholder)
                         .into(view.info_window_rest_image)
                 }
             } else {

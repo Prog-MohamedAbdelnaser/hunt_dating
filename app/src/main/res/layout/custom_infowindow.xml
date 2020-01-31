@@ -9,9 +9,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clInfoId"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:background="@drawable/info_window_box"
-            android:padding="8dp"
+            android:padding="4dp"
             android:layout_alignParentRight="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -20,9 +20,9 @@
         <ImageView
                 android:id="@+id/info_window_rest_image"
                 android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 tools:src="@drawable/ic_img_location_placeholder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:text="TextView"
                 android:textColor="@color/app_text_black"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/info_window_rest_image"
                 app:layout_constraintTop_toTopOf="@+id/info_window_rest_image"/>
@@ -47,10 +47,10 @@
                 android:id="@+id/imageView19"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/ic_info_window_user"
                 app:layout_constraintStart_toStartOf="@+id/info_window_rest_name"
-                app:layout_constraintTop_toBottomOf="@+id/info_window_rest_name"/>
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
                 android:id="@+id/textView30"
@@ -72,10 +72,10 @@
                 android:layout_height="15dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_info_window_loccation"
                 app:layout_constraintStart_toEndOf="@+id/textView30"
-                app:layout_constraintTop_toBottomOf="@+id/info_window_rest_name" />
+                app:layout_constraintTop_toTopOf="@id/textView30"
+                app:layout_constraintBottom_toBottomOf="@id/textView30"/>
 
         <TextView
                 android:id="@+id/textView31"
