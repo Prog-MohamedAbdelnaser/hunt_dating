@@ -1205,6 +1205,7 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
 
                 if (!locationInfo.image.isEmpty()) {
+                    Log.i("locationInfo","not isEmpty")
                     val url =
                         "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 
@@ -1217,8 +1218,12 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 }
 
                 else{
+                    Log.i("locationInfo"," isEmpty")
+
                     Glide.with(context)
                         .load(R.drawable.ic_img_location_placeholder)
+                        .error(R.drawable.ic_img_location_placeholder)
+                        .placeholder(R.drawable.ic_img_location_placeholder)
                         .apply(RequestOptions.circleCropTransform())
                         .into(view.info_window_rest_image)
                 }
