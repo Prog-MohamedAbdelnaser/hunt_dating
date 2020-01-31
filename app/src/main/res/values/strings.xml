@@ -466,5 +466,6 @@
     <string name="invalid_length">Invalid Length</string>
     <string name="default_notification_channel_id">com.recep.hunt.notification</string>
     <string name="title_activity_swip_profiles">SwipeProfilesActivity</string>
+    <string name="send">Send</string>
 </resources>
 

@@ -38,6 +38,6 @@ data class Data(
     val socialInfo : SocialInfo,
     val user_profile_image : ArrayList<ProfileImage>,
     val totalMatching : Float,
-    val totalMeeting : Int,
+    val totalMeeting : Float,
     val user_swipe : String
 )

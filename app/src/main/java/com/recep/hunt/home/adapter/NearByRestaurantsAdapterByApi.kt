@@ -31,7 +31,7 @@ import org.jetbrains.anko.activityManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import kotlin.math.roundToInt
 
 
 /**
@@ -214,7 +214,7 @@ class NearByRestaurantsAdapterByApi(
                                     result[i].basicInfo.job_title,
                                     result[i].basicInfo.about,
                                     result[i].totalMatching,
-                                    result[i].totalMeeting,
+                                    result[i].totalMeeting.roundToInt(),
                                     result[i].is_online,
                                     result[i].for_date,
                                     result[i].for_bussiness,
