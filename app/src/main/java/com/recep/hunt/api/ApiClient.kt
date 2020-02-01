@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    var BASE_URL: String = "http://165.22.18.129"
+    var BASE_URL: String = "https://www.gethunt.app"
 
     val builder: OkHttpClient by lazy {
         val interceptor = HttpLoggingInterceptor()

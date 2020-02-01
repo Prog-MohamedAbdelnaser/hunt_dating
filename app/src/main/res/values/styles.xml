@@ -14,6 +14,7 @@
     <style name="AppToolbar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:itemTextAppearance">@style/menu_item_color</item>
     </style>
+
     <style name="menu_item_color">
         <item name="android:textColor">@color/app_light_text_color</item>
     </style>
@@ -22,8 +23,7 @@
         <item name="android:textColorPrimary">@color/white</item>
     </style>
 
-    <style name="AppBottomSheetDialogTheme"
-           parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
 
@@ -32,8 +32,7 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
-    <style name="AppModalStyle"
-           parent="Widget.Design.BottomSheet.Modal">
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/round_dialog</item>
     </style>
 
@@ -50,5 +49,14 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

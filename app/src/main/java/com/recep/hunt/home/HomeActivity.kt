@@ -1148,8 +1148,8 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                     //todo test converted to glide
                     Glide.with(context)
                         .load(url)
-                        .error(R.drawable.demo_restaurant_1)
-                        .placeholder(R.drawable.demo_restaurant_1)
+                        .error(R.drawable.ic_img_location_placeholder)
+                        .placeholder(R.drawable.ic_img_location_placeholder)
                         .apply(RequestOptions.circleCropTransform())
                         .into(view.info_window_rest_image)
                 }

@@ -437,7 +437,7 @@
 
     <!--    Keep these on LAST-->
 
-<!--    <string name="facebook_app_id">428189314461041</string>-->
+    <!--    <string name="facebook_app_id">428189314461041</string>-->
     <string name="facebook_app_id">1042270406107761</string>
     <string name="fb_login_protocol_scheme">fb1042270406107761</string>
 
@@ -464,6 +464,7 @@
     <string name="timeout_error_message">Looks like the server is taking too long to respond, please try again in sometime
     </string>
     <string name="invalid_length">Invalid Length</string>
-    <string name="default_notification_channel_id" >com.recep.hunt.notification</string>
+    <string name="default_notification_channel_id">com.recep.hunt.notification</string>
+    <string name="title_activity_swip_profiles">SwipeProfilesActivity</string>
 </resources>
 

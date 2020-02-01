@@ -155,6 +155,7 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             matchProgressBar = containerView.findViewById(R.id.match_status_progressBar)
             textView50 = containerView.findViewById(R.id.textView50)
             textView51 = containerView.findViewById(R.id.textView51)
+
             ivForDate = containerView.findViewById(R.id.ivForDate)
             ivForBusiness = containerView.findViewById(R.id.ivForBusiness)
             ivForFriendship = containerView.findViewById(R.id.ivForFriendship)
@@ -212,12 +213,14 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             if (items[i].images!!.size > 0)
                 Glide.with(this)
                     .load(items[i].images!![0])
+                    .placeholder(R.drawable.swiping_place_holder)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .signature(ObjectKey(items[currentUser].images!![counter[currentUser]]))
                     .into(storyImageView[i])
-            if (i == last)
-                storyProgressViews[i].startStories()
+
+            if (i == last) storyProgressViews[i].startStories()
+
             val nameView = containerView.findViewById<TextView>(R.id.user_detail_username_txtView)
             val placeView = containerView.findViewById<TextView>(R.id.user_detail_place_txtView)
             val titleView = containerView.findViewById<TextView>(R.id.user_detail_job_title)
@@ -264,7 +267,8 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
                             containerView.x = (x_cord - x).toFloat()
                             containerView.rotation = ((x_cord - x) * (Math.PI / 256)).toFloat()
 
-                            if ((x - x_cord) <= -150 || (x - x_cord) >= 150) {
+                            Log.i("Swiping","x - x_cord ${x - x_cord}")
+                            if ((x - x_cord) <= -30 || (x - x_cord) >= 30) {
 
                                 when {
                                     x_cord > x -> {
@@ -273,13 +277,13 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
                                         containerView.findViewById<ImageView>(R.id.like_dislike_imageView).imageResource = R.drawable.swipe_like
 
-                                        if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
+                                 /*       if (x_cord - x >= 255 || (x_cord - x) % 255 >= 179)
                                             containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
                                                 Color.argb(179, 58, 204, 225))
                                         else if ((x_cord - x) % 255 < 179)
                                             containerView.findViewById<ImageView>(R.id.story_image_userdetail).setColorFilter(
                                                 Color.argb((x_cord - x) % 255, 58, 204, 225)
-                                            )
+                                            )*/
                                         Likes = if (x_cord >= (screenCenter + 50)) {
                                             2
                                         } else {
@@ -522,160 +526,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
         })
     }
 
-    //Dummy Users Data
-//    private fun dummyUsersdata(): ArrayList<SwipeUserModel> {
-//        val data = ArrayList<SwipeUserModel>()
-//        val images: ArrayList<String> = ArrayList<String>()
-//        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573485502.jfif")
-//        images.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573546803.jpg")
-//        val images1 = ArrayList<String>()
-//        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574714.jpg")
-//        images1.add("https://hunt.nyc3.digitaloceanspaces.com/User/1573574732.jfif")
-//        if (data.size == 0) {
-//            data.add(
-//                SwipeUserModel(
-//                    2,
-//                    "Hookah Loungh",
-//                    "Valentina",
-//                    28,
-//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-//                    images,
-//                    BasicInfo(
-//                        "test",
-//                        "test",
-//                        "test job",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test"
-//                    )
-//                )
-//            )
-//            data.add(
-//                SwipeUserModel(
-//                    2,
-//                    "Hookah Loungh",
-//                    "Valentina",
-//                    28,
-//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-//                    images1,
-//                    BasicInfo(
-//                        "test",
-//                        "test",
-//                        "test job",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test"
-//                    )
-//                )
-//            )
-//            data.add(
-//                SwipeUserModel(
-//                    2,
-//                    "Hookah Loungh",
-//                    "Valentina",
-//                    28,
-//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-//                    images,
-//                    BasicInfo(
-//                        "test",
-//                        "test",
-//                        "test job",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test"
-//                    )
-//                )
-//            )
-//            data.add(
-//                SwipeUserModel(
-//                    2,
-//                    "Hookah Loungh",
-//                    "Valentina",
-//                    28,
-//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-//                    images1,
-//                    BasicInfo(
-//                        "test",
-//                        "test",
-//                        "test job",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test"
-//                    )
-//                )
-//            )
-//            data.add(
-//                SwipeUserModel(
-//                    2,
-//                    "Hookah Loungh",
-//                    "Valentina",
-//                    28,
-//                    "title ", "test detial", 80f, 60, "true", "both", "both", "both",
-//                    images,
-//                    BasicInfo(
-//                        "test",
-//                        "test",
-//                        "test job",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test",
-//                        "test"
-//                    )
-//                )
-//            )
-//        }
-//        return data
-//    }
-
     fun isAClick(dragTime: Long, downTime: Long): Boolean {
         return dragTime - downTime < CLICK_ACTION_THRESHOLD
     }
@@ -715,7 +565,6 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
 
     override fun onComplete() {
         counter[currentUser] = items[currentUser].images!!.size
-
     }
 
     override fun onPrev() {

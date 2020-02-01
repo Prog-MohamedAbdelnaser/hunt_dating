@@ -68,7 +68,7 @@ class NearByRestaurantsAdapter(val context: Context,
 
                 //
                 Glide.with(context)
-                    .load(R.drawable.demo_restaurant_1)
+                    .load(R.drawable.ic_img_location_placeholder)
                     //.transform(Helpers.getPicassoTransformation(restaurantImage))
                     .apply(RequestOptions.circleCropTransform())
                     .into(restaurantImage)

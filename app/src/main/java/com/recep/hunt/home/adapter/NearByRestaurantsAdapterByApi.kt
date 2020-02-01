@@ -31,6 +31,7 @@ import com.recep.hunt.model.nearestLocation.NearestLocationData
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
+import com.recep.hunt.swipe.activities.SwipProfilesActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
 import com.recep.hunt.utilis.*
 import org.jetbrains.anko.activityManager
@@ -120,6 +121,7 @@ class NearByRestaurantsAdapterByApi(
                     goToSwipeView.performClick()
                 }
                 goToSwipeView.setOnClickListener {
+
                     selectLocationAndGetUsersList(model.place_id, model.name)
                 }
             }
@@ -246,7 +248,7 @@ class NearByRestaurantsAdapterByApi(
                             )
 //                            }catch (ex : Exception){}
                         }
-                        context.launchActivity<SwipeMainActivity> {
+                        context.launchActivity<SwipProfilesActivity> {
                             putParcelableArrayListExtra("swipeUsers", swipeUserArray)
                             Log.i("SwipeMainActivity","LOCATION_OBJECT_KEY ${item!![adapterPosition].name}")
                             putExtra(FeaturesConstants.LOCATION_OBJECT_KEY,item!![adapterPosition].name)

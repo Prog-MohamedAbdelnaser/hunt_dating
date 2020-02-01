@@ -15,6 +15,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
@@ -59,45 +60,21 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                 val model = item[position - nearItemsCount - 2]
                 if(!model.image.isNullOrEmpty()){
                     val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
-//                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"
 
                     //todo test converted to glide
                     Glide
                         .with(context)
                         .load(url)
                         .error(R.drawable.ic_img_location_placeholder)
-//                        .apply(RequestOptions.circleCropTransform())
-//                        .transform(RoundedTransformation(20, 0))
+                        .transform(RoundedCorners(20))
                         .placeholder(R.drawable.ic_img_location_placeholder)
-
-                        .addListener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),viewHolder.itemView.restaurant_vertical_list_image)
-
-                                return false
-                            }
-
-                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                refactorImage(resource,viewHolder.itemView.restaurant_vertical_list_image)
-                                return true
-                            }
-                        }) .submit()
+                        .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
                 else {
                     Glide.with(context)
-                        .load(R.drawable.demo_restaurant_1)
-                        .addListener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                refactorImage(context.resources.getDrawable(R.drawable.ic_img_location_placeholder),viewHolder.itemView.restaurant_vertical_list_image)
-                                return false
-                            }
-
-                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                                refactorImage(resource,viewHolder.itemView.restaurant_vertical_list_image)
-                                return true
-                            }
-                        })
-                        .submit()
+                        .load(R.drawable.ic_img_location_placeholder)
+                        .transform(RoundedCorners(20))
+                        .into(viewHolder.itemView.restaurant_vertical_list_image)
                 }
 
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
