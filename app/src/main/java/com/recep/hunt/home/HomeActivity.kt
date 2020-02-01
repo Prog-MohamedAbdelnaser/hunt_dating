@@ -38,6 +38,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
@@ -1204,14 +1205,13 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 view.textView30.text = (locationInfo.users).toString()
                 view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
 
-                if (!locationInfo.image.isEmpty()) {
-                    val url =
-                        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+                if (locationInfo.image.isNotEmpty()) {
+                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
 
                     Logger.d("url = $url")
                     Glide.with(context)
                         .load(url)
-                        .error(R.drawable.ic_img_location_placeholder)
+                        .transform(RoundedCorners(20))
                         .placeholder(R.drawable.ic_img_location_placeholder)
                         .into(view.info_window_rest_image)
                 }
@@ -1219,8 +1219,7 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 else{
                     Glide.with(context)
                         .load(R.drawable.ic_img_location_placeholder)
-                        .error(R.drawable.ic_img_location_placeholder)
-                        .placeholder(R.drawable.ic_img_location_placeholder)
+                        .transform(RoundedCorners(20))
                         .into(view.info_window_rest_image)
                 }
             } else {

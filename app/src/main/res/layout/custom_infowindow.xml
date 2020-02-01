@@ -17,17 +17,27 @@
             app:layout_constraintRight_toRightOf="parent"
             >
 
-        <ImageView
-                android:id="@+id/info_window_rest_image"
+        <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_image_container"
                 android:layout_width="65dp"
                 android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/ic_img_location_placeholder"
+                app:cardCornerRadius="8dp"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                >
+
+            <ImageView
+                    android:id="@+id/info_window_rest_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/ic_img_location_placeholder"
+                    />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
                 android:id="@+id/info_window_rest_name"
@@ -40,8 +50,8 @@
                 android:textColor="@color/app_text_black"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/info_window_rest_image"
-                app:layout_constraintTop_toTopOf="@+id/info_window_rest_image"/>
+                app:layout_constraintStart_toEndOf="@+id/cardview_image_container"
+                app:layout_constraintTop_toTopOf="@+id/cardview_image_container"/>
 
         <ImageView
                 android:id="@+id/imageView19"
