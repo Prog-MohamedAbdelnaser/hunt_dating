@@ -194,8 +194,6 @@ dependencies {
     //swipping lib
     implementation project(":layoutmanager")
 
-
-
     implementation 'com.koushikdutta.ion:ion:1.1.1'
 
 }
