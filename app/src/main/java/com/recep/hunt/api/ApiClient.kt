@@ -27,7 +27,6 @@ object ApiClient {
         val gson = GsonBuilder()
             .setLenient()
             .create()
-
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(builder)
@@ -40,39 +39,4 @@ object ApiClient {
     }
 
 
-    val retrofitRx: Retrofit by lazy {
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(builder)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-    }
-
-    val getClientRx: ApiInterface by lazy {
-        retrofitRx.create(ApiInterface::class.java)
-    }
-//        get() {
-
-
-//            builder.addInterceptor { chain ->
-//                val requestBuilder = chain.request().newBuilder()
-////                requestBuilder.addHeader(ApiConstant.HEADER_NEWS_API_KEY, ApiConstant.NEWS_KEY)
-//                MyApplication.instance?.let {
-//                    val token = SharedPrefrenceManager.getUserToken(it)
-//                    Log.d("Creator" ,"Token : " + token)
-//                    if (!TextUtils.isEmpty(token)) {
-//                        requestBuilder.addHeader("Authorization", token)
-//                    }
-//                }
-//                chain.proceed(requestBuilder.build())
-//            }
-
-//            return retrofit.create(ApiInterface::class.java)
-//
-//        }
 }

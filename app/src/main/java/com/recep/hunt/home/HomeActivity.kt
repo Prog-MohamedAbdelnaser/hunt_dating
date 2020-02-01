@@ -117,14 +117,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun selectLocation(latitude: Double, longitude: Double) {
-//        val markerOptions = MarkerOptions()
-//            .position(LatLng(latitude,longitude))
-//            .icon(null)
-
-
-//        mMarker = mMap.addMarker(markerOptions)
-//        mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
 
@@ -172,7 +164,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var locationButton: ImageView
     private lateinit var searchTextView: TextView
     private lateinit var placesRecyclerView: RecyclerView
-    private var isListshowing = true
+    private var isListshowing = false
     private var adapter = GroupAdapter<ViewHolder>()
     private lateinit var autoCompleteAdapter: PlacesAutoCompleteAdapter
     private var callAPIOnlyOnceStatus = 1
@@ -400,6 +392,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         horizontal_list_near_by_user.adapter=null
         horizontal_list_near_by_user.removeAllViewsInLayout()
         horizontal_list_near_by_user.removeAllViews()
+        sortedListRecyclerView.adapter=null
+        sortedListRecyclerView.removeAllViewsInLayout()
+        sortedListRecyclerView.removeAllViews()
+        hideVerticallRecycler()
+
 
 
     }
@@ -434,7 +431,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                     if(it.isEmpty()){
                         setupNearByRestaurantsRecyclerViewByApiEmpty()
                         Utils.noUserError.postValue("true")
-
                         Toast.makeText(this@HomeActivity, "No locations found/possible google quota issue", Toast.LENGTH_SHORT).show()
                     }
                     else {
@@ -526,42 +522,21 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         horizontal_list_near_by_user.setSlideOnFling(true)
     }
 
-    private fun setupSortedListView(
-        nearItems: ArrayList<NearestLocationData>?,
-        farItems: ArrayList<NearestLocationData>?
-    ) {
+    private fun setupSortedListView(nearItems: ArrayList<NearestLocationData>?, farItems: ArrayList<NearestLocationData>?) {
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-//        adapter.setOnItemClickListener { item, view ->
-//                val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-//            val dialog = Dialog(this)
-//            dialog.setContentView(ll)
-//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-//            gotItBtn.setOnClickListener {
-//                dialog.dismiss()
-//            }
-//            dialog.show()
-//        }
+
+
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
 
         for (i in 0 until nearItems!!.size) {
-            adapter.add(
-                NearByRestaurantsVerticalAdapterByAPi(
-                    this@HomeActivity,
-                    nearItems
-                )
-            )
+            adapter.add(NearByRestaurantsVerticalAdapterByAPi(this@HomeActivity, nearItems))
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
 
         for (i in 0 until farItems!!.size) {
             adapter.add(
-                FarAwayRestaurantsVerticalAdapterByApi(
-                    this@HomeActivity,
-                    farItems,
-                    nearItems.size
-                )
+                FarAwayRestaurantsVerticalAdapterByApi(this@HomeActivity, farItems, nearItems.size)
             )
         }
     }
@@ -673,72 +648,34 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         showSortedListCardView.setOnClickListener {
-            if (isListshowing) {
-                isListshowing = false
-
-                sortedListRecyclerView.visibility = View.VISIBLE
-                horizontal_list_near_by_user.visibility = View.INVISIBLE
-                val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
-                mapFrag.alpha = 0.15f
-                list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
-//                home_root_view.backgroundColor = Color.parseColor("#CCFFFFFF")
-
+            if (!isListshowing) {
+                showVerticallRecycler()
             } else {
-                isListshowing = true
-                sortedListRecyclerView.visibility = View.INVISIBLE
-                horizontal_list_near_by_user.visibility = View.VISIBLE
-                val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
-                mapFrag.alpha = 0.95f
-                list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
-
+                hideVerticallRecycler()
             }
 
 
         }
     }
 
-//    private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
-//        sortedListRecyclerView.adapter = adapter
-//        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-//        adapter.setOnItemClickListener { item, view ->
-//            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-//            val dialog = Dialog(this)
-//            dialog.setContentView(ll)
-//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-//            gotItBtn.setOnClickListener {
-//                dialog.dismiss()
-//            }
-//            dialog.show()
-//        }
-//        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-//        for (i in 0 until 3) {
-//            adapter.add(
-//                NearByRestaurantsVerticalAdapter(
-//                    this@HomeActivity,
-//                    items
-//                )
-//            )
-//        }
-//        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-//        for (i in 4 until 6) {
-//            adapter.add(
-//                FarAwayRestaurantsVerticalAdapter(
-//                    this@HomeActivity,
-//                    items
-//                )
-//            )
-//        }
-////        for (i in 4 until items.size) {
-////            adapter.add(
-////                FarAwayRestaurantsVerticalAdapter(
-////                    this@HomeActivity,
-////                    items
-////                )
-////            )
-////        }
-//
-//    }
+    private fun showVerticallRecycler() {
+        isListshowing = true
+        sortedListRecyclerView.visibility = View.VISIBLE
+        horizontal_list_near_by_user.visibility = View.INVISIBLE
+        val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+        mapFrag.alpha = 0.15f
+        list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
+    }
+
+    private fun hideVerticallRecycler() {
+        isListshowing = false
+        sortedListRecyclerView.visibility = View.INVISIBLE
+        horizontal_list_near_by_user.visibility = View.VISIBLE
+        val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+        mapFrag.alpha = 0.95f
+        list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
+    }
+
 
     override fun onFarAwayRestaurantClick(position: Int) {
         farLocationErrorPrompt()
@@ -1050,7 +987,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                                 result[i].basicInfo.job_title,
                                 result[i].basicInfo.about,
                                 result[i].totalMatching,
-                                result[i].totalMeeting,
+                                result[i].totalMeeting.roundToInt(),
                                 result[i].is_online,
                                 result[i].for_date,
                                 result[i].for_bussiness,

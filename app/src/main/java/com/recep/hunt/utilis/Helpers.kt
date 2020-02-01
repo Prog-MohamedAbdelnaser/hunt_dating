@@ -48,7 +48,11 @@ import java.net.URL
 class Helpers {
 
     companion object{
-
+        fun createSclead(
+            bitmap: Bitmap,
+            width:Int,height:Int): Bitmap {
+            return Bitmap.createScaledBitmap(bitmap,width,height, true)
+        }
         fun showDialog(activity: Activity, context: Context, title:String): KProgressHUD {
             return KProgressHUD.create(activity)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
