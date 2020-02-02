@@ -497,6 +497,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     fun clearPlacesView(){
+        adapter.clear()
         sortedListRecyclerView.adapter=null
         sortedListRecyclerView.removeAllViews()
         mMap.clear()
