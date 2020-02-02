@@ -39,6 +39,6 @@
     <color name="colorFaqBackgroud">#f9fcff</color>
 
     <color name="colorProgressbar">#ff2a4e</color>
-
+    <color name="farAwayHeighlightColor">#F18828</color>
 
 </resources>

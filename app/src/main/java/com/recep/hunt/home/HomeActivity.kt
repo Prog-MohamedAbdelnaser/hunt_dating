@@ -153,6 +153,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private var gpsReceiver: GpsLocationReceiver? = null
 
+    private var groubHorizontalListadapter = GroupAdapter<ViewHolder>()
+
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
     private var NEAREST_DISTANCE = 3000 // testing purpose
     private var latitude = 0.toDouble()
@@ -178,9 +180,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private val REQUEST_CODE_ASK_PERMISSIONS = 101
 
+    private  val restaurantHorizontalAdapter:NearRestaurantHorizontalAdapter by lazy { NearRestaurantHorizontalAdapter() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        showNoUserBottomSheet()
+
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
             if (it != "false") {
                 showErrorAlertToUser(it)
@@ -410,6 +416,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
             SharedPrefrenceManager.getUserToken(this)
         )
 
+
+
         call.enqueue(object : Callback<NearestLocationResponse> {
             override fun onFailure(call: Call<NearestLocationResponse>, t: Throwable) {
                 Log.d("Api call failure -> ", "" + call)
@@ -461,12 +469,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                                 farItems.add(result[i])
                             }
                         }
+                        clearPlacesView()
                         setPlacesMarker(nearbyItems, R.drawable.close_rest_marker)
                         setPlacesMarker(farItems, R.drawable.far_rest_markers)
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
-//                    mMap.setMaxZoomPreference(animateZoomTo)
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-                        setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
+                        setupNearByRestaurantsRecyclerViewByApi(nearbyItems,farItems)
                         setupSortedListView(nearbyItems, farItems)
                     }
                 }
@@ -488,6 +496,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //        mapRipple.startRippleMapAnimation()
     }
 
+    fun clearPlacesView(){
+        sortedListRecyclerView.adapter=null
+        sortedListRecyclerView.removeAllViews()
+        mMap.clear()
+    }
     private fun setPlacesMarker(items: ArrayList<NearestLocationData>, resource: Int) {
         val markerOptions = MarkerOptions()
         for (i in 0 until items.size) {
@@ -509,12 +522,18 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-    private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?) {
+    private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?, farItems: ArrayList<NearestLocationData>?) {
         val windowwidth = windowManager.defaultDisplay.width
         horizontal_list_near_by_user.x = (0 - windowwidth.toFloat() / 2.07).toFloat()
         horizontal_list_near_by_user.layoutParams.width = windowwidth + windowwidth / 3 + 150
-//        horizontal_list_near_by_user.setOffscreenItems(items!!.size)
-        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
+        horizontal_list_near_by_user.adapter=restaurantHorizontalAdapter
+
+
+        items?.let { restaurantHorizontalAdapter.updateItems(it) }
+        restaurantHorizontalAdapter.setNearbySize(items?.size!!.toInt())
+        farItems?.let { restaurantHorizontalAdapter.addItems(it) }
+
+        //   horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(
             ScaleTransformer.Builder().setMaxScale(
@@ -523,45 +542,26 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         )
         horizontal_list_near_by_user.scrollToPosition(0)
         horizontal_list_near_by_user.setSlideOnFling(true)
+
+
+
     }
 
-    private fun setupSortedListView(
-        nearItems: ArrayList<NearestLocationData>?,
+    private fun setupSortedListView(nearItems: ArrayList<NearestLocationData>?,
         farItems: ArrayList<NearestLocationData>?
     ) {
+
         sortedListRecyclerView.adapter = adapter
         sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-//        adapter.setOnItemClickListener { item, view ->
-//                val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-//            val dialog = Dialog(this)
-//            dialog.setContentView(ll)
-//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-//            gotItBtn.setOnClickListener {
-//                dialog.dismiss()
-//            }
-//            dialog.show()
-//        }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
 
         for (i in 0 until nearItems!!.size) {
-            adapter.add(
-                NearByRestaurantsVerticalAdapterByAPi(
-                    this@HomeActivity,
-                    nearItems
-                )
-            )
+            adapter.add(NearByRestaurantsVerticalAdapterByAPi(this@HomeActivity, nearItems))
         }
         adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
 
         for (i in 0 until farItems!!.size) {
-            adapter.add(
-                FarAwayRestaurantsVerticalAdapterByApi(
-                    this@HomeActivity,
-                    farItems,
-                    nearItems.size
-                )
-            )
+            adapter.add(FarAwayRestaurantsVerticalAdapterByApi(this@HomeActivity, farItems, nearItems.size))
         }
     }
 
