@@ -94,6 +94,7 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -101,36 +102,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     PlacesAutoCompleteAdapter.ClickListener,
     NearByRestaurantsAdapter.NearByRestaurantsAdapterListener,
     FarAwayRestaurantsVerticalAdapter.FarAwayRestaurantsVerticalAdapterListener {
-
-
-    //PlacesAutoCompleteAdapter override
-    override fun click(place: Place) {
-        Utils.hideKeyboard(this@HomeActivity)
-        place.latLng?.latitude?.let {
-            place.latLng?.longitude?.let { it1 ->
-                selectLocation(
-                    it,
-                    it1
-                )
-            }
-        }
-    }
-
-    private fun selectLocation(latitude: Double, longitude: Double) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-
-        setPlaceRipple(LatLng(latitude, longitude))
-
-        adapter.clear()
-        nearestPlaces(latitude, longitude)
-        searchTextView.text = ""
-    }
-
-    override fun onFilterBottomSheetClickApplyListener() {
-
-        nearestPlaces(latitude,longitude)
-    }
 
     private lateinit var mMap: GoogleMap
 
@@ -140,6 +111,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val animateZoomTo = 13.0f
+        var NEAREST_DISTANCE = 3000 // testing purpose
     }
 
     private val disposables = CompositeDisposable()
@@ -147,7 +119,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     private var gpsReceiver: GpsLocationReceiver? = null
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-    private var NEAREST_DISTANCE = 3000 // testing purpose
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -307,6 +278,35 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         })
 
+    }
+
+    //PlacesAutoCompleteAdapter override
+    override fun click(place: Place) {
+        Utils.hideKeyboard(this@HomeActivity)
+        place.latLng?.latitude?.let {
+            place.latLng?.longitude?.let { it1 ->
+                selectLocation(
+                    it,
+                    it1
+                )
+            }
+        }
+    }
+
+    private fun selectLocation(latitude: Double, longitude: Double) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
+
+        setPlaceRipple(LatLng(latitude, longitude))
+
+        adapter.clear()
+        nearestPlaces(latitude, longitude)
+        searchTextView.text = ""
+    }
+
+    override fun onFilterBottomSheetClickApplyListener() {
+
+        nearestPlaces(latitude,longitude)
     }
 
 
@@ -1137,29 +1137,32 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
         view.alpha = 1.0f
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
-            marker.setInfoWindowAnchor(6f,0f)
+            marker.setInfoWindowAnchor(7f,0f)
             if (marker.tag != null) {
                 val locationInfo = marker.tag as NearestLocationData
-                view.textView30.text = (locationInfo.users).toString()
-                view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
 
-//                if (locationInfo.image.isNotEmpty()) {
-//                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
-//
-//                    Logger.d("url = $url")
-//                    Glide.with(context)
-//                        .load(url)
-//                        .transform(RoundedCorners(20))
-//                        .placeholder(R.drawable.ic_img_location_placeholder)
-//                        .into(view.info_window_rest_image)
-//                }
-//
-//                else{
-//                    Glide.with(context)
-//                        .load(R.drawable.ic_img_location_placeholder)
-//                        .transform(RoundedCorners(20))
-//                        .into(view.info_window_rest_image)
-//                }
+                if(locationInfo.distance.roundToInt() > HomeActivity.NEAREST_DISTANCE ){
+                    view.textView30.setTextColor(ActivityCompat.getColor(context, R.color.font_color_far_location))
+                    view.textView31.setTextColor(ActivityCompat.getColor(context, R.color.font_color_far_location))
+                    view.image_view_location_icon.setImageDrawable(ActivityCompat.getDrawable(context, R.drawable.ic_far_away_distance))
+                    view.image_view_user_icon.setImageDrawable(ActivityCompat.getDrawable(context, R.drawable.ic_far_away_rest_user))
+                }
+                else{
+                    view.textView30.setTextColor(ActivityCompat.getColor(context, R.color.font_color_near_location))
+                    view.textView31.setTextColor(ActivityCompat.getColor(context, R.color.font_color_near_location))
+                    view.image_view_location_icon.setColorFilter(ActivityCompat.getColor(context, R.color.font_color_near_location), android.graphics.PorterDuff.Mode.MULTIPLY)
+                    view.image_view_user_icon.setImageDrawable(ActivityCompat.getDrawable(context, R.drawable.ic_near_by_rest_user))
+                }
+
+                view.textView30.text = (locationInfo.users).toString()
+
+                if (locationInfo.distance < 1000) {
+                    view.textView31.text = "${locationInfo.distance.roundToInt()} M"
+                }
+                else{
+                    view.textView31.text = "${round(locationInfo.distance/1000) * 100 / 100} KM"
+                }
+
                 val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
                 Logger.d("url = $url")
                 Glide.with(context)
