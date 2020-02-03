@@ -1133,7 +1133,7 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
 
     override fun getInfoWindow(marker: Marker?): View {
-        val view = context.layoutInflater.inflate(R.layout.custom_infowindow, null)
+        val view = LayoutInflater.from(context).inflate(R.layout.custom_infowindow, null)
         view.alpha = 1.0f
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
@@ -1143,23 +1143,31 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 view.textView30.text = (locationInfo.users).toString()
                 view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
 
-                if (locationInfo.image.isNotEmpty()) {
-                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+//                if (locationInfo.image.isNotEmpty()) {
+//                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+//
+//                    Logger.d("url = $url")
+//                    Glide.with(context)
+//                        .load(url)
+//                        .transform(RoundedCorners(20))
+//                        .placeholder(R.drawable.ic_img_location_placeholder)
+//                        .into(view.info_window_rest_image)
+//                }
+//
+//                else{
+//                    Glide.with(context)
+//                        .load(R.drawable.ic_img_location_placeholder)
+//                        .transform(RoundedCorners(20))
+//                        .into(view.info_window_rest_image)
+//                }
+                val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+                Logger.d("url = $url")
+                Glide.with(context)
+                    .load(url)
+                    .transform(RoundedCorners(20))
+                    .placeholder(R.drawable.ic_img_location_placeholder)
+                    .into(view.info_window_rest_image)
 
-                    Logger.d("url = $url")
-                    Glide.with(context)
-                        .load(url)
-                        .transform(RoundedCorners(20))
-                        .placeholder(R.drawable.ic_img_location_placeholder)
-                        .into(view.info_window_rest_image)
-                }
-
-                else{
-                    Glide.with(context)
-                        .load(R.drawable.ic_img_location_placeholder)
-                        .transform(RoundedCorners(20))
-                        .into(view.info_window_rest_image)
-                }
             } else {
                 view.textView30.text = 0.toString()
                 view.textView31.text = "0 M"
