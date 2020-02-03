@@ -1137,6 +1137,7 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
         view.alpha = 1.0f
         if (marker != null) {
             view.info_window_rest_name.text = marker.title
+            marker.setInfoWindowAnchor(6f,0f)
             if (marker.tag != null) {
                 val locationInfo = marker.tag as NearestLocationData
                 view.textView30.text = (locationInfo.users).toString()
