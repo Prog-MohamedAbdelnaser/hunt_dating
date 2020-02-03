@@ -1157,10 +1157,10 @@ class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
                 view.textView30.text = (locationInfo.users).toString()
 
                 if (locationInfo.distance < 1000) {
-                    view.textView31.text = "${locationInfo.distance.roundToInt()} M"
+                    view.textView31.setText("${locationInfo.distance.roundToInt()} M")
                 }
                 else{
-                    view.textView31.text = "${round(locationInfo.distance/1000) * 100 / 100} KM"
+                    view.textView31.setText("${String.format("%.2f", locationInfo.distance/1000)} KM")
                 }
 
                 val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"

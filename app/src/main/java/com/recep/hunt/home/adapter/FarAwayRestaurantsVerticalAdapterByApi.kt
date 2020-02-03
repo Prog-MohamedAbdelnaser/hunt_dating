@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.
 import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.textView_user_numbers
 import org.jetbrains.anko.find
 import java.lang.Exception
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 
@@ -80,7 +81,15 @@ class FarAwayRestaurantsVerticalAdapterByApi(val context: Context, val item:Arra
                 viewHolder.itemView.restaurant_vertical_item_name.text = model.name
                 viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
-                viewHolder.itemView.textView_distance_numbers.text = "${model.distance.roundToInt()} M"
+
+                if (model.distance < 1000) {
+                    viewHolder.itemView.textView_distance_numbers.text =
+                        "${model.distance.roundToInt()} M"
+                }
+                else{
+                    viewHolder.itemView.textView_distance_numbers.text =
+                        "${String.format("%.2f", model.distance/1000)} KM"
+                }
 
                 viewHolder.itemView.setOnClickListener {
                     val ll = LayoutInflater.from(context).inflate(R.layout.far_away_dialog_layout, null)
