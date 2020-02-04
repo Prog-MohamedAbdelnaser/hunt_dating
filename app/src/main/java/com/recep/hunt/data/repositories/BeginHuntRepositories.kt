@@ -19,7 +19,7 @@ class BeginHuntRepositories(private val apiInterface: ApiInterface,private val t
 
 
     fun callUpdateHuntBeginAPI(updateHuntBeginParams: UpdateHuntBeginParams):Single<Any>{
-        return apiInterface.updateHuntBegin(updateHuntBeginParams).map { res->res.payload }
+        return apiInterface.updateHuntBegin(updateHuntBeginParams.huntId.toString(),updateHuntBeginParams.isMeet,updateHuntBeginParams.isExtraTime,updateHuntBeginParams.extraTime).map { res->res.message }
     }
 
 }

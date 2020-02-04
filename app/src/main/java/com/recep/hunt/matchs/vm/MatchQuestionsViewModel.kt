@@ -66,7 +66,7 @@ class MatchQuestionsViewModel(private val beginHuntLocationUseCases: BeginHuntLo
     }
 
     fun updateHuntBegin(updateHuntBeginParams: UpdateHuntBeginParams){
-        updateHuntBeginParams.huntId=beginHuntLocation.schedule?.huntId
+        updateHuntBeginParams.huntId= beginHuntLocation.schedule?.huntId!!
         disposables.add(beginHuntLocationUseCases.executeUpdateHuntBegin(updateHuntBeginParams)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

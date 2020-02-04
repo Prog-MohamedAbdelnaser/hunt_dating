@@ -140,7 +140,8 @@ interface ApiInterface {
     @POST("/api/push-notification-single-user")
     fun pushNotificationSingleUser(@Body pushNotificationSingleUserParams: PushNotificationSingleUserParams): Single<APIResponse<Any>>
 
-    @POST("/api/update-hunt-begin")
-    fun updateHuntBegin(@Body updateHuntBeginParams: UpdateHuntBeginParams): Single<APIResponse<Any>>
+    @FormUrlEncoded
+    @PUT("/api/update-hunt-begin")
+    fun updateHuntBegin(@Field("hunt_id") huntId:String,@Field("is_meet") is_meet:String,@Field("is_extra_time") is_extra_time:String,@Field("extra_time") extra_time:String): Single<APIResponse<Any>>
 
 }
