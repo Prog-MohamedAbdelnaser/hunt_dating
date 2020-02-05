@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.faraway_restaurant_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.roundToInt
 
 class NearRestaurantHorizontalAdapter:BaseAdapter<NearestLocationData>(itemLayoutRes = R.layout.faraway_restaurant_item) {
 
@@ -179,7 +180,7 @@ class NearRestaurantHorizontalAdapter:BaseAdapter<NearestLocationData>(itemLayou
                                 result[i].basicInfo.job_title,
                                 result[i].basicInfo.about,
                                 result[i].totalMatching,
-                                result[i].totalMeeting,
+                                result[i].totalMeeting.roundToInt(),
                                 result[i].is_online,
                                 result[i].for_date,
                                 result[i].for_bussiness,
