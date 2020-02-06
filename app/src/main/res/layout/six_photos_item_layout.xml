@@ -12,11 +12,12 @@
             android:layout_width="match_parent"
             android:layout_height="126dp">
 
+
         <ImageView
 
                 android:id="@+id/user_image_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
@@ -32,11 +33,18 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_circle_white"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/user_image_1"
+                app:layout_constraintTop_toTopOf="@+id/user_image_1" />
         <ImageView
                 android:id="@+id/user_image_2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
@@ -50,11 +58,19 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/user_image_1"
                 app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_circle_white"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/user_image_2"
+                app:layout_constraintTop_toTopOf="@+id/user_image_2" />
 
         <ImageView
                 android:id="@+id/user_image_3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
@@ -70,7 +86,14 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/user_image_2"
                 app:layout_constraintTop_toTopOf="parent" />
-
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_circle_white"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/user_image_3"
+                app:layout_constraintTop_toTopOf="@+id/user_image_3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -82,8 +105,8 @@
         <ImageView
 
                 android:id="@+id/user_image_4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
@@ -99,9 +122,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_circle_white"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/user_image_4"
+                app:layout_constraintTop_toTopOf="@+id/user_image_4" />
+
+        <ImageView
                 android:id="@+id/user_image_5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
@@ -115,11 +147,19 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/user_image_4"
                 app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_circle_white"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/user_image_5"
+                app:layout_constraintTop_toTopOf="@+id/user_image_5" />
 
         <ImageView
                 android:id="@+id/user_image_6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
@@ -136,5 +176,13 @@
                 app:layout_constraintStart_toEndOf="@+id/user_image_5"
                 app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_circle_white"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/user_image_6"
+                app:layout_constraintTop_toTopOf="@+id/user_image_6" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

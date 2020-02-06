@@ -19,8 +19,11 @@ import com.bumptech.glide.Glide
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.data.sources.local.AppPreference
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.model.UserProfile.Data
+import com.recep.hunt.model.UserProfile.ImageModel
+import com.recep.hunt.model.UserProfile.ImagesListModel
 import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
@@ -39,6 +42,7 @@ import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.textColor
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -127,6 +131,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setPrefData() {
 
+        val appPreference:AppPreference by inject()
         try {
             userInfo.let {
                 SharedPrefrenceManager.setUserFirstName(this, userInfo.first_name)
@@ -139,8 +144,14 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                 SharedPrefrenceManager.setUserLatitude(this, userInfo.lat)
                 SharedPrefrenceManager.setProfileImg(this, userInfo.profile_pic)
 
+                Log.i("IMAGES_MODULE befor ","images ${it.user_profile_image[0].toString()}")
+
+                appPreference.saveObject("IMAGES_MODULE",it.user_profile_image)
+
+                Log.i("IMAGES_MODULE","images ${appPreference.getObject("IMAGES_MODULE",ImagesListModel::class.java)}")
 
                 for ((index, it1) in userInfo.user_profile_image.withIndex()) {
+
                     when (index) {
                         0 -> {
                             SharedPrefrenceManager.setFirstImg(this, it1.image)

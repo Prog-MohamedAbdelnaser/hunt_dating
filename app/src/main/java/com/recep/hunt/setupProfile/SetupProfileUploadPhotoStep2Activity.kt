@@ -29,6 +29,7 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -37,6 +38,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.nguyenhoanglam.imagepicker.helper.ImageHelper.createImageFile
 import com.orhanobut.logger.Logger
 import com.recep.hunt.R
+import com.recep.hunt.base.adapter.BaseAdapter
+import com.recep.hunt.base.adapter.BaseViewHolder
 import com.recep.hunt.constants.Constants.Companion.IMGURI
 import com.recep.hunt.profile.UserProfileEditActivity
 import com.recep.hunt.utilis.BaseActivity
@@ -52,6 +55,7 @@ import java.security.cert.Extension
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.jar.Manifest
+import kotlin.collections.HashMap
 
 
 class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
@@ -61,13 +65,17 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         private val WRITE_EXTERNAL_STORAGE_CODE =13
     }
 
+//    private var imageMap:HashMap<Int,String> = HashMap()
+
     private var imgFlag: String? = null
     private var mPath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_profile_upload_photo_step2)
         setScreenTitle(R.string.setup_profile)
-        getBackButton().setOnClickListener { finish() }
+        getBackButton().setOnClickListener {
+            finishActivity()
+        }
         getBaseCancelBtn().visibility = View.GONE
         SharedPrefrenceManager.setUserGenderChanged(this, true)
         init()
@@ -120,6 +128,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     private var currentPhotoPath = ""
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
@@ -177,7 +186,9 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
         }
-            if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
+        Log.e("onActivityResult: ", " requestCode : ${requestCode}")
+
+        if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
             val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images)
             if (imgFlag == null) {
@@ -203,20 +214,22 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         /** image picker and cropper **/
         val imageFile: File
         if (requestCode === Config.RC_PICK_IMAGES && resultCode === Activity.RESULT_OK && data != null) {
+            Log.e("onActivityResult: ", " RC_PICK_IMAGES : ${requestCode}")
+
             val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
             if (images.size == 1) {
                 imageFile = File(images[0].path)
-                MediaScannerConnection.scanFile(
-                    this, arrayOf(imageFile.getAbsolutePath()), null
-                ) { path, uri ->
+                MediaScannerConnection.scanFile(this, arrayOf(imageFile.getAbsolutePath()), null) { path, uri ->
                     CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).start(this)
                     Logger.d("path = $path")
                 }
 
             }
         }
+
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
+            Log.e("onActivityResult: ", " CROP_IMAGE_ACTIVITY_REQUEST_CODE : ${requestCode}")
 
 
             val result = CropImage.getActivityResult(data)
@@ -276,6 +289,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     private fun finishActivity() {
+  //      setResult(UserProfileEditActivity.REQUEST_CODE_UPLOAD_IMAGE_INTENT)
         launchActivity<UserProfileEditActivity>
         {
             finish()
@@ -296,7 +310,6 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         return Uri.parse(path)
     }
 
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_TAKE_PHOTO -> {
@@ -310,5 +323,6 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
         }
     }
+
 
 }
