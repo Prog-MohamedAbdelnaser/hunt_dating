@@ -576,7 +576,7 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
                             fbUserImages(id)
 
 
-                            launchActivity<SetupProfileDobActivity> {
+                            launchActivity<ContinueAsSocialActivity> {
                                 putExtra(socialTypeKey, Constants.socialFBType)
                                 putExtra(userSocialModel, json)
                             }
