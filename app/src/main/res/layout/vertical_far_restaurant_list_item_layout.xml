@@ -76,7 +76,7 @@
 
         <ImageView
                 android:id="@+id/snear_vertical_rest_user_image"
-                android:layout_width="12dp"
+                android:layout_width="9dp"
                 android:layout_height="12dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -84,9 +84,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_far_away_rest_user"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail"
+                app:layout_constraintBottom_toBottomOf="@id/cardview_image_container"
                 app:layout_constraintStart_toStartOf="@+id/restaurant_vertical_item_detail"
-                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+                />
 
         <TextView
                 android:id="@+id/textView_user_numbers"
@@ -95,15 +96,14 @@
                 android:layout_alignBottom="@+id/snear_rest_user_image"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/montserrat_semibold"
                 android:text="20"
-                android:textColor="#F18828"
+                android:textColor="@color/font_color_far_location"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/snear_vertical_rest_user_image"
+                app:layout_constraintBottom_toBottomOf="@id/snear_vertical_rest_user_image"
                 app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_user_image"
-                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+                />
 
         <ImageView
                 android:id="@+id/snear_vertical_rest_distance_image"
@@ -114,29 +114,26 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginLeft="22dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_far_away_distance"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textView_user_numbers"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_user_numbers"
                 app:layout_constraintStart_toEndOf="@+id/textView_user_numbers"
-                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+                />
 
         <TextView
                 android:id="@+id/textView_distance_numbers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/snear_rest_user_image"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/montserrat_semibold"
                 android:text="100 M"
-                android:textColor="#F18828"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/font_color_far_location"
+                android:textSize="14sp"
+                app:layout_constraintTop_toTopOf="@id/snear_vertical_rest_distance_image"
+                app:layout_constraintBottom_toBottomOf="@id/snear_vertical_rest_distance_image"
                 app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_distance_image"
-                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+                />
 
         <ImageView
                 android:id="@+id/imageView9"

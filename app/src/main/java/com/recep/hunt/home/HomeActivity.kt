@@ -94,6 +94,7 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -101,36 +102,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     PlacesAutoCompleteAdapter.ClickListener,
     NearByRestaurantsAdapter.NearByRestaurantsAdapterListener,
     FarAwayRestaurantsVerticalAdapter.FarAwayRestaurantsVerticalAdapterListener {
-
-
-    //PlacesAutoCompleteAdapter override
-    override fun click(place: Place) {
-        Utils.hideKeyboard(this@HomeActivity)
-        place.latLng?.latitude?.let {
-            place.latLng?.longitude?.let { it1 ->
-                selectLocation(
-                    it,
-                    it1
-                )
-            }
-        }
-    }
-
-    private fun selectLocation(latitude: Double, longitude: Double) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-
-        setPlaceRipple(LatLng(latitude, longitude))
-
-        adapter.clear()
-        nearestPlaces(latitude, longitude)
-        searchTextView.text = ""
-    }
-
-    override fun onFilterBottomSheetClickApplyListener() {
-
-        nearestPlaces(latitude, longitude)
-    }
 
     private lateinit var mMap: GoogleMap
 
@@ -140,6 +111,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val animateZoomTo = 13.0f
+        var NEAREST_DISTANCE = 3000 // testing purpose
     }
 
     private val disposables = CompositeDisposable()
@@ -149,7 +121,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     private var groubHorizontalListadapter = GroupAdapter<ViewHolder>()
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-    private var NEAREST_DISTANCE = 3000 // testing purpose
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -319,6 +290,35 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         })
 
+    }
+
+    //PlacesAutoCompleteAdapter override
+    override fun click(place: Place) {
+        Utils.hideKeyboard(this@HomeActivity)
+        place.latLng?.latitude?.let {
+            place.latLng?.longitude?.let { it1 ->
+                selectLocation(
+                    it,
+                    it1
+                )
+            }
+        }
+    }
+
+    private fun selectLocation(latitude: Double, longitude: Double) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
+
+        setPlaceRipple(LatLng(latitude, longitude))
+
+        adapter.clear()
+        nearestPlaces(latitude, longitude)
+        searchTextView.text = ""
+    }
+
+    override fun onFilterBottomSheetClickApplyListener() {
+
+        nearestPlaces(latitude,longitude)
     }
 
 
@@ -1195,50 +1195,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         private fun onEnableGPS() {
 
         }
-    }
-    class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
-
-        private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-
-        override fun getInfoWindow(marker: Marker?): View {
-            val view = context.layoutInflater.inflate(R.layout.custom_infowindow, null)
-            view.alpha = 1.0f
-            if (marker != null) {
-                view.info_window_rest_name.text = marker.title
-                marker.setInfoWindowAnchor(6f, 0f)
-                if (marker.tag != null) {
-                    val locationInfo = marker.tag as NearestLocationData
-                    view.textView30.text = (locationInfo.users).toString()
-                    view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
-
-                    if (locationInfo.image.isNotEmpty()) {
-                        val url =
-                            "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
-
-                        Logger.d("url = $url")
-                        Glide.with(context)
-                            .load(url)
-                            .transform(RoundedCorners(20))
-                            .placeholder(R.drawable.ic_img_location_placeholder)
-                            .into(view.info_window_rest_image)
-                    } else {
-                        Glide.with(context)
-                            .load(R.drawable.ic_img_location_placeholder)
-                            .transform(RoundedCorners(20))
-                            .into(view.info_window_rest_image)
-                    }
-                } else {
-                    view.textView30.text = 0.toString()
-                    view.textView31.text = "0 M"
-                }
-            }
-            return view
-        }
-
-        //getInfoWindow
-        override fun getInfoContents(p0: Marker?) = null
-
-    }
+}
 
     class ListPaddingDecoration(context: Context, val paddingLeft: Int, val paddingRight: Int) :
         RecyclerView.ItemDecoration() {
