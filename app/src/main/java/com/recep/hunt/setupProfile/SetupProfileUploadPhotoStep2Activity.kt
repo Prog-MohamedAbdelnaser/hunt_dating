@@ -67,12 +67,9 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
         private val WRITE_EXTERNAL_STORAGE_CODE =13
     }
-
-//    private var imageMap:HashMap<Int,String> = HashMap()
-
+    private val editeProfileRepository:EditeProfileRepository by inject()
     private var imagePostion: Int=-1
     private var imgFlag: Int? = null
-    private val editeProfileRepository:EditeProfileRepository by inject()
     private var mPath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,9 +189,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
         if (requestCode == WRITE_EXTERNAL_STORAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
         }
-        Log.e("onActivityResult: ", " requestCode : ${requestCode}")
-
-        if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
+            if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
             val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images)
             if (imgFlag == -1) {
@@ -220,8 +215,6 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         /** image picker and cropper **/
         val imageFile: File
         if (requestCode === Config.RC_PICK_IMAGES && resultCode === Activity.RESULT_OK && data != null) {
-            Log.e("onActivityResult: ", " RC_PICK_IMAGES : ${requestCode}")
-
             val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
             if (images.size == 1) {
                 imageFile = File(images[0].path)
@@ -232,12 +225,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
             }
         }
-
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            Log.e("onActivityResult: ", " CROP_IMAGE_ACTIVITY_REQUEST_CODE : ${requestCode}")
-
-
             val result = CropImage.getActivityResult(data)
 
 
@@ -310,7 +298,6 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     private fun finishActivity() {
-  //      setResult(UserProfileEditActivity.REQUEST_CODE_UPLOAD_IMAGE_INTENT)
         launchActivity<UserProfileEditActivity>
         {
             finish()

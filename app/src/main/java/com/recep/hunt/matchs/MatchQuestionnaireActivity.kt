@@ -534,6 +534,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
             if (mSwipeUserModel != null) {
                 Glide.with(this)
                     .load(mSwipeUserModel?.images!![0])
+                    .placeholder(R.drawable.ic_person_gray_24dp)
                     .centerCrop()
                     .into(ivLikedPersonImage)
 
@@ -542,6 +543,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
                 if (userProfile.contains("http")) {
                     Glide.with(this)
                         .load(userProfile)
+                        .placeholder(R.drawable.ic_person_gray_24dp)
                         .centerCrop()
                         .into(ivUserImage)
                 }
