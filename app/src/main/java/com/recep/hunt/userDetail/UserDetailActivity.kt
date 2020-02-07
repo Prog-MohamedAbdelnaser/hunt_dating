@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.github.pwittchen.swipe.library.rx2.SwipeListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.recep.hunt.utilis.*
 import org.jetbrains.anko.imageResource
 
@@ -48,6 +49,8 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
 
     override fun onDoubleTap() {
     }
+
+    private lateinit var behavior: BottomSheetBehavior<View>
 
     var counter = 0
     var screenCenter: Int = 0
@@ -70,9 +73,12 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
         init()
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     private fun init() {
         swipe = Swipe(200, 200)
+
+
         swipe.setListener(object : SwipeListener {
             override fun onSwipedUp(event: MotionEvent?): Boolean {
                 //setupUserDetailBottomSheet()
@@ -236,6 +242,9 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
             supportFragmentManager.beginTransaction().remove(bottomSheet!!).commit();
         }
         bottomSheet = UserDetalBottomSheetFragment(this)
+        bottomSheet!!.allowEnterTransitionOverlap=true
+        bottomSheet!!.allowReturnTransitionOverlap=true
+
         bottomSheet?.show(supportFragmentManager, "userDetailBottomSheet")
 
     }

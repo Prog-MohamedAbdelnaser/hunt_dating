@@ -1,21 +1,12 @@
 package com.recep.hunt.utilis
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.recep.hunt.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import android.content.res.Resources
-import android.widget.FrameLayout
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import android.view.ViewGroup
 import com.kotlin.mvvm.utils.SuperBottomSheetFragment
+import com.recep.hunt.R
 import kotlinx.android.synthetic.main.no_user_bottom_sheet.*
 
 /**
@@ -65,8 +56,6 @@ class NoUserBottomSheetFragment : SuperBottomSheetFragment(), View.OnClickListen
         }
 
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
