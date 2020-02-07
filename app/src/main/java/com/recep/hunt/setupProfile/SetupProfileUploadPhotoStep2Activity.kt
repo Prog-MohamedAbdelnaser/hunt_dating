@@ -216,9 +216,6 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             }
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-
-
             val result = CropImage.getActivityResult(data)
 
 

@@ -39,6 +39,10 @@
     <color name="colorFaqBackgroud">#f9fcff</color>
 
     <color name="colorProgressbar">#ff2a4e</color>
+
+    <color name="font_color_far_location">#F18828</color>
+    <color name="font_color_near_location">#F64C1F</color>
+
     <color name="farAwayHeighlightColor">#F18828</color>
 
 </resources>

@@ -93,7 +93,7 @@
                         android:layout_alignBottom="@+id/snear_rest_user_image"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
-                        android:textColor="#F64C1F"
+                        android:textColor="@color/font_color_near_location"
                         android:fontFamily="@font/montserrat"
                         android:textSize="10sp"
                         android:layout_toEndOf="@+id/snear_rest_user_image"

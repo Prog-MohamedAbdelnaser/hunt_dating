@@ -507,15 +507,18 @@ class SocialLoginActivity : AppCompatActivity(), View.OnClickListener,
         SharedPrefrenceManager.setGoogleLoginToken(this, user.uid)
         SharedPrefrenceManager.setGoogleId(this, user.uid)
 
-        //                    launchActivity<ContinueAsSocialActivity> {
-        //                        putExtra(socialTypeKey, Constants.socialGoogleType)
-        //                        putExtra(userSocialModel, json)
-        //                    }
-
-        launchActivity<SetupProfileDobActivity> {
-            putExtra(socialTypeKey, Constants.socialFBType)
-            putExtra(userSocialModel, json)
-        }
+                            launchActivity<ContinueAsSocialActivity> {
+                                putExtra(socialTypeKey, Constants.socialGoogleType)
+                                putExtra(userSocialModel, json)
+                            }
+/**
+ *
+ * @Reason: After success the user is direct to {@link ContinueAsSocialActivity } not {@link SetupProfileDobActivity}
+ */
+//        launchActivity<SetupProfileDobActivity> {
+//            putExtra(socialTypeKey, Constants.socialFBType)
+//            putExtra(userSocialModel, json)
+//        }
 
         val googleSignInClient = GoogleSignIn.getClient(this@SocialLoginActivity, gso)
         googleSignInClient.signOut()
