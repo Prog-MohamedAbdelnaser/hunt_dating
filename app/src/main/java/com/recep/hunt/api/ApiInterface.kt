@@ -144,4 +144,9 @@ interface ApiInterface {
     fun pushNotificationSingleUser(@Body pushNotificationSingleUserParams: PushNotificationSingleUserParams): Single<APIResponse<Any>>
 
 
+    @FormUrlEncoded
+    @POST("/api/delete-image-user-profile")
+    fun deleteImageFromUserImages(@Field("image_id") imageId:String):Single<APIResponse<Any>>
+
+
 }

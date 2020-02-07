@@ -305,6 +305,149 @@
                     android:layout_marginBottom="20dp"
                     app:layout_constraintTop_toBottomOf="@+id/basic_info_tv" />
 
+
+            <LinearLayout
+                    android:id="@+id/connectFbLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView"
+            >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvFacebookLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/facebook"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvFacebookConnect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_to_fb"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                    android:id="@+id/showInstaPhotoLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/connectFbLout"
+                    >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvInstaLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/show_insta_photo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvInsaPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_inest"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                    android:id="@+id/linkedInLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/showInstaPhotoLout"
+                    >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvLinkedinLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/linked_in"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvLinked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_to_linked"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                    android:id="@+id/spotifyLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/linkedInLout"
+                    >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvSpotifyLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/my_top_spotify_artists"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvSpotify"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_spotify"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

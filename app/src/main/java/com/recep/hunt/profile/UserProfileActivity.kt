@@ -20,6 +20,7 @@ import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.data.sources.local.AppPreference
+import com.recep.hunt.domain.entities.EntitiesConstants
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.model.UserProfile.Data
 import com.recep.hunt.model.UserProfile.ImageModel
@@ -132,8 +133,13 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
     private fun setPrefData() {
 
         val appPreference:AppPreference by inject()
+
         try {
             userInfo.let {
+
+                appPreference.saveObject(EntitiesConstants.USER_INFO_MODULE,it)
+
+
                 SharedPrefrenceManager.setUserFirstName(this, userInfo.first_name)
                 SharedPrefrenceManager.setUserLastName(this, userInfo.last_name)
                 SharedPrefrenceManager.setUserMobileNumber(this, userInfo.mobile_no)
@@ -144,11 +150,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                 SharedPrefrenceManager.setUserLatitude(this, userInfo.lat)
                 SharedPrefrenceManager.setProfileImg(this, userInfo.profile_pic)
 
-                Log.i("IMAGES_MODULE befor ","images ${it.user_profile_image[0].toString()}")
 
-                appPreference.saveObject("IMAGES_MODULE",it.user_profile_image)
-
-                Log.i("IMAGES_MODULE","images ${appPreference.getObject("IMAGES_MODULE",ImagesListModel::class.java)}")
 
                 for ((index, it1) in userInfo.user_profile_image.withIndex()) {
 
@@ -189,6 +191,8 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                 SharedPrefrenceManager.setZodiac(this,userInfo.user_info.zodiac)
                 SharedPrefrenceManager.setReligion(this,userInfo.user_info.religion)
 
+
+             //   appPreference.saveObject("IMAGES_MODULE",it.user_profile_image)
 
             }
         } catch (e: Exception) {

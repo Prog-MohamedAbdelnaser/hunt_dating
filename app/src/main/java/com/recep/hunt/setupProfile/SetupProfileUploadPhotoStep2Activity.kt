@@ -41,6 +41,8 @@ import com.recep.hunt.R
 import com.recep.hunt.base.adapter.BaseAdapter
 import com.recep.hunt.base.adapter.BaseViewHolder
 import com.recep.hunt.constants.Constants.Companion.IMGURI
+import com.recep.hunt.data.repositories.EditeProfileRepository
+import com.recep.hunt.model.UserProfile.ImageModel
 import com.recep.hunt.profile.UserProfileEditActivity
 import com.recep.hunt.utilis.BaseActivity
 import com.recep.hunt.utilis.LogUtil
@@ -48,6 +50,7 @@ import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.launchActivity
 import com.theartofdev.edmodo.cropper.CropImageView
 import org.jetbrains.anko.Android
+import org.koin.android.ext.android.inject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.Exception
@@ -67,7 +70,9 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
 //    private var imageMap:HashMap<Int,String> = HashMap()
 
-    private var imgFlag: String? = null
+    private var imagePostion: Int=-1
+    private var imgFlag: Int? = null
+    private val editeProfileRepository:EditeProfileRepository by inject()
     private var mPath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +87,8 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
     }
 
     private fun init() {
-        imgFlag = intent.getStringExtra(UserProfileEditActivity.imgBlock)
+        imgFlag = intent.getIntExtra(UserProfileEditActivity.imgBlock,-1)
+        imagePostion = intent.getIntExtra(UserProfileEditActivity.IMAGE_POSITION,-1)
         Logger.d("imgFlag from intent ",imgFlag)
         camera_layout.setOnClickListener { takePhoto() }
         gallery_layout.setOnClickListener {
@@ -191,7 +197,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.data
             val imagesBtm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), images)
-            if (imgFlag == null) {
+            if (imgFlag == -1) {
                 if (images != null) {
                     SharedPrefrenceManager.setProfileImg(this, BitMapToString(imagesBtm))
                     launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, images.toString()) }
@@ -203,7 +209,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
             Log.e("QuestionData Extras : ", " ${data.extras}")
             val images = data.extras.get("questionData") as Bitmap
             val imageString = BitMapToString(images)
-            if (imgFlag == null) {
+            if (imgFlag == -1) {
                 SharedPrefrenceManager.setProfileImg(this, imageString)
                 launchActivity<SetupProfileAddedPhotoActivity> { putExtra(IMGURI, data.data.toString()) }
             } else {
@@ -237,7 +243,7 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
             if (resultCode === Activity.RESULT_OK) {
                 LogUtil.d("Uri ",result.uri.toString())
-                if (imgFlag.isNullOrEmpty()) {
+                if (imgFlag ==-1) {
                     LogUtil.d("imageFlag","Called")
 
 //                    SharedPrefrenceManager.setProfileImg(this, result.bitmap.toString())
@@ -266,7 +272,19 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
 
     private fun setImage(bitmap: Bitmap) {
         val imageString = BitMapToString(bitmap)
-        if (imgFlag.equals("1")) {
+        imgFlag?.let {
+            if (imgFlag==0) {
+                editeProfileRepository.addImage(ImageModel(imageString, it),imagePostion)
+            }else{
+                editeProfileRepository.updateImage(ImageModel(imageString, it),imagePostion)
+            }
+
+
+            finishActivity()
+        }
+
+
+/*        if (imgFlag.equals("1")) {
             SharedPrefrenceManager.setFirstImg(this, imageString)
             finishActivity()
         } else if (imgFlag.equals("2")) {
@@ -284,7 +302,10 @@ class SetupProfileUploadPhotoStep2Activity : BaseActivity() {
         } else {
             SharedPrefrenceManager.setSixImg(this, imageString)
             finishActivity()
-        }
+        }*/
+
+
+
 
     }
 
