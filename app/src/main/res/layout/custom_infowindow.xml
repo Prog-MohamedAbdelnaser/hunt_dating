@@ -17,7 +17,7 @@
         <ImageView
                 android:id="@+id/info_window_rest_image"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
                 tools:src="@drawable/ic_img_location_placeholder"
@@ -29,16 +29,20 @@
         <TextView
                 android:id="@+id/info_window_rest_name"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="TextView"
+                tools:text="TextView"
                 android:textColor="@color/app_text_black"
                 android:textSize="12sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="24sp"
+                app:autoSizeMinTextSize="6sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/info_window_rest_image"
-                app:layout_constraintTop_toTopOf="@+id/info_window_rest_image"/>
+                app:layout_constraintTop_toTopOf="@+id/info_window_rest_image"
+                />
 
         <ImageView
                 android:id="@+id/image_view_user_icon"
