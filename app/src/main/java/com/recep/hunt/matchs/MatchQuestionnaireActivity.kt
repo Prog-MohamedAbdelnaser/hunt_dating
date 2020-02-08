@@ -73,7 +73,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
     private var timerPstatus = 360
 
-    private var addTime = 1L
+    private var addTime = 0L
 
     private lateinit var ivLikedPersonImage: CircleImageView
 
@@ -107,12 +107,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
         idSubmit.setOnClickListener {
             tvStepSix.visibility = View.GONE
-            val mIntent = Intent(this, LetsMeetActivity::class.java)
-            mIntent.putExtra("swipeUsers", mSwipeUserModel)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(mIntent)
-            finish()
+            updateHuntBegin(UpdateHuntBeginParams(0,"yes",if(addTime > 0L) "yes" else "no","$addTime"))
 
         }
 
@@ -141,7 +136,6 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
             }
 
-            updateHuntBegin(UpdateHuntBeginParams(0,"yes","yes","$addTime"))
 
         }
 
@@ -264,6 +258,14 @@ class MatchQuestionnaireActivity : BaseActivity() {
             CommonState.LoadingShow->showProgressDialog()
             CommonState.LoadingFinished->hideProgressDialog()
             is CommonState.Success->{
+
+                val mIntent = Intent(this, LetsMeetActivity::class.java)
+                mIntent.putExtra("swipeUsers", mSwipeUserModel)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(mIntent)
+                finish()
+
                 Helpers.showSuccesSnackBar(this,"Successfully",state.data.toString())
             }
             is CommonState.Error->{
