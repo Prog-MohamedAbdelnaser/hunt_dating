@@ -4,23 +4,44 @@ package com.recep.hunt.profile
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.base.adapter.BaseAdapter
+import com.recep.hunt.base.adapter.BaseViewHolder
+import com.recep.hunt.base.adapter.GridSpacingItemDecoration
+import com.recep.hunt.common.AskBeforeMakeActionDialog
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.data.repositories.EditeProfileRepository
+import com.recep.hunt.data.sources.local.AppPreference
+import com.recep.hunt.domain.entities.EntitiesConstants
 import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.model.UserProfile.Data
+import com.recep.hunt.model.UserProfile.ImageModel
+import com.recep.hunt.model.UserProfile.ImagesListModel
 import com.recep.hunt.model.UserProfile.UserProfileResponse
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoModel
@@ -30,15 +51,21 @@ import com.recep.hunt.utilis.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import jp.wasabeef.glide.transformations.CropSquareTransformation
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.activity_user_profile_edit.*
+import kotlinx.android.synthetic.main.item_image.view.*
 import kotlinx.android.synthetic.main.profile_basic_item_view.view.*
 import kotlinx.android.synthetic.main.profile_header_layout_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_header_item.view.*
 import kotlinx.android.synthetic.main.profile_simple_title_item.view.*
 import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
+import kotlinx.android.synthetic.main.user_photos_list.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
 import org.jetbrains.anko.textColor
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,6 +74,8 @@ private const val TAG = "UserProfileActivity"
 
 class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
 
+
+    private val editeProfileRepository:EditeProfileRepository by inject()
 
     private lateinit var recyclerView: RecyclerView
     lateinit var userInfo: Data
@@ -127,8 +156,14 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setPrefData() {
 
+        val appPreference:AppPreference by inject()
+
         try {
             userInfo.let {
+
+                appPreference.saveObject(EntitiesConstants.USER_INFO_MODULE,it)
+
+
                 SharedPrefrenceManager.setUserFirstName(this, userInfo.first_name)
                 SharedPrefrenceManager.setUserLastName(this, userInfo.last_name)
                 SharedPrefrenceManager.setUserMobileNumber(this, userInfo.mobile_no)
@@ -140,7 +175,9 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                 SharedPrefrenceManager.setProfileImg(this, userInfo.profile_pic)
 
 
+/*
                 for ((index, it1) in userInfo.user_profile_image.withIndex()) {
+
                     when (index) {
                         0 -> {
                             SharedPrefrenceManager.setFirstImg(this, it1.image)
@@ -161,7 +198,7 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                             SharedPrefrenceManager.setSixImg(this, it1.image)
                         }
                     }
-                }
+                }*/
 
                 SharedPrefrenceManager.setAboutYou(this,userInfo.user_info.about)
                 SharedPrefrenceManager.setJobTitle(this,userInfo.user_info.job_title)
@@ -178,6 +215,8 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
                 SharedPrefrenceManager.setZodiac(this,userInfo.user_info.zodiac)
                 SharedPrefrenceManager.setReligion(this,userInfo.user_info.religion)
 
+
+             //   appPreference.saveObject("IMAGES_MODULE",it.user_profile_image)
 
             }
         } catch (e: Exception) {
@@ -214,15 +253,20 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun addSixPhotosItemView() {
+/*
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
         val fourthImage = SharedPrefrenceManager.getFourthImg(this)
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
+*/
 
-        if (firstImage != Constants.NULL || secondImage != Constants.NULL || thirdImage != Constants.NULL || fourthImage != Constants.NULL || fifthImage != Constants.NULL || sixthImage != Constants.NULL)
-            adapter.add(ProfileSixPhotosView(this))
+//        if (firstImage != Constants.NULL || secondImage != Constants.NULL || thirdImage != Constants.NULL || fourthImage != Constants.NULL || fifthImage != Constants.NULL || sixthImage != Constants.NULL)
+
+
+        if(editeProfileRepository.getUserImages().size>0)
+            adapter.add(ProfileSixPhotosView(this,editeProfileRepository.getUserImages()))
     }
 
     private fun addHomeTownAndSchoolItemView() {
@@ -273,6 +317,10 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
 //        }
 //        return super.onOptionsItemSelected(item)
 //    }
+
+
+
+
 }
 
 //ProfileHeader
@@ -328,11 +376,16 @@ class ProfileHeaderView(private val context: Context) : Item<ViewHolder>() {
 }
 
 //Profile User Images - 6
-class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
+class ProfileSixPhotosView(private val context: Context,private val imagesListModel: ArrayList<ImageModel>) : Item<ViewHolder>() {
     var bitmap: Bitmap? = null
-    override fun getLayout() = R.layout.six_photos_item_layout
+
+    private val userImageAdapter: UserImagesAdapter by lazy { UserImagesAdapter() }
+    override fun getLayout() = R.layout.user_photos_list
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        val firstImage = SharedPrefrenceManager.getFirstImg(context)
+
+        userImageAdapter.updateItems(imagesListModel)
+
+       /* val firstImage = SharedPrefrenceManager.getFirstImg(context)
         if (firstImage.contains("http")) {
             Glide.with(context)
                 .load(firstImage)
@@ -430,17 +483,53 @@ class ProfileSixPhotosView(private val context: Context) : Item<ViewHolder>() {
                 )
             )
         }
+*/
+
+        viewHolder.itemView.recyclerViewUserImages.apply {
+            setHasFixedSize(false)
+            adapter=userImageAdapter
+            layoutManager= GridLayoutManager(context,3)
+            addItemDecoration(GridSpacingItemDecoration(3, resources.getDimension(R.dimen.dp8).toInt(), true))
+
+        }
 
 
     }
 
-    fun StringToBitmap(img: String): Bitmap? {
+
+    inner class UserImagesAdapter: BaseAdapter<ImageModel>(itemLayoutRes = R.layout.item_image){
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ImageModel> {
+            return UserImageViewHolder(getItemView(parent))
+        }
+
+        inner class UserImageViewHolder(view: View) : BaseViewHolder<ImageModel>(view) {
+            override fun fillData() {
+                itemView.btnDelete.visibility=View.GONE
+                item?.let { loadImage(it, itemView.ivProfileItem) }
+            }
+
+        }
+    }
+
+    fun loadImage(imageModel:ImageModel, imageView: ImageView){
+        val multi = MultiTransformation<Bitmap>(
+            CropSquareTransformation(),
+            RoundedCornersTransformation(1, 8, RoundedCornersTransformation.CornerType.ALL)
+        )
+        Glide.with(context).load(imageModel.image)
+            .apply(RequestOptions.bitmapTransform(multi))
+            .into(imageView)
+
+    }
+
+   /* fun StringToBitmap(img: String): Bitmap? {
         if (img != null) {
             var b = Base64.decode(img, Base64.DEFAULT)
             bitmap = BitmapFactory.decodeByteArray(b, 0, b.size)
         }
         return bitmap
-    }
+    }*/
 
 }
 
@@ -575,3 +664,4 @@ class ProfileBasicInfoItemView(
 
     }
 }
+

@@ -168,17 +168,26 @@ class SwipeMainActivity : AppCompatActivity(), StoriesProgressView.StoriesListen
             if (items[i].is_online == "true") {
                 ivStatusOnline.visibility = VISIBLE
             }
-            if (items[i].for_bussiness != null) {
-                if (items[i]?.for_bussiness?.isNotEmpty()!!) {
-                    ivForBusiness.visibility = VISIBLE
-                }
-            }
-            if (items[i].for_date.isNotEmpty()) {
-                ivForDate.visibility = VISIBLE
-            }
-            if (items[i].for_friendship.isNotEmpty()) {
-                ivForFriendship.visibility = VISIBLE
-            }
+
+//            if (items[i].for_bussiness != null) {
+//                if (items[i]?.for_bussiness?.isNotEmpty()!!) {
+//                    ivForBusiness.visibility = VISIBLE
+//                }
+//            }
+//            if (items[i].for_date.isNotEmpty()) {
+//                ivForDate.visibility = VISIBLE
+//            }
+//            if (items[i].for_friendship.isNotEmpty()) {
+//                ivForFriendship.visibility = VISIBLE
+//            }
+            /**
+             * Changes made
+             */
+            items[i].for_bussiness?.let { if(it.isNotEmpty()) ivForBusiness.visibility = VISIBLE }
+            items[i].for_date?.let { if(it.isNotEmpty()) ivForDate.visibility = VISIBLE }
+            items[i].for_friendship?.let { if(it.isNotEmpty()) ivForFriendship.visibility = VISIBLE }
+
+
 
             textView51.text = "" + items[i].totalMeeting
             textView50.text = "" + items[i].totalMatching.toInt()

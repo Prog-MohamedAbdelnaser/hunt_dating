@@ -7,31 +7,52 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
+import com.recep.hunt.base.adapter.BaseAdapter
+import com.recep.hunt.base.adapter.BaseViewHolder
+import com.recep.hunt.base.adapter.GridSpacingItemDecoration
+import com.recep.hunt.common.AskBeforeMakeActionDialog
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.data.repositories.EditeProfileRepository
+import com.recep.hunt.features.common.CommonState
 import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
+import com.recep.hunt.model.UserProfile.ImageModel
 import com.recep.hunt.profile.listeners.ProfileBasicInfoTappedListner
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
 import com.recep.hunt.profile.viewmodel.BasicInfoViewModel
+import com.recep.hunt.profile.viewmodel.EditProfileViewModel
 import com.recep.hunt.setupProfile.SetupProfileUploadPhotoStep2Activity
 import com.recep.hunt.utilis.*
 import com.theartofdev.edmodo.cropper.CropImage
@@ -39,13 +60,17 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
+import jp.wasabeef.glide.transformations.CropSquareTransformation
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_user_profile_edit.*
-import kotlinx.android.synthetic.main.six_photos_item_layout.*
+import kotlinx.android.synthetic.main.item_image.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,8 +78,12 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
-
 class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
+
+
+    val editeProfileRepository: EditeProfileRepository by inject()
+
+    private val editProfileViewModel:EditProfileViewModel by  viewModel()
     private lateinit var writeAboutYouEditText: EditText
     private lateinit var jobTitleEditText: EditText
     private lateinit var companyNameEditText: EditText
@@ -62,34 +91,45 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     private lateinit var schoolOrUniversityEditText: EditText
     private lateinit var ivPencilEditProfileId: ImageView
     private lateinit var ivEditProfielId: CircleImageView
-
-
     private lateinit var maleGenderBtn: Button
+
     private lateinit var femaleGenderBtn: Button
+
     private lateinit var otherGenderBtn: Button
 
     private var count = 1
+
     private var flag = 0
+
     private lateinit var oldGender: String
+
     private var bitmap: Bitmap? = null
+
+    private var attempImages:ArrayList<ImageModel> = ArrayList()
+    private val userImageAdapter:UserImagesAdapter by lazy { UserImagesAdapter() }
 
     companion object {
         const val questionModelKey = "questionModelKey"
         const val questionImageKey = "questionImageKey"
         const val imgBlock = "imgBlock"
+        const val IMAGE_POSITION = "IMAGE_POSITION"
+
         const val questionPositionKey = "questionPositionKey"
+        const val REQUEST_CODE_UPLOAD_IMAGE_INTENT=2222
     }
 
-
     private lateinit var userBasicInfoRecyclerView: RecyclerView
+
     private var adapter = GroupAdapter<ViewHolder>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile_edit)
         setScreenTitle(R.string.edit_profile)
         getBackButton().setOnClickListener { finish() }
         getBaseCancelBtn().visibility = View.GONE
-//        SharedPrefrenceManager.setUserGenderChanged(this, true)
+        initObservers()
+        initRecyclerUserImages()
         init()
     }
 
@@ -112,7 +152,11 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         val dialog = Helpers.showDialog(this, this, "Updating Profile")
         oldGender = SharedPrefrenceManager.getUserGender(this)
 
+
+
         save_edit_profile_btn.setOnClickListener {
+            Log.i("save_edit_profile_btn","setOnClickListener ")
+
             dialog.show()
             updateAboutYou()
             updateJobTitle()
@@ -231,6 +275,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                         }
                     }
 
+                    Log.i("save_edit_profile_btn","response${response.isSuccessful} ")
 
                     if (response.isSuccessful) {
                         saveUserProfile()
@@ -249,9 +294,11 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         }
 
 
-        bindSixImages()
+        //bindSixImages()
         setupFields()
         setupRecyclerView()
+        Log.i("sharePrefeImageSetup","firstImage ")
+
         sharePrefeImageSetup()
         setupChangeGenderBtn()
         setupSelectedGender(SharedPrefrenceManager.getUserGender(this))
@@ -263,11 +310,29 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     }
 
-    override fun onItemClicked(
-        position: Int,
-        questionModel: UserBasicInfoQuestionModel,
-        icon: Int
-    ) {
+    private fun initObservers() {
+        editProfileViewModel.apply {
+            removeImageLiveData.observe(this@UserProfileEditActivity, Observer {
+                handleDeleteUserImage(it)
+            })
+        }
+    }
+
+    private fun handleDeleteUserImage(state: CommonState<ImageModel>?) {
+        when(state){
+            is CommonState.LoadingShow->{showProgressDialog()}
+            is CommonState.LoadingFinished->{dismissProgressDialog()}
+            is CommonState.Success->{
+                Log.i("handleDeleteUserImage","handleDeleteUserImage")
+                userImageAdapter.removeItem(state.data)
+                userImageAdapter.addItem(ImageModel("",0))
+            }
+            is CommonState.Error->{
+            }
+        }
+    }
+
+    override fun onItemClicked(position: Int, questionModel: UserBasicInfoQuestionModel, icon: Int) {
         launchActivity<UserProfileEditQuestionActivity> {
             putExtra(questionModelKey, questionModel)
             putExtra(questionPositionKey, position)
@@ -275,12 +340,12 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         }
     }
 
-
     private fun saveUserProfile() {
         val profileImage = SharedPrefrenceManager.getProfileImg(this)
         val dialog = Helpers.showDialog(this, this, "Updating Images")
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
+
         var isImageAvailable = false
         if (!TextUtils.isEmpty(profileImage)) {
             val firstFile = getFiles(profileImage, 0)
@@ -333,15 +398,15 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     }
 
-
     private fun saveImages() {
-
+/*
         val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
         val fourthImage = SharedPrefrenceManager.getFourthImg(this)
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
         val sixthImage = SharedPrefrenceManager.getSixImg(this)
+        Log.i("SixImage","${sixthImage}")*/
         val dialog = Helpers.showDialog(this, this, "Updating Images")
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
@@ -349,7 +414,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         var isImageAvailable = false
 
 
-
+/*
         if (!TextUtils.isEmpty(firstImage)) {
             val firstFile = getFiles(firstImage, 1)
             if (firstFile.exists() && firstFile.length() > 0) {
@@ -361,6 +426,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 isImageAvailable = true
             }
         }
+
 
         if (!TextUtils.isEmpty(secondImage)) {
             val firstFile = getFiles(secondImage, 2)
@@ -413,20 +479,27 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         if (!TextUtils.isEmpty(sixthImage)) {
             val firstFile = getFiles(sixthImage, 6)
             if (firstFile.exists() && firstFile.length() > 0) {
-                builder.addFormDataPart(
-                    "user_profile",
-                    firstFile.name,
-                    RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile)
-                )
+
+                Log.i("getFiles","try add")
+                builder.addFormDataPart("user_profile", firstFile.name, RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile))
                 isImageAvailable = true
+
             }
+        }*/
+
+
+        if (attempImages.size>0){
+            for (itemPostion in 0 until attempImages.size){
+                Log.i("getAttempImages","getAttempImages ${itemPostion}")
+                val firstFile = getFiles(attempImages[itemPostion].image, itemPostion)
+                builder.addFormDataPart("user_profile", firstFile.name, RequestBody.create(MediaType.parse("multipart/form-questionData"), firstFile))
+            }
+            isImageAvailable = true
+
         }
 
         if (isImageAvailable) {
-            val call = ApiClient.getClient.addImageInAlbum(
-                builder.build(),
-                SharedPrefrenceManager.getUserToken(this)
-            )
+            val call = ApiClient.getClient.addImageInAlbum(builder.build(), SharedPrefrenceManager.getUserToken(this))
             call.enqueue(object :
                 Callback<UpdateUserInfoResponseModel> {
                 override fun onFailure(call: Call<UpdateUserInfoResponseModel>, t: Throwable) {
@@ -461,18 +534,30 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     }
 
+    private fun initRecyclerUserImages() {
+        recyclerViewUserImages.apply {
+            setHasFixedSize(false)
+            adapter=userImageAdapter
+            layoutManager= GridLayoutManager(this@UserProfileEditActivity,3)
+            addItemDecoration(GridSpacingItemDecoration(3, resources.getDimension(R.dimen.dp8).toInt(), true))
+
+        }
+
+
+
+    }
 
     private fun getFiles(strImage: String, position: Int): File {
         val mFile = File(cacheDir, "image_$position.jpeg")
         mFile.createNewFile()
 
-//Convert bitmap to byte array
+       //Convert bitmap to byte array
         val bitmap = StringToBitmap(strImage)
         val bos = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, bos)
         val bitmapData = bos.toByteArray()
 
-//write the bytes in file
+       //write the bytes in file
         val fos = FileOutputStream(mFile)
         fos.write(bitmapData)
         fos.flush()
@@ -491,6 +576,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val imageFile: File
+        Log.i("onActivityResult","requestCode$requestCode")
         if (requestCode === Config.RC_PICK_IMAGES && resultCode === Activity.RESULT_OK && data != null) {
             val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
             if (images.size == 1) {
@@ -503,7 +589,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
             }
         }
-        if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
                 val resultUri = result.uri
@@ -519,18 +605,20 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 val error = result.error
             }
         }
+        init()
+
         super.onActivityResult(requestCode, resultCode, data)
 
     }
 
     private fun sharePrefeImageSetup() {
-        //ivEditProfielId.setImageBitmap(StringToBitmap(SharedPrefrenceManager.getProfileImg(this)))
-        val firstImage = SharedPrefrenceManager.getFirstImg(this)
+
+    /*    val firstImage = SharedPrefrenceManager.getFirstImg(this)
         val secondImage = SharedPrefrenceManager.getSecImg(this)
         val thirdImage = SharedPrefrenceManager.getThirdImg(this)
         val fourthImage = SharedPrefrenceManager.getFourthImg(this)
         val fifthImage = SharedPrefrenceManager.getFiveImg(this)
-        val sixthImage = SharedPrefrenceManager.getSixImg(this)
+        val sixthImage = SharedPrefrenceManager.getSixImg(this)*/
         val socialTypeStr = SharedPrefrenceManager.getsocialType(this)
 
         if (socialTypeStr.equals("social")) {
@@ -539,6 +627,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 .placeholder(R.drawable.account_icon).into(ivEditProfielId)
         } else {
             val profile = SharedPrefrenceManager.getProfileImg(this)
+
             if (profile.contains("http")) {
                 Glide.with(this)
                     .load(profile)
@@ -550,92 +639,97 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
         }
 
-        if (firstImage != Constants.NULL) {
-            if (firstImage.contains("http")) {
-                Glide.with(this)
-                    .load(firstImage)
-                    .placeholder(R.drawable.add_image)
-                    .into(user_image_1)
-            } else {
-                user_image_1.setImageBitmap(
-                    StringToBitmap(
-                        firstImage
-                    )
-                )
-            }
-        }
-        if (secondImage != Constants.NULL) {
-            if (secondImage.contains("http")) {
-                Glide.with(this)
-                    .load(secondImage)
-                    .placeholder(R.drawable.add_image)
-                    .into(user_image_2)
-            } else {
-                user_image_2.setImageBitmap(
-                    StringToBitmap(
-                        secondImage
-                    )
-                )
-            }
-        }
+       val list = editeProfileRepository.getUserImages()
+        Log.i("IMAGES_MODULE","differenceUntilSixItem${list.size}")
 
-        if (thirdImage != Constants.NULL) {
-            if (thirdImage.contains("http")) {
-                Glide.with(this)
-                    .load(thirdImage)
-                    .placeholder(R.drawable.add_image)
-                    .into(user_image_3)
-            } else {
-                user_image_3.setImageBitmap(
-                    StringToBitmap(
-                        thirdImage
-                    )
-                )
+        if (list!!.size >  5) {
+            userImageAdapter.updateItems(list!!.take(6))
+        }else{
+            userImageAdapter.updateItems(list!!)
+
+            val differenceUntilSixItem = 6-list.size
+            for (i in 1..differenceUntilSixItem){
+                Log.i("IMAGES_MODULE","differenceUntilSixItem$i")
+                userImageAdapter.addItem(ImageModel("",0))
             }
 
         }
+/*
+        Log.i("ProfileImage","firstImage $firstImage ")
+        Log.i("HTTPCHECK","${firstImage.contains("http")}")
 
-        if (fourthImage != Constants.NULL) {
-            if (fourthImage.contains("http")) {
-                Glide.with(this)
-                    .load(fourthImage)
-                    .placeholder(R.drawable.add_image)
-                    .into(user_image_4)
-            } else {
-                user_image_4.setImageBitmap(StringToBitmap(fourthImage))
-            }
+            userImageAdapter.addItem(UserImage(1,firstImage))
+
+            userImageAdapter.addItem(UserImage(2,secondImage))
+
+            userImageAdapter.addItem(UserImage(3,thirdImage))
+
+            userImageAdapter.addItem(UserImage(4,fourthImage))
+
+            userImageAdapter.addItem(UserImage(5,fifthImage))
+
+            userImageAdapter.addItem(UserImage(6,sixthImage))
+*/
+
+
+    }
+
+    fun initPlaceHolderImageList(){
+        for (i in 1..6){
+            userImageAdapter.addItem(ImageModel("",i))
         }
+    }
 
-        if (fifthImage != Constants.NULL) {
-            if (fifthImage.contains("http")) {
-                Glide.with(this)
-                    .load(fifthImage)
-                    .placeholder(R.drawable.add_image)
-                    .into(user_image_5)
-            } else {
-                user_image_5.setImageBitmap(
-                    StringToBitmap(
-                        fifthImage
-                    )
-                )
-            }
-        }
+    fun loadImage(bitmap:Bitmap,imageView: ImageView) {
+        val multi = MultiTransformation<Bitmap>(
+            CropSquareTransformation(),
+            RoundedCornersTransformation(16, 8, RoundedCornersTransformation.CornerType.ALL)
+        )
 
-        if (sixthImage != Constants.NULL) {
-            if (sixthImage.contains("http")) {
-                Glide.with(this)
-                    .load(sixthImage)
-                    .placeholder(R.drawable.add_image)
-                    .into(user_image_6)
-            } else {
-                user_image_6.setImageBitmap(
-                    StringToBitmap(
-                        sixthImage
-                    )
-                )
-            }
-        }
+        Glide.with(this).load(bitmap)
+            .apply(RequestOptions.bitmapTransform(multi))
+            .into(imageView)
+    }
 
+    fun loadImage(imageModel:ImageModel,imageView: ImageView,imagePosition: Int){
+        val multi = MultiTransformation<Bitmap>(
+            CropSquareTransformation(),
+            RoundedCornersTransformation(16, 8, RoundedCornersTransformation.CornerType.ALL))
+
+        Glide.with(this).load(imageModel.image)
+            .addListener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return true
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    val imageBitmap = resource?.toBitmap()
+
+                  //  imageBitmap?.let { bitMapToString(it) }?.let { addToAttempImages(ImageModel(it,imageModel.id),imagePosition) }
+
+                    return false
+                }
+            })
+            .apply(RequestOptions.bitmapTransform(multi))
+            .into(imageView)
+
+    }
+
+    private fun addToAttempImages(imageModel: ImageModel,imagePosition: Int) {
+        if(attempImages.getOrNull(imagePosition) !=null){
+            attempImages[imagePosition] = imageModel
+        }else attempImages.add(imageModel)
     }
 
     private fun updateAboutYou() {
@@ -796,6 +890,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
     private fun setupRecyclerView() {
         userBasicInfoRecyclerView.adapter = adapter
         userBasicInfoRecyclerView.layoutManager = LinearLayoutManager(this)
+
         addBasicInfoItemViews()
     }
 
@@ -809,54 +904,12 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         }
     }
 
-    private fun bindSixImages() {
-        user_image_1.setOnClickListener {
-            flag = 1
-            launchActivity<SetupProfileUploadPhotoStep2Activity>
-            {
-                putExtra(imgBlock, flag.toString())
-                finish()
-            }
-        }
-        user_image_2.setOnClickListener {
-            flag = 2
-            launchActivity<SetupProfileUploadPhotoStep2Activity>
-            {
-                putExtra(imgBlock, flag.toString())
-                finish()
-            }
-        }
-        user_image_3.setOnClickListener {
-            flag = 3
-            launchActivity<SetupProfileUploadPhotoStep2Activity>
-            {
-                putExtra(imgBlock, flag.toString())
-                finish()
-            }
-        }
-        user_image_4.setOnClickListener {
-            flag = 4
-            launchActivity<SetupProfileUploadPhotoStep2Activity>
-            {
-                putExtra(imgBlock, flag.toString())
-                finish()
-            }
-        }
-        user_image_5.setOnClickListener {
-            flag = 5
-            launchActivity<SetupProfileUploadPhotoStep2Activity>
-            {
-                putExtra(imgBlock, flag.toString())
-                finish()
-            }
-        }
-        user_image_6.setOnClickListener {
-            flag = 6
-            launchActivity<SetupProfileUploadPhotoStep2Activity>
-            {
-                putExtra(imgBlock, flag.toString())
-                finish()
-            }
+    private fun goToSetupProfileUploadPhotoActivity(flag: Int, imagePosition: Int) {
+        launchActivity<SetupProfileUploadPhotoStep2Activity>
+        {
+            putExtra(imgBlock, flag)
+            putExtra(IMAGE_POSITION,imagePosition)
+            finish()
         }
     }
 
@@ -876,5 +929,59 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
+    inner class UserImagesAdapter: BaseAdapter<ImageModel>(itemLayoutRes = R.layout.item_image){
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ImageModel> {
+            return UserImageViewHolder(getItemView(parent))
+        }
+
+        inner class UserImageViewHolder(view: View) : BaseViewHolder<ImageModel>(view) {
+            override fun fillData() {
+
+                if (item!!.image.isNullOrEmpty()){
+                    itemView.btnDelete.visibility=View.GONE
+                    itemView.ivProfileItem.setImageResource(R.drawable.add_image)
+                }else {
+                    itemView.btnDelete.visibility=View.VISIBLE
+
+
+                    if ( URLUtil.isValidUrl(item!!.image)) {
+                        Log.i("ImageUserhttp","${item!!.image}")
+
+                        item?.let { loadImage(it, itemView.ivProfileItem,adapterPosition) }
+                    } else {
+                        Log.i("ImageUser64","${item!!.id}")
+                        addToAttempImages(item!!,adapterPosition)
+                        item!!.image?.let { StringToBitmap(it)?.let { it1 ->
+                            loadImage(it1, itemView.ivProfileItem)
+                        } }
+                    }
+
+                }
+                itemView.ivProfileItem.setOnClickListener {
+                    goToSetupProfileUploadPhotoActivity(item!!.id,adapterPosition)
+                }
+
+                itemView.setOnClickListener { onClick(it) }
+                 itemView.btnDelete.setOnClickListener {
+                     AskBeforeMakeActionDialog().show(this@UserProfileEditActivity,getString(R.string.ask_before_delete_image),okAction = {
+
+                         if (item!!.id !=0){
+                             editProfileViewModel.removeImage(item!!)
+                             editeProfileRepository.removeUserImage(item!!)
+                         }else{
+                             itemView.btnDelete.visibility=View.GONE
+                             itemView.ivProfileItem.setImageResource(R.drawable.add_image)
+                         }
+                     })
+                 }
+            }
+
+        }
+
+        fun removeImageFromList(){
+
+        }
+    }
 
 }

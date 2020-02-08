@@ -33,13 +33,13 @@
     <color name="purple_color">#6B40BE</color>
     <color name="color_cool_gray">#9a9da4</color>
     <color name="color_faq_payment">#03F9FCFF</color>
-
     <color name="faq_card_background_color">#ffffff</color>
     <color name="faq_card_secondary_color">#ffffff</color>
     <color name="colorFaqBackgroud">#f9fcff</color>
 
     <color name="colorProgressbar">#ff2a4e</color>
 
+    <color name="redFont">#FF526F</color>
     <color name="font_color_far_location">#F18828</color>
     <color name="font_color_near_location">#F64C1F</color>
 

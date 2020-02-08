@@ -1,9 +1,6 @@
 package com.recep.hunt.api
 
-import com.recep.hunt.domain.entities.PushNotificationSingleUserParams
-import com.recep.hunt.domain.entities.APIResponse
-import com.recep.hunt.domain.entities.BeginHuntLocation
-import com.recep.hunt.domain.entities.BeginHuntLocationParams
+import com.recep.hunt.domain.entities.*
 import com.recep.hunt.model.*
 import com.recep.hunt.model.GetRandomQuestions.GetRandomQuestionReponse
 import com.recep.hunt.model.RegistrationModule.RegistrationResponse
@@ -142,6 +139,14 @@ interface ApiInterface {
 
     @POST("/api/push-notification-single-user")
     fun pushNotificationSingleUser(@Body pushNotificationSingleUserParams: PushNotificationSingleUserParams): Single<APIResponse<Any>>
+
+    @FormUrlEncoded
+    @PUT("/api/update-hunt-begin")
+    fun updateHuntBegin(@Field("hunt_id") huntId:String,@Field("is_meet") is_meet:String,@Field("is_extra_time") is_extra_time:String,@Field("extra_time") extra_time:String): Single<APIResponse<Any>>
+
+    @FormUrlEncoded
+    @POST("/api/delete-image-user-profile")
+    fun deleteImageFromUserImages(@Field("image_id") imageId:String):Single<APIResponse<Any>>
 
 
 }

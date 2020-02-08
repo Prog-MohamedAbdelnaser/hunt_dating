@@ -3,7 +3,7 @@ package com.recep.hunt.model.UserProfile
 data class Data(
     val user_info: UserInfoModel,
     val social_info: Any,
-    val user_profile_image: ArrayList<ImageModel>,
+    val user_profile_image: ImagesListModel,
 
     val id: Int,
     val first_name: String,
