@@ -38,6 +38,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
@@ -93,6 +94,7 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -100,44 +102,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     PlacesAutoCompleteAdapter.ClickListener,
     NearByRestaurantsAdapter.NearByRestaurantsAdapterListener,
     FarAwayRestaurantsVerticalAdapter.FarAwayRestaurantsVerticalAdapterListener {
-
-
-    //PlacesAutoCompleteAdapter override
-    override fun click(place: Place) {
-        Utils.hideKeyboard(this@HomeActivity)
-        place.latLng?.latitude?.let {
-            place.latLng?.longitude?.let { it1 ->
-                selectLocation(
-                    it,
-                    it1
-                )
-            }
-        }
-    }
-
-    private fun selectLocation(latitude: Double, longitude: Double) {
-//        val markerOptions = MarkerOptions()
-//            .position(LatLng(latitude,longitude))
-//            .icon(null)
-
-
-//        mMarker = mMap.addMarker(markerOptions)
-//        mMarker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.my_location_placeholder))
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-
-        setPlaceRipple(LatLng(latitude, longitude))
-
-        adapter.clear()
-        nearestPlaces(latitude, longitude)
-        searchTextView.text = ""
-    }
-
-    override fun onFilterBottomSheetClickApplyListener() {
-
-        nearestPlaces(latitude,longitude)
-    }
 
     private lateinit var mMap: GoogleMap
 
@@ -147,14 +111,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         private const val animateZoomTo = 13.0f
+        var NEAREST_DISTANCE = 3000 // testing purpose
     }
 
     private val disposables = CompositeDisposable()
 
     private var gpsReceiver: GpsLocationReceiver? = null
 
+    private var groubHorizontalListadapter = GroupAdapter<ViewHolder>()
+
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
-    private var NEAREST_DISTANCE = 3000 // testing purpose
     private var latitude = 0.toDouble()
     private var longitude = 0.toDouble()
     lateinit var mLastLocation: Location
@@ -171,16 +137,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var locationButton: ImageView
     private lateinit var searchTextView: TextView
     private lateinit var placesRecyclerView: RecyclerView
-    private var isListshowing = true
+    private var isListshowing = false
     private var adapter = GroupAdapter<ViewHolder>()
     private lateinit var autoCompleteAdapter: PlacesAutoCompleteAdapter
     private var callAPIOnlyOnceStatus = 1
 
     private val REQUEST_CODE_ASK_PERMISSIONS = 101
 
+    private val restaurantHorizontalAdapter: NearRestaurantHorizontalAdapter by lazy { NearRestaurantHorizontalAdapter() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
         Utils.placesApiError.observe(this, androidx.lifecycle.Observer {
             if (it != "false") {
                 showErrorAlertToUser(it)
@@ -220,7 +189,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         mapFrag.getMapAsync(this)
         val mapFragView = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
         mapFragView.alpha = 0.95f
-        locationButton = (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View).findViewById(Integer.parseInt("2"))
+        locationButton =
+            (mapFrag.view!!.find<View>(Integer.parseInt("1")).parent as View).findViewById(
+                Integer.parseInt("2")
+            )
 
         geoCoder = Geocoder(this, Locale.getDefault())
 
@@ -294,7 +266,11 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
 
         searchTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -316,8 +292,37 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    //PlacesAutoCompleteAdapter override
+    override fun click(place: Place) {
+        Utils.hideKeyboard(this@HomeActivity)
+        place.latLng?.latitude?.let {
+            place.latLng?.longitude?.let { it1 ->
+                selectLocation(
+                    it,
+                    it1
+                )
+            }
+        }
+    }
 
-    fun isLocationEnabled()= EnableLocationServiceSettingActivity.isLocationEnabled(this)
+    private fun selectLocation(latitude: Double, longitude: Double) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
+
+        setPlaceRipple(LatLng(latitude, longitude))
+
+        adapter.clear()
+        nearestPlaces(latitude, longitude)
+        searchTextView.text = ""
+    }
+
+    override fun onFilterBottomSheetClickApplyListener() {
+
+        nearestPlaces(latitude,longitude)
+    }
+
+
+    fun isLocationEnabled() = EnableLocationServiceSettingActivity.isLocationEnabled(this)
 
     private fun showErrorAlertToUser(msg: String) {
         val alertDialogBuilder = AlertDialog.Builder(this)
@@ -395,10 +400,14 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     //integration of nearest-place api
 
-    fun setupNearByRestaurantsRecyclerViewByApiEmpty(){
-        horizontal_list_near_by_user.adapter=null
+    fun setupNearByRestaurantsRecyclerViewByApiEmpty() {
+        horizontal_list_near_by_user.adapter = null
         horizontal_list_near_by_user.removeAllViewsInLayout()
         horizontal_list_near_by_user.removeAllViews()
+        sortedListRecyclerView.adapter = null
+        sortedListRecyclerView.removeAllViewsInLayout()
+        sortedListRecyclerView.removeAllViews()
+        hideVerticallRecycler()
 
 
     }
@@ -409,6 +418,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
             nearestLocation,
             SharedPrefrenceManager.getUserToken(this)
         )
+
+
 
         call.enqueue(object : Callback<NearestLocationResponse> {
             override fun onFailure(call: Call<NearestLocationResponse>, t: Throwable) {
@@ -430,13 +441,16 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 var result = response.body()?.data
                 result?.let {
-                    if(it.isEmpty()){
+                    if (it.isEmpty()) {
                         setupNearByRestaurantsRecyclerViewByApiEmpty()
                         Utils.noUserError.postValue("true")
 
-                        Toast.makeText(this@HomeActivity, "No locations found/possible google quota issue", Toast.LENGTH_SHORT).show()
-                    }
-                    else {
+                        Toast.makeText(
+                            this@HomeActivity,
+                            "No locations found/possible google quota issue",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
                         val nearbyItems = ArrayList<NearestLocationData>()
                         val farItems = ArrayList<NearestLocationData>()
                         for (i in 0 until result.size) {
@@ -461,12 +475,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
                                 farItems.add(result[i])
                             }
                         }
+                        clearPlacesView()
                         setPlacesMarker(nearbyItems, R.drawable.close_rest_marker)
                         setPlacesMarker(farItems, R.drawable.far_rest_markers)
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(lat, long)))
-//                    mMap.setMaxZoomPreference(animateZoomTo)
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo))
-                        setupNearByRestaurantsRecyclerViewByApi(nearbyItems)
+                        setupNearByRestaurantsRecyclerViewByApi(nearbyItems, farItems)
                         setupSortedListView(nearbyItems, farItems)
                     }
                 }
@@ -486,6 +500,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //        mapRipple.withRippleDuration(10000)    //12000ms
 //        mapRipple.withTransparency(0.4f)
 //        mapRipple.startRippleMapAnimation()
+    }
+
+    fun clearPlacesView() {
+        adapter.clear()
+        sortedListRecyclerView.adapter = null
+        sortedListRecyclerView.removeAllViews()
+        mMap.clear()
     }
 
     private fun setPlacesMarker(items: ArrayList<NearestLocationData>, resource: Int) {
@@ -509,12 +530,21 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-    private fun setupNearByRestaurantsRecyclerViewByApi(items: ArrayList<NearestLocationData>?) {
+    private fun setupNearByRestaurantsRecyclerViewByApi(
+        items: ArrayList<NearestLocationData>?,
+        farItems: ArrayList<NearestLocationData>?
+    ) {
         val windowwidth = windowManager.defaultDisplay.width
         horizontal_list_near_by_user.x = (0 - windowwidth.toFloat() / 2.07).toFloat()
         horizontal_list_near_by_user.layoutParams.width = windowwidth + windowwidth / 3 + 150
-//        horizontal_list_near_by_user.setOffscreenItems(items!!.size)
-        horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
+        horizontal_list_near_by_user.adapter = restaurantHorizontalAdapter
+
+
+        items?.let { restaurantHorizontalAdapter.updateItems(it) }
+        restaurantHorizontalAdapter.setNearbySize(items?.size!!.toInt())
+        farItems?.let { restaurantHorizontalAdapter.addItems(it) }
+
+        //   horizontal_list_near_by_user.adapter = NearByRestaurantsAdapterByApi(this, items)
         horizontal_list_near_by_user.setOrientation(DSVOrientation.HORIZONTAL)
         horizontal_list_near_by_user.setItemTransformer(
             ScaleTransformer.Builder().setMaxScale(
@@ -523,47 +553,35 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
         )
         horizontal_list_near_by_user.scrollToPosition(0)
         horizontal_list_near_by_user.setSlideOnFling(true)
+
+
     }
 
-    private fun setupSortedListView(
-        nearItems: ArrayList<NearestLocationData>?,
-        farItems: ArrayList<NearestLocationData>?
-    ) {
-        sortedListRecyclerView.adapter = adapter
-        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-//        adapter.setOnItemClickListener { item, view ->
-//                val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-//            val dialog = Dialog(this)
-//            dialog.setContentView(ll)
-//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-//            gotItBtn.setOnClickListener {
-//                dialog.dismiss()
-//            }
-//            dialog.show()
-//        }
-        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
 
-        for (i in 0 until nearItems!!.size) {
-            adapter.add(
-                NearByRestaurantsVerticalAdapterByAPi(
-                    this@HomeActivity,
-                    nearItems
-                )
-            )
-        }
-        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
 
-        for (i in 0 until farItems!!.size) {
-            adapter.add(
-                FarAwayRestaurantsVerticalAdapterByApi(
-                    this@HomeActivity,
-                    farItems,
-                    nearItems.size
+    private fun setupSortedListView(nearItems: ArrayList<NearestLocationData>?,
+            farItems: ArrayList<NearestLocationData>?) {
+            sortedListRecyclerView.adapter = adapter
+            sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
+
+
+            adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
+
+            for (i in 0 until nearItems!!.size) {
+                adapter.add(NearByRestaurantsVerticalAdapterByAPi(this@HomeActivity, nearItems))
+            }
+            adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
+
+            for (i in 0 until farItems!!.size) {
+                adapter.add(
+                    FarAwayRestaurantsVerticalAdapterByApi(
+                        this@HomeActivity,
+                        farItems,
+                        nearItems.size
+                    )
                 )
-            )
+            }
         }
-    }
 
 //    private fun nearByRestaurants(
 //        lat: Double,
@@ -666,136 +684,98 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //
 //    }
 
-    private fun setupCardClicks() {
-        showMyLocationCardView.setOnClickListener {
-            checkLocationSetting()
-        }
-
-        showSortedListCardView.setOnClickListener {
-            if (isListshowing) {
-                isListshowing = false
-
-                sortedListRecyclerView.visibility = View.VISIBLE
-                horizontal_list_near_by_user.visibility = View.INVISIBLE
-                val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
-                mapFrag.alpha = 0.15f
-                list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
-//                home_root_view.backgroundColor = Color.parseColor("#CCFFFFFF")
-
-            } else {
-                isListshowing = true
-                sortedListRecyclerView.visibility = View.INVISIBLE
-                horizontal_list_near_by_user.visibility = View.VISIBLE
-                val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
-                mapFrag.alpha = 0.95f
-                list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
-
+        private fun setupCardClicks() {
+            showMyLocationCardView.setOnClickListener {
+                checkLocationSetting()
             }
 
+            showSortedListCardView.setOnClickListener {
+                if (!isListshowing) {
+                    showVerticallRecycler()
+                } else {
+                    hideVerticallRecycler()
+                }
 
-        }
-    }
 
-//    private fun setupSortedListRecyclerView(items: ArrayList<NearByRestaurantsModelResults>) {
-//        sortedListRecyclerView.adapter = adapter
-//        sortedListRecyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
-//        adapter.setOnItemClickListener { item, view ->
-//            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-//            val dialog = Dialog(this)
-//            dialog.setContentView(ll)
-//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            val gotItBtn: Button = dialog.find(R.id.far_away_ok_btn)
-//            gotItBtn.setOnClickListener {
-//                dialog.dismiss()
-//            }
-//            dialog.show()
-//        }
-//        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.near_by_locations)))
-//        for (i in 0 until 3) {
-//            adapter.add(
-//                NearByRestaurantsVerticalAdapter(
-//                    this@HomeActivity,
-//                    items
-//                )
-//            )
-//        }
-//        adapter.add(SimpleHeaderItemAdapter(resources.getString(R.string.far_away)))
-//        for (i in 4 until 6) {
-//            adapter.add(
-//                FarAwayRestaurantsVerticalAdapter(
-//                    this@HomeActivity,
-//                    items
-//                )
-//            )
-//        }
-////        for (i in 4 until items.size) {
-////            adapter.add(
-////                FarAwayRestaurantsVerticalAdapter(
-////                    this@HomeActivity,
-////                    items
-////                )
-////            )
-////        }
-//
-//    }
-
-    override fun onFarAwayRestaurantClick(position: Int) {
-        farLocationErrorPrompt()
-    }
-
-    //todo create seperate class for this or convert to lazy load
-    private fun farLocationErrorPrompt() {
-        val locationFarErrorDialog = Dialog(this)
-
-        val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
-        locationFarErrorDialog.setContentView(ll)
-        locationFarErrorDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val gotItBtn: Button = locationFarErrorDialog.find(R.id.far_away_ok_btn)
-        gotItBtn.setOnClickListener {
-            locationFarErrorDialog.dismiss()
+            }
         }
 
-        locationFarErrorDialog.show()
-    }
+        private fun showVerticallRecycler() {
+            isListshowing = true
+            sortedListRecyclerView.visibility = View.VISIBLE
+            horizontal_list_near_by_user.visibility = View.INVISIBLE
+            val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+            mapFrag.alpha = 0.15f
+            list_image_view.image = resources.getDrawable(R.drawable.ic_street_view)
+        }
 
-    private fun buildLocationRequest() {
+        private fun hideVerticallRecycler() {
+            isListshowing = false
+            sortedListRecyclerView.visibility = View.INVISIBLE
+            horizontal_list_near_by_user.visibility = View.VISIBLE
+            val mapFrag = supportFragmentManager.findFragmentById(R.id.maps)?.view as View
+            mapFrag.alpha = 0.95f
+            list_image_view.image = resources.getDrawable(R.drawable.ic_format_list)
+        }
 
-        locationRequest = LocationRequest()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 5000
-        locationRequest.fastestInterval = 3000
-        locationRequest.smallestDisplacement = 0.1f
+
+        override fun onFarAwayRestaurantClick(position: Int) {
+            farLocationErrorPrompt()
+        }
+
+        //todo create seperate class for this or convert to lazy load
+        private fun farLocationErrorPrompt() {
+            val locationFarErrorDialog = Dialog(this)
+
+            val ll = LayoutInflater.from(this).inflate(R.layout.far_away_dialog_layout, null)
+            locationFarErrorDialog.setContentView(ll)
+            locationFarErrorDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val gotItBtn: Button = locationFarErrorDialog.find(R.id.far_away_ok_btn)
+            gotItBtn.setOnClickListener {
+                locationFarErrorDialog.dismiss()
+            }
+
+            locationFarErrorDialog.show()
+        }
+
+        private fun buildLocationRequest() {
+
+            locationRequest = LocationRequest()
+            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            locationRequest.interval = 5000
+            locationRequest.fastestInterval = 3000
+            locationRequest.smallestDisplacement = 0.1f
 //        locationRequest.numUpdates = 1
 
-    }
+        }
 
-    private fun buildLocationCallBack() {
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(p0: LocationResult?) {
+        private fun buildLocationCallBack() {
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult?) {
 
-                super.onLocationResult(p0)
-                mLastLocation = p0!!.locations[p0.locations.size - 1]
-                if (mMarker != null) {
-                    mMarker!!.remove()
-                }
-                latitude = mLastLocation.latitude
-                longitude = mLastLocation.longitude
-                var title = "Your Place"
-
-                try {
-                    val listAddresses = geoCoder.getFromLocation(latitude, longitude, 1)
-                    if (listAddresses != null && listAddresses.size > 0) {
-                        title = listAddresses.get(0).getAddressLine(0)
+                    super.onLocationResult(p0)
+                    mLastLocation = p0!!.locations[p0.locations.size - 1]
+                    if (mMarker != null) {
+                        mMarker!!.remove()
                     }
-                } catch (e: IOException) {
+                    latitude = mLastLocation.latitude
+                    longitude = mLastLocation.longitude
+                    var title = "Your Place"
+
+                    try {
+                        val listAddresses = geoCoder.getFromLocation(latitude, longitude, 1)
+                        if (listAddresses != null && listAddresses.size > 0) {
+                            title = listAddresses.get(0).getAddressLine(0)
+                        }
+                    } catch (e: IOException) {
 //                    e.printStackTrace()
-                }
-                val latLng = LatLng(latitude, longitude)
-                val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title(title)
-                    .icon(null)
+                    }
+                    val latLng = LatLng(latitude, longitude)
+                    val markerOptions = MarkerOptions()
+                        .position(latLng)
+                        .title(title)
+                        .icon(null)
 
 
 //                mMarker = mMap.addMarker(markerOptions)
@@ -803,200 +783,221 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
 //                mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-                mMap.setOnMarkerClickListener { p0 ->
-                    if (p0?.position?.latitude != latitude && p0?.position?.longitude != longitude) {
-                        p0?.showInfoWindow()
+                    mMap.setOnMarkerClickListener { p0 ->
+                        if (p0?.position?.latitude != latitude && p0?.position?.longitude != longitude) {
+                            p0?.showInfoWindow()
+                        }
+                        true
                     }
-                    true
-                }
 
-                mMap.setOnMyLocationButtonClickListener {
-                    selectLocation(latitude, longitude)
-                    false
-                }
+                    mMap.setOnMyLocationButtonClickListener {
+                        selectLocation(latitude, longitude)
+                        false
+                    }
 
-                setPlaceRipple(LatLng(latitude, longitude))
+                    setPlaceRipple(LatLng(latitude, longitude))
 
-                SharedPrefrenceManager.setUserLatitude(this@HomeActivity, mLastLocation.latitude.toString())
+                    SharedPrefrenceManager.setUserLatitude(
+                        this@HomeActivity,
+                        mLastLocation.latitude.toString()
+                    )
 
-                SharedPrefrenceManager.setUserLongitude(this@HomeActivity, mLastLocation.longitude.toString())
+                    SharedPrefrenceManager.setUserLongitude(
+                        this@HomeActivity,
+                        mLastLocation.longitude.toString()
+                    )
 
-                if (Helpers.isInternetConnection(this@HomeActivity)) {
-                    if (callAPIOnlyOnceStatus == 1) {
-                        val lat = mLastLocation.latitude
-                        val long = mLastLocation.longitude
-                        nearestPlaces(lat, long)
+                    if (Helpers.isInternetConnection(this@HomeActivity)) {
+                        if (callAPIOnlyOnceStatus == 1) {
+                            val lat = mLastLocation.latitude
+                            val long = mLastLocation.longitude
+                            nearestPlaces(lat, long)
 //                        setupAllNearByRestMarkers(lat, long)
-                        callAPIOnlyOnceStatus = 0
+                            callAPIOnlyOnceStatus = 0
+                        }
+
                     }
 
                 }
-
             }
         }
-    }
 
-    private fun checkPermission() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE)
-
-            return
-        }else{
-            listenToGPSChanges()
-        }
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-        makeUserOnOffline(false)
-    }
-
-
-    override fun onMapReady(p0: GoogleMap?) {
-        if (p0 != null) {
-
-            mMap = p0
-            mMap.uiSettings.isCompassEnabled = false
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    mMap.isMyLocationEnabled = true
-                }
-            } else
-                mMap.isMyLocationEnabled = true
-            mMap.uiSettings.isZoomControlsEnabled = false
-            mMap.uiSettings.isMapToolbarEnabled = false
-            locationButton.visibility = View.GONE
-            mMap.setInfoWindowAdapter(CustomInfoWindowView(this))
-            checkLocationSetting()
-        }
-
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.hunt_main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    private fun setupToolbarClicks() {
-        home_filter_btn.setOnClickListener {
-            val bottomSheet = FilterBottomSheetDialog(this)
-            bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
-        }
-
-        home_incoginoti_btn.setOnClickListener {
-            showIncognitoBtn()
-        }
-
-        home_notification_btn.setOnClickListener {
-            launchActivity<NotificationsActivity>()
-        }
-
-        home_profile_btn.setOnClickListener {
-            launchActivity<UserProfileActivity>()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        checkPermission()
-                    buildLocationRequest()
-                    buildLocationCallBack()
-                    fusedLocationProviderClient =
-                        LocationServices.getFusedLocationProviderClient(this)
-                    fusedLocationProviderClient.requestLocationUpdates(
-                        locationRequest,
-                        locationCallback,
-                        Looper.myLooper()
-                    )
-                } else {
-                    Helpers.showErrorSnackBar(
-                        this,
-                        "Turn on Location!",
-                        "Please allow for location"
-                    )
-                }
-            }
-            REQUEST_CODE_ASK_PERMISSIONS -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    init()
-                } else {
-                    Helpers.showErrorSnackBar(
-                        this,
-                        "Please allow location access!",
-                        "Please allow for location"
-                    )
-
-                }
-
-            }
-
-
-        }
-    }
-
-    private fun makeUserOnOffline(is_online: Boolean) {
-        val makeUserOnline = MakeUserOnline(is_online)
-
-        val call = ApiClient.getClient.makeUserOnline(
-            makeUserOnline,
-            SharedPrefrenceManager.getUserToken(this)
-        )
-
-        call.enqueue(object : Callback<MakeUserOnlineResponse> {
-            override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
-
-            }
-
-            override fun onResponse(
-                call: Call<MakeUserOnlineResponse>,
-                response: Response<MakeUserOnlineResponse>
+        private fun checkPermission() {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
-                if (!response.isSuccessful) {
-                    val strErrorJson = response.errorBody()?.string()
-                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
-                        return
+
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+
+                return
+            } else {
+                listenToGPSChanges()
+            }
+        }
+
+
+        override fun onPause() {
+            super.onPause()
+            makeUserOnOffline(false)
+        }
+
+
+        override fun onMapReady(p0: GoogleMap?) {
+            if (p0 != null) {
+
+                mMap = p0
+                mMap.uiSettings.isCompassEnabled = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        mMap.isMyLocationEnabled = true
                     }
+                } else
+                    mMap.isMyLocationEnabled = true
+                mMap.uiSettings.isZoomControlsEnabled = false
+                mMap.uiSettings.isMapToolbarEnabled = false
+                locationButton.visibility = View.GONE
+                mMap.setInfoWindowAdapter(CustomInfoWindowView(this))
+                checkLocationSetting()
+            }
+
+        }
+
+
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.hunt_main_menu, menu)
+            return super.onCreateOptionsMenu(menu)
+        }
+
+        private fun setupToolbarClicks() {
+            home_filter_btn.setOnClickListener {
+                val bottomSheet = FilterBottomSheetDialog(this)
+                bottomSheet.show(supportFragmentManager, "FilterBottomSheetDialog")
+            }
+
+            home_incoginoti_btn.setOnClickListener {
+                showIncognitoBtn()
+            }
+
+            home_notification_btn.setOnClickListener {
+                launchActivity<NotificationsActivity>()
+            }
+
+            home_profile_btn.setOnClickListener {
+                launchActivity<UserProfileActivity>()
+            }
+        }
+
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+        ) {
+            when (requestCode) {
+                TurnOnGPSActivity.LOCATION_PERMISSION_REQUEST_CODE -> {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                            checkPermission()
+                        buildLocationRequest()
+                        buildLocationCallBack()
+                        fusedLocationProviderClient =
+                            LocationServices.getFusedLocationProviderClient(this)
+                        fusedLocationProviderClient.requestLocationUpdates(
+                            locationRequest,
+                            locationCallback,
+                            Looper.myLooper()
+                        )
+                    } else {
+                        Helpers.showErrorSnackBar(
+                            this,
+                            "Turn on Location!",
+                            "Please allow for location"
+                        )
+                    }
+                }
+                REQUEST_CODE_ASK_PERMISSIONS -> {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        init()
+                    } else {
+                        Helpers.showErrorSnackBar(
+                            this,
+                            "Please allow location access!",
+                            "Please allow for location"
+                        )
+
+                    }
+
                 }
 
 
-                if (is_online == false)
-                    Toast.makeText(this@HomeActivity, "You're offline", Toast.LENGTH_SHORT).show()
-                else
-                    Toast.makeText(this@HomeActivity, "You're online", Toast.LENGTH_SHORT).show()
             }
+        }
 
-        })
+        private fun makeUserOnOffline(is_online: Boolean) {
+            val makeUserOnline = MakeUserOnline(is_online)
 
-    }
+            val call = ApiClient.getClient.makeUserOnline(
+                makeUserOnline,
+                SharedPrefrenceManager.getUserToken(this)
+            )
+
+            call.enqueue(object : Callback<MakeUserOnlineResponse> {
+                override fun onFailure(call: Call<MakeUserOnlineResponse>, t: Throwable) {
+
+                }
+
+                override fun onResponse(
+                    call: Call<MakeUserOnlineResponse>,
+                    response: Response<MakeUserOnlineResponse>
+                ) {
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                            return
+                        }
+                    }
 
 
-    fun getUsersList(location_id: String,
-        age: String,
-        date: String,
-        business: String,
-        friendship: String,
-        location_name: String
-    ) {
+                    if (is_online == false)
+                        Toast.makeText(
+                            this@HomeActivity,
+                            "You're offline",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    else
+                        Toast.makeText(
+                            this@HomeActivity,
+                            "You're online",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                }
 
-        val lat = SharedPrefrenceManager.getUserLatitude(this)
-        val lang = SharedPrefrenceManager.getUserLongitude(this)
-        val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
+            })
+
+        }
+
+
+        fun getUsersList(
+            location_id: String,
+            age: String,
+            date: String,
+            business: String,
+            friendship: String,
+            location_name: String
+        ) {
+
+            val lat = SharedPrefrenceManager.getUserLatitude(this)
+            val lang = SharedPrefrenceManager.getUserLongitude(this)
+            val filter = UsersListFilter(location_id, age, date, business, friendship, lat, lang)
 //        val filter = UsersListFilter(
 //            "ChIJDZPv6a8lv0cRBFRz6EJVlxY01",
 //            "25,30",
@@ -1006,253 +1007,220 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
 //            "77.6722",
 //            "12.8821"
 //        )
-        val call =
-            ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(this))
+            val call =
+                ApiClient.getClient.usersList(filter, SharedPrefrenceManager.getUserToken(this))
 
-        call.enqueue(object : Callback<UsersListResponse> {
-            override fun onFailure(call: Call<UsersListResponse>, t: Throwable) {
-                Log.d("Api call failure -> ", "" + call)
-            }
-
-            override fun onResponse(
-                call: Call<UsersListResponse>,
-                response: Response<UsersListResponse>
-            ) {
-
-                if (!response.isSuccessful) {
-                    val strErrorJson = response.errorBody()?.string()
-                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
-                        return
-                    }
+            call.enqueue(object : Callback<UsersListResponse> {
+                override fun onFailure(call: Call<UsersListResponse>, t: Throwable) {
+                    Log.d("Api call failure -> ", "" + call)
                 }
 
-                var result = response.body()?.data
-                var swipeUserArray = ArrayList<SwipeUserModel>()
-                if (result != null && result.size > 0) {
-                    for (i in 0 until result.size) {
-                        val images = ArrayList<String>()
-                        if (result[i].user_profile_image.size != 0) {
-                            for (j in 0 until result[i].user_profile_image.size) {
-                                images.add(result[i].user_profile_image[j].image)
-                            }
-                        } else {
-                            val baseUrl = "https://hunt.nyc3.digitaloceanspaces.com/User/"
-                            images.add(baseUrl + result[i].profile_pic)
+                override fun onResponse(
+                    call: Call<UsersListResponse>,
+                    response: Response<UsersListResponse>
+                ) {
+
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                            return
                         }
-                        swipeUserArray.add(
-                            SwipeUserModel(
-                                result[i].id,
-                                result[i].location_name,
-                                result[i].email,
-                                result[i].first_name,
-                                result[i].age,
-                                result[i].basicInfo.job_title,
-                                result[i].basicInfo.about,
-                                result[i].totalMatching,
-                                result[i].totalMeeting.toInt(),
-                                result[i].is_online,
-                                result[i].for_date,
-                                result[i].for_bussiness,
-                                result[i].for_friendship,
-                                images,
-                                result[i].basicInfo
+                    }
+
+                    var result = response.body()?.data
+                    var swipeUserArray = ArrayList<SwipeUserModel>()
+                    if (result != null && result.size > 0) {
+                        for (i in 0 until result.size) {
+                            val images = ArrayList<String>()
+                            if (result[i].user_profile_image.size != 0) {
+                                for (j in 0 until result[i].user_profile_image.size) {
+                                    images.add(result[i].user_profile_image[j].image)
+                                }
+                            } else {
+                                val baseUrl = "https://hunt.nyc3.digitaloceanspaces.com/User/"
+                                images.add(baseUrl + result[i].profile_pic)
+                            }
+                            swipeUserArray.add(
+                                SwipeUserModel(
+                                    result[i].id,
+                                    result[i].location_name,
+                                    result[i].email,
+                                    result[i].first_name,
+                                    result[i].age,
+                                    result[i].basicInfo.job_title,
+                                    result[i].basicInfo.about,
+                                    result[i].totalMatching,
+                                    result[i].totalMeeting.roundToInt(),
+                                    result[i].is_online,
+                                    result[i].for_date,
+                                    result[i].for_bussiness,
+                                    result[i].for_friendship,
+                                    images,
+                                    result[i].basicInfo
+                                )
                             )
-                        )
-                    }
-                    launchActivity<SwipeMainActivity> {
-                        putParcelableArrayListExtra("swipeUsers", swipeUserArray)
-                        putExtra(FeaturesConstants.LOCATION_OBJECT_KEY,location_name)
+                        }
+                        launchActivity<SwipeMainActivity> {
+                            putParcelableArrayListExtra("swipeUsers", swipeUserArray)
+                            putExtra(FeaturesConstants.LOCATION_OBJECT_KEY, location_name)
 
-                    }
-                } else {
-                      launchActivity<SwipeMainActivity> {
-                          putParcelableArrayListExtra("swipeUsers", swipeUserArray)
-                          putExtra(FeaturesConstants.LOCATION_OBJECT_KEY,location_name)
-
-
-                      }
-                    //showNoUserBottomSheet()
-                }
-            }
-        })
-    }
-
-    fun showNoUserBottomSheet() {
-        var noUserbottomSheetFragment = NoUserBottomSheetFragment()
-        noUserbottomSheetFragment.show(
-            getSupportFragmentManager(),
-            noUserbottomSheetFragment.tag
-        )
-    }
-
-    fun selectLocationAndGetUsersList(location_id: String, location_name: String) {
-        var leftAge = SharedPrefrenceManager.getUserInterestedAgeFrom(this)
-        if (leftAge.isEmpty())
-            leftAge = "18"
-        var rightAge = SharedPrefrenceManager.getUserInterestedAgeTo(this)
-        if (rightAge.isEmpty())
-            rightAge = "50"
-        val age = "$leftAge,$rightAge"
-        var date = SharedPrefrenceManager.getUserLookingFor(this, "Date")
-        var business = SharedPrefrenceManager.getUserLookingFor(this, "Business")
-        var friendship = SharedPrefrenceManager.getUserLookingFor(this, "Friendship")
-        date = date.toLowerCase()
-        business = business.toLowerCase()
-        friendship = friendship.toLowerCase()
-        val location = SelectLocation(location_id, location_name)
-        val call =
-            ApiClient.getClient.selectLocation(location, SharedPrefrenceManager.getUserToken(this))
-
-        call.enqueue(object : Callback<SelectLocationResponse> {
-            override fun onFailure(call: Call<SelectLocationResponse>, t: Throwable) {
-                Log.d("Api call failure -> ", "" + call)
-            }
-
-            override fun onResponse(
-                call: Call<SelectLocationResponse>,
-                response: Response<SelectLocationResponse>
-            ) {
+                        }
+                    } else {
+                        launchActivity<SwipeMainActivity> {
+                            putParcelableArrayListExtra("swipeUsers", swipeUserArray)
+                            putExtra(FeaturesConstants.LOCATION_OBJECT_KEY, location_name)
 
 
-                if (!response.isSuccessful) {
-                    val strErrorJson = response.errorBody()?.string()
-                    if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
-                        return
+                        }
+                        //showNoUserBottomSheet()
                     }
                 }
+            })
+        }
 
-                var result = response.body()?.data
-                if (result != null) {
-                    getUsersList(location_id, age, date, business, friendship,location_name)
+        fun showNoUserBottomSheet() {
+            var noUserbottomSheetFragment = NoUserBottomSheetFragment()
+            noUserbottomSheetFragment.show(
+                getSupportFragmentManager(),
+                noUserbottomSheetFragment.tag
+            )
+        }
+
+        fun selectLocationAndGetUsersList(location_id: String, location_name: String) {
+            var leftAge = SharedPrefrenceManager.getUserInterestedAgeFrom(this)
+            if (leftAge.isEmpty())
+                leftAge = "18"
+            var rightAge = SharedPrefrenceManager.getUserInterestedAgeTo(this)
+            if (rightAge.isEmpty())
+                rightAge = "50"
+            val age = "$leftAge,$rightAge"
+            var date = SharedPrefrenceManager.getUserLookingFor(this, "Date")
+            var business = SharedPrefrenceManager.getUserLookingFor(this, "Business")
+            var friendship = SharedPrefrenceManager.getUserLookingFor(this, "Friendship")
+            date = date.toLowerCase()
+            business = business.toLowerCase()
+            friendship = friendship.toLowerCase()
+            val location = SelectLocation(location_id, location_name)
+            val call =
+                ApiClient.getClient.selectLocation(
+                    location,
+                    SharedPrefrenceManager.getUserToken(this)
+                )
+
+            call.enqueue(object : Callback<SelectLocationResponse> {
+                override fun onFailure(call: Call<SelectLocationResponse>, t: Throwable) {
+                    Log.d("Api call failure -> ", "" + call)
+                }
+
+                override fun onResponse(
+                    call: Call<SelectLocationResponse>,
+                    response: Response<SelectLocationResponse>
+                ) {
+
+
+                    if (!response.isSuccessful) {
+                        val strErrorJson = response.errorBody()?.string()
+                        if (Utils.isSessionExpire(this@HomeActivity, strErrorJson)) {
+                            return
+                        }
+                    }
+
+                    var result = response.body()?.data
+                    if (result != null) {
+                        getUsersList(location_id, age, date, business, friendship, location_name)
 //                        context.launchActivity<SwipeMainActivity> {  }
+                    }
                 }
-            }
 
-        })
-    }
-
-    private fun listenToGPSChanges() {
-        this?.apply {
-            gpsReceiver = GpsLocationReceiver()
-            registerReceiver(gpsReceiver, IntentFilter(PROVIDERS_CHANGED))
+            })
         }
-    }
 
-    inner class GpsLocationReceiver : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.w("GpsLocationReceiver", "onReceive ${intent.action}")
-            if (intent.action?.equals(PROVIDERS_CHANGED) == true) {
-                val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    onEnableGPS()
-                } else {
-                    onDisableGPS()
-                    //showErrorSnackbar(contentView, getString(R.string.wont_detect_location))
-                }
+        private fun listenToGPSChanges() {
+            this?.apply {
+                gpsReceiver = GpsLocationReceiver()
+                registerReceiver(gpsReceiver, IntentFilter(PROVIDERS_CHANGED))
             }
         }
-    }
 
-    fun clickMyLocationButton(){
-        locationButton.callOnClick()
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
-    }
+        inner class GpsLocationReceiver : BroadcastReceiver() {
 
-    private fun onDisableGPS() {
-        checkLocationSetting()
-    }
+            override fun onReceive(context: Context, intent: Intent) {
+                Log.w("GpsLocationReceiver", "onReceive ${intent.action}")
+                if (intent.action?.equals(PROVIDERS_CHANGED) == true) {
+                    val locationManager =
+                        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-    private fun checkLocationSetting() {
-        disposables.add(EnableLocationServiceSettingActivity.checkLocationServiceSetting(this).
-            subscribe({
-                if (it){
-                    clickMyLocationButton()
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        onEnableGPS()
+                    } else {
+                        onDisableGPS()
+                        //showErrorSnackbar(contentView, getString(R.string.wont_detect_location))
+                    }
                 }
-            },{
-                it.printStackTrace()
-            }))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (gpsReceiver != null) {
-            unregisterReceiver(gpsReceiver)
-            gpsReceiver = null
+            }
         }
-        if (disposables.isDisposed.not())
-            disposables.dispose()
-    }
 
-    private fun onEnableGPS() {
+        fun clickMyLocationButton() {
+            locationButton.callOnClick()
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(animateZoomTo), 3000, null)
+        }
 
-    }
+        private fun onDisableGPS() {
+            checkLocationSetting()
+        }
+
+        private fun checkLocationSetting() {
+            disposables.add(
+                EnableLocationServiceSettingActivity.checkLocationServiceSetting(this).subscribe({
+                    if (it) {
+                        clickMyLocationButton()
+                    }
+                },
+                    {
+                        it.printStackTrace()
+                    })
+            )
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            if (gpsReceiver != null) {
+                unregisterReceiver(gpsReceiver)
+                gpsReceiver = null
+            }
+            if (disposables.isDisposed.not())
+                disposables.dispose()
+        }
+
+        private fun onEnableGPS() {
+
+        }
 }
 
-class CustomInfoWindowView(val context: Context) : GoogleMap.InfoWindowAdapter {
+    class ListPaddingDecoration(context: Context, val paddingLeft: Int, val paddingRight: Int) :
+        RecyclerView.ItemDecoration() {
+        private var mDivider: Drawable? = null
 
-    private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
+        init {
+            mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)
+        }
 
-    override fun getInfoWindow(marker: Marker?): View {
-        val view = context.layoutInflater.inflate(R.layout.custom_infowindow, null)
-        view.alpha = 1.0f
-        if (marker != null) {
-            view.info_window_rest_name.text = marker.title
-            if (marker.tag != null) {
-                val locationInfo = marker.tag as NearestLocationData
-                view.textView30.text = (locationInfo.users).toString()
-                view.textView31.text = locationInfo.distance.roundToInt().toString() + " M"
+        override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+            val left = parent.paddingLeft + paddingLeft
+            val right = parent.width - parent.paddingRight - paddingRight
 
-                if (!locationInfo.image.isEmpty()) {
-                    val url =
-                        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${locationInfo.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+            val childCount = parent.childCount
+            for (i in 0 until childCount) {
+                val child = parent.getChildAt(i)
+                val params = child.layoutParams as RecyclerView.LayoutParams
+                val top = child.bottom + params.bottomMargin
+                val bottom = top + (mDivider?.intrinsicHeight ?: 0)
 
-                    //todo test converted to glide
-                    Glide.with(context)
-                        .load(url)
-                        .error(R.drawable.ic_img_location_placeholder)
-                        .placeholder(R.drawable.ic_img_location_placeholder)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(view.info_window_rest_image)
+                mDivider?.let {
+                    it.setBounds(left, top, right, bottom)
+                    it.draw(c)
                 }
-            } else {
-                view.textView30.text = 0.toString()
-                view.textView31.text = "0 M"
-            }
-        }
-        return view
-    }
-
-    //getInfoWindow
-    override fun getInfoContents(p0: Marker?) = null
-
-}
-
-class ListPaddingDecoration(context: Context, val paddingLeft: Int, val paddingRight: Int) :
-    RecyclerView.ItemDecoration() {
-    private var mDivider: Drawable? = null
-
-    init {
-        mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)
-    }
-
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val left = parent.paddingLeft + paddingLeft
-        val right = parent.width - parent.paddingRight - paddingRight
-
-        val childCount = parent.childCount
-        for (i in 0 until childCount) {
-            val child = parent.getChildAt(i)
-            val params = child.layoutParams as RecyclerView.LayoutParams
-            val top = child.bottom + params.bottomMargin
-            val bottom = top + (mDivider?.intrinsicHeight ?: 0)
-
-            mDivider?.let {
-                it.setBounds(left, top, right, bottom)
-                it.draw(c)
             }
         }
     }
-}
 

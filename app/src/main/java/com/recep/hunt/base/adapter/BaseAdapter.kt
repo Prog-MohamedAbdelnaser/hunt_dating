@@ -59,6 +59,7 @@ abstract class BaseAdapter<I>(items: ArrayList<I>? = null, @LayoutRes private va
     fun addItems(newItems: List<I>) {
         val start = items.size
         items.addAll(newItems)
+      //  notifyDataSetChanged()
         notifyItemRangeInserted(start, newItems.size - 1)
     }
 

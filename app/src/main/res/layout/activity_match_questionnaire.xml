@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".matchs.MatchQuestionnaireActivity">
+
 
 
     <View
@@ -54,12 +56,11 @@
             android:id="@+id/ivUserImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginLeft="82dp"
             android:layout_marginTop="42dp"
             android:src="@drawable/profile_pic"
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/questionLayoutContainer"
             app:layout_constraintTop_toTopOf="@+id/tvMessage" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -67,12 +68,10 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="42dp"
-
-            android:layout_marginRight="82dp"
             android:src="@drawable/ic_avatar"
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/questionLayoutContainer"
             app:layout_constraintTop_toTopOf="@+id/tvMessage" />
 
 
@@ -84,10 +83,16 @@
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/ivUserImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/questionLayoutContainer"
+            app:layout_constraintStart_toStartOf="@+id/questionLayoutContainer"
             app:layout_constraintTop_toTopOf="@+id/ivUserImage" />
 
+    <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
 
     <ImageView
             android:id="@+id/imageView26"
@@ -102,11 +107,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/setpOne"
             android:layout_width="wrap_content"
-
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked">
 
@@ -138,6 +142,7 @@
                 android:textColor="@color/white"
                 app:cornerRadius="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineCentersetpOne"
                 app:layout_constraintStart_toStartOf="parent"
                 app:strokeColor="@color/white"
                 app:strokeWidth="100dp" />
@@ -154,22 +159,30 @@
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guidelineCentersetpOne" />
 
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCentersetpOne"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <include
+            android:id="@+id/questionLayoutContainer"
             layout="@layout/question_layout"
-            app:layout_constraintTop_toBottomOf="@+id/ivLiked"
-            android:layout_height="0dp"
             android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="56dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLiked" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/stepSix"
@@ -320,8 +333,8 @@
             android:id="@+id/askAboutWantToMeetLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="56dp"
             android:visibility="gone"
+            android:layout_marginTop="56dp"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLiked"
@@ -384,6 +397,7 @@
                 android:textColor="@color/white"
                 app:cornerRadius="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineCenteraskAboutWantToMeetLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:strokeColor="@color/white"
                 app:strokeWidth="100dp" />
@@ -400,8 +414,15 @@
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guidelineCenteraskAboutWantToMeetLayout" />
 
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCenteraskAboutWantToMeetLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -507,6 +528,10 @@
                 android:background="@drawable/partially_transparent"
                 android:hint="Enter custom location"
                 android:gravity="center"
+                android:singleLine="true"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:imeActionLabel="Add"
                 android:padding="18dp"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"

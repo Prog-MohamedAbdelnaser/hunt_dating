@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -168,6 +169,9 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
         }
 
+        edtEnterLocation.setOnEditorActionListener { v, actionId, event ->
+            btnAddLocation.performClick()
+        }
         btnAddLocation.setOnClickListener {
             if (edtEnterLocation.text.toString().length>3) {
                 addLocation(edtEnterLocation.text.toString())
@@ -321,7 +325,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
                     }
                 }
 
-                questionlayout.visibility=View.VISIBLE
+                questionLayoutContainer.visibility=View.VISIBLE
 
                 val randomQuestions = state.data.body()
                 if (randomQuestions != null) {
@@ -382,7 +386,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
         askAboutWantToMeetLayout.visibility=View.VISIBLE
         btnLastAnswer.text=answers
         tvLastQuestion.text=question
-        questionlayout.visibility=View.GONE
+        questionLayoutContainer.visibility=View.GONE
 
     }
 
@@ -469,7 +473,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
                     if (pStatusVisible == 0) {
                         runOnUiThread {
-                            questionlayout.visibility=View.VISIBLE
+                            questionLayoutContainer.visibility=View.VISIBLE
 //                            setpThree.visibility = View.VISIBLE
 //                            setpThree.visibility = View.GONE
 
@@ -554,6 +558,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
             if (mSwipeUserModel != null) {
                 Glide.with(this)
                     .load(mSwipeUserModel?.images!![0])
+                    .placeholder(R.drawable.ic_person_gray_24dp)
                     .centerCrop()
                     .into(ivLikedPersonImage)
 
@@ -562,6 +567,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
                 if (userProfile.contains("http")) {
                     Glide.with(this)
                         .load(userProfile)
+                        .placeholder(R.drawable.ic_person_gray_24dp)
                         .centerCrop()
                         .into(ivUserImage)
                 }

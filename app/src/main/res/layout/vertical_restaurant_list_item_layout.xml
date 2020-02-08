@@ -3,99 +3,60 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="14dp"
-        android:layout_marginBottom="4dp"
-        app:cardElevation="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardElevation="4dp"
         app:cardCornerRadius="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="8dp">
 
-        <ImageView
-                android:id="@+id/restaurant_vertical_list_image"
-                android:layout_width="92dp"
+        <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_image_container"
+                android:layout_width="90dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="8dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
+                app:cardCornerRadius="8dp"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_img_location_placeholder" />
+                >
 
-        <ImageView
-                android:id="@+id/snear_vertical_rest_user_image"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_near_by_rest_user"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/restaurant_vertical_item_detail"
-                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+            <ImageView
+                    android:id="@+id/restaurant_vertical_list_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:src="@drawable/ic_img_location_placeholder"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    />
 
-        <TextView
-                android:id="@+id/textView_user_numbers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/snear_rest_user_image"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="20"
-                android:textColor="#F64C1F"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_user_image"
-                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+        </androidx.cardview.widget.CardView>
 
-        <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="42dp"
-                android:layout_height="30dp"
-                android:background="@drawable/near_by_arrow_custom_bg"
-                android:paddingRight="0.15dp"
-                android:paddingLeft="0.15dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:rotation="180"
-                android:src="@drawable/ic_arrow_back_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+
 
         <TextView
                 android:id="@+id/restaurant_vertical_item_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
                 android:fontFamily="@font/montserrat_semibold"
-                android:letterSpacing="-0.01"
-                android:maxLines="1"
-                android:text="Hookah Loungh"
-                android:textColor="@color/app_text_black"
                 android:textSize="16sp"
+                android:maxLines="1"
+                tools:text="Caffe Rio"
+                android:textColor="@color/app_text_black"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/restaurant_vertical_list_image"
-                app:layout_constraintTop_toTopOf="@+id/restaurant_vertical_list_image" />
+                app:layout_constraintStart_toEndOf="@+id/cardview_image_container"
+                app:layout_constraintTop_toTopOf="@+id/cardview_image_container" />
 
         <TextView
                 android:id="@+id/restaurant_vertical_item_detail"
@@ -110,10 +71,91 @@
                 android:maxLines="2"
                 android:text="Lorem ipsum dolor sit amet \nectetur adipiscing"
                 android:textColor="@color/light_grey"
-                android:textSize="9sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/restaurant_vertical_item_name"
                 app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_name" />
+
+        <ImageView
+                android:id="@+id/snear_vertical_rest_user_image"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_near_by_rest_user"
+                app:layout_constraintBottom_toBottomOf="@id/cardview_image_container"
+                app:layout_constraintStart_toStartOf="@+id/restaurant_vertical_item_detail"
+                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail" />
+
+        <TextView
+                android:id="@+id/textView_user_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/snear_rest_user_image"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="20"
+                android:textColor="@color/font_color_near_location"
+                android:textSize="14sp"
+                app:layout_constraintTop_toTopOf="@id/snear_vertical_rest_user_image"
+                app:layout_constraintBottom_toBottomOf="@id/snear_vertical_rest_user_image"
+                app:layout_constraintLeft_toRightOf="@+id/snear_vertical_rest_user_image"
+                />
+
+
+
+
+
+        <ImageView
+                android:id="@+id/snear_vertical_rest_distance_image"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:tint="@color/colorAccent"
+                android:src="@drawable/ic_far_away_distance"
+                app:layout_constraintTop_toTopOf="@id/textView_user_numbers"
+                app:layout_constraintBottom_toBottomOf="@id/textView_user_numbers"
+                app:layout_constraintStart_toEndOf="@+id/textView_user_numbers"
+                />
+
+        <TextView
+                android:id="@+id/textView_distance_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/snear_rest_user_image"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="100 M"
+                android:textColor="@color/font_color_near_location"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="@+id/snear_vertical_rest_distance_image"
+                app:layout_constraintBottom_toBottomOf="@+id/snear_vertical_rest_distance_image"
+                app:layout_constraintStart_toEndOf="@+id/snear_vertical_rest_distance_image" />
+
+
+
+
+        <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="42dp"
+                android:layout_height="30dp"
+                android:background="@drawable/near_by_arrow_custom_bg"
+                android:paddingRight="0.15dp"
+                android:paddingLeft="0.15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:rotation="180"
+                android:src="@drawable/ic_arrow_back_white"
+                app:layout_constraintTop_toBottomOf="@+id/restaurant_vertical_item_detail"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

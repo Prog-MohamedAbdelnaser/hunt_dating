@@ -1,19 +1,9 @@
 package com.recep.hunt.home.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.recep.hunt.FeaturesConstants
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
@@ -24,27 +14,16 @@ import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.swipe.SwipeMainActivity
 import com.recep.hunt.swipe.model.SwipeUserModel
-import com.recep.hunt.utilis.Helpers.Companion.createSclead
 import com.recep.hunt.utilis.SharedPrefrenceManager
 import com.recep.hunt.utilis.Utils
 import com.recep.hunt.utilis.launchActivity
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.*
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.imageView9
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_detail
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_item_name
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.restaurant_vertical_list_image
-import kotlinx.android.synthetic.main.vertical_restaurant_list_item_layout.view.textView_user_numbers
+import kotlinx.android.synthetic.main.near_by_rest_card.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DecimalFormat
-import kotlin.math.round
 import kotlin.math.roundToInt
-
-
-
 
 
 /**
@@ -53,58 +32,45 @@ import kotlin.math.roundToInt
  * Email : rishabh1450@gmail.com
  */
 
-class NearByRestaurantsVerticalAdapterByAPi(
+class NearByRestaurantsHorizontalAdapterByAPi(
     val context: Context,
     val item: ArrayList<NearestLocationData>?
 ) : Item<ViewHolder>() {
 
     private var GOOGLE_API_KEY_FOR_IMAGE = "AIzaSyD_MwCA8Z2IKyoyV0BEsAxjZZrkokUX_jo"
 
-    override fun getLayout() = R.layout.vertical_restaurant_list_item_layout
+    override fun getLayout() = R.layout.near_by_rest_card
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.imageView9.visibility = View.VISIBLE
         if (item != null) {
             try {
                 val model = item[position - 1]
                 if (!model.image.isNullOrEmpty()) {
                     val url =
                         "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.image}&key=${GOOGLE_API_KEY_FOR_IMAGE}"
+//                    val url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${model.photos[0].photoReference}&key=${context.resources.getString(R.string.google_api_key)}"
 
                     //TODO test converted to glide
-                    Glide
-                        .with(context)
+                    Glide.with(context)
                         .load(url)
-                        .transform(RoundedCorners(20))
                         .error(R.drawable.ic_img_location_placeholder)
+//                        .transform(RoundedTransformation(20, 0))
+//                        .apply(RequestOptions.circleCropTransform())
                         .placeholder(R.drawable.ic_img_location_placeholder)
-                        .into(viewHolder.itemView.restaurant_vertical_list_image)
-                }
-                else {
+                        .into(viewHolder.itemView.restaurant_image)
+                } else {
+                    //todo test converted to glide
                     Glide.with(context)
                         .load(R.drawable.ic_img_location_placeholder)
-                        .transform(RoundedCorners(20))
-                        .into(viewHolder.itemView.restaurant_vertical_list_image)
+                        //.transform(Helpers.getPicassoTransformation(viewHolder.itemView.restaurant_vertical_list_image))
+                        .into(viewHolder.itemView.restaurant_image)
                 }
-                viewHolder.itemView.restaurant_vertical_item_name.text = model.name
-                viewHolder.itemView.restaurant_vertical_item_detail.text = model.address
+                viewHolder.itemView.restaurant_name.text = model.name
+                viewHolder.itemView.restaurant_detail.text = model.address
                 viewHolder.itemView.textView_user_numbers.text = model.users.toString()
-
-                if (model.distance < 1000) {
-                    viewHolder.itemView.textView_distance_numbers.text =
-                        "${model.distance.roundToInt()} M"
-                }
-                else{
-                    viewHolder.itemView.textView_distance_numbers.text =
-                        "${String.format("%.2f", model.distance/1000)} KM"
-
-                }
 
                 viewHolder.itemView.imageView9.setOnClickListener {
                     selectLocationAndGetUsersList(model.place_id, model.name)
-                }
-                viewHolder.itemView.setOnClickListener {
-                    viewHolder.itemView.imageView9.performClick()
                 }
 
 
@@ -114,16 +80,6 @@ class NearByRestaurantsVerticalAdapterByAPi(
 
 
         }
-
-    }
-
-    private fun refactorImage(resource: Drawable?,imageView: ImageView) {
-        var imageBitmap = resource?.toBitmap()
-        imageBitmap =createSclead(imageBitmap!!,500,400)
-        val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
-        imageDrawable.isCircular = true
-        imageDrawable.cornerRadius = 16.0f
-       imageView.setImageDrawable(imageDrawable)
 
     }
 
