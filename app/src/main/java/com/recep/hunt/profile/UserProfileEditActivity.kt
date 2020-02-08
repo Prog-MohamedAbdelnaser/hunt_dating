@@ -716,7 +716,7 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
                 ): Boolean {
                     val imageBitmap = resource?.toBitmap()
 
-                    imageBitmap?.let { bitMapToString(it) }?.let { addToAttempImages(ImageModel(it,imageModel.id),imagePosition) }
+                  //  imageBitmap?.let { bitMapToString(it) }?.let { addToAttempImages(ImageModel(it,imageModel.id),imagePosition) }
 
                     return false
                 }
