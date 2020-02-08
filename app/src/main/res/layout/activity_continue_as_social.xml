@@ -37,7 +37,7 @@
                 android:layout_height="140dp"
                 android:background="@drawable/insta_bg_image"
                 android:scaleType="fitCenter"
-                android:src="@drawable/insta_icon"
+                android:src="@drawable/insta_icon_2"
                 android:layout_alignEnd="@id/continue_as_user_imageView"
                 android:layout_alignRight="@id/continue_as_user_imageView"
                 android:layout_marginRight="100dp"

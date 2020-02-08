@@ -92,7 +92,7 @@ class ContinueAsSocialActivity : AppCompatActivity() {
             Constants.socialInstaType -> {      //Instagram Icon with Instagram bg
 
 
-                socialImage.image = resources.getDrawable(R.drawable.insta_icon)
+                socialImage.image = resources.getDrawable(R.drawable.insta_icon_2)
                 socialImage.background = resources.getDrawable(R.drawable.insta_bg_image)
 
             }
