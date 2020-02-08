@@ -203,4 +203,8 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:1.1.1'
 
+    //to generate transformation for glide images
+    implementation 'jp.wasabeef:glide-transformations:4.1.0'
+
+
 }

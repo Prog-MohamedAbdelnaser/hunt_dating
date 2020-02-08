@@ -212,7 +212,7 @@
                 app:strokeWidth="100dp" />
 
         <Button
-                android:id="@+id/id_add_time"
+                android:id="@+id/btnAddTime"
                 android:layout_width="162dp"
                 android:layout_height="58dp"
                 android:layout_margin="26dp"

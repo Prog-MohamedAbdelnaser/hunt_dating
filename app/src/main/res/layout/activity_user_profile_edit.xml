@@ -4,6 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="match_parent">
 
     <ScrollView
@@ -31,7 +32,7 @@
                     app:civ_border_color="@color/black"
                     app:civ_border_overlay="true"
                     app:civ_border_width="0dp"
-                    app:layout_constraintBottom_toTopOf="@id/include_six_photos"
+                    app:layout_constraintBottom_toTopOf="@id/recyclerViewUserImages"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -85,165 +86,150 @@
             <!--                </RelativeLayout>-->
 
 
-            <include
-                    android:id="@+id/include_six_photos"
-                    layout="@layout/six_photos_item_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ivEditProfielId" />
 
 
-            <TextView
-                    android:id="@+id/about_header"
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewUserImages"
                     android:layout_width="wrap_content"
+                    tools:listitem="@layout/item_image"
+                    tools:itemCount="6"
+                    app:spanCount="3"
+                    android:background="@color/white"
+
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/montserrat"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/include_six_photos" />
+                    app:layout_constraintTop_toBottomOf="@id/ivEditProfielId"
+                    />
+            <TextView
+                    style="@style/profileItemTitle"
+
+                    android:id="@+id/about_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/about_you"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recyclerViewUserImages" />
 
 
             <EditText
+                    style="@style/profileItemValue"
                     android:id="@+id/write_about_us_et"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/montserrat"
                     android:hint="@string/write_about_you"
                     android:inputType="textMultiLine"
                     android:padding="16dp"
-                    android:textColor="@color/app_light_text_color"
-                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/about_header" />
 
             <TextView
+                    style="@style/profileItemTitle"
                     android:id="@+id/job_title_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
                     android:padding="16dp"
                     android:text="@string/job_title"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/write_about_us_et" />
 
 
             <EditText
+                    style="@style/profileItemValue"
                     android:id="@+id/add_job_title_et"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/montserrat"
                     android:hint="@string/add_job_title"
                     android:padding="16dp"
-                    android:textColor="@color/app_light_text_color"
-                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/job_title_tv" />
 
             <TextView
+                    style="@style/profileItemTitle"
                     android:id="@+id/company_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat"
                     android:padding="16dp"
                     android:text="@string/company"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/add_job_title_et" />
 
             <EditText
+                    style="@style/profileItemValue"
                     android:id="@+id/add_company_name_et"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/montserrat"
                     android:hint="@string/add_company_name"
                     android:padding="16dp"
-                    android:textColor="@color/app_light_text_color"
-                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/company_tv" />
 
             <TextView
+                    style="@style/profileItemTitle"
                     android:id="@+id/hometown_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat"
                     android:padding="16dp"
                     android:text="@string/hometown"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="@+id/add_company_name_et"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/add_company_name_et" />
 
             <EditText
+                    style="@style/profileItemValue"
                     android:id="@+id/add_hometown_et"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/montserrat"
                     android:hint="@string/add_home_town"
                     android:padding="16dp"
-                    android:textColor="@color/app_light_text_color"
-                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/hometown_tv" />
 
 
             <TextView
+                    style="@style/profileItemTitle"
                     android:id="@+id/school_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat"
                     android:padding="16dp"
                     android:text="@string/schooloruniversity"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/add_hometown_et" />
 
 
             <EditText
+                    style="@style/profileItemValue"
                     android:id="@+id/add_school_or_university_et"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/montserrat"
                     android:hint="@string/add_school_or_university"
                     android:padding="16dp"
-                    android:textColor="@color/app_light_text_color"
-                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/school_tv" />
 
             <TextView
+                    style="@style/profileItemTitle"
                     android:id="@+id/iam_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/montserrat"
                     android:padding="16dp"
                     android:text="@string/iam"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/add_school_or_university_et" />
 
@@ -300,14 +286,14 @@
                     app:layout_constraintTop_toTopOf="@+id/edit_profile_female_gender_btn" />
 
             <TextView
+                    style="@style/profileItemTitle"
                     android:id="@+id/basic_info_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat"
                     android:padding="16dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/basic_info"
-                    android:textColor="@color/app_text_black"
-                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/edit_profile_male_gender_btn" />
 
@@ -318,6 +304,149 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     app:layout_constraintTop_toBottomOf="@+id/basic_info_tv" />
+
+
+            <LinearLayout
+                    android:id="@+id/connectFbLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView"
+            >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvFacebookLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/facebook"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvFacebookConnect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_to_fb"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                    android:id="@+id/showInstaPhotoLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/connectFbLout"
+                    >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvInstaLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/show_insta_photo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvInsaPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_inest"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                    android:id="@+id/linkedInLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/showInstaPhotoLout"
+                    >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvLinkedinLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/linked_in"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvLinked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_to_linked"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                    android:id="@+id/spotifyLout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/linkedInLout"
+                    >
+                <TextView
+                        style="@style/profileItemTitle"
+                        android:id="@+id/tvSpotifyLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/my_top_spotify_artists"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+                <TextView
+                        style="@style/profileItemValue"
+                        android:id="@+id/tvSpotify"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@color/redFont"
+                        android:text="@string/connect_spotify"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_user_basic_details_recyclerView" />
+
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

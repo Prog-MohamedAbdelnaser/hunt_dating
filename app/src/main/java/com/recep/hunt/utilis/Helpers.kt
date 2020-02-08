@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -22,6 +23,8 @@ import android.view.animation.LayoutAnimationController
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kaopiz.kprogresshud.KProgressHUD
@@ -53,6 +56,18 @@ class Helpers {
             width:Int,height:Int): Bitmap {
             return Bitmap.createScaledBitmap(bitmap,width,height, true)
         }
+
+         fun refactorImage(resource: Drawable?, imageView: ImageView,context:Context) {
+            var imageBitmap = resource?.toBitmap()
+            imageBitmap = createSclead(imageBitmap!!, imageView.width,imageView.height)
+            val imageDrawable = RoundedBitmapDrawableFactory.create(context.resources, imageBitmap)
+            imageDrawable.isCircular = true
+            imageDrawable.cornerRadius = 16.0f
+            imageView.setImageDrawable(imageDrawable)
+
+
+        }
+
         fun showDialog(activity: Activity, context: Context, title:String): KProgressHUD {
             return KProgressHUD.create(activity)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)

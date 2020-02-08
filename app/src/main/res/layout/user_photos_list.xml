@@ -7,8 +7,22 @@
 
         android:background="@color/white"
         android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewUserImages"
+            android:layout_width="wrap_content"
+            tools:listitem="@layout/item_image"
+            tools:itemCount="6"
+            app:spanCount="3"
+            android:background="@color/white"
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivEditProfielId"
+            />
+<!--    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="126dp">
 
@@ -138,5 +152,5 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>-->
 </LinearLayout>

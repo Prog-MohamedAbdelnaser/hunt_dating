@@ -59,4 +59,17 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="profileItemTitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@color/table_view_bg</item>
+        <item name="android:textColor">@color/color_cool_gray</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="profileItemValue">
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/app_text_black</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
 </resources>

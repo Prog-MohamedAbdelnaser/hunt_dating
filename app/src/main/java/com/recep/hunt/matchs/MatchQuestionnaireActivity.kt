@@ -24,8 +24,8 @@ import com.recep.hunt.base.adapter.BaseAdapter
 import com.recep.hunt.base.adapter.BaseViewHolder
 import com.recep.hunt.base.extentions.handleApiErrorWithSnackBar
 import com.recep.hunt.domain.entities.BeginHuntLocationParams
+import com.recep.hunt.domain.entities.UpdateHuntBeginParams
 import com.recep.hunt.features.common.CommonState
-import com.recep.hunt.home.HomeActivity
 import com.recep.hunt.matchs.vm.MatchQuestionsViewModel
 import com.recep.hunt.model.AnswerRandomQuestions
 import com.recep.hunt.model.randomQuestion.QuestionData
@@ -74,7 +74,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
     private var timerPstatus = 360
 
-    private var addTime = 1L
+    private var addTime = 0L
 
     private lateinit var ivLikedPersonImage: CircleImageView
 
@@ -108,27 +108,22 @@ class MatchQuestionnaireActivity : BaseActivity() {
 
         idSubmit.setOnClickListener {
             tvStepSix.visibility = View.GONE
-            val mIntent = Intent(this, LetsMeetActivity::class.java)
-            mIntent.putExtra("swipeUsers", mSwipeUserModel)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(mIntent)
-            finish()
+            updateHuntBegin(UpdateHuntBeginParams(0,"yes",if(addTime > 0L) "yes" else "no","$addTime"))
 
         }
 
         btnCancelStepOne.setOnClickListener {
-//            gotoHomeScreen()
+            //            gotoHomeScreen()
             onBackPressed()
         }
 
-        id_add_time.setOnClickListener {
+        btnAddTime.setOnClickListener {
             when (addTime) {
                 1L -> {
                     setTimerAgain(addTime)
                     addTime = 5
-                    id_add_time.text = "+ 5 Min"
-                    id_add_time.setBackgroundResource(R.drawable.magento_corner_card)
+                    btnAddTime.text = "+ 5 Min"
+                    btnAddTime.setBackgroundResource(R.drawable.magento_corner_card)
                 }
                 5L -> {
                     setTimerAgain(addTime)
@@ -139,7 +134,10 @@ class MatchQuestionnaireActivity : BaseActivity() {
                     "Now you could not add more time.",
                     Toast.LENGTH_LONG
                 ).show()
+
             }
+
+
         }
 
         placeName=getLocationNameFromArgs()
@@ -182,7 +180,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
         }
 
         btnCancelMeet.setOnClickListener {
-//            gotoHomeScreen()
+            //            gotoHomeScreen()
             onBackPressed()
         }
 
@@ -198,7 +196,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
         }
 
         btnCancelLocation.setOnClickListener {
-//            gotoHomeScreen()
+            //            gotoHomeScreen()
             onBackPressed()
         }
 
@@ -251,6 +249,32 @@ class MatchQuestionnaireActivity : BaseActivity() {
             sendHuntLocationLiveData.observe(this@MatchQuestionnaireActivity, Observer {
                 handleSendHuntLocationState(it)
             })
+
+            updateHuntBeginLiveData.observe(this@MatchQuestionnaireActivity, Observer {
+                handleUpdateHuntState(it)
+
+            })
+        }
+    }
+
+    private fun handleUpdateHuntState(state: CommonState<Any>?) {
+        when(state){
+            CommonState.LoadingShow->showProgressDialog()
+            CommonState.LoadingFinished->hideProgressDialog()
+            is CommonState.Success->{
+
+                val mIntent = Intent(this, LetsMeetActivity::class.java)
+                mIntent.putExtra("swipeUsers", mSwipeUserModel)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(mIntent)
+                finish()
+
+                Helpers.showSuccesSnackBar(this,"Successfully",state.data.toString())
+            }
+            is CommonState.Error->{
+                handleApiErrorWithSnackBar(state.exception)
+            }
         }
     }
 
@@ -563,6 +587,10 @@ class MatchQuestionnaireActivity : BaseActivity() {
         questionAdapter.updateItems(questionData.answer)
     }
 
+    fun updateHuntBegin(updateHuntBeginParams: UpdateHuntBeginParams){
+        matchQuestionViewModel.updateHuntBegin(updateHuntBeginParams)
+    }
+
     inner class QuestionsAdapter(): BaseAdapter<String>(itemLayoutRes = R.layout.question_item) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<String> {
             return QuestionsViewHolder(getItemView(parent))
@@ -571,7 +599,7 @@ class MatchQuestionnaireActivity : BaseActivity() {
         inner class QuestionsViewHolder(view: View): BaseViewHolder<String>(view) {
             override fun fillData() {
                 Log.i("QuestionsAdapter","fillData ${item}")
-               itemView. btnAnswerOption.text=item
+                itemView. btnAnswerOption.text=item
 
                 itemView.btnAnswerOption.setOnClickListener {
                     Log.i("btnAnswerOption","click ${item}")
