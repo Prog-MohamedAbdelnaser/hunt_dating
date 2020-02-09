@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.github.pwittchen.swipe.library.rx2.SwipeListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.recep.hunt.profile.ProfileActivity
 import com.recep.hunt.utilis.*
 import org.jetbrains.anko.imageResource
 
@@ -264,7 +265,7 @@ class UserDetailActivity : AppCompatActivity(), StoriesProgressView.StoriesListe
         }
 
         user_detail_profile_btn.setOnClickListener {
-            launchActivity<UserProfileActivity>()
+            launchActivity<ProfileActivity>()
         }
     }
 

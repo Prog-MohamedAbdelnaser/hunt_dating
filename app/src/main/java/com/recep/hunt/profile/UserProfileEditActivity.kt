@@ -46,6 +46,7 @@ import com.recep.hunt.base.adapter.GridSpacingItemDecoration
 import com.recep.hunt.common.AskBeforeMakeActionDialog
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.data.repositories.EditeProfileRepository
+import com.recep.hunt.data.repositories.ProfileRepository
 import com.recep.hunt.features.common.CommonState
 import com.recep.hunt.model.UpdateUserInfoResponse.UpdateUserInfoResponseModel
 import com.recep.hunt.model.UserProfile.ImageModel
@@ -896,7 +897,8 @@ class UserProfileEditActivity : BaseActivity(), ProfileBasicInfoTappedListner {
 
     private fun addBasicInfoItemViews() {
 //        val basicInfoViewModel = ViewModelProviders.of(this).get(BasicInfoViewModel::class.java)
-        val basicInfoViewModel = BasicInfoViewModel.getInstace(this.application)
+        val profileRepository : ProfileRepository by inject()
+        val basicInfoViewModel = BasicInfoViewModel.getInstace(this.application,profileRepository)
         val basicModel = basicInfoViewModel.getData()
 
         for (model in basicModel) {

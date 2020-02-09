@@ -25,6 +25,7 @@ import com.orhanobut.logger.Logger
 import com.recep.hunt.R
 import com.recep.hunt.api.ApiClient
 import com.recep.hunt.constants.Constants
+import com.recep.hunt.data.repositories.ProfileRepository
 import com.recep.hunt.model.ReportUser
 import com.recep.hunt.model.reportUser.ReportUserResponse
 import com.recep.hunt.profile.model.UserBasicInfoModel
@@ -48,6 +49,7 @@ import kotlinx.android.synthetic.main.six_photos_item_layout.view.*
 import kotlinx.android.synthetic.main.user_detail_header_item.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.image
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -86,7 +88,9 @@ class UserDetalBottomSheetFragment(private val ctx: Context) : BottomSheetDialog
     private fun init(view: View?) {
         if (view != null) {
             act = activity ?: return
-            basicInfoViewModel = BasicInfoViewModel.getInstace(act.application)
+            val profileRepository: ProfileRepository by inject()
+
+            basicInfoViewModel = BasicInfoViewModel.getInstace(act.application,profileRepository)
             if (basicInfo.size == 0) {
                 basicInfo = if (swipeUserModel != null) {
                     basicInfoViewModel.getData(swipeUserModel?.basicInfo)

@@ -2,6 +2,7 @@ package com.recep.hunt.profile.viewmodel
 
 import android.app.Application
 import com.recep.hunt.R
+import com.recep.hunt.data.repositories.ProfileRepository
 import com.recep.hunt.model.usersList.BasicInfo
 import com.recep.hunt.profile.model.UserBasicInfoModel
 import com.recep.hunt.profile.model.UserBasicInfoQuestionModel
@@ -14,103 +15,29 @@ import com.recep.hunt.utilis.SharedPrefrenceManager
  * Email : rishabh1450@gmail.com
  */
 
-class BasicInfoViewModel(private val app: Application) {
+class BasicInfoViewModel(private val app: Application,private val profileRepository: ProfileRepository) {
+
+    private var userBasicInfo=profileRepository.getUserInfo().user_info
+
     companion object {
-        fun getInstace(app: Application): BasicInfoViewModel = BasicInfoViewModel(app)
+        fun getInstace(app: Application,profileRepository: ProfileRepository): BasicInfoViewModel = BasicInfoViewModel(app,profileRepository)
     }
 
     fun getData(): ArrayList<UserBasicInfoModel> {
         val basicModel = ArrayList<UserBasicInfoModel>()
         val questionModel = getBasicInfoQuestions()
         if (basicModel.size == 0) {
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Relationship status",
-                    SharedPrefrenceManager.getRelationShipStatus(app.applicationContext),
-                    R.drawable.relationship_icon,
-                    questionModel[0]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Height",
-                    SharedPrefrenceManager.getUserHeight(app.applicationContext),
-                    R.drawable.height_icon,
-                    questionModel[1]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Gym",
-                    SharedPrefrenceManager.getUserGym(app.applicationContext),
-                    R.drawable.gym_icon,
-                    questionModel[2]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Education level",
-                    SharedPrefrenceManager.getUserEducationLevel(app.applicationContext),
-                    R.drawable.education_icon,
-                    questionModel[3]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Drink",
-                    SharedPrefrenceManager.getUserDrink(app.applicationContext),
-                    R.drawable.drink_icon,
-                    questionModel[4]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Smoke",
-                    SharedPrefrenceManager.getSomke(app.applicationContext),
-                    R.drawable.smoke_icon,
-                    questionModel[5]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Pets",
-                    SharedPrefrenceManager.getPets(app.applicationContext),
-                    R.drawable.pets_icon,
-                    questionModel[6]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Looking for",
-                    SharedPrefrenceManager.getLookingFor(app.applicationContext),
-                    R.drawable.looking_for_icon,
-                    questionModel[7]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Kids",
-                    SharedPrefrenceManager.getKids(app.applicationContext),
-                    R.drawable.kids_icon,
-                    questionModel[8]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Zodiac",
-                    SharedPrefrenceManager.getZodiac(app.applicationContext),
-                    R.drawable.zodiac_icon,
-                    questionModel[9]
-                )
-            )
-            basicModel.add(
-                UserBasicInfoModel(
-                    "Religion",
-                    SharedPrefrenceManager.getReligion(app.applicationContext),
-                    R.drawable.religion_icon,
-                    questionModel[10]
-                )
-            )
+            basicModel.add(UserBasicInfoModel("Relationship status", SharedPrefrenceManager.getRelationShipStatus(app.applicationContext), R.drawable.relationship_icon, questionModel[0]))
+            basicModel.add(UserBasicInfoModel("Height",userBasicInfo.height, R.drawable.height_icon, questionModel[1]))
+            basicModel.add(UserBasicInfoModel("Gym", userBasicInfo.gym, R.drawable.gym_icon, questionModel[2]))
+            basicModel.add(UserBasicInfoModel("Education level", userBasicInfo.education_level, R.drawable.education_icon, questionModel[3]))
+            basicModel.add(UserBasicInfoModel("Drink", userBasicInfo.drink, R.drawable.drink_icon, questionModel[4]))
+            basicModel.add(UserBasicInfoModel("Smoke",userBasicInfo.smoke, R.drawable.smoke_icon, questionModel[5]))
+            basicModel.add(UserBasicInfoModel("Pets", userBasicInfo.pets, R.drawable.pets_icon, questionModel[6]))
+            basicModel.add(UserBasicInfoModel("Looking for", SharedPrefrenceManager.getLookingFor(app.applicationContext), R.drawable.looking_for_icon, questionModel[7]))
+            basicModel.add(UserBasicInfoModel("Kids", SharedPrefrenceManager.getKids(app.applicationContext), R.drawable.kids_icon, questionModel[8]))
+            basicModel.add(UserBasicInfoModel("Zodiac", userBasicInfo.zodiac, R.drawable.zodiac_icon, questionModel[9]))
+            basicModel.add(UserBasicInfoModel("Religion", userBasicInfo.religion, R.drawable.religion_icon, questionModel[10]))
         }
         return basicModel
     }

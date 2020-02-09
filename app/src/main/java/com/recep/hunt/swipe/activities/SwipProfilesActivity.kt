@@ -27,6 +27,7 @@ import com.recep.hunt.model.UserSwipe
 import com.recep.hunt.model.makeUserOnline.MakeUserOnlineResponse
 import com.recep.hunt.model.swipeUser.SwipeUserResponse
 import com.recep.hunt.notifications.NotificationsActivity
+import com.recep.hunt.profile.ProfileActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.swipe.adapter.SwipeProfiles
 import com.recep.hunt.swipe.model.SwipeUserModel
@@ -211,7 +212,7 @@ class SwipProfilesActivity : BaseActivity() , SwipeProfiles.ClickToolbarControll
     }
 
     private fun navigateToProfileActivity() {
-        launchActivity<UserProfileActivity>()
+        launchActivity<ProfileActivity>()
     }
 
     private fun showIncognitoBtn() {

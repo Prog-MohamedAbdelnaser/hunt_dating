@@ -42,10 +42,11 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".profile.ProfileActivity"></activity>
         <activity
                 android:name=".swipe.activities.SwipProfilesActivity"
                 android:label="@string/title_activity_swip_profiles"
-                android:theme="@style/AppTheme.NoActionBar"/>
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".matchs.MatchQuestionnaireActivity" />
         <activity android:name=".matchs.LetsMeetActivity" />
         <activity android:name=".payment.TrasactionDone" />

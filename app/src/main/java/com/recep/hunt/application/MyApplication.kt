@@ -22,6 +22,7 @@ import com.recep.hunt.data.sources.remote.di.remoteModule
 import com.recep.hunt.login.WelcomeScreenActivity
 import com.recep.hunt.matchs.di.matchQuestionsModule
 import com.recep.hunt.profile.di.editProfileModule
+import com.recep.hunt.profile.di.profileModule
 import com.recep.hunt.swipe.di.swipModule
 import com.recep.hunt.utilis.AlertDialogUtils
 import com.recep.hunt.utilis.Helpers
@@ -78,7 +79,7 @@ class MyApplication : MultiDexApplication() {
         super.onCreate()
         instance = this
         startKoin(this, listOf(matchQuestionsModule,remoteModule,applicationModule, swipModule,
-            editProfileModule))
+            editProfileModule,profileModule))
         /** logger initialization **/
         Logger.addLogAdapter(AndroidLogAdapter())
 

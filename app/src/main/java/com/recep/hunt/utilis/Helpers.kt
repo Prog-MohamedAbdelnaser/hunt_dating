@@ -33,6 +33,7 @@ import com.recep.hunt.constants.Constants
 import com.recep.hunt.filters.FilterBottomSheetDialog
 import com.recep.hunt.login.SocialLoginActivity
 import com.recep.hunt.notifications.NotificationsActivity
+import com.recep.hunt.profile.ProfileActivity
 import com.recep.hunt.profile.UserProfileActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import org.aviran.cookiebar2.CookieBar
@@ -248,7 +249,7 @@ class Helpers {
                     showIncognitoBtn(context,incoginitoImage)
                 }
                 R.id.user_detail_profile_btn or R.id.home_profile_btn ->{
-                    context.launchActivity<UserProfileActivity>()
+                    context.launchActivity<ProfileActivity>()
                 }
                 R.id.user_detail_notification_btn or R.id.home_notification_btn ->{
                     context.launchActivity<NotificationsActivity>()

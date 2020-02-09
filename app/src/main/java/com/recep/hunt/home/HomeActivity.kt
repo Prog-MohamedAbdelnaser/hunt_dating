@@ -67,6 +67,7 @@ import com.recep.hunt.model.nearestLocation.NearestLocationResponse
 import com.recep.hunt.model.selectLocation.SelectLocationResponse
 import com.recep.hunt.model.usersList.UsersListResponse
 import com.recep.hunt.notifications.NotificationsActivity
+import com.recep.hunt.profile.ProfileActivity
 import com.recep.hunt.profile.UserProfileActivity
 import com.recep.hunt.setupProfile.TurnOnGPSActivity
 import com.recep.hunt.swipe.SwipeMainActivity
@@ -893,7 +894,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback,
             }
 
             home_profile_btn.setOnClickListener {
-                launchActivity<UserProfileActivity>()
+                launchActivity<ProfileActivity>()
             }
         }
 

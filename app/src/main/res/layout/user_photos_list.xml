@@ -11,10 +11,9 @@
             android:id="@+id/recyclerViewUserImages"
             android:layout_width="wrap_content"
             tools:listitem="@layout/item_image"
-            tools:itemCount="6"
+            tools:itemCount="3"
             app:spanCount="3"
             android:background="@color/white"
-
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

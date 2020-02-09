@@ -36,6 +36,7 @@ import com.recep.hunt.base.adapter.GridSpacingItemDecoration
 import com.recep.hunt.common.AskBeforeMakeActionDialog
 import com.recep.hunt.constants.Constants
 import com.recep.hunt.data.repositories.EditeProfileRepository
+import com.recep.hunt.data.repositories.ProfileRepository
 import com.recep.hunt.data.sources.local.AppPreference
 import com.recep.hunt.domain.entities.EntitiesConstants
 import com.recep.hunt.home.HomeActivity
@@ -152,7 +153,6 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
         })
 
     }
-
 
     private fun setPrefData() {
 
@@ -292,7 +292,8 @@ class UserProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun addBasicInfoItemViews() {
 //        val basicInfoViewModel = ViewModelProviders.of(this).get(BasicInfoViewModel::class.java)
-        val basicInfoViewModel = BasicInfoViewModel.getInstace(this.application)
+       val profileRepository: ProfileRepository by inject()
+        val basicInfoViewModel = BasicInfoViewModel.getInstace(this.application,profileRepository = profileRepository)
         val basicModel = basicInfoViewModel.getData()
 
         for (model in basicModel) {
@@ -554,13 +555,13 @@ class ProfileGenderItemView(
     private val context: Context,
     private val gender: String,
     private val isEditMode: Boolean
-) :
-    Item<ViewHolder>() {
+) : Item<ViewHolder>() {
     private lateinit var maleBtn: Button
     private lateinit var femaleBtn: Button
     private lateinit var otherBtn: Button
     override fun getLayout() = R.layout.profile_gender_item_view
     override fun bind(viewHolder: ViewHolder, position: Int) {
+
         maleBtn = viewHolder.itemView.find(R.id.profile_male_gender_btn)
         femaleBtn = viewHolder.itemView.find(R.id.profile_female_gender_btn)
         otherBtn = viewHolder.itemView.find(R.id.profile_other_gender_btn)
